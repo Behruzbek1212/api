@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+        "cjhowe7.laravel-blade",
+        "amiralizadeh9480.laravel-extra-intellisense",
+        "shufo.vscode-blade-formatter",
+        "mehedidracula.php-namespace-resolver",
+        "bmewburn.vscode-intelephense-client",
+        "streetsidesoftware.code-spell-checker",
+        "calebporzio.better-phpunit",
+        "aaron-bond.better-comments"
+    ]
+}
