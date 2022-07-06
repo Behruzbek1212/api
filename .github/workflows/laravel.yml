@@ -24,12 +24,10 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
 
-      - name: Setup MySQL
-        run: |
-          sudo /etc/init.d/mysql start
-          mysql -e 'CREATE DATABASE ${{ job.services.mysql.MYSQL_DATABASE }};' -u root
+      - name: Verify jobo DB exists
+        run: mysql --host 127.0.0.1 --port 3306 -uroot -e "SHOW DATABASES LIKE 'jobo'"
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
