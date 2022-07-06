@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - production
-      - staging
+      - development
   pull_request:
     branches:
       - production
-      - staging
+      - development
 
 jobs:
   app-tests:
@@ -18,13 +18,16 @@ jobs:
         image: mysql:5.7
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_DATABASE: laravel
+          MYSQL_DATABASE: jobo
         ports:
           - 3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
+
+      # - name: Verify jobo DB exists
+      #   run: mysql --host 127.0.0.1 --port 3306 -uroot -e "SHOW DATABASES LIKE 'jobo'"
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -39,6 +42,9 @@ jobs:
 
       - name: Generate key
         run: php artisan key:generate
+
+      # - name: Migrate database
+      #   run: php artisan migrate --seed
 
       - name: Execute tests (Unit and Feature tests) using PHPUnit
         env:
