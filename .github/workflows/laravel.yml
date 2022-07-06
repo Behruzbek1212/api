@@ -26,8 +26,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Verify jobo DB exists
-        run: mysql --host 127.0.0.1 --port 3306 -uroot -e "SHOW DATABASES LIKE 'jobo'"
+      # - name: Verify jobo DB exists
+      #   run: mysql --host 127.0.0.1 --port 3306 -uroot -e "SHOW DATABASES LIKE 'jobo'"
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -43,8 +43,8 @@ jobs:
       - name: Generate key
         run: php artisan key:generate
 
-      - name: Migrate database
-        run: php artisan migrate --seed
+      # - name: Migrate database
+      #   run: php artisan migrate --seed
 
       - name: Execute tests (Unit and Feature tests) using PHPUnit
         env:
