@@ -18,7 +18,7 @@ jobs:
         image: mysql:5.7
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_DATABASE: laravel
+          MYSQL_DATABASE: jobo
         ports:
           - 3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -39,6 +39,9 @@ jobs:
 
       - name: Generate key
         run: php artisan key:generate
+
+      - name: Migrate database
+        run: php artisan migrate --seed
 
       - name: Execute tests (Unit and Feature tests) using PHPUnit
         env:

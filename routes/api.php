@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,28 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::get('/', function () {
+    return response()->json([
+        'version' => 'v1.2.0',
+        'development' => 'infoshop',
+        'repo' => 'https://github.com/jobo-uz/'
+    ]);
+});
+
+Route::prefix('/v1')->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    })->middleware('auth:sanctum');
+
+    Route::prefix('/auth')->name('auth.')->group(function () {
+        Route::middleware('guest')->group(function () {
+            Route::post('/register', [RegisterController::class, 'store'])->name('register');
+            Route::post('/login', [RegisterController::class, 'store'])->name('login');
+            Route::post('/restore', [RegisterController::class, 'store'])->name('restore');
+        });
+
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::post('/logout', [RegisterController::class, 'store'])->name('logout');
+        });
+    });
 });
