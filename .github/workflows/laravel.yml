@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - production
-      - staging
+      - development
   pull_request:
     branches:
       - production
-      - staging
+      - development
 
 jobs:
   app-tests:
@@ -25,6 +25,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Setup MySQL
+        run: |
+          sudo /etc/init.d/mysql start
+          mysql -e 'CREATE DATABASE ${{ job.services.mysql.MYSQL_DATABASE }};' -u root
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
