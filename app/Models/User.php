@@ -20,6 +20,8 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsHasApiTo
      */
     protected $fillable = [
         'name',
+        'phone',
+        'role',
         'email',
         'password',
     ];

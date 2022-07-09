@@ -3,16 +3,18 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Candidate;
+use App\Models\Customer;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
 {
     /**
-     * Store a newly created resource in storage.
+     * Registration of new users
      * 
      * @param  Request  $request
      * @return JsonResponse
@@ -21,15 +23,29 @@ class RegisterController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string'],
-            'phone' => ['required', 'numeric'],
+            'phone' => ['required', 'numeric', 'unique:users,phone'],
             'password' => ['required', 'confirmed', 'min:8'],
+            'role' => ['required', 'in:admin,customer,candidate']
         ]);
 
         /** @var User $user */
         $user = User::query()->create([
-            'name' => $request->input('name'),
-            'phone' => $request->input('phone'),
+            'phone' => $request->get('phone'),
+            'password' => Hash::make($request->get('password')),
+            'role' => $request->get('role'),
         ]);
+
+        switch ($user->role) {
+            case 'candidate':
+                $this->registerCandidate($request, $user);
+                break;
+            case 'customer':
+                $this->registerCustomer($request, $user);
+                break;
+            case 'admin':
+            default:
+                throw new Exception('Invalid role');
+        }
 
         $token = $user->createToken($user->name . '-' . Hash::make($user->id))
             ->plainTextToken;
@@ -43,36 +59,54 @@ class RegisterController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * Register a customer user
      *
      * @param  Request $request
-     * @param  int  $id
-     * @return Response
+     * @param User $user
+     * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function registerCustomer(Request $request, User $user)
     {
-        //
+        $request->validate([
+            'customer_name' => ['required', 'string'],
+            'owned_date' => ['required', 'date'],
+            'address' => ['required', 'string']
+        ]);
+
+        $customer = Customer::query()->create([
+            'user_id' => $user->id,
+            'name' => $request->get('customer_name'),
+            'owned_date' => $request->get('owned_date'),
+            'address' => $request->get('address'),
+        ]);
+
+        return response()->json($customer);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Register a candidate account
      *
-     * @param  int  $id
+     * @param  Request $request
+     * @param User $user
      * @return JsonResponse
      */
-    public function destroy($id)
+    public function registerCandidate(Request $request, User $user)
     {
-        //
+        $request->validate([
+            'first_name' => ['required', 'string'],
+            'last_name' => ['nullable', 'string'],
+            'birthday' => ['required', 'date'],
+            'address' => ['required', 'string']
+        ]);
+
+        $candidate = Candidate::query()->create([
+            'user_id' => $user->id,
+            'first_name' => $request->get('first_name'),
+            'last_name' => $request->get('last_name'),
+            'birthday' => $request->get('birthday'),
+            'address' => $request->get('address'),
+        ]);
+
+        return response()->json($candidate);
     }
 }

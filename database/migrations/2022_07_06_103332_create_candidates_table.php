@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('last_name')->nullable();
             $table->timestamp('birthday');
             $table->string('address');
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }
