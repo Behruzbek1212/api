@@ -45,4 +45,24 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsHasApiTo
         'email_verified_at' => 'datetime',
         'phone_verified_at' => 'datetime',
     ];
+
+    /**
+     * Check if the phone number is exist.
+     * 
+     * @return bool
+     */
+    public function existPhone()
+    {
+        return !is_null($this->phone);
+    }
+
+    /**
+     * Check if the email address is exist.
+     * 
+     * @return bool
+     */
+    public function existEmail()
+    {
+        return !is_null($this->email);
+    }
 }

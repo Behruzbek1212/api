@@ -2,7 +2,11 @@
 
 namespace App\Services;
 
-class MobileService
+use App\Constants\MobileServiceConst;
+use Illuminate\Support\Facades\Http;
+use Nette\Utils\Random;
+
+class MobileService extends MobileServiceConst
 {
     protected string $payload;
     protected string $login;
@@ -29,14 +33,22 @@ class MobileService
      * 
      * @param integer|string $phone
      * @param string $message
-     * @return void
+     * @return array<string, string|integer|null>
      */
     public function send($phone, $message)
     {
-        //
+        $response = Http::withBasicAuth($this->login, $this->password)
+            ->post($this->payload, $this->makeRequest($phone, $message))
+            ->json();
+
+        return [
+            'status' => $response->error_code ?? null,
+            'message' => $response->error_description ?? null,
+        ];
     }
 
     /**
+     * Make a POST request
      * 
      * @param integer|string $phone
      * @param string $message
@@ -44,6 +56,18 @@ class MobileService
      */
     protected function makeRequest($phone, $message)
     {
-        //
+        return [
+            'messages' => [[
+                'recipient' => $phone,
+                'message-id' => 'jobo' . Random::generate(19, '0-9'),
+
+                'sms' => [
+                    'originator' => $this->originator,
+                    'content' => [
+                        'text' => $message
+                    ]
+                ]
+            ]]
+        ];
     }
 }
