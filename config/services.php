@@ -14,6 +14,13 @@ return [
     |
     */
 
+    'playmobile' => [
+        'payload' => env('PLAYMOBILE_PAYLOAD', 'http://91.204.239.44/broker-api/send'),
+        'login' => env('PLAYMOBILE_LOGIN'),
+        'password' => env('PLAYMOBILE_PASSWORD'),
+        'originator' => env('PLAYMOBILE_ORIGINATOR', 'Jobo')
+    ],
+
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),

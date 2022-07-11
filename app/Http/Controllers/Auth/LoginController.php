@@ -6,13 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
     /**
-     * Store a newly created resource in storage.
+     * Login existing user with phone and password.
      * 
      * @param  Request  $request
      * @return JsonResponse
@@ -24,7 +23,7 @@ class LoginController extends Controller
             'password' => ['required', 'string', 'min:8'],
         ]);
 
-        $loggedIn = Auth::attempt($request->only([
+        $loggedIn = auth()->attempt($request->only([
             'phone', 'password'
         ]));
 

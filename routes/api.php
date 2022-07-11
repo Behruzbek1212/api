@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ Route::prefix('/v1')->group(function () {
     Route::prefix('/auth')->name('auth.')->group(function () {
         Route::middleware('guest')->group(function () {
             Route::post('/register', [RegisterController::class, 'register'])->name('register');
-            Route::post('/login', [RegisterController::class, 'register'])->name('login');
+            Route::post('/login', [LoginController::class, 'login'])->name('login');
             Route::post('/restore', [RegisterController::class, 'register'])->name('restore');
         });
 
