@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Exception;
 use Illuminate\Http\Request;
 use Nette\Utils\Random;
+use Exception;
 
 class RestoreController extends Controller
 {

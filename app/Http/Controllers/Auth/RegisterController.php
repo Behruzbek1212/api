@@ -22,7 +22,6 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string'],
             'phone' => ['required', 'numeric', 'unique:users,phone'],
             'password' => ['required', 'confirmed', 'min:8'],
             'role' => ['required', 'in:admin,customer,candidate']
@@ -51,7 +50,7 @@ class RegisterController extends Controller
             ->plainTextToken;
 
         return response()->json([
-            'status' => 200,
+            'status' => true,
             'message' => 'User successfully registered',
             'user' => $user,
             'token' => $token
@@ -68,14 +67,14 @@ class RegisterController extends Controller
     public function registerCustomer(Request $request, User $user)
     {
         $request->validate([
-            'customer_name' => ['required', 'string'],
+            'name' => ['required', 'string'],
             'owned_date' => ['required', 'date'],
             'address' => ['required', 'string']
         ]);
 
         $customer = Customer::query()->create([
             'user_id' => $user->id,
-            'name' => $request->get('customer_name'),
+            'name' => $request->get('name'),
             'owned_date' => $request->get('owned_date'),
             'address' => $request->get('address'),
         ]);

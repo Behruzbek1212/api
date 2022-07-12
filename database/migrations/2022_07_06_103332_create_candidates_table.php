@@ -16,12 +16,11 @@ return new class extends Migration
         Schema::create('candidates', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id')->unique();
-            $table->string('name');
             $table->string('first_name');
             $table->string('last_name')->nullable();
             $table->timestamp('birthday');
             $table->string('address');
-            $table->boolean('active')->default(true);
+            $table->boolean('active')->default(false);
             $table->timestamps();
         });
     }

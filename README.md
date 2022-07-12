@@ -2,6 +2,7 @@
     <samp>JOBO - API SERVER</samp>
     <br />
     <img src="https://github.com/jobo-uz/api/actions/workflows/laravel.yml/badge.svg?branch=production" alt="Badge" />
+    <a href="https://documenter.getpostman.com/view/16513917/UzJPMFLG" target="_blank"><img src="https://img.shields.io/badge/API%20Docs-v1.0-%23FF6C37?style=flat&logo=postman&labelColor=#252525&cacheSeconds=3600&logoColor=#ffffff" alt="API Documentation" /></a>
 </h1>
 
 ### Featured plugins:

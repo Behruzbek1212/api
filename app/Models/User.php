@@ -65,4 +65,19 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsHasApiTo
     {
         return !is_null($this->email);
     }
+
+    /**
+     * Mutate the phone number
+     * 
+     * @param string $value
+     * @return void
+     */
+    public function setPhoneAttribute($value)
+    {
+        $expression =
+            "/^[\+]?([0-9]{3})?[-\(\s\.]?([0-9]{2})[-\)\s\.]?([0-9]{7})$/";
+
+        $value = preg_replace($expression, '$1$2$3', $value);
+        $this->attributes['phone'] = $value;
+    }
 }

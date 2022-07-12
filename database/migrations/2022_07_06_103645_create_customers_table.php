@@ -20,7 +20,7 @@ return new class extends Migration
             $table->bigInteger('balance')->default(0);
             $table->timestamp('owned_date');
             $table->string('address');
-            $table->boolean('active')->default(true);
+            $table->boolean('active')->default(false);
             $table->timestamps();
         });
     }

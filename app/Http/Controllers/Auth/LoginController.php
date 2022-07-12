@@ -28,8 +28,8 @@ class LoginController extends Controller
         ]));
 
         if (!$loggedIn) return response()->json([
-            'status' => 400,
-            'message' => 'Your account has been successfully authenticated.'
+            'status' => false,
+            'message' => 'Phone or password is incorrect'
         ]);
 
         /** @var User $user */
@@ -38,7 +38,7 @@ class LoginController extends Controller
             ->plainTextToken;
 
         return response()->json([
-            'status' => 200,
+            'status' => true,
             'message' => 'Your account has been successfully authenticated.',
             'user' => $user,
             'token' => $token,
