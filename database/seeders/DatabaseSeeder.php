@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Candidate;
 use App\Models\Customer;
+use App\Models\Guide;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -19,5 +20,6 @@ class DatabaseSeeder extends Seeder
         User::factory(15)->create();
         Candidate::factory(15)->create();
         Customer::factory(15)->create();
+        Guide::factory(45)->create();
     }
 }

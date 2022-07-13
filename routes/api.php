@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\RestoreController;
+use App\Http\Controllers\GuideController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', HomeController::class);
+Route::fallback([HomeController::class, 'fallback']);
 
 Route::prefix('/v1')->group(function () {
     Route::get('/me', function (Request $request) {
@@ -40,6 +42,18 @@ Route::prefix('/v1')->group(function () {
 
         Route::middleware('auth:sanctum')->group(function () {
             Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
+        });
+    });
+
+    Route::prefix('/guides')->name('guides.')->group(function () {
+        Route::get('/', [GuideController::class, 'all'])->name('all');
+        Route::get('/get/{id}', [GuideController::class, 'get'])->name('get');
+
+        // Admin routes | TODO:Building 🏗
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::post('/create', [GuideController::class, 'create'])->name('create');
+            Route::post('/edit/{id}', [GuideController::class, 'edit'])->name('edit');
+            Route::post('/destroy/{id}', [GuideController::class, 'destroy'])->name('destroy');
         });
     });
 });
