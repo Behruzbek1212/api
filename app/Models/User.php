@@ -49,31 +49,31 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsHasApiTo
 
     /**
      * Check if the phone number is exist.
-     * 
+     *
      * @return bool
      */
-    public function existPhone()
+    public function existPhone(): bool
     {
         return !is_null($this->phone);
     }
 
     /**
      * Check if the email address is exist.
-     * 
+     *
      * @return bool
      */
-    public function existEmail()
+    public function existEmail(): bool
     {
         return !is_null($this->email);
     }
 
     /**
      * Mutate the phone number
-     * 
+     *
      * @param string $value
      * @return void
      */
-    public function setPhoneAttribute($value)
+    public function setPhoneAttribute($value): void
     {
         $expression =
             "/^[\+]?([0-9]{3})?[-\(\s\.]?([0-9]{2})[-\)\s\.]?([0-9]{7})$/";

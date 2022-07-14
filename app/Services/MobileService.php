@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Constants\MobileServiceConst;
 use Illuminate\Support\Facades\Http;
+use JetBrains\PhpStorm\ArrayShape;
 use Nette\Utils\Random;
 
 class MobileService extends MobileServiceConst
@@ -15,7 +16,7 @@ class MobileService extends MobileServiceConst
 
     /**
      * PlayMobile service constructor
-     * 
+     *
      * @return MobileService
      */
     public function __construct()
@@ -30,12 +31,13 @@ class MobileService extends MobileServiceConst
 
     /**
      * Send Message to phone number
-     * 
+     *
      * @param integer|string $phone
      * @param string $message
-     * @return array<string, string|integer|null>
+     * @return array
      */
-    public function send($phone, $message)
+    #[ArrayShape(['status' => "mixed", 'message' => "mixed"])]
+    public function send(int|string $phone, string $message): array
     {
         $response = Http::withBasicAuth($this->login, $this->password)
             ->post($this->payload, $this->makeRequest($phone, $message))
@@ -49,12 +51,13 @@ class MobileService extends MobileServiceConst
 
     /**
      * Make a POST request
-     * 
+     *
      * @param integer|string $phone
      * @param string $message
-     * @return array|object
+     * @return array
      */
-    protected function makeRequest($phone, $message)
+    #[ArrayShape(['messages' => "array[]"])]
+    protected function makeRequest(int|string $phone, string $message): array
     {
         return [
             'messages' => [[

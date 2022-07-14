@@ -28,7 +28,7 @@ class Notification extends AppNotification
      * @param  mixed  $notifiable
      * @return array
      */
-    public function via($notifiable)
+    public function via(mixed $notifiable): array
     {
         return [PhoneChannel::class, 'mail'];
     }
@@ -38,10 +38,10 @@ class Notification extends AppNotification
      *
      * @param  mixed  $notifiable
      * @return array<string, string|integer|null>
-     * 
+     *
      * @see \App\Channel\PhoneChannel
      */
-    public function toPhone($notifiable)
+    public function toPhone(mixed $notifiable): array
     {
         $phone = 998900371461;
         $message = "Ok";
@@ -54,9 +54,9 @@ class Notification extends AppNotification
      * Get the mail representation of the notification.
      *
      * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * @return MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail(mixed $notifiable): MailMessage
     {
         return (new MailMessage)
             ->line('The introduction to the notification.')
@@ -70,7 +70,7 @@ class Notification extends AppNotification
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toArray($notifiable)
+    public function toArray(mixed $notifiable): array
     {
         return [
             //
