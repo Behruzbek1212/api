@@ -22,4 +22,7 @@
 
 #### PHP-Storm
 
--   Soon
+-   [Laravel](https://plugins.jetbrains.com/plugin/7532-laravel)
+-   [PHP Annotations](https://plugins.jetbrains.com/plugin/7320-php-annotations)
+-   [Symfony Support](https://plugins.jetbrains.com/plugin/7219-symfony-support)
+-   [.env files support](https://plugins.jetbrains.com/plugin/9525--env-files-support)
