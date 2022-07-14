@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\MobileService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Nette\Utils\Random;
 use Exception;
@@ -19,7 +20,7 @@ class RestoreController extends Controller
 
     /**
      * Restore controller constructor.
-     * 
+     *
      * @return void
      */
     public function __construct()
@@ -29,11 +30,11 @@ class RestoreController extends Controller
 
     /**
      * Restore passwords from the database.
-     * 
+     *
      * @param  Request  $request
      * @return JsonResponse
      */
-    public function restore(Request $request)
+    public function restore(Request $request): JsonResponse
     {
         $model = $this->model
             ->where('phone', '=', $request->input('phone'))
@@ -70,11 +71,13 @@ class RestoreController extends Controller
 
     /**
      * Send verification code
-     * 
-     * @param  Request  $request
+     *
+     * @param Request $request
      * @return JsonResponse
+     *
+     * @throws Exception
      */
-    public function send(Request $request)
+    public function send(Request $request): JsonResponse
     {
         $request->validate([
             'phone' => ['numeric', 'nullable'],
@@ -114,12 +117,12 @@ class RestoreController extends Controller
     }
 
     /**
-     * Verify sended verification code
-     * 
+     * Verify sent verification code
+     *
      * @param Request $request
      * @return JsonResponse
      */
-    public function verify(Request $request)
+    public function verify(Request $request): JsonResponse
     {
         $model = $this->model
             ->where('phone', '=', $request->input('phone'))
@@ -148,12 +151,14 @@ class RestoreController extends Controller
 
     /**
      * Restore password with phone number.
-     * 
-     * @param string|integer $phone
-     * @param string|integer $code
-     * @return void|Exception
+     *
+     * @param integer|string $phone
+     * @param integer|string $code
+     * @return void
+     *
+     * @throws Exception
      */
-    protected function withPhone($phone, $code)
+    protected function withPhone(int|string $phone, int|string $code): void
     {
         if (!$phone || !$code) {
             throw new Exception('Invalid phone number');
@@ -171,12 +176,14 @@ class RestoreController extends Controller
 
     /**
      * Restore password with phone number.
-     * 
+     *
      * @param string $email
-     * @param string|integer $code
-     * @return void|Exception
+     * @param integer|string $code
+     * @return void
+     *
+     * @throws Exception
      */
-    protected function withEmail($email, $code)
+    protected function withEmail(string $email, int|string $code): void
     {
         if (!$email || !$code) {
             throw new Exception('Invalid email address');
