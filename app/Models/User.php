@@ -9,6 +9,19 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\Contracts\HasApiTokens as ContractsHasApiTokens;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * Model properties
+ *
+ * @property integer $id
+ * @property integer $phone
+ * @property boolean $verified
+ * @property string $name
+ * @property string $role
+ * @property string $email
+ * @property string $password
+ * @property string $phone_verified_at
+ * @property string $email_verified_at
+ */
 class User extends Authenticatable implements MustVerifyEmail, ContractsHasApiTokens
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -76,7 +89,7 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsHasApiTo
     public function setPhoneAttribute($value): void
     {
         $expression =
-            "/^[\+]?([0-9]{3})?[-\(\s\.]?([0-9]{2})[-\)\s\.]?([0-9]{7})$/";
+            "/^\+?(\d{3})?[-\s]?(\d{2})[-\s]?(\d{7})$/";
 
         $value = preg_replace($expression, '$1$2$3', $value);
         $this->attributes['phone'] = $value;

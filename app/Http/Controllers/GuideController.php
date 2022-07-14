@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Guide;
+use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -24,6 +26,7 @@ class GuideController extends Controller
         $authorized = auth('sanctum')->check();
 
         if ($authorized) {
+            /** @var Authenticatable|User */
             $user = auth('sanctum')->user();
 
             $guides = Guide::query()
