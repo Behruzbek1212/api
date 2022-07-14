@@ -20,6 +20,8 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsHasApiTo
      */
     protected $fillable = [
         'name',
+        'phone',
+        'role',
         'email',
         'password',
     ];
@@ -40,7 +42,43 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsHasApiTo
      * @var array<string, string>
      */
     protected $casts = [
+        'verified' => 'boolean',
         'email_verified_at' => 'datetime',
         'phone_verified_at' => 'datetime',
     ];
+
+    /**
+     * Check if the phone number is exist.
+     * 
+     * @return bool
+     */
+    public function existPhone()
+    {
+        return !is_null($this->phone);
+    }
+
+    /**
+     * Check if the email address is exist.
+     * 
+     * @return bool
+     */
+    public function existEmail()
+    {
+        return !is_null($this->email);
+    }
+
+    /**
+     * Mutate the phone number
+     * 
+     * @param string $value
+     * @return void
+     */
+    public function setPhoneAttribute($value)
+    {
+        $expression =
+            "/^[\+]?([0-9]{3})?[-\(\s\.]?([0-9]{2})[-\)\s\.]?([0-9]{7})$/";
+
+        $value = preg_replace($expression, '$1$2$3', $value);
+        $this->attributes['phone'] = $value;
+    }
 }

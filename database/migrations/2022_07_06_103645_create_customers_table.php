@@ -17,8 +17,10 @@ return new class extends Migration
             $table->id();
             $table->integer('user_id')->unique();
             $table->string('name');
+            $table->bigInteger('balance')->default(0);
             $table->timestamp('owned_date');
             $table->string('address');
+            $table->boolean('active')->default(false);
             $table->timestamps();
         });
     }

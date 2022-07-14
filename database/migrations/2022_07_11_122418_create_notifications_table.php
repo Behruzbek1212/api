@@ -13,14 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('candidates', function (Blueprint $table) {
-            $table->id();
-            $table->integer('user_id')->unique();
-            $table->string('first_name');
-            $table->string('last_name')->nullable();
-            $table->timestamp('birthday');
-            $table->string('address');
-            $table->boolean('active')->default(false);
+        Schema::create('notifications', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('type');
+            $table->morphs('notifiable');
+            $table->text('data');
+            $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });
     }
@@ -32,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('candidates');
+        Schema::dropIfExists('notifications');
     }
 };
