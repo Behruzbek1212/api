@@ -11,8 +11,8 @@ class BitrixService
 
     /**
      * PlayMobile service constructor
-     * 
-     * @return MobileService
+     *
+     * @return BitrixService
      */
     public function __construct()
     {
@@ -26,23 +26,23 @@ class BitrixService
 
     /**
      * Send Message to phone number
-     * 
+     *
      * @param integer|string $phone
      * @param string $message
      * @return void
      */
-    public function send($phone, $message)
+    public function send(int|string $phone, string $message): void
     {
         //
     }
 
     /**
-     * 
+     *
      * @param integer|string $phone
      * @param string $message
      * @return array|object
      */
-    protected function makeRequest($phone, $message)
+    protected function makeRequest(int|string $phone, string $message): object|array
     {
         //
     }

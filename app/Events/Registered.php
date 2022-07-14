@@ -11,10 +11,10 @@ class Registered
 
     /**
      * The authenticated user.
-     * 
+     *
      * @var User
      */
-    public $user;
+    public User $user;
 
     /**
      * Create a new event instance.
@@ -22,7 +22,7 @@ class Registered
      * @param User $user
      * @return void
      */
-    public function __construct($user)
+    public function __construct(User $user)
     {
         $this->user = $user;
     }

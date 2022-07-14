@@ -11,7 +11,7 @@ class HomeController extends Controller
      *
      * @return JsonResponse
      */
-    public function __invoke()
+    public function __invoke(): JsonResponse
     {
         return response()->json([
             'version' => 'v' . env('APP_VERSION', '1.0.0'),
@@ -25,7 +25,7 @@ class HomeController extends Controller
      *
      * @return JsonResponse
      */
-    public function fallback()
+    public function fallback(): JsonResponse
     {
         return response()->json([
             'status' => 404,

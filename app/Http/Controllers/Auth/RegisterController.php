@@ -15,11 +15,13 @@ class RegisterController extends Controller
 {
     /**
      * Registration of new users
-     * 
-     * @param  Request  $request
+     *
+     * @param Request $request
      * @return JsonResponse
+     *
+     * @throws Exception
      */
-    public function register(Request $request)
+    public function register(Request $request): JsonResponse
     {
         $request->validate([
             'phone' => ['required', 'numeric', 'unique:users,phone'],
@@ -64,7 +66,7 @@ class RegisterController extends Controller
      * @param User $user
      * @return JsonResponse
      */
-    public function registerCustomer(Request $request, User $user)
+    public function registerCustomer(Request $request, User $user): JsonResponse
     {
         $request->validate([
             'name' => ['required', 'string'],
@@ -89,7 +91,7 @@ class RegisterController extends Controller
      * @param User $user
      * @return JsonResponse
      */
-    public function registerCandidate(Request $request, User $user)
+    public function registerCandidate(Request $request, User $user): JsonResponse
     {
         $request->validate([
             'first_name' => ['required', 'string'],

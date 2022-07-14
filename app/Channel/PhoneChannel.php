@@ -2,6 +2,7 @@
 
 namespace App\Channel;
 
+use App\Services\MobileService;
 use Illuminate\Notifications\Notification;
 
 class PhoneChannel
@@ -10,10 +11,10 @@ class PhoneChannel
      * Send the given notification.
      *
      * @param mixed $notifiable
-     * @param mixed|Notification $notification
-     * @return void
+     * @param Notification $notification
+     * @return mixed
      */
-    public function send($notifiable, Notification $notification)
+    public function send(mixed $notifiable, Notification $notification): mixed
     {
         return $notification->toPhone($notifiable);
     }

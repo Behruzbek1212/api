@@ -12,11 +12,11 @@ class LoginController extends Controller
 {
     /**
      * Login existing user with phone and password.
-     * 
+     *
      * @param  Request  $request
      * @return JsonResponse
      */
-    public function login(Request $request)
+    public function login(Request $request): JsonResponse
     {
         $request->validate([
             'phone' => ['required', 'numeric'],

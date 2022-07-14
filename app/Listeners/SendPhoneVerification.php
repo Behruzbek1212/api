@@ -21,10 +21,10 @@ class SendPhoneVerification
     /**
      * Handle the event.
      *
-     * @param  \App\Events\Registered $event
+     * @param Registered $event
      * @return void
      */
-    public function handle(Registered $event)
+    public function handle(Registered $event): void
     {
         if (!$event->user->existPhone()) {
             return;
@@ -32,7 +32,8 @@ class SendPhoneVerification
 
         $verification = Random::generate(5, '0-9');
         $message = "Jobo.uz | Код подтверждение: " . $verification;
-        $playmobile = new MobileService();
-        $playmobile->send($event->user->phone, $message);
+
+        (new MobileService)
+            ->send($event->user->phone, $message);
     }
 }

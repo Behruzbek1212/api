@@ -27,7 +27,7 @@ Route::fallback([HomeController::class, 'fallback']);
 Route::prefix('/v1')->group(function () {
     // User | Me ------------------------------------
     Route::get('/me', function (Request $request) {
-        return $request->user();
+        return $request->user('sanctum');
     })->middleware('auth:sanctum');
 
     // Authorization --------------------------------

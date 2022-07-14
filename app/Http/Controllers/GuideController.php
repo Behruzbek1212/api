@@ -15,11 +15,11 @@ class GuideController extends Controller
     }
 
     /**
-     * Show all guides
-     * 
+     * Display all guides
+     *
      * @return JsonResponse
      */
-    public function all()
+    public function all(): JsonResponse
     {
         $authorized = auth('sanctum')->check();
 
@@ -44,13 +44,13 @@ class GuideController extends Controller
 
     /**
      * Get guide information
-     * 
-     * @param string|integer $id
+     *
+     * @param integer|string $id
      * @return JsonResponse
      */
-    public function get($id)
+    public function get(int|string $id): JsonResponse
     {
-        $guide = Guide::find($id);
+        $guide = Guide::query()->find($id);
 
         return response()->json([
             'status' => true,

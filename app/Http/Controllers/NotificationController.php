@@ -3,16 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
-    protected User $user;
+    protected Authenticatable|User $user;
 
     /**
      * Notification controller constructor
-     * 
+     *
      * @return void
      */
     public function __construct()
@@ -22,7 +23,7 @@ class NotificationController extends Controller
 
     /**
      * Get the notifications
-     * 
+     *
      * @param Request $request
      * @return JsonResponse
      */
@@ -33,7 +34,7 @@ class NotificationController extends Controller
 
     /**
      * Mark as read notification
-     * 
+     *
      * @param Request $request
      * @param string|integer $id
      * @return JsonResponse
@@ -45,7 +46,7 @@ class NotificationController extends Controller
 
     /**
      * Mark as read notifications
-     * 
+     *
      * @param Request $request
      * @return JsonResponse
      */
@@ -56,7 +57,7 @@ class NotificationController extends Controller
 
     /**
      * Delete notification
-     * 
+     *
      * @param Request $request
      * @param string|integer $id
      * @return JsonResponse
@@ -68,7 +69,7 @@ class NotificationController extends Controller
 
     /**
      * Delete all notifications
-     * 
+     *
      * @param Request $request
      * @param string|integer $id
      * @return JsonResponse
