@@ -86,7 +86,7 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsHasApiTo
      * @param string $value
      * @return void
      */
-    public function setPhoneAttribute($value): void
+    public function setPhoneAttribute(string $value): void
     {
         $expression =
             "/^\+?(\d{3})?[-\s]?(\d{2})[-\s]?(\d{7})$/";
