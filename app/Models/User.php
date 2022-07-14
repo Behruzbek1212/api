@@ -42,6 +42,7 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsHasApiTo
      * @var array<string, string>
      */
     protected $casts = [
+        'verified' => 'boolean',
         'email_verified_at' => 'datetime',
         'phone_verified_at' => 'datetime',
     ];

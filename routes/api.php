@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\RestoreController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,10 +25,12 @@ Route::get('/', HomeController::class);
 Route::fallback([HomeController::class, 'fallback']);
 
 Route::prefix('/v1')->group(function () {
+    // User | Me ------------------------------------
     Route::get('/me', function (Request $request) {
         return $request->user();
     })->middleware('auth:sanctum');
 
+    // Authorization --------------------------------
     Route::prefix('/auth')->name('auth.')->group(function () {
         Route::middleware('guest:sanctum')->group(function () {
             Route::post('/register', [RegisterController::class, 'register'])->name('register');
@@ -45,6 +48,7 @@ Route::prefix('/v1')->group(function () {
         });
     });
 
+    // Guides ---------------------------------------
     Route::prefix('/guides')->name('guides.')->group(function () {
         Route::get('/', [GuideController::class, 'all'])->name('all');
         Route::get('/get/{id}', [GuideController::class, 'get'])->name('get');
@@ -55,5 +59,13 @@ Route::prefix('/v1')->group(function () {
             Route::post('/edit/{id}', [GuideController::class, 'edit'])->name('edit');
             Route::post('/destroy/{id}', [GuideController::class, 'destroy'])->name('destroy');
         });
+    });
+
+    // Notifications --------------------------------
+    Route::prefix('/notifications')->middleware('auth:sanctum')->name('notifications.')->group(function () {
+        Route::get('/', [NotificationController::class, 'index'])->name('get');
+        Route::post('/read/all', [NotificationController::class, 'read_all'])->name('read');
+        Route::post('/read/{id}', [NotificationController::class, 'read'])->name('read');
+        Route::post('/destroy/{id}', [NotificationController::class, 'destroy'])->name('destroy');
     });
 });
