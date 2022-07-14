@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,8 +20,8 @@ class LogoutController extends Controller
      */
     public function logout(Request $request): JsonResponse
     {
-        /** @var User */
-        $user = $request->user();
+        /** @var Authenticatable|User */
+        $user = $request->user('sanctum');
 
         /** @var HasAbilities|Builder */
         $token = $user->currentAccessToken();

@@ -29,7 +29,7 @@ class RegisterController extends Controller
             'role' => ['required', 'in:admin,customer,candidate']
         ]);
 
-        /** @var User $user */
+        /** @var User */
         $user = User::query()->create([
             'phone' => $request->get('phone'),
             'password' => Hash::make($request->get('password')),

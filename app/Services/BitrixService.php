@@ -40,9 +40,9 @@ class BitrixService
      *
      * @param integer|string $phone
      * @param string $message
-     * @return array|object
+     * @return void
      */
-    protected function makeRequest(int|string $phone, string $message): object|array
+    protected function makeRequest(int|string $phone, string $message): void
     {
         //
     }
