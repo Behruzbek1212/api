@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
 
+/**
+ * @property array $abilities
+ */
 class PersonalAccessToken extends SanctumPersonalAccessToken
 {
     /**

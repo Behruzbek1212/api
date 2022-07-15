@@ -13,14 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('candidates', function (Blueprint $table) {
+        Schema::create('jobs', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id')->unsigned();
-            $table->string('first_name');
-            $table->string('last_name')->nullable();
-            $table->timestamp('birthday');
-            $table->string('address');
-            $table->boolean('active')->default(false);
+            $table->bigInteger('customer_id');
+            $table->string('title');
+            $table->string('salary');
+            $table->string('type');
+            $table->json('requirements');
+            $table->json('tasks')->nullable();
+            $table->json('advantages')->nullable();
+            $table->integer('location_id');
             $table->timestamps();
         });
     }
@@ -32,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('candidates');
+        Schema::dropIfExists('jobs');
     }
 };

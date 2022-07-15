@@ -4,14 +4,13 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\Contracts\HasApiTokens as ContractsHasApiTokens;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
- * Model properties
- *
  * @property integer $id
  * @property integer $phone
  * @property boolean $verified
@@ -21,6 +20,8 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $password
  * @property string $phone_verified_at
  * @property string $email_verified_at
+ * -------------- Relationships --------------
+ * @property Job[] $wishlist
  */
 class User extends Authenticatable implements MustVerifyEmail, ContractsHasApiTokens
 {
@@ -86,12 +87,23 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsHasApiTo
      * @param string $value
      * @return void
      */
-    public function setPhoneAttribute($value): void
+    public function setPhoneAttribute(string $value): void
     {
         $expression =
             "/^\+?(\d{3})?[-\s]?(\d{2})[-\s]?(\d{7})$/";
 
         $value = preg_replace($expression, '$1$2$3', $value);
         $this->attributes['phone'] = $value;
+    }
+
+    /**
+     * Display the wishlist
+     *
+     * @return BelongsToMany
+     * @see https://laravel.com/docs/9.x/eloquent-relationships#many-to-many
+     */
+    public function wishlist(): BelongsToMany
+    {
+        return $this->belongsToMany(Job::class, 'wishlists');
     }
 }
