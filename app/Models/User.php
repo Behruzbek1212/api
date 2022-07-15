@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\Contracts\HasApiTokens as ContractsHasApiTokens;
@@ -22,6 +23,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $email_verified_at
  * -------------- Relationships --------------
  * @property Job[] $wishlist
+ * @property Resume[] $resume
  */
 class User extends Authenticatable implements MustVerifyEmail, ContractsHasApiTokens
 {
@@ -59,6 +61,8 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsHasApiTo
         'verified' => 'boolean',
         'email_verified_at' => 'datetime',
         'phone_verified_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     /**
@@ -105,5 +109,16 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsHasApiTo
     public function wishlist(): BelongsToMany
     {
         return $this->belongsToMany(Job::class, 'wishlists');
+    }
+
+    /**
+     * Display the resumes
+     *
+     * @return HasMany
+     * @see https://laravel.com/docs/9.x/eloquent-relationships#one-to-many
+     */
+    public function resume(): HasMany
+    {
+        return $this->hasMany(Resume::class);
     }
 }

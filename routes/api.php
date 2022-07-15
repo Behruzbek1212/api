@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RestoreController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ResumeController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -62,21 +63,30 @@ Route::prefix('/v1')->group(function () {
         });
     });
 
-    // Notifications --------------------------------
-    Route::prefix('/notifications')->middleware('auth:sanctum')->name('notifications.')->group(function () {
-        Route::get('/', [NotificationController::class, 'index'])->name('get');
-        // Read as mark
-        Route::post('/read/all', [NotificationController::class, 'read_all'])->name('read.all');
-        Route::post('/read/{id}', [NotificationController::class, 'read'])->name('read');
-        // Destroy
-        Route::post('/destroy/all', [NotificationController::class, 'destroy_all'])->name('destroy.all');
-        Route::post('/destroy/{id}', [NotificationController::class, 'destroy'])->name('destroy');
-    });
+    Route::middleware('auth:sanctum')->group(function () {
+        // Notifications --------------------------------
+        Route::prefix('/notifications')->name('notifications.')->group(function () {
+            Route::get('/', [NotificationController::class, 'index'])->name('get');
+            // Read as mark
+            Route::post('/read/all', [NotificationController::class, 'read_all'])->name('read.all');
+            Route::post('/read/{id}', [NotificationController::class, 'read'])->name('read');
+            // Destroy
+            Route::post('/destroy/all', [NotificationController::class, 'destroy_all'])->name('destroy.all');
+            Route::post('/destroy/{id}', [NotificationController::class, 'destroy'])->name('destroy');
+        });
 
-    // Wishlist -------------------------------------
-    Route::prefix('/wishlist')->middleware('auth:sanctum')->name('wishlist.')->group(function () {
-        Route::get('/', [WishlistController::class, 'index'])->name('index');
-        Route::post('/add', [WishlistController::class, 'store'])->name('set');
-        Route::post('/remove', [WishlistController::class, 'destroy'])->name('remove');
+        // Wishlist -------------------------------------
+        Route::prefix('/wishlist')->name('wishlist.')->group(function () {
+            Route::get('/', [WishlistController::class, 'index'])->name('index');
+            Route::post('/add', [WishlistController::class, 'store'])->name('set');
+            Route::post('/remove', [WishlistController::class, 'destroy'])->name('remove');
+        });
+
+        // Resume ---------------------------------------
+        Route::prefix('/resume')->name('resume.')->group(function () {
+            Route::get('/', [ResumeController::class, 'index'])->name('index');
+            Route::post('/make', [ResumeController::class, 'store'])->name('make');
+            Route::post('/remove', [ResumeController::class, 'destroy'])->name('remove');
+        });
     });
 });

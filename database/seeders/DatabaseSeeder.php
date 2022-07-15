@@ -6,6 +6,7 @@ use App\Models\Candidate;
 use App\Models\Customer;
 use App\Models\Guide;
 use App\Models\Job;
+use App\Models\Resume;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -23,6 +24,7 @@ class DatabaseSeeder extends Seeder
         Customer::factory(15)->create();
         Guide::factory(45)->create();
         Job::factory(45)->create();
+        Resume::factory(15)->create();
 
         $this->call([
             WishlistSeeder::class

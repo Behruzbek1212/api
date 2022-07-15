@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Job;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class WishlistController extends Controller
+class ResumeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,7 +22,7 @@ class WishlistController extends Controller
 
         return response()->json([
             'status' => true,
-            'list' => $user->wishlist
+            'list' => $user->resume
         ]);
     }
 
@@ -37,20 +36,11 @@ class WishlistController extends Controller
     {
         /** @var Authenticatable|User */
         $user = $request->user('sanctum');
-        $job = Job::query()->find($request->input('job_id'));
-
-        if (is_null($job)) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Job not found'
-            ]);
-        }
-
-        $user->wishlist()->attach($job);
 
         return response()->json([
             'status' => true,
             'message' => 'Ok',
+            'data' => $user
         ]);
     }
 
@@ -64,20 +54,11 @@ class WishlistController extends Controller
     {
         /** @var Authenticatable|User */
         $user = $request->user('sanctum');
-        $job = Job::query()->find($request->input('job_id'));
-
-        if (is_null($job)) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Job not found'
-            ]);
-        }
-
-        $user->wishlist()->detach($job);
 
         return response()->json([
             'status' => true,
-            'message' => 'Ok'
+            'message' => 'Ok',
+            'data' => $user
         ]);
     }
 }
