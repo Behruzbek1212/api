@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->unique();
+            $table->bigInteger('user_id')->unsigned();
             $table->string('name');
             $table->bigInteger('balance')->default(0);
             $table->timestamp('owned_date');

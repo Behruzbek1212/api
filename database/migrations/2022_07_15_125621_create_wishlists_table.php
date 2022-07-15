@@ -13,15 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('candidates', function (Blueprint $table) {
+        Schema::create('wishlists', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned();
-            $table->string('first_name');
-            $table->string('last_name')->nullable();
-            $table->timestamp('birthday');
-            $table->string('address');
-            $table->boolean('active')->default(false);
-            $table->timestamps();
+            $table->bigInteger('job_id')->unsigned();
         });
     }
 
@@ -32,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('candidates');
+        Schema::dropIfExists('wishlists');
     }
 };
