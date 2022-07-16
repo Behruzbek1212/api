@@ -23,7 +23,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $email_verified_at
  * -------------- Relationships --------------
  * @property Job[] $wishlist
- * @property Resume[] $resume
+ * @property Resume[] $resumes
  */
 class User extends Authenticatable implements MustVerifyEmail, ContractsHasApiTokens
 {
@@ -50,6 +50,7 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsHasApiTo
     protected $hidden = [
         'password',
         'remember_token',
+        'pivot',
     ];
 
     /**
@@ -117,8 +118,26 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsHasApiTo
      * @return HasMany
      * @see https://laravel.com/docs/9.x/eloquent-relationships#one-to-many
      */
-    public function resume(): HasMany
+    public function resumes(): HasMany
     {
         return $this->hasMany(Resume::class);
+    }
+
+    /**
+     * Display resume information
+     *
+     * @param Resume $resume
+     * @return Resume|null
+     * @see https://laravel.com/docs/9.x/eloquent-relationships#one-to-many
+     */
+    public function resume(Resume $resume): ?Resume
+    {
+        foreach ($this->resumes as $_resume) {
+            if ($_resume->id === $resume->id) {
+                return $_resume;
+            }
+        }
+
+        return null;
     }
 }

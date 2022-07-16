@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * @property string title
@@ -13,6 +14,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property array|null $tasks
  * @property array|null $advantages
  * @property integer $location_id
+ * -------------- Relationships --------------
+ * @property User[] $user
  */
 class Job extends Model
 {
@@ -35,6 +38,15 @@ class Job extends Model
     ];
 
     /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'pivot',
+    ];
+
+    /**
      * The attributes that should be cast.
      *
      * @var array<string, string>
@@ -46,4 +58,32 @@ class Job extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    /**
+     * Display the wishlist
+     *
+     * @return BelongsToMany
+     * @see https://laravel.com/docs/9.x/eloquent-relationships#many-to-many
+     */
+    public function user(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'wishlists');
+    }
+
+    /**
+     * Check if user saved wishlist
+     *
+     * @param User $user
+     * @return bool
+     */
+    public function liked(User $user): bool
+    {
+        foreach ($this->user as $likedUser) {
+            if ($likedUser->id === $user->id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

@@ -6,6 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property string $title
+ * @property string $file
+ * @property array $data
+ * -------------- Relationships --------------
+ * @property User $user
+ */
 class Resume extends Model
 {
     use HasFactory;
@@ -47,7 +56,7 @@ class Resume extends Model
      * @return BelongsTo
      * @see https://laravel.com/docs/9.x/eloquent-relationships#one-to-many-inverse
      */
-    public function resume(): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
