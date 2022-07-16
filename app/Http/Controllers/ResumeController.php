@@ -27,6 +27,23 @@ class ResumeController extends Controller
     }
 
     /**
+     * Display a resume.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function show(Request $request): JsonResponse
+    {
+        /** @var Authenticatable|User */
+        $user = $request->user('sanctum');
+
+        return response()->json([
+            'status' => true,
+            'list' => $user->resume
+        ]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param Request $request

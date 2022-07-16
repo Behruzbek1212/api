@@ -85,6 +85,7 @@ Route::prefix('/v1')->group(function () {
         // Resume ---------------------------------------
         Route::prefix('/resume')->name('resume.')->group(function () {
             Route::get('/', [ResumeController::class, 'index'])->name('index');
+            Route::get('/{id}', [ResumeController::class, 'show'])->name('index');
             Route::post('/make', [ResumeController::class, 'store'])->name('make');
             Route::post('/remove', [ResumeController::class, 'destroy'])->name('remove');
         });
