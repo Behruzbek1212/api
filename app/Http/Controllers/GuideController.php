@@ -7,7 +7,6 @@ use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
 
 class GuideController extends Controller
 {
@@ -26,7 +25,7 @@ class GuideController extends Controller
         $authorized = auth('sanctum')->check();
 
         if ($authorized) {
-            /** @var Authenticatable|User */
+            /** @var Authenticatable|User $user */
             $user = auth('sanctum')->user();
 
             $guides = Guide::query()

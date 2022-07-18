@@ -22,7 +22,7 @@ class ResumeController extends Controller
 
         return response()->json([
             'status' => true,
-            'list' => $user->resume
+            'list' => $user->resumes
         ]);
     }
 
@@ -39,7 +39,7 @@ class ResumeController extends Controller
 
         return response()->json([
             'status' => true,
-            'list' => $user->resume
+            'list' => $user->resumes
         ]);
     }
 
