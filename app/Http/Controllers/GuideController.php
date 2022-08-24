@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 
 class GuideController extends Controller
 {
@@ -18,11 +19,13 @@ class GuideController extends Controller
     /**
      * Display all guides
      *
+     * @param Request $request
      * @return JsonResponse
      */
-    public function all(): JsonResponse
+    public function all(Request $request): JsonResponse
     {
         $authorized = auth('sanctum')->check();
+        $limit = $request->get('limit') ?? -1;
 
         if ($authorized) {
             /** @var Authenticatable|User $user */
@@ -35,8 +38,9 @@ class GuideController extends Controller
                     $query->where('blank', '=', '0');
                     $query->where('role', '=', 'all');
                 })
+                ->limit($limit)
                 ->get();
-        } else $guides = Guide::all();
+        } else $guides = Guide::query()->limit($limit)->get();
 
         return response()->json([
             'status' => true,
