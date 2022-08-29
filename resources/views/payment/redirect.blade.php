@@ -8,7 +8,7 @@
 <body>
     <h1 style="text-align: center">Please, wait...</h1>
 
-    <form action="{{ $params['url'] }}" method="POST" name="redirect">
+    <form action="{{ $params['url'] }}" method="GET" name="redirect">
         @foreach($params as $key => $value)
             @if($key !== 'url')
                 <input type="hidden" name="{{ $key }}" value="{{ $value }}" />
