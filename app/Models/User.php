@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\Contracts\HasApiTokens as ContractsHasApiTokens;
@@ -24,6 +25,8 @@ use Laravel\Sanctum\HasApiTokens;
  * -------------- Relationships --------------
  * @property Job[] $wishlist
  * @property Resume[] $resumes
+ * @property Customer $customer
+ * @property Candidate $candidate
  */
 class User extends Authenticatable implements MustVerifyEmail, ContractsHasApiTokens
 {
@@ -99,6 +102,28 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsHasApiTo
 
         $value = preg_replace($expression, '$1$2$3', $value);
         $this->attributes['phone'] = $value;
+    }
+
+    /**
+     * Display the customer information
+     *
+     * @return HasOne
+     * @see https://laravel.com/docs/9.x/eloquent-relationships#one-to-one
+     */
+    public function customer(): HasOne
+    {
+        return $this->hasOne(Customer::class);
+    }
+
+    /**
+     * Display the candidate information
+     *
+     * @return HasOne
+     * @see https://laravel.com/docs/9.x/eloquent-relationships#one-to-one
+     */
+    public function candidate(): HasOne
+    {
+        return $this->hasOne(Candidate::class);
     }
 
     /**
