@@ -4,7 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property User $user
+ */
 class Candidate extends Model
 {
     use HasFactory;
@@ -32,4 +36,15 @@ class Candidate extends Model
     protected $casts = [
         'birthday' => 'datetime',
     ];
+
+    /**
+     * Display the user information
+     *
+     * @return BelongsTo
+     * @see https://laravel.com/docs/9.x/eloquent-relationships#one-to-one
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

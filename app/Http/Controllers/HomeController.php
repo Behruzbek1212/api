@@ -14,9 +14,21 @@ class HomeController extends Controller
     public function __invoke(): JsonResponse
     {
         return response()->json([
-            'version' => 'v' . env('APP_VERSION', '1.0.0'),
-            'development' => 'infoshop',
+            'version' => 'v' . config('app.version'),
+            'development' => 'ADON A.K.A Infoshop',
             'repo' => 'https://github.com/jobo-uz/',
+            'contributors' => [
+                [
+                    'name' => 'Muhammaddiyor Tohirov <remisero>',
+                    'mail' => 'milly@mally.moe',
+                    'url' => 'https://github.com/thetakhirov'
+                ],
+                [
+                    'name' => 'Ibrohim Bobojonov',
+                    'mail' => 'ibrohim777775@gmail.com',
+                    'url' => 'https://github.com/ibrohim777775'
+                ]
+            ]
         ]);
     }
 
@@ -29,7 +41,7 @@ class HomeController extends Controller
     {
         return response()->json([
             'status' => 404,
-            'version' => 'v' . env('APP_VERSION', '1.0.0'),
+            'version' => 'v' . config('app.version'),
             'development' => 'infoshop',
             'repo' => 'https://github.com/jobo-uz/',
         ], 404);

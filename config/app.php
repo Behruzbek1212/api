@@ -28,6 +28,7 @@ return [
     |
     */
 
+    'version' => env('APP_VERSION', '1.0.0'),
     'env' => env('APP_ENV', 'production'),
 
     /*
@@ -83,6 +84,9 @@ return [
     */
 
     'locale' => 'en',
+    'available_locales' => [
+        'uz', 'ru', 'en'
+    ],
 
     /*
     |--------------------------------------------------------------------------

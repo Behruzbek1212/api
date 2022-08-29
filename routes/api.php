@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\RestoreController;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
@@ -28,9 +29,8 @@ Route::fallback([HomeController::class, 'fallback']);
 
 Route::prefix('/v1')->group(function () {
     // User | Me ------------------------------------
-    Route::get('/me', function (Request $request) {
-        return $request->user('sanctum');
-    })->middleware('auth:sanctum');
+    Route::get('/me', [Controller::class, 'user'])
+        ->middleware('auth:sanctum');
 
     // Authorization --------------------------------
     Route::prefix('/auth')->name('auth.')->group(function () {
