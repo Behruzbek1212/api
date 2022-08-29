@@ -16,6 +16,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/', function () {
+    return redirect('https://jobo.uz');
+});
+Route::fallback(function () {
+    return redirect('https://jobo.uz');
+});
+
 Route::prefix('handle')->group(function () {
     Route::match(['GET', 'POST'], '{pay_system}', function ($pay_system) {
         return (new Payment)
