@@ -11,7 +11,9 @@ return [
     ],
 
     'paynet' => [
-        ''
+        'login' => env('PAYNET_LOGIN', 'Inforabota'),
+        'password' => env('PAYNET_PASSWORD'),
+        'service_id' => env('PAYNET_SERVICE_ID')
     ],
 
     'payze' => [

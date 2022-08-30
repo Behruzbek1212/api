@@ -7,16 +7,16 @@ use App\Services\Payment\ResponseException;
 
 class Response extends ResponseClass
 {
-    const SUCCESS                       = 0;
-    const ERROR_SIGN_CHECK              = -1;
-    const ERROR_INVALID_AMOUNT          = -2;
-    const ERROR_ACTION_NOT_FOUND        = -3;
-    const ERROR_ALREADY_PAID            = -4;
-    const ERROR_ORDER_NOT_FOUND         = -5;
-    const ERROR_TRANSACTION_NOT_FOUND   = -6;
-    const ERROR_UPDATE_ORDER            = -7;
-    const ERROR_REQUEST_FROM            = -8;
-    const ERROR_TRANSACTION_CANCELLED   = -9;
+    public const SUCCESS                       = 0;
+    public const ERROR_SIGN_CHECK              = -1;
+    public const ERROR_INVALID_AMOUNT          = -2;
+    public const ERROR_ACTION_NOT_FOUND        = -3;
+    public const ERROR_ALREADY_PAID            = -4;
+    public const ERROR_ORDER_NOT_FOUND         = -5;
+    public const ERROR_TRANSACTION_NOT_FOUND   = -6;
+    public const ERROR_UPDATE_ORDER            = -7;
+    public const ERROR_REQUEST_FROM            = -8;
+    public const ERROR_TRANSACTION_CANCELLED   = -9;
 
     public array $result                = [];
 

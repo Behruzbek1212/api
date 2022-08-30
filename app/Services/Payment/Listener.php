@@ -4,7 +4,6 @@ namespace App\Services\Payment;
 
 use App\Models\Transaction;
 use App\Models\User;
-use App\Services\DataFormat;
 
 class Listener
 {

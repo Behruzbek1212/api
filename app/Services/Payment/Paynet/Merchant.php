@@ -2,7 +2,6 @@
 
 namespace App\Services\Payment\Paynet;
 
-class Handle
+class Merchant
 {
-
 }

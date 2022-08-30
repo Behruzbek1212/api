@@ -14,24 +14,24 @@ class Transaction extends Model
 {
     use SoftDeletes;
 
-    const TIMEOUT = 43200000;
-    const RETURN_URL = 'https://jobo.uz/';
+    public const TIMEOUT = 43200000;
+    public const RETURN_URL = 'https://jobo.uz/';
 
-    const STATE_CREATED = 1;
-    const STATE_COMPLETED = 2;
-    const STATE_CANCELLED = -1;
-    const STATE_CANCELLED_AFTER_COMPLETE = -2;
+    public const STATE_CREATED = 1;
+    public const STATE_COMPLETED = 2;
+    public const STATE_CANCELLED = -1;
+    public const STATE_CANCELLED_AFTER_COMPLETE = -2;
 
-    const REASON_RECEIVERS_NOT_FOUND = 1;
-    const REASON_PROCESSING_EXECUTION_FAILED = 2;
-    const REASON_EXECUTION_FAILED = 3;
-    const REASON_CANCELLED_BY_TIMEOUT = 4;
-    const REASON_FUND_RETURNED = 5;
-    const REASON_UNKNOWN = 10;
+    public const REASON_RECEIVERS_NOT_FOUND = 1;
+    public const REASON_PROCESSING_EXECUTION_FAILED = 2;
+    public const REASON_EXECUTION_FAILED = 3;
+    public const REASON_CANCELLED_BY_TIMEOUT = 4;
+    public const REASON_FUND_RETURNED = 5;
+    public const REASON_UNKNOWN = 10;
 
-    const CURRENCY_CODE_UZS = 860;
-    const CURRENCY_CODE_RUB = 643;
-    const CURRENCY_CODE_USD = 840;
+    public const CURRENCY_CODE_UZS = 860;
+    public const CURRENCY_CODE_RUB = 643;
+    public const CURRENCY_CODE_USD = 840;
 
     protected $fillable = [
         'payment_system', 'currency_code',
