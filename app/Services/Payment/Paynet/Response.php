@@ -3,6 +3,7 @@
 namespace App\Services\Payment\Paynet;
 
 use App\Services\Payment\ResponseClass;
+use App\Services\Payment\ResponseException;
 
 class Response extends ResponseClass
 {
@@ -22,15 +23,68 @@ class Response extends ResponseClass
     protected int $code;
 
     /**
+     * Paynet - Response constructor
+     *
+     * @return Response
+     */
+    public function __construct()
+    {
+        return $this;
+    }
+
+    /**
+     * Set response body
+     *
+     * @param Request $request
+     * @param mixed $body
+     * @param int $code
+     * @return void
+     *
+     * @throws ResponseException
+     */
+    public function response(Request $request, mixed $body, int $code): void
+    {
+        $this->request = $request;
+        $this->body = $body;
+        $this->code = $code;
+
+        throw new ResponseException($this);
+    }
+
+    /**
+     * Make response body
+     *
+     * @param string $body
+     * @return string
+     */
+    public static function makeResponse(string $body): string
+    {
+        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>".
+                "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\">".
+                    "<soapenv:Body>".
+                        $body.
+                    "</soapenv:Body>".
+                "</soapenv:Envelope>";
+    }
+
+    /**
+     * Define request model
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function _request(Request $request): void
+    {
+        $this->request = $request;
+    }
+
+    /**
      * Display the result
      *
      * @return mixed
      */
     public function send(): mixed
     {
-        // $secret_key = config('payment.click')['secret_key'];
-        // $digest = sha1(time() . $secret_key);
-
         return $this->body;
     }
 
@@ -42,7 +96,7 @@ class Response extends ResponseClass
     public function headers(): array
     {
         return [
-            'Content-Type' => 'application/xml',
+            'Content-Type' => 'text/xml',
         ];
     }
 }

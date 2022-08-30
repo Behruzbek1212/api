@@ -74,7 +74,7 @@ class Response extends ResponseClass
     public function headers(): array
     {
         return [
-            'Content-Type' => 'application/json',
+            'Content-Type' => 'application/json; charset=utf-8',
         ];
     }
 }
