@@ -56,13 +56,25 @@ class Response extends ResponseClass
     /**
      * Display the result
      *
-     * @return array
+     * @return mixed
      */
-    public function send(): array
+    public function send(): mixed
     {
         // $secret_key = config('payment.click')['secret_key'];
         // $digest = sha1(time() . $secret_key);
 
-        return $this->result;
+        return json_encode($this->result, JSON_PRETTY_PRINT);
+    }
+
+    /**
+     * Return headers
+     *
+     * @return array
+     */
+    public function headers(): array
+    {
+        return [
+            'Content-Type' => 'application/json',
+        ];
     }
 }

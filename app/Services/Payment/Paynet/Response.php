@@ -2,7 +2,9 @@
 
 namespace App\Services\Payment\Paynet;
 
-class Response
+use App\Services\Payment\ResponseClass;
+
+class Response extends ResponseClass
 {
     public const ERROR_INTERNAL_SYSTEM         = -32400;
     public const ERROR_INSUFFICIENT_PRIVILEGE  = -32504;
@@ -18,4 +20,29 @@ class Response
     protected Request $request;
     protected mixed $body;
     protected int $code;
+
+    /**
+     * Display the result
+     *
+     * @return mixed
+     */
+    public function send(): mixed
+    {
+        // $secret_key = config('payment.click')['secret_key'];
+        // $digest = sha1(time() . $secret_key);
+
+        return $this->body;
+    }
+
+    /**
+     * Return headers
+     *
+     * @return array
+     */
+    public function headers(): array
+    {
+        return [
+            'Content-Type' => 'application/xml',
+        ];
+    }
 }

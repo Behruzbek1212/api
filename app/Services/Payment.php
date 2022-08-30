@@ -11,7 +11,7 @@ use App\Services\Payment\Payze\Payze;
 use App\Services\Payment\Paynet\Paynet;
 use App\Services\Payment\ResponseException;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 /**
  * Payment service
@@ -61,18 +61,18 @@ class Payment extends PaymentConverter
     /**
      * Handling payment driver
      *
-     * @return JsonResponse|null
+     * @return Response|null
      *
      * @throws PaymentException
      */
-    public function handle(): JsonResponse|null
+    public function handle(): ?Response
     {
         $this->validateDriver();
 
         try {
             $this->paymentDriver->run();
         } catch (ResponseException $e) {
-            return response()->json($e->response());
+            return response($e->response(), headers: $e->headers());
         }
 
         return null;

@@ -4,5 +4,17 @@ namespace App\Services\Payment;
 
 abstract class ResponseClass
 {
-    abstract public function send(): array;
+    /**
+     * Return response body
+     *
+     * @return mixed
+     */
+    abstract public function send(): mixed;
+
+    /**
+     * Return headers
+     *
+     * @return array
+     */
+    abstract public function headers(): array;
 }
