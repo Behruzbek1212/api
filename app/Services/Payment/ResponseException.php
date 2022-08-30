@@ -34,10 +34,20 @@ class ResponseException extends Exception
     /**
      * Return the response
      *
-     * @return array
+     * @return mixed
      */
-    public function response(): array
+    public function response(): mixed
     {
         return $this->response->send();
+    }
+
+    /**
+     * Return headers
+     *
+     * @return array
+     */
+    public function headers(): array
+    {
+        return $this->response->headers();
     }
 }

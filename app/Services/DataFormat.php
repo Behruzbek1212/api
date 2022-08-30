@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Http;
-
 class DataFormat
 {
     /**
@@ -109,7 +107,7 @@ class DataFormat
      */
     public static function toDateTime(string $time): bool|string
     {
-        return date('Y-m-d H:i:s',strtotime($time));
+        return date('Y-m-d H:i:s', strtotime($time));
     }
 
     /**
@@ -118,6 +116,6 @@ class DataFormat
      */
     public static function toDateTimeWithTimeZone(string $time): string
     {
-        return date('Y-m-d\TH:i:s',strtotime($time)) . '+05:00';
+        return date('Y-m-d\TH:i:s', strtotime($time)) . '+05:00';
     }
 }

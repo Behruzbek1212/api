@@ -4,5 +4,8 @@
     "license": "MIT",
     "repository": {
         "directory": "https://github.com/jobo-uz/api"
+    },
+    "scripts": {
+        "lint": "php vendor/bin/pint -v"
     }
 }

@@ -14,15 +14,15 @@ use JetBrains\PhpStorm\ArrayShape;
 
 class Click extends PaymentClass
 {
-    const ARRAY_SHAPE = [
+    public const ARRAY_SHAPE = [
         'service_id' => 'integer|string',
         'secret_key' => 'integer|string',
         'merchant_id' => 'integer|string',
         'merchant_user_id' => 'integer|string',
     ];
 
-    const REQUEST_PREPARE = '0';
-    const REQUEST_COMPLETE = '1';
+    public const REQUEST_PREPARE = '0';
+    public const REQUEST_COMPLETE = '1';
 
     #[ArrayShape(self::ARRAY_SHAPE)]
     protected array $config;
@@ -39,7 +39,7 @@ class Click extends PaymentClass
     {
         $this->config = config('payment.click');
         $this->request = request()->all();
-        $this->response = new Response();
+        $this->response = new Response;
         $this->merchant = new Merchant($this->response);
 
         return $this;

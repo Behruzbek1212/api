@@ -4,10 +4,10 @@ namespace App\Services\Payment;
 
 class PaymentSystems
 {
-    const NON_ACTIVE = 'non_active';
-    const ACTIVE = 'active';
+    public const NON_ACTIVE = 'non_active';
+    public const ACTIVE = 'active';
 
-    const CLICK = 'click';
-    const PAYNET = 'paynet';
-    const PAYZE = 'payze';
+    public const CLICK = 'click';
+    public const PAYNET = 'paynet';
+    public const PAYZE = 'payze';
 }
