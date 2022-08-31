@@ -16,13 +16,45 @@ class GuideFactory extends Factory
      */
     public function definition()
     {
+        $rand_int = $this->faker->numberBetween(0, 2);
+
+        $images = [
+            'https://static.jobo.uz/img/1.png',
+            'https://static.jobo.uz/img/2.png',
+            'https://static.jobo.uz/img/3.png',
+        ];
+
+        $backgrounds = [
+            '#0079FE',
+            '#FFA800',
+            '#FF6985'
+        ];
+
+        $buttons = [
+            '#FFA800',
+            '#0079FE',
+            '#FFA800'
+        ];
+
+        $roles = [
+            'customer',
+            'candidate',
+            'all'
+        ];
+
         return [
             'title' => $this->faker->text(50),
-            'design' => ['background' => '#252525', 'button' => '#454545', 'image' => '/img/img1.jpg'],
-            'image' => '/img/img1.jpg',
-            'content' => $this->faker->realTextBetween(300, 800),
-            'content_button' => '#454545',
-            'role' => ['customer', 'candidate', 'all'][$this->faker->numberBetween(0, 2)],
+            'background' => [
+                'color' => $backgrounds[$rand_int],
+                'image' => $images[$rand_int]
+            ],
+            'button' => [
+                'text' => 'more',
+                'color' => '#FFFFFF',
+                'background' => $buttons[$rand_int]
+            ],
+            'content' => $this->faker->realTextBetween(700, 1200),
+            'role' => $roles[$rand_int],
             'slug' => $this->faker->slug()
         ];
     }

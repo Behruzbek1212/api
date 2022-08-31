@@ -16,13 +16,16 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        $rand_int = $this->faker->numberBetween(0, 1);
+        $roles = ['candidate', 'customer'];
+
         return [
             'phone' => $this->faker->unique()->e164PhoneNumber(),
             'email' => $this->faker->unique()->email(),
             'phone_verified_at' => $this->faker->dateTime(),
             'email_verified_at' => $this->faker->dateTime(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'role' => ['candidate', 'customer'][$this->faker->numberBetween(0, 1)],
+            'role' => $roles[$rand_int],
             'verified' => $this->faker->boolean(),
         ];
     }

@@ -15,11 +15,9 @@ return new class extends Migration {
         Schema::create('guides', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('button')->default('More ...');
-            $table->json('design');
-            $table->string('image');
+            $table->json('button');
+            $table->json('background');
             $table->text('content');
-            $table->string('content_button');
             $table->enum('role', ['customer', 'candidate', 'all'])->default('all');
             $table->string('slug');
             $table->boolean('blank')->default(false);

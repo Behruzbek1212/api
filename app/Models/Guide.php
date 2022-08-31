@@ -16,11 +16,9 @@ class Guide extends Model
      */
     protected $fillable = [
         'title',
+        'background',
         'button',
-        'design',
-        'image',
         'content',
-        'content_button',
         'role',
         'slug'
     ];
@@ -40,7 +38,8 @@ class Guide extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'design' => 'array',
+        'background' => 'array',
+        'button' => 'array',
         'blank' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
