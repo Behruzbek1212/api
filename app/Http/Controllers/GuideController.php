@@ -58,6 +58,12 @@ class GuideController extends Controller
     {
         $guide = Guide::query()->find($slug);
 
+        if (is_null($guide))
+            return response()->json([
+                'status' => false,
+                'message' => 'Guide not found'
+            ]);
+
         return response()->json([
             'status' => true,
             'guide' => $guide

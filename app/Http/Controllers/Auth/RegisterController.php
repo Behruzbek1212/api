@@ -36,17 +36,16 @@ class RegisterController extends Controller
             'role' => $request->get('role'),
         ]);
 
-        switch ($user->role) {
-            case 'candidate':
-                $this->registerCandidate($request, $user);
-                break;
-            case 'customer':
-                $this->registerCustomer($request, $user);
-                break;
-            case 'admin':
-            default:
-                throw new Exception('Invalid role');
-        }
+        match ($user->role) {
+            'candidate' =>
+                $this->registerCandidate($request, $user),
+
+            'customer' =>
+                $this->registerCustomer($request, $user),
+
+            default =>
+                throw new Exception('Invalid role')
+        };
 
         $token = $user->createToken($user->name . '-' . Hash::make($user->id))
             ->plainTextToken;

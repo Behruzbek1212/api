@@ -44,19 +44,15 @@ class RestoreController extends Controller
             ->where('phone', $request->input('phone'))
             ->orWhere('email', $request->input('phone'));
 
-        if (is_null($model->first()) || is_null($user->first())) {
-            return response()->json([
-                'status' => false,
-                'message' => 'No user found with provided phone or email address'
-            ]);
-        }
+        if (is_null($model->first()) || is_null($user->first())) return response()->json([
+            'status' => false,
+            'message' => 'No user found with provided phone or email address'
+        ]);
 
-        if (!Hash::check($request->input('code'), $model->first()->token)) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Verification code is not valid'
-            ]);
-        }
+        if (!Hash::check($request->input('code'), $model->first()->token)) return response()->json([
+            'status' => false,
+            'message' => 'Verification code is not valid'
+        ]);
 
         $model->delete();
         $user->update([
@@ -99,16 +95,16 @@ class RestoreController extends Controller
 
         $code = Random::generate(5, '0-9');
 
-        switch ($request->input('type')) {
-            case 'phone':
-                $this->withPhone($request->input('phone'), $code);
-                break;
-            case 'email':
-                $this->withEmail($request->input('email'), $code);
-                break;
-            default:
-                throw new Exception('Invalid request type');
-        }
+        match ($request->input('type')) {
+            'phone' =>
+                $this->withPhone($request->input('phone'), $code),
+
+            'email' =>
+                $this->withEmail($request->input('email'), $code),
+
+            default =>
+                throw new Exception('Invalid request type')
+        };
 
         return response()->json([
             'status' => true,
@@ -129,19 +125,15 @@ class RestoreController extends Controller
             ->orWhere('email', '=', $request->input('email'))
             ->first();
 
-        if (is_null($model)) {
-            return response()->json([
-                'status' => false,
-                'message' => 'No user found with provided phone or email address'
-            ]);
-        }
+        if (is_null($model)) return response()->json([
+            'status' => false,
+            'message' => 'No user found with provided phone or email address'
+        ]);
 
-        if (!Hash::check($request->input('code'), $model->token)) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Verification code is not valid',
-            ]);
-        }
+        if (!Hash::check($request->input('code'), $model->token)) return response()->json([
+            'status' => false,
+            'message' => 'Verification code is not valid',
+        ]);
 
         return response()->json([
             'status' => true,
@@ -175,7 +167,7 @@ class RestoreController extends Controller
     }
 
     /**
-     * Restore password with phone number.
+     * Restore password with email address.
      *
      * @param string $email
      * @param integer|string $code

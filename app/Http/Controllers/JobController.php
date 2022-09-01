@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
-use App\Models\User;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -56,11 +54,17 @@ class JobController extends Controller
      */
     public function get(string $slug): JsonResponse
     {
-        $guide = Job::query()->find($slug);
+        $job = Job::query()->find($slug);
+
+        if (is_null($job))
+            return response()->json([
+                'status' => false,
+                'message' => 'Job not found'
+            ]);
 
         return response()->json([
             'status' => true,
-            'guide' => $guide
+            'job' => $job
         ]);
     }
 }

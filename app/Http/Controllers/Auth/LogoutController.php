@@ -20,10 +20,10 @@ class LogoutController extends Controller
      */
     public function logout(Request $request): JsonResponse
     {
-        /** @var Authenticatable|User */
-        $user = $request->user('sanctum');
+        /** @var Authenticatable|User $request */
+        $user = _auth()->user();
 
-        /** @var HasAbilities|Builder */
+        /** @var HasAbilities|Builder $token */
         $token = $user->currentAccessToken();
         $token->delete();
 
