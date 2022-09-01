@@ -55,7 +55,7 @@ class GuideFactory extends Factory
             ],
             'content' => $this->faker->realTextBetween(700, 1200),
             'role' => $roles[$rand_int],
-            'slug' => $this->faker->slug()
+            'slug' => $this->faker->unique()->slug()
         ];
     }
 }

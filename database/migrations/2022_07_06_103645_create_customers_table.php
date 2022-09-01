@@ -12,15 +12,19 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('customers', function (Blueprint $table) {
+        $default_avatar = 'https://static.jobo.uz/img/default.webp';
+
+        Schema::create('customers', function (Blueprint $table) use ($default_avatar) {
             $table->id();
             $table->bigInteger('user_id')->unsigned();
+            $table->string('avatar')->default($default_avatar);
             $table->string('name');
             $table->bigInteger('balance')->default(0);
             $table->timestamp('owned_date');
             $table->string('address');
             $table->boolean('active')->default(false);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

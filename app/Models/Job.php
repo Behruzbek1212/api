@@ -4,7 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property string title
@@ -15,11 +17,27 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property array|null $advantages
  * @property integer $location_id
  * -------------- Relationships --------------
+ * @property Customer $customer
  * @property User[] $user
  */
 class Job extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+
+    /**
+     * The primary key for the model.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'slug';
+
+    /**
+     * The "type" of the primary key ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'string';
 
     /**
      * The attributes that are mass assignable.
@@ -35,6 +53,8 @@ class Job extends Model
         'tasks',
         'advantages',
         'location_id',
+        'slug',
+        'status'
     ];
 
     /**
@@ -43,7 +63,8 @@ class Job extends Model
      * @var array<int, string>
      */
     protected $hidden = [
-        'pivot',
+        'deleted_at',
+        'customer_id'
     ];
 
     /**
@@ -52,12 +73,24 @@ class Job extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'salary' => 'array',
         'requirements' => 'array',
         'tasks' => 'array',
         'advantages' => 'array',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    /**
+     * Display the customer information
+     *
+     * @return BelongsTo
+     * @see https://laravel.com/docs/9.x/eloquent-relationships#one-to-many-inverse
+     */
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class);
+    }
 
     /**
      * Display the wishlist

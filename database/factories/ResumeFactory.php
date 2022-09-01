@@ -17,7 +17,7 @@ class ResumeFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => $this->faker->numberBetween(1, 20),
+            'user_id' => $this->faker->numberBetween(1, 8),
             'file' => $this->faker->unique()->url(),
             'data' => ['ok', 'no'] // TODO: change this to something
         ];

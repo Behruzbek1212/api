@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
@@ -19,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Customer extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -32,6 +35,15 @@ class Customer extends Model
         'owned_date',
         'address',
         'active'
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'user_id'
     ];
 
     /**
@@ -52,5 +64,16 @@ class Customer extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Display the resumes
+     *
+     * @return HasMany
+     * @see https://laravel.com/docs/9.x/eloquent-relationships#one-to-many
+     */
+    public function jobs(): HasMany
+    {
+        return $this->hasMany(Job::class);
     }
 }

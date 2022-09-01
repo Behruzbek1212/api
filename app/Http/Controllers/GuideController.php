@@ -51,12 +51,12 @@ class GuideController extends Controller
     /**
      * Get guide information
      *
-     * @param integer|string $id
+     * @param string $slug
      * @return JsonResponse
      */
-    public function get(int|string $id): JsonResponse
+    public function get(string $slug): JsonResponse
     {
-        $guide = Guide::query()->find($id);
+        $guide = Guide::query()->find($slug);
 
         return response()->json([
             'status' => true,

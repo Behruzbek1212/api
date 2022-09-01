@@ -17,7 +17,8 @@ class CustomerFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => $this->faker->unique()->numberBetween(1, 40),
+            'user_id' => $this->faker->unique()->numberBetween(1, 20),
+            'avatar' => $this->faker->unique()->imageUrl(450, 450),
             'name' => $this->faker->company(),
             'balance' => $this->faker->randomNumber(),
             'owned_date' => $this->faker->dateTime(),

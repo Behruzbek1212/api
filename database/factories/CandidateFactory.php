@@ -17,7 +17,8 @@ class CandidateFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => $this->faker->unique()->numberBetween(1, 20),
+            'user_id' => $this->faker->unique()->numberBetween(1, 9),
+            'avatar' => $this->faker->unique()->imageUrl(450, 450),
             'first_name' => $this->faker->name(),
             'last_name' => $this->faker->name(),
             'birthday' => $this->faker->dateTime(),

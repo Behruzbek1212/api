@@ -16,13 +16,16 @@ return new class extends Migration {
             $table->id();
             $table->bigInteger('customer_id');
             $table->string('title');
-            $table->string('salary');
             $table->string('type');
+            $table->json('salary');
             $table->json('requirements');
             $table->json('tasks')->nullable();
             $table->json('advantages')->nullable();
             $table->integer('location_id');
+            $table->string('slug')->unique();
+            $table->enum('status', ['approved', 'rejected', 'moderating'])->default('moderating');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

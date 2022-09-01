@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RestoreController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\JobController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ResumeController;
 use App\Http\Controllers\WishlistController;
@@ -52,7 +53,20 @@ Route::prefix('/v1')->group(function () {
     // Guides ---------------------------------------
     Route::prefix('/guides')->name('guides.')->group(function () {
         Route::get('/', [GuideController::class, 'all'])->name('all');
-        Route::get('/get/{id}', [GuideController::class, 'get'])->name('get');
+        Route::get('/get/{slug}', [GuideController::class, 'get'])->name('get');
+
+        // Admin routes | TODO:Building 🏗
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::post('/create', [GuideController::class, 'create'])->name('create');
+            Route::post('/edit/{id}', [GuideController::class, 'edit'])->name('edit');
+            Route::post('/destroy/{id}', [GuideController::class, 'destroy'])->name('destroy');
+        });
+    });
+
+    // Jobs -----------------------------------------
+    Route::prefix('/jobs')->name('jobs.')->group(function () {
+        Route::get('/', [JobController::class, 'all'])->name('all');
+        Route::get('/get/{slug}', [JobController::class, 'get'])->name('get');
 
         // Admin routes | TODO:Building 🏗
         Route::middleware('auth:sanctum')->group(function () {
