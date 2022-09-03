@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\CheckController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -34,6 +35,8 @@ Route::prefix('/v1')->group(function () {
 
     // Authorization --------------------------------
     Route::prefix('/auth')->name('auth.')->group(function () {
+        Route::post('/check', CheckController::class)->name('check');
+
         Route::middleware('guest:sanctum')->group(function () {
             Route::post('/register', [RegisterController::class, 'register'])->name('register');
             Route::post('/login', [LoginController::class, 'login'])->name('login');
