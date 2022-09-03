@@ -54,7 +54,8 @@ class JobController extends Controller
      */
     public function get(string $slug): JsonResponse
     {
-        $job = Job::query()->find($slug);
+        $job = Job::query()->with('customer')
+            ->find($slug);
 
         if (is_null($job))
             return response()->json([
