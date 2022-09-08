@@ -19,12 +19,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        User::factory(16)->create();
-        Candidate::factory(8)->create();
-        Customer::factory(8)->create();
+        // User::factory(16)->create();
+        // Candidate::factory(8)->create();
+        // Customer::factory(8)->create();
         Guide::factory(45)->create();
         Job::factory(45)->create();
-        Resume::factory(8)->create();
+        // Resume::factory(8)->create();
 
         $this->call([
             WishlistSeeder::class

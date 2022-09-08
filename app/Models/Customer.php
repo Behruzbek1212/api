@@ -31,8 +31,10 @@ class Customer extends Model
     protected $fillable = [
         'user_id',
         'name',
+        'avatar',
         'balance',
         'owned_date',
+        'location',
         'address',
         'active'
     ];

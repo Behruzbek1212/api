@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,9 +23,10 @@ class Candidate extends Model
      */
     protected $fillable = [
         'user_id',
+        'avatar',
         'name',
-        'first_name',
-        'last_name',
+        'surname',
+        'spheres',
         'birthday',
         'address',
         'active'
@@ -45,14 +47,28 @@ class Candidate extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'spheres' => 'array',
         'birthday' => 'datetime',
     ];
+
+    /**
+     * @return Attribute
+     */
+    public function avatar(): Attribute
+    {
+        $default_avatar = 'https://static.jobo.uz/img/default.webp';
+
+        return Attribute::make(
+            set: fn ($value) =>
+                is_null($value) ? $default_avatar : $value
+        );
+    }
 
     /**
      * Display the user information
      *
      * @return BelongsTo
-     * @see https://laravel.com/docs/9.x/eloquent-relationships#one-to-one
+     * @see https://laravel.com/docs/9.x/eloquent-relationships#one-to-one-defining-the-inverse-of-the-relationship
      */
     public function user(): BelongsTo
     {

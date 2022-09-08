@@ -21,10 +21,10 @@ class MobileService extends MobileServiceConst
      */
     public function __construct()
     {
-        $this->payload = env('PLAYMOBILE_PAYLOAD');
-        $this->login = env('PLAYMOBILE_LOGIN');
-        $this->password = env('PLAYMOBILE_PASSWORD');
-        $this->originator = env('PLAYMOBILE_ORIGINATOR');
+        $this->payload = config('services.playmobile.payload');
+        $this->login = config('services.playmobile.login');
+        $this->password = config('services.playmobile.password');
+        $this->originator = config('services.playmobile.originator');
 
         return $this;
     }

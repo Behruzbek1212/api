@@ -31,9 +31,8 @@ class SendPhoneVerification
         }
 
         $verification = Random::generate(5, '0-9');
-        $message = "Jobo.uz | Код подтверждение: " . $verification;
 
         (new MobileService)
-            ->send($event->user->phone, $message);
+            ->send($event->user->phone, __('mobile.send.verification_code', ['code' => $verification]));
     }
 }

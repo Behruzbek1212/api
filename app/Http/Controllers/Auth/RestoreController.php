@@ -44,15 +44,17 @@ class RestoreController extends Controller
             ->where('phone', $request->input('phone'))
             ->orWhere('email', $request->input('phone'));
 
-        if (is_null($model->first()) || is_null($user->first())) return response()->json([
-            'status' => false,
-            'message' => 'No user found with provided phone or email address'
-        ]);
+        if (is_null($model->first()) || is_null($user->first()))
+            return response()->json([
+                'status' => false,
+                'message' => 'No user found with provided phone or email address'
+            ]);
 
-        if (!Hash::check($request->input('code'), $model->first()->token)) return response()->json([
-            'status' => false,
-            'message' => 'Verification code is not valid'
-        ]);
+        if (! Hash::check($request->input('code'), $model->get('token')->first()->token))
+            return response()->json([
+                'status' => false,
+                'message' => 'Verification code is not valid'
+            ]);
 
         $model->delete();
         $user->update([
@@ -123,6 +125,7 @@ class RestoreController extends Controller
         $model = $this->model
             ->where('phone', '=', $request->input('phone'))
             ->orWhere('email', '=', $request->input('email'))
+            ->get('token')
             ->first();
 
         if (is_null($model)) return response()->json([
@@ -161,9 +164,8 @@ class RestoreController extends Controller
             'token' => Hash::make($code)
         ]);
 
-        $message = "Jobo.uz | Код подтверждение: " . $code;
         (new MobileService)
-            ->send($phone, $message);
+            ->send($phone, __('mobile.send.verification_code', ['code' => $code]));
     }
 
     /**

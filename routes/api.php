@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Auth\CheckController;
+use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -11,6 +11,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ResumeController;
+use App\Http\Controllers\Utils\UploadController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,7 +36,10 @@ Route::prefix('/v1')->group(function () {
 
     // Authorization --------------------------------
     Route::prefix('/auth')->name('auth.')->group(function () {
-        Route::post('/check', CheckController::class)->name('check');
+        Route::prefix('/check')->name('check.')->group(function () {
+            Route::post('/', [VerificationController::class, 'check'])->name('index');
+            Route::post('/verify', [VerificationController::class, 'verify'])->name('verify');
+        });
 
         Route::middleware('guest:sanctum')->group(function () {
             Route::post('/register', [RegisterController::class, 'register'])->name('register');
@@ -105,5 +109,9 @@ Route::prefix('/v1')->group(function () {
             Route::post('/make', [ResumeController::class, 'store'])->name('make');
             Route::post('/remove', [ResumeController::class, 'destroy'])->name('remove');
         });
+    });
+
+    Route::prefix('/utils')->name('utils.')->group(function () {
+        Route::post('upload', [UploadController::class, 'upload'])->name('upload');
     });
 });

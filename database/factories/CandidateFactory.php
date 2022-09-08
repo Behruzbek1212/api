@@ -16,11 +16,18 @@ class CandidateFactory extends Factory
      */
     public function definition()
     {
+        $spheres = [
+            ['it', 'marketing', 'education'],
+            ['marketing', 'it'],
+            ['it'],
+        ];
+
         return [
             'user_id' => $this->faker->unique()->numberBetween(1, 9),
             'avatar' => $this->faker->unique()->imageUrl(450, 450),
-            'first_name' => $this->faker->name(),
-            'last_name' => $this->faker->name(),
+            'name' => $this->faker->name(),
+            'surname' => $this->faker->name(),
+            'spheres' => $spheres[$this->faker->numberBetween(0, 2)],
             'birthday' => $this->faker->dateTime(),
             'address' => $this->faker->streetAddress(),
             'active' => $this->faker->boolean(),

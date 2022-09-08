@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Interfaces\MustVerifyPhone as ContractsMustVerifyPhone;
+use App\Traits\MustVerifyPhone;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -28,10 +30,11 @@ use Laravel\Sanctum\HasApiTokens;
  * @property Customer $customer
  * @property Candidate $candidate
  */
-class User extends Authenticatable implements MustVerifyEmail, ContractsHasApiTokens
+class User extends Authenticatable implements MustVerifyEmail, ContractsMustVerifyPhone, ContractsHasApiTokens
 {
     use HasApiTokens;
     use HasFactory;
+    use MustVerifyPhone;
     use Notifiable;
 
     /**
@@ -89,21 +92,6 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsHasApiTo
     public function existEmail(): bool
     {
         return !is_null($this->email);
-    }
-
-    /**
-     * Mutate the phone number
-     *
-     * @param string $value
-     * @return void
-     */
-    public function setPhoneAttribute(string $value): void
-    {
-        $expression =
-            "/^\+?(\d{3})?[-\s]?(\d{2})[-\s]?(\d{7})$/";
-
-        $value = preg_replace($expression, '$1$2$3', $value);
-        $this->attributes['phone'] = $value;
     }
 
     /**

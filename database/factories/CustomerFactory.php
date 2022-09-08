@@ -22,6 +22,7 @@ class CustomerFactory extends Factory
             'name' => $this->faker->company(),
             'balance' => $this->faker->randomNumber(),
             'owned_date' => $this->faker->dateTime(),
+            'location' => $this->faker->city(),
             'address' => $this->faker->address(),
             'active' => $this->faker->boolean(),
         ];
