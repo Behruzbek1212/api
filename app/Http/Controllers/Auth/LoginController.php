@@ -40,7 +40,9 @@ class LoginController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Your account has been successfully authenticated.',
-            'user' => $user,
+            'user' => User::query()
+                ->with('candidate', 'customer')
+                ->find($user->id),
             'token' => $token,
         ]);
     }
