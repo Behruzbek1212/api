@@ -19,6 +19,7 @@ return new class extends Migration {
             $table->string('name');
             $table->string('surname')->nullable();
             $table->json('spheres')->nullable();
+            $table->string('specialization')->nullable();
             $table->timestamp('birthday');
             $table->string('address');
             $table->boolean('active')->default(false);

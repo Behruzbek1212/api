@@ -28,6 +28,7 @@ class CandidateFactory extends Factory
             'name' => $this->faker->name(),
             'surname' => $this->faker->name(),
             'spheres' => $spheres[$this->faker->numberBetween(0, 2)],
+            'specialization' => $this->faker->jobTitle(),
             'birthday' => $this->faker->dateTime(),
             'address' => $this->faker->streetAddress(),
             'active' => $this->faker->boolean(),

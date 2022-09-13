@@ -29,6 +29,7 @@ class Candidate extends Model
         'spheres',
         'birthday',
         'address',
+        'specialization',
         'active'
     ];
 
@@ -52,6 +53,8 @@ class Candidate extends Model
     ];
 
     /**
+     * Set user avatar mutation
+     *
      * @return Attribute
      */
     public function avatar(): Attribute
