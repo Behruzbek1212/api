@@ -16,15 +16,20 @@ class UploadController extends Controller
         ]);
 
         $name = $request->get('name');
+        $image = $request->get('image');
+
         $name = $name == '' ?
             Random::generate(5, 'a-z') :
             str_replace(' ', '_', $name);
 
-        $image = $request->get('image');
-        $image = str_replace('data:image/webp;base64,', '', $image);
+        preg_match('/^data:image\/(\w+);/m', $image, $mimetype);
+        $mimetype = '.' . $mimetype[1];
+
+        $image = explode(',', $image)[1];
         $image = str_replace(' ', '+', $image);
 
-        $image_directory = '/uploads/image/avatars/' . $name . '-' . Random::generate() . '.webp';
+        $image_directory =
+            '/uploads/image/avatars/' . $name . '-' . Random::generate() . $mimetype;
 
         File::put(base_path('public') . $image_directory, base64_decode($image));
 
