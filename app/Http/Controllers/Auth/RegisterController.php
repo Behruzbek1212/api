@@ -156,6 +156,7 @@ class RegisterController extends Controller
             'name' => $request->input('name'),
             'surname' => $request->input('surname'),
             'spheres' => $request->input('spheres'),
+            'specialization' => $request->input('specialization'),
             'birthday' => $request->input('birthday'),
             'address' => $request->input('address'),
         ]);
