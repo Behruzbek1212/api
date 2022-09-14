@@ -118,7 +118,7 @@
                     </h2>
                 </td>
                 <td class="w-full">
-                    <p style="font-size: 11px; line-height: 19px">
+                    <p style="font-size: 14px; line-height: 19px">
                         {{ $faker->paragraph('10') }}
                     </p>
                 </td>
