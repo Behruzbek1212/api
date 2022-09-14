@@ -5,11 +5,13 @@ namespace App\Models;
 use App\Interfaces\MustVerifyPhone as ContractsMustVerifyPhone;
 use App\Traits\MustVerifyPhone;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\Contracts\HasApiTokens as ContractsHasApiTokens;
 use Laravel\Sanctum\HasApiTokens;
@@ -36,6 +38,17 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
     use HasFactory;
     use MustVerifyPhone;
     use Notifiable;
+
+    /**
+     * Available roles list
+     *
+     * @var array<int, string>
+     */
+    protected $availableRoles = [
+        'candidate',
+        'customer',
+        'admin'
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -73,6 +86,60 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    /**
+     * Get name mutation
+     *
+     * @return Attribute
+     */
+    public function name(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this[$this->role]->name
+        );
+    }
+
+    /**
+     * Switch user role
+     *
+     * @param string $role
+     * @return JsonResponse
+     */
+    public function changeRole(string $role): JsonResponse
+    {
+        if (! in_array($role, $this->availableRoles))
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid role'
+            ]);
+
+        switch ($role) {
+            case 'candidate':
+                $this->customer()->update([ 'active' => false ]);
+                $this->candidate()->update([ 'active' => true ]);
+                break;
+            case 'customer':
+                $this->candidate()->update([ 'active' => false ]);
+                break;
+            case 'admin':
+                $this->candidate()->update([ 'active' => false ]);
+                $this->customer()->update([ 'active' => false ]);
+                break;
+            default:
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Error occurred'
+                ]);
+        }
+
+        $this->role = $role;
+        $this->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Role updated successfully'
+        ]);
+    }
 
     /**
      * Check if the phone number is exist.

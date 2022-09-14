@@ -113,5 +113,15 @@ Route::prefix('/v1')->group(function () {
 
     Route::prefix('/utils')->name('utils.')->group(function () {
         Route::post('upload', [UploadController::class, 'upload'])->name('upload');
+
+        // TODO: Delete
+        Route::get('resume', function (\Illuminate\Http\Request $request) {
+            $user = $request->get('user');
+            $user = \App\Models\User::query()->find($user);
+
+            return (new \App\Services\ResumeService)
+                ->load(compact('user'))
+                ->stream();
+        });
     });
 });

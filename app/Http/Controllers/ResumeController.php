@@ -17,7 +17,7 @@ class ResumeController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        /** @var Authenticatable|User */
+        /** @var Authenticatable|User $user */
         $user = $request->user('sanctum');
 
         return response()->json([
@@ -34,7 +34,7 @@ class ResumeController extends Controller
      */
     public function show(Request $request): JsonResponse
     {
-        /** @var Authenticatable|User */
+        /** @var Authenticatable|User $user */
         $user = $request->user('sanctum');
 
         return response()->json([
@@ -51,7 +51,7 @@ class ResumeController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        /** @var Authenticatable|User */
+        /** @var Authenticatable|User $user */
         $user = $request->user('sanctum');
 
         return response()->json([
@@ -69,7 +69,7 @@ class ResumeController extends Controller
      */
     public function destroy(Request $request): JsonResponse
     {
-        /** @var Authenticatable|User */
+        /** @var Authenticatable|User $user */
         $user = $request->user('sanctum');
 
         return response()->json([
