@@ -15,6 +15,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\Contracts\HasApiTokens as ContractsHasApiTokens;
 use Laravel\Sanctum\HasApiTokens;
+use PayzeIO\LaravelPayze\Traits\HasTransactions;
 
 /**
  * @property integer $id
@@ -36,6 +37,7 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
 {
     use HasApiTokens;
     use HasFactory;
+    use HasTransactions;
     use MustVerifyPhone;
     use Notifiable;
 
@@ -159,6 +161,26 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
     public function existEmail(): bool
     {
         return !is_null($this->email);
+    }
+
+    /**
+     * Check if user role is customer.
+     *
+     * @return bool
+     */
+    public function isCustomer(): bool
+    {
+        return !is_null($this->customer);
+    }
+
+    /**
+     * Check if user role is customer.
+     *
+     * @return bool
+     */
+    public function isCandidate(): bool
+    {
+        return !is_null($this->candidate);
     }
 
     /**

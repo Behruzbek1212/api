@@ -16,6 +16,10 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
+    'domain' => [
+        'api' => env('API_DOMAIN_NAME'),
+        'static' => env('STATIC_DOMAIN_NAME'),
+    ],
 
     /*
     |--------------------------------------------------------------------------

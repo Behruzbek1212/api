@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c6a0253e40f4eca80958868fc7ee3357",
+    "content-hash": "246907a37d7b32d96983687463299202",
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -2318,6 +2318,59 @@
                 }
             ],
             "time": "2022-08-01T11:03:24+00:00"
+        },
+        {
+            "name": "payzeio/laravel-payze",
+            "version": "v1.8.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/payzeio/laravel-payze.git",
+                "reference": "ee76cc5f8b26683f639586ed59f772cee6f39bcc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/payzeio/laravel-payze/zipball/ee76cc5f8b26683f639586ed59f772cee6f39bcc",
+                "reference": "ee76cc5f8b26683f639586ed59f772cee6f39bcc",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^6|^7",
+                "illuminate/support": ">=5.3",
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "PayzeIO\\LaravelPayze\\PayzeServiceProvider"
+                    ],
+                    "aliases": {
+                        "Payze": "PayzeIO\\LaravelPayze\\Facades\\Payze"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PayzeIO\\LaravelPayze\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Levan Lotuashvili",
+                    "email": "l.lotuashvili@gmail.com"
+                }
+            ],
+            "description": "Payze.io Payment Integration for Laravel",
+            "support": {
+                "issues": "https://github.com/payzeio/laravel-payze/issues",
+                "source": "https://github.com/payzeio/laravel-payze/tree/v1.8.3"
+            },
+            "time": "2022-09-12T07:23:37+00:00"
         },
         {
             "name": "phenx/php-font-lib",

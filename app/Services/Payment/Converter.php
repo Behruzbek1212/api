@@ -4,6 +4,8 @@ namespace App\Services\Payment;
 
 use App\Models\Transaction;
 use App\Models\User;
+use JsonException;
+use PayzeIO\LaravelPayze\Exceptions\UnsupportedCurrencyException;
 
 class Converter extends Listener
 {
@@ -38,6 +40,28 @@ class Converter extends Listener
     public static function isProperAmount(int|float $amount): bool
     {
         return $amount >= 500;
+    }
+
+    /**
+     * Convert currency code to string
+     *
+     * @param int $currency
+     *
+     * @return string
+     * @throws JsonException|UnsupportedCurrencyException
+     */
+    public static function currencyCodeToString(int $currency): string
+    {
+        if (! in_array($currency, Transaction::SUPPORTED)) {
+            throw new JsonException('Currency code is not supported');
+        }
+
+        return match ($currency) {
+            Transaction::CURRENCY_CODE_UZS => 'UZS',
+            Transaction::CURRENCY_CODE_RUB => 'RUB',
+            Transaction::CURRENCY_CODE_USD => 'USD',
+            default => throw new UnsupportedCurrencyException($currency)
+        };
     }
 
     /**

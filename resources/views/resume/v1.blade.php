@@ -8,11 +8,8 @@
     $avatar = explode('/', $user->candidate->avatar);
     $avatar = public_path('uploads/image/avatars/') . array_pop($avatar);
 
-    if (! file_exists($avatar)) {
+    if (! file_exists($avatar))
         throw new \JsonException('File does not exist');
-    }
-
-    preg_match('/(default.webp)$/m', $avatar, $match, PREG_UNMATCHED_AS_NULL);
 @endphp
 
 @section('title', $user->name)

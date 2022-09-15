@@ -33,6 +33,12 @@ class Transaction extends Model
     public const CURRENCY_CODE_RUB = 643;
     public const CURRENCY_CODE_USD = 840;
 
+    public const SUPPORTED = [
+        self::CURRENCY_CODE_UZS,
+        self::CURRENCY_CODE_RUB,
+        self::CURRENCY_CODE_USD
+    ];
+
     protected $fillable = [
         'payment_system', 'currency_code',
         'state', 'system_transaction_id',

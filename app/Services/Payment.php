@@ -12,6 +12,9 @@ use App\Services\Payment\Paynet\Paynet;
 use App\Services\Payment\ResponseException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Response;
+use JsonException;
+use PayzeIO\LaravelPayze\Exceptions\UnsupportedCurrencyException;
+use Throwable;
 
 /**
  * Payment service
@@ -87,14 +90,17 @@ class Payment extends PaymentConverter
      * @param string $url
      * @return View
      *
-     * @throws PaymentException
+     * @throws PaymentException|JsonException|UnsupportedCurrencyException|Throwable
      */
     public function redirect(
         User $model,
         float|int $amount,
-        int $currency = Transaction::CURRENCY_CODE_UZS,
+        int|string $currency = Transaction::CURRENCY_CODE_UZS,
         string $url = Transaction::RETURN_URL
     ): View {
+        if ($model->isCandidate())
+            throw new JsonException('User cannot redirect because it is a candidate');
+
         $this->validateDriver();
         $driver = $this->paymentDriver;
 
