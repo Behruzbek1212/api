@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: automerge
-        uses: actions/github-script@0.2.0
+        uses: actions/github-script@v6.2.0
         with:
           script: |
             github.pullRequests.createReview({
