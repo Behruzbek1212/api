@@ -16,19 +16,7 @@ class HomeController extends Controller
         return response()->json([
             'version' => 'v' . config('app.version'),
             'development' => 'ADON A.K.A Infoshop',
-            'repo' => 'https://github.com/jobo-uz/',
-            'contributors' => [
-                [
-                    'name' => 'Muhammaddiyor Tohirov <remisero>',
-                    'mail' => 'milly@mally.moe',
-                    'url' => 'https://github.com/thetakhirov'
-                ],
-                [
-                    'name' => 'Ibrohim Bobojonov',
-                    'mail' => 'ibrohim777775@gmail.com',
-                    'url' => 'https://github.com/ibrohim777775'
-                ]
-            ]
+            'repo' => 'https://github.com/jobo-uz/'
         ]);
     }
 

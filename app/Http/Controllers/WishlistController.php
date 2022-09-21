@@ -18,12 +18,13 @@ class WishlistController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        /** @var Authenticatable|User */
-        $user = $request->user('sanctum');
+        /** @var Authenticatable|User $user */
+        $user = _auth()->user();
 
         return response()->json([
             'status' => true,
-            'list' => $user->wishlist
+            'list' => $user->wishlist()
+                ->paginate(15)
         ]);
     }
 
@@ -35,8 +36,12 @@ class WishlistController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        /** @var Authenticatable|User */
-        $user = $request->user('sanctum');
+        $request->validate([
+            'job_id' => ['required']
+        ]);
+
+        /** @var Authenticatable|User $user */
+        $user = _auth()->user();
         $job = Job::query()->find($request->input('job_id'));
 
         if (is_null($job)) {
@@ -62,8 +67,8 @@ class WishlistController extends Controller
      */
     public function destroy(Request $request): JsonResponse
     {
-        /** @var Authenticatable|User */
-        $user = $request->user('sanctum');
+        /** @var Authenticatable|User $user */
+        $user = _auth()->user();
         $job = Job::query()->find($request->input('job_id'));
 
         if (is_null($job)) {

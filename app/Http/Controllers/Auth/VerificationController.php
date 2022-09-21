@@ -95,6 +95,7 @@ class VerificationController extends Controller
                 'message' => __('error.verification_code_is_invalid')
             ]);
 
+        $model->delete();
         return response()->json([
             'status' => true,
             'message' => 'Verification successful'

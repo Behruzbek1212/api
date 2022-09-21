@@ -41,12 +41,9 @@ class RegisterController extends Controller
     {
         $request->validate([
             'phone' => ['required', 'numeric', 'unique:users,phone'],
-            'verification_code' => ['required', 'numeric', 'min:5'],
             'password' => ['required', 'min:8'],
             'role' => ['required', 'in:admin,customer,candidate']
         ]);
-
-//        $this->check_verification_code($request);
 
         /** @var User $user */
         $user = User::query()->create([
@@ -79,31 +76,6 @@ class RegisterController extends Controller
                 ->find($user->id),
             'token' => $token
         ]);
-    }
-
-    /**
-     * Check verification code
-     *
-     * @param Request $request
-     * @return void
-     *
-     * @throws JsonException
-     */
-    protected function check_verification_code(Request $request): void
-    {
-        $phone = str_replace('+', '', $request->get('phone'));
-        $model = $this->model->where('phone', $phone);
-
-        if (is_null($model->first()))
-            throw new JsonException('Verification code not found', 200);
-
-        $token = $model->get('token')->first()->token;
-        $code = $request->get('verification_code');
-
-        if (! Hash::check($code, $token))
-            throw new JsonException('Invalid verification code', 200);
-
-        $model->delete();
     }
 
     /**
