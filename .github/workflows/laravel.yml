@@ -49,4 +49,5 @@ jobs:
       - name: Execute tests (Unit and Feature tests) using PHPUnit
         env:
           DB_PORT: ${{ job.services.mysql.ports[3306] }}
+          API_DOMAIN_NAME: ''
         run: ./vendor/bin/phpunit
