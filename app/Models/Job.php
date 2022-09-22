@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -57,6 +60,10 @@ class Job extends Model
         'status'
     ];
 
+    protected $appends = [
+        'liked'
+    ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -106,17 +113,22 @@ class Job extends Model
     /**
      * Check if user saved wishlist
      *
-     * @param User $user
+     * @return User|BelongsToMany|null
+     */
+    public function getLikedByCurrentUser(): User|BelongsToMany|null
+    {
+        return $this->user()
+            ->where('user_id', @_auth()->id() ?? 0)
+            ->first();
+    }
+
+    /**
+     * Check if user saved wishlist
+     *
      * @return bool
      */
-    public function liked(User $user): bool
+    public function getLikedAttribute(): bool
     {
-        foreach ($this->user as $likedUser) {
-            if ($likedUser->id === $user->id) {
-                return true;
-            }
-        }
-
-        return false;
+        return ! is_null($this->getLikedByCurrentUser());
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Job;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,12 @@ class JobController extends Controller
     public function all(Request $request): JsonResponse
     {
         /** @var Builder $jobs */
-        $jobs = Job::query()->with('customer')
+        $jobs = Job::query()
+            // Check if customer status is active
+            ->whereHas('customer', function (EloquentBuilder $query) {
+                $query->where('active', '=', true);
+            })
+            ->with('customer')
             ->where('status', '=', 'approved');
 
         if ($title = $request->get('title'))
@@ -55,13 +61,7 @@ class JobController extends Controller
     public function get(string $slug): JsonResponse
     {
         $job = Job::query()->with('customer')
-            ->find($slug);
-
-        if (is_null($job))
-            return response()->json([
-                'status' => false,
-                'message' => 'Job not found'
-            ]);
+            ->findOrFail($slug);
 
         return response()->json([
             'status' => true,

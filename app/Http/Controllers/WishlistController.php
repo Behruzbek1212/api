@@ -24,6 +24,7 @@ class WishlistController extends Controller
         return response()->json([
             'status' => true,
             'list' => $user->wishlist()
+                ->with('customer')
                 ->paginate(15)
         ]);
     }
@@ -51,7 +52,8 @@ class WishlistController extends Controller
             ]);
         }
 
-        $user->wishlist()->attach($job);
+        $user->wishlist()
+            ->syncWithoutDetaching($job);
 
         return response()->json([
             'status' => true,
