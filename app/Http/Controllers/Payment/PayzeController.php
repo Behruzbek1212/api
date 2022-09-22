@@ -34,7 +34,7 @@ class PayzeController extends BasePayzeController
 
         $amount = match ($transaction->currency) {
             'UZS' => $amount,
-            'USD' => Exchange::USDToUSD($amount)
+            'USD' => Exchange::USDToUZS($amount)
         };
 
         User::query()->find($transaction->model_id)

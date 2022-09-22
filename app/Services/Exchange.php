@@ -50,7 +50,7 @@ class Exchange
      * @return float|int
      * @throws GuzzleException
      */
-    public static function USDToUSD(int $amount): float|int
+    public static function USDToUZS(int $amount): float|int
     {
         $price = self::GetExchangeRate('USD');
 
