@@ -1,18 +1,21 @@
 @extends('app')
 
 @php
-    /** @var \App\Models\User $user */
+    /**
+     * @var \App\Models\Candidate|\Illuminate\Contracts\Auth\Authenticatable $candidate
+     * @var array $data
+     */
 
     $faker = \Faker\Factory::create();
 
-    $avatar = explode('/', $user->candidate->avatar);
+    $avatar = explode('/', $candidate->avatar);
     $avatar = public_path('uploads/image/avatars/') . array_pop($avatar);
 
     if (! file_exists($avatar))
-        throw new \JsonException('File does not exist');
+        throw new \ErrorException('File does not exist');
 @endphp
 
-@section('title', $user->name)
+@section('title', $candidate->name)
 
 @section('style')
     <style type="text/css">
@@ -36,6 +39,10 @@
 
         p {
             color: #21212199;
+        }
+
+        p * {
+            font-size: 16px;
         }
 
         .text-blue {
@@ -87,19 +94,19 @@
                     <td style="width: 135px; padding-right: 20px">
                         <img
                             src="{{ $avatar }}"
-                            alt="{{ $user->name }}"
+                            alt="{{ $candidate->name }}"
                             class="profile-avatar"
                             width="100%"
                         />
                     </td>
                 @endif
                 <td align="left" class="space-1">
-                    <h1>{{ $user->name }}</h1>
-                    <p>{{ $user->candidate->specialization }}</p>
+                    <h1>{{ $candidate->name }}</h1>
+                    <p>{{ $candidate->specialization }}</p>
                     <p style="line-height: 20px">
-                        {{ $user->candidate->address }} <br />
-                        {{ $user->email }} <br />
-                        {{ $user->phone }} <br />
+                        {{ $candidate->address }} <br />
+                        {{ $candidate->email }} <br />
+                        +{{ $candidate->phone }} <br />
                     </p>
                 </td>
             </tr>
@@ -111,12 +118,12 @@
             <tr class="w-full">
                 <td style="max-width: 130px; width: 130px; vertical-align: top">
                     <h2 class="text-blue text-bold">
-                        About
+                        {{ __('About') }}
                     </h2>
                 </td>
                 <td class="w-full">
                     <p style="font-size: 14px; line-height: 19px">
-                        {{ $faker->paragraph('10') }}
+                        {!! $data['about'] !!}
                     </p>
                 </td>
             </tr>
@@ -128,30 +135,29 @@
             <tr class="w-full">
                 <td style="max-width: 130px; width: 130px">
                     <h2 class="text-blue text-bold">
-                        Education
+                        {{ __('Education') }}
                     </h2>
                 </td>
             </tr>
-            <tr class="w-full">
-                <td style="width: 130px; vertical-align: top; padding-top: 15px">
-                    <p style="font-size: 11px; margin-top: 4px">Nov 2005 — Sep 2010</p>
-                </td>
-                <td class="w-full space-1" style="padding-top: 15px">
-                    <h3>Los Angeles University</h3>
-                    <p style="font-size: 14px">
-                        Bachelor of Fine Arts in Graphic Design, GPA: 3.4/4.0
-                    </p>
-                </td>
-            </tr>
-            <tr class="w-full">
-                <td style="width: 130px; vertical-align: top; padding-top: 15px">
-                    <p style="font-size: 11px; margin-top: 4px">Aug 2010 — Sep 2012</p>
-                </td>
-                <td class="w-full space-1" style="padding-top: 15px">
-                    <h3>New York University</h3>
-                    <p style="font-size: 14px">Master of Graphic Design, GPA: 3.8/4.0</p>
-                </td>
-            </tr>
+            @foreach($data['education'] as $education)
+                <tr class="w-full">
+                    <td style="width: 130px; vertical-align: top; padding-top: 15px">
+                        <p style="font-size: 11px; margin-top: 4px">
+                            {{ __('month.' . $education['date']['start']['month']) }}
+                            {{ $education['date']['start']['year'] }}
+                            -
+                            {{ __('month.' . $education['date']['end']['month']) }}
+                            {{ $education['date']['end']['year'] }}
+                        </p>
+                    </td>
+                    <td class="w-full space-1" style="padding-top: 15px">
+                        <h3>{{ $education['school'] }} - {{ $education['degree'] }}</h3>
+                        <p style="font-size: 14px">
+                            {!! $education['description'] !!}
+                        </p>
+                    </td>
+                </tr>
+            @endforeach
         </table>
 
         <div class="splitter"></div>
@@ -160,78 +166,71 @@
             <tr class="w-full">
                 <td style="max-width: 130px; width: 130px">
                     <h2 class="text-blue text-bold">
-                        Employment
+                        {{ __('Employment') }}
                     </h2>
                 </td>
             </tr>
-            <tr class="w-full">
-                <td style="width: 130px; vertical-align: top; padding-top: 15px">
-                    <p style="font-size: 11px; margin-top: 4px">Oct 2012 — Sep 2015</p>
-                </td>
-                <td class="w-full space-1" style="padding-top: 15px">
-                    <h3>UI Designer at Market Studios</h3>
-                    <p style="font-size: 14px">
-                        Successfully translated subject into concrete design for newsletters,
-                        promotional materials and sales collateral. Created design graphics for
-                        marketing and sales presentations, training videos and corporate websites.
-                    </p>
-                </td>
-            </tr>
-            <tr class="w-full">
-                <td style="width: 130px; vertical-align: top; padding-top: 15px">
-                    <p style="font-size: 11px; margin-top: 4px">Oct 2015 — Jan 2018</p>
-                </td>
-                <td class="w-full space-1" style="padding-top: 15px">
-                    <h3>Graphic Designer at FireWeb</h3>
-                    <p style="font-size: 14px; line-height: 19px">
-                        Created new design themes for marketing and collateral materials.
-                        Collaborated with creative team to design and produce computer-generated
-                        artwork for marketing and promotional materials.
-                    </p>
-                </td>
-            </tr>
+            @foreach($data['employment'] as $employment)
+                <tr class="w-full">
+                    <td style="width: 130px; vertical-align: top; padding-top: 15px">
+                        <p style="font-size: 11px; margin-top: 4px">
+                            {{ __('month.' . $employment['date']['start']['month']) }}
+                            {{ $employment['date']['start']['year'] }}
+                            -
+                            {{ __('month.' . $employment['date']['end']['month']) }}
+                            {{ $employment['date']['end']['year'] }}
+                        </p>
+                    </td>
+                    <td class="w-full space-1" style="padding-top: 15px">
+                        <h3>{{ $employment['title'] }} at {{ $employment['employer'] }}</h3>
+                        <p style="font-size: 14px">
+                            {!! $employment['description'] !!}
+                        </p>
+                    </td>
+                </tr>
+            @endforeach
         </table>
 
         <div class="splitter"></div>
 
-        <table class="w-full">
-            <tr class="w-full">
-                <td style="max-width: 130px; width: 130px; vertical-align: top">
-                    <h2 class="text-blue text-bold">
-                        Skills
-                    </h2>
-                </td>
-                <td class="w-full">
-                    <table class="w-full" style="padding-top: 7px">
-                        <tr class="w-full">
-                            <td style="display: inline-block; min-width: 280px; max-width: 280px; padding-bottom: 10px">
-                                <h4 align="left" style="display: inline-block; width: 60%">Figma</h4>
-                                <p align="right" style="display: inline-block; width: 20%">Expert</p>
-                            </td>
-                            <td style="display: inline-block; min-width: 280px; max-width: 280px; padding-bottom: 10px">
-                                <h4 align="left" style="display: inline-block; width: 60%">HTML/CSS</h4>
-                                <p align="right" style="display: inline-block; width: 20%">Expert</p>
-                            </td>
-                            <td style="display: inline-block; min-width: 280px; max-width: 280px; padding-bottom: 10px">
-                                <h4 align="left" style="display: inline-block; width: 60%">Sketch App</h4>
-                                <p align="right" style="display: inline-block; width: 20%">Expert</p>
-                            </td>
-                            <td style="display: inline-block; min-width: 280px; max-width: 280px; padding-bottom: 10px">
-                                <h4 align="left" style="display: inline-block; width: 60%">Premiere Pro</h4>
-                                <p align="right" style="display: inline-block; width: 20%">Expert</p>
-                            </td>
-                            <td style="display: inline-block; min-width: 280px; max-width: 280px; padding-bottom: 10px">
-                                <h4 align="left" style="display: inline-block; width: 60%">Adobe Photoshop</h4>
-                                <p align="right" style="display: inline-block; width: 20%">Expert</p>
-                            </td>
-                            <td style="display: inline-block; min-width: 280px; max-width: 280px; padding-bottom: 10px">
-                                <h4 align="left" style="display: inline-block; width: 60%">After Effects</h4>
-                                <p align="right" style="display: inline-block; width: 20%">Expert</p>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
+        {{-- <table class="w-full"> --}}
+        {{--     <tr class="w-full"> --}}
+        {{--         <td style="max-width: 130px; width: 130px; vertical-align: top"> --}}
+        {{--             <h2 class="text-blue text-bold"> --}}
+        {{--                 Skills --}}
+        {{--             </h2> --}}
+        {{--         </td> --}}
+        {{--         <td class="w-full"> --}}
+        {{--             <table class="w-full" style="padding-top: 7px"> --}}
+        {{--                 <tr class="w-full"> --}}
+        {{--                     <td style="display: inline-block; min-width: 280px; max-width: 280px; padding-bottom: 10px"> --}}
+        {{--                         <h4 align="left" style="display: inline-block; width: 60%">Figma</h4> --}}
+        {{--                         <p align="right" style="display: inline-block; width: 20%">Expert</p> --}}
+        {{--                     </td> --}}
+        {{--                     <td style="display: inline-block; min-width: 280px; max-width: 280px; padding-bottom: 10px"> --}}
+        {{--                         <h4 align="left" style="display: inline-block; width: 60%">HTML/CSS</h4> --}}
+        {{--                         <p align="right" style="display: inline-block; width: 20%">Expert</p> --}}
+        {{--                     </td> --}}
+        {{--                     <td style="display: inline-block; min-width: 280px; max-width: 280px; padding-bottom: 10px"> --}}
+        {{--                         <h4 align="left" style="display: inline-block; width: 60%">Sketch App</h4> --}}
+        {{--                         <p align="right" style="display: inline-block; width: 20%">Expert</p> --}}
+        {{--                     </td> --}}
+        {{--                     <td style="display: inline-block; min-width: 280px; max-width: 280px; padding-bottom: 10px"> --}}
+        {{--                         <h4 align="left" style="display: inline-block; width: 60%">Premiere Pro</h4> --}}
+        {{--                         <p align="right" style="display: inline-block; width: 20%">Expert</p> --}}
+        {{--                     </td> --}}
+        {{--                     <td style="display: inline-block; min-width: 280px; max-width: 280px; padding-bottom: 10px"> --}}
+        {{--                         <h4 align="left" style="display: inline-block; width: 60%">Adobe Photoshop</h4> --}}
+        {{--                         <p align="right" style="display: inline-block; width: 20%">Expert</p> --}}
+        {{--                     </td> --}}
+        {{--                     <td style="display: inline-block; min-width: 280px; max-width: 280px; padding-bottom: 10px"> --}}
+        {{--                         <h4 align="left" style="display: inline-block; width: 60%">After Effects</h4> --}}
+        {{--                         <p align="right" style="display: inline-block; width: 20%">Expert</p> --}}
+        {{--                     </td> --}}
+        {{--                 </tr> --}}
+        {{--             </table> --}}
+        {{--         </td> --}}
+        {{--     </tr> --}}
+        {{-- </table> --}}
     </main>
 @endsection

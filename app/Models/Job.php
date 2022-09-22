@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,9 +16,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property array|null $tasks
  * @property array|null $advantages
  * @property integer $location_id
+ * @property bool $liked
  * -------------- Relationships --------------
  * @property Customer $customer
- * @property User[] $user
  */
 class Job extends Model
 {
@@ -60,6 +57,11 @@ class Job extends Model
         'status'
     ];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array<int, string>
+     */
     protected $appends = [
         'liked'
     ];
@@ -100,24 +102,14 @@ class Job extends Model
     }
 
     /**
-     * Display the wishlist
-     *
-     * @return BelongsToMany
-     * @see https://laravel.com/docs/9.x/eloquent-relationships#many-to-many
-     */
-    public function user(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'wishlists');
-    }
-
-    /**
      * Check if user saved wishlist
      *
      * @return User|BelongsToMany|null
      */
     public function getLikedByCurrentUser(): User|BelongsToMany|null
     {
-        return $this->user()
+        return $this
+            ->belongsToMany(User::class, 'wishlists')
             ->where('user_id', @_auth()->id() ?? 0)
             ->first();
     }

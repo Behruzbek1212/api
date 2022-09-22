@@ -68,6 +68,34 @@ class Candidate extends Model
     }
 
     /**
+     * Set user avatar mutation
+     *
+     * @return Attribute
+     */
+    public function phone(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->user->phone,
+            set: fn ($value) =>
+                $this->user()->update([ 'phone' => $value ])
+        );
+    }
+
+    /**
+     * Set user avatar mutation
+     *
+     * @return Attribute
+     */
+    public function email(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->user->email,
+            set: fn ($value) =>
+            $this->user()->update([ 'email' => $value ])
+        );
+    }
+
+    /**
      * Display the user information
      *
      * @return BelongsTo

@@ -60,4 +60,20 @@ class ResumeService extends ResumeServiceConst
 
         return $this->pdf->stream('download.pdf');
     }
+
+    /**
+     * Render and download PDF file
+     *
+     * @param string $name
+     *
+     * @return Response
+     * @throws JsonException
+     */
+    public function download(string $name = 'download.pdf'): Response
+    {
+        if (is_null($this->pdf))
+            throw new JsonException('DomPDF not initialized');
+
+        return $this->pdf->download($name);
+    }
 }

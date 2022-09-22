@@ -5,13 +5,11 @@ namespace App\Models;
 use App\Interfaces\MustVerifyPhone as ContractsMustVerifyPhone;
 use App\Traits\MustVerifyPhone;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableConteact;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Notifications\Notifiable;
@@ -123,6 +121,7 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
                 $this->candidate()->update([ 'active' => true ]);
                 break;
             case 'customer':
+                $this->customer()->update([ 'active' => true ]);
                 $this->candidate()->update([ 'active' => false ]);
                 break;
             case 'admin':

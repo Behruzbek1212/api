@@ -2,44 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Resume;
 use App\Models\User;
+use App\Services\ResumeService;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use JsonException;
 
 class ResumeController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
      * @return JsonResponse
      */
-    public function index(Request $request): JsonResponse
+    public function index(): JsonResponse
     {
-        /** @var Authenticatable|User $user */
-        $user = $request->user('sanctum');
+        /** @var Authenticatable|User|null $user */
+        $user = _auth()->user();
 
         return response()->json([
             'status' => true,
-            'list' => $user->resumes
-        ]);
-    }
-
-    /**
-     * Display a resume.
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function show(Request $request): JsonResponse
-    {
-        /** @var Authenticatable|User $user */
-        $user = $request->user('sanctum');
-
-        return response()->json([
-            'status' => true,
-            'list' => $user->resumes
+            'resumes' => $user->resumes
         ]);
     }
 
@@ -51,31 +37,85 @@ class ResumeController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        /** @var Authenticatable|User $user */
-        $user = $request->user('sanctum');
+        /** @var Authenticatable|User|null $user */
+        $user = _auth()->user();
+
+        $user->resumes()->updateOrCreate([
+            'data' => $request->toArray()
+        ]);
 
         return response()->json([
             'status' => true,
             'message' => 'Ok',
-            'data' => $user
+            'data' => $user->resumes
         ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param Request $request
+     * @param string|int $id
      * @return JsonResponse
      */
-    public function destroy(Request $request): JsonResponse
+    public function destroy(string|int $id): JsonResponse
     {
         /** @var Authenticatable|User $user */
-        $user = $request->user('sanctum');
+        $user = _auth()->user();
+
+        $user->resumes()
+            ->findOrFail($id)
+            ->delete();
 
         return response()->json([
             'status' => true,
             'message' => 'Ok',
-            'data' => $user
+            'data' => $user->resumes
         ]);
+    }
+
+    /**
+     * Display a resume.
+     *
+     * @param string|int $id
+     *
+     * @return Response
+     * @throws JsonException
+     */
+    public function show(string|int $id): Response
+    {
+        $resume = Resume::query()
+            ->with('user')
+            ->findOrFail($id);
+
+        $data = $resume->data;
+        $candidate = $resume->user
+            ->candidate;
+
+        return (new ResumeService)
+            ->load(compact('data', 'candidate'))
+            ->stream();
+    }
+
+    /**
+     * Download resume.
+     *
+     * @param string|int $id
+     *
+     * @return Response
+     * @throws JsonException
+     */
+    public function download(string|int $id): Response
+    {
+        $resume = Resume::query()
+            ->with('user')
+            ->findOrFail($id);
+
+        $data = $resume->data;
+        $candidate = $resume->user
+            ->candidate;
+
+        return (new ResumeService)
+            ->load(compact('data', 'candidate'))
+            ->download($candidate->name . '.pdf');
     }
 }

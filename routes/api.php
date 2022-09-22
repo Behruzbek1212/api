@@ -105,23 +105,16 @@ Route::prefix('/v1')->group(function () {
         // Resume ---------------------------------------
         Route::prefix('/resume')->name('resume.')->group(function () {
             Route::get('/', [ResumeController::class, 'index'])->name('index');
-            Route::get('/{id}', [ResumeController::class, 'show'])->name('index');
             Route::post('/make', [ResumeController::class, 'store'])->name('make');
-            Route::post('/remove', [ResumeController::class, 'destroy'])->name('remove');
+            Route::post('/remove/{id}', [ResumeController::class, 'destroy'])->name('remove');
         });
     });
 
+    // Resume Display|Download ---------------------------------------
+    Route::get('resume/show/{id}', [ResumeController::class, 'show'])->name('resume.show');
+    Route::get('resume/download/{id}', [ResumeController::class, 'download'])->name('resume.download');
+
     Route::prefix('/utils')->name('utils.')->group(function () {
         Route::post('upload', [UploadController::class, 'upload'])->name('upload');
-
-        // TODO: Delete
-        Route::get('resume', function (\Illuminate\Http\Request $request) {
-            $user = $request->get('user');
-            $user = \App\Models\User::query()->find($user);
-
-            return (new \App\Services\ResumeService)
-                ->load(compact('user'))
-                ->stream();
-        });
     });
 });
