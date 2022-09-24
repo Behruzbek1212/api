@@ -10,7 +10,7 @@ class RespondNotification extends Notification
     protected array $user;
     protected array $customer;
     protected array $job;
-    protected string $message;
+    protected ?string $message;
 
     public function __construct(array $data)
     {
