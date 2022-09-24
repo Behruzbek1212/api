@@ -41,10 +41,7 @@ class PayzeController extends BasePayzeController
             ->customer()
             ->increment('balance', $amount);
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Transaction successfully processed'
-        ]);
+        return view('payment.success');
     }
 
     /**
@@ -64,5 +61,7 @@ class PayzeController extends BasePayzeController
          * Do any transaction related operations and return a response
          * If nothing is returned, default response will be used
          */
+
+        return view('payment.fail');
     }
 }

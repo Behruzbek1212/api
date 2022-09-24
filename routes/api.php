@@ -74,6 +74,7 @@ Route::prefix('/v1')->group(function () {
     Route::prefix('/jobs')->name('jobs.')->group(function () {
         Route::get('/', [JobController::class, 'all'])->name('all');
         Route::get('/get/{slug}', [JobController::class, 'get'])->name('get');
+        Route::post('/respond', [JobController::class, 'respond'])->name('respond');
 
         // Admin routes | TODO:Building 🏗
         Route::middleware('auth:sanctum')->group(function () {
@@ -117,4 +118,12 @@ Route::prefix('/v1')->group(function () {
     Route::prefix('/utils')->name('utils.')->group(function () {
         Route::post('upload', [UploadController::class, 'upload'])->name('upload');
     });
+});
+
+Route::post('test', function () {
+    if (! _auth()->check()) return false;
+    $user = _auth()->user();
+
+//    $user->notify(new \App\Notifications\AuthorizedNotification());
+    return response()->json($user-notifications());
 });

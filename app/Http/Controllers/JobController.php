@@ -3,6 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
+use App\Models\Resume;
+use App\Models\User;
+use App\Notifications\AuthorizedNotification;
+use App\Notifications\RespondMessageNotification;
+use App\Notifications\RespondNotification;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Http\JsonResponse;
@@ -66,6 +72,39 @@ class JobController extends Controller
         return response()->json([
             'status' => true,
             'job' => $job
+        ]);
+    }
+
+    public function respond(Request $request): JsonResponse
+    {
+        $request->validate([
+            'resume_id' => ['required', 'numeric'],
+            'job_slug' => ['required', 'string'],
+            'message' => ['nullable', 'string']
+        ]);
+
+        /** @var Authenticatable|User $user */
+        $user = _auth()->user();
+        $resume = Resume::query()->findOrFail($request->input('resume_id'));
+        $job = Job::query()->findOrFail($request->input('job_slug'));
+        $message = $request->input('message');
+        $customer = $job->customer;
+
+        $customer->user->notify(new RespondMessageNotification([
+            'candidate' => $user->toArray(),
+            'resume' => $resume->toArray(),
+            'job' => $job->toArray()
+        ]));
+
+        $user->notify(new RespondNotification([
+            'user' => $user->toArray(),
+            'customer' => $customer->toArray(),
+            'job' => $job->toArray(),
+            'message' => $message ?? null
+        ]));
+
+        return response()->json([
+            'status' => true
         ]);
     }
 }
