@@ -106,7 +106,7 @@
                     <p style="line-height: 20px">
                         {{ $candidate->address }} <br />
                         {{ $candidate->email }} <br />
-                        +{{ $candidate->phone }} <br />
+                        {{ $candidate->phone }} <br />
                     </p>
                 </td>
             </tr>
