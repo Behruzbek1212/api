@@ -1613,16 +1613,16 @@
         },
         {
             "name": "league/flysystem",
-            "version": "3.5.1",
+            "version": "3.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "f14993c6e394450ac4649da35264df0544d0234e"
+                "reference": "c73c4eb31f2e883b3897ab5591aa2dbc48112433"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/f14993c6e394450ac4649da35264df0544d0234e",
-                "reference": "f14993c6e394450ac4649da35264df0544d0234e",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/c73c4eb31f2e883b3897ab5591aa2dbc48112433",
+                "reference": "c73c4eb31f2e883b3897ab5591aa2dbc48112433",
                 "shasum": ""
             },
             "require": {
@@ -1684,7 +1684,7 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/flysystem/issues",
-                "source": "https://github.com/thephpleague/flysystem/tree/3.5.1"
+                "source": "https://github.com/thephpleague/flysystem/tree/3.5.2"
             },
             "funding": [
                 {
@@ -1700,7 +1700,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-09-18T18:23:19+00:00"
+            "time": "2022-09-23T18:59:16+00:00"
         },
         {
             "name": "league/mime-type-detection",
@@ -2322,16 +2322,16 @@
         },
         {
             "name": "payzeio/laravel-payze",
-            "version": "v1.8.7",
+            "version": "v1.8.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/payzeio/laravel-payze.git",
-                "reference": "8cb96366322d29ce5e10b4c6ab5b426b9267064d"
+                "reference": "1ffad08e0469b54e82f0b13b353b3d2921e4d370"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/payzeio/laravel-payze/zipball/8cb96366322d29ce5e10b4c6ab5b426b9267064d",
-                "reference": "8cb96366322d29ce5e10b4c6ab5b426b9267064d",
+                "url": "https://api.github.com/repos/payzeio/laravel-payze/zipball/1ffad08e0469b54e82f0b13b353b3d2921e4d370",
+                "reference": "1ffad08e0469b54e82f0b13b353b3d2921e4d370",
                 "shasum": ""
             },
             "require": {
@@ -2369,9 +2369,9 @@
             "description": "Payze.io Payment Integration for Laravel",
             "support": {
                 "issues": "https://github.com/payzeio/laravel-payze/issues",
-                "source": "https://github.com/payzeio/laravel-payze/tree/v1.8.7"
+                "source": "https://github.com/payzeio/laravel-payze/tree/v1.8.8"
             },
-            "time": "2022-09-19T10:24:08+00:00"
+            "time": "2022-09-24T14:16:54+00:00"
         },
         {
             "name": "phenx/php-font-lib",
