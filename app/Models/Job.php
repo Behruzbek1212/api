@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -63,7 +64,8 @@ class Job extends Model
      * @var array<int, string>
      */
     protected $appends = [
-        'liked'
+        'liked',
+        'responded'
     ];
 
     /**
@@ -112,6 +114,31 @@ class Job extends Model
             ->belongsToMany(User::class, 'wishlists')
             ->where('user_id', @_auth()->id() ?? 0)
             ->first();
+    }
+
+    /**
+     * Check if user responded to vacancy
+     *
+     * @return bool
+     */
+    public function GetRespondedAttribute()
+    {
+        if (! _auth()->check()) {
+            return false;
+        }
+
+	    /** @var Authenticatable|User|null $user */
+	    $user = _auth()->user();
+
+	    $responded = $user->notifications()
+            ->whereJsonContains('data->job->slug', $this->slug)
+            ->get()->toArray();
+
+	    if (! count($responded)) {
+		    return false;
+	    }
+
+	    return true;
     }
 
     /**

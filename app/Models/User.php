@@ -10,8 +10,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\Contracts\HasApiTokens as ContractsHasApiTokens;
 use Laravel\Sanctum\HasApiTokens;
@@ -204,6 +206,18 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
     public function candidate(): HasOne
     {
         return $this->hasOne(Candidate::class);
+    }
+
+    /**
+     * Get the entity's notifications.
+     *
+     * @return MorphMany
+     * @see https://laravel.com/docs/9.x/eloquent-relationships#one-to-many-polymorphic-relations
+     * @see https://laravel.com/docs/9.x/notifications
+     */
+    public function notifications(): MorphMany
+    {
+        return $this->morphMany(DatabaseNotification::class, 'notifiable')->latest();
     }
 
     /**
