@@ -67,6 +67,10 @@ class JobController extends Controller
     public function get(string $slug): JsonResponse
     {
         $job = Job::query()->with('customer')
+            ->whereHas('customer', function (EloquentBuilder $query) {
+                $query->where('active', '=', true);
+            })
+            ->where('status', '=', 'approved')
             ->findOrFail($slug);
 
         return response()->json([
