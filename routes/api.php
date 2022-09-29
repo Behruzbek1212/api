@@ -120,10 +120,3 @@ Route::prefix('/v1')->group(function () {
     });
 });
 
-Route::post('test', function () {
-    if (! _auth()->check()) return false;
-    $user = _auth()->user();
-
-//    $user->notify(new \App\Notifications\AuthorizedNotification());
-    return response()->json($user-notifications());
-});

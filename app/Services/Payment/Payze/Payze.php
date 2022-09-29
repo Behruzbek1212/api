@@ -32,6 +32,8 @@ class Payze
             ->raw()
             ->for($model)
             ->currency($currency)
+            ->callback(config('payze.routes.success'))
+            ->callbackError(config('payze.routes.fail'))
             ->process();
 
         return [
