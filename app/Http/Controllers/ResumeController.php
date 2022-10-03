@@ -46,8 +46,29 @@ class ResumeController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Ok',
-            'data' => $user->resumes
+            'message' => 'Ok'
+        ]);
+    }
+
+    /**
+     * Update data
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function update(Request $request): JsonResponse
+    {
+        /** @var Authenticatable|User|null $user */
+        $user = _auth()->user();
+
+        $user->resumes()->findOrFail($request->input('resume_id'))
+            ->update([
+                'data' => $request->input('data')
+            ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Ok'
         ]);
     }
 
@@ -68,8 +89,7 @@ class ResumeController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Ok',
-            'data' => $user->resumes
+            'message' => 'Ok'
         ]);
     }
 

@@ -11,6 +11,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ResumeController;
+use App\Http\Controllers\User\ChangeRoleController;
 use App\Http\Controllers\Utils\UploadController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
@@ -107,7 +108,14 @@ Route::prefix('/v1')->group(function () {
         Route::prefix('/resume')->name('resume.')->group(function () {
             Route::get('/', [ResumeController::class, 'index'])->name('index');
             Route::post('/make', [ResumeController::class, 'store'])->name('make');
+            Route::post('/edit', [ResumeController::class, 'update'])->name('make');
             Route::post('/remove/{id}', [ResumeController::class, 'destroy'])->name('remove');
+        });
+
+        // User ---------------------------------------
+        Route::prefix('/settings')->name('settings.')->group(function () {
+            Route::post('/change-role', [ChangeRoleController::class, 'update'])->name('change-role');
+            Route::post('/update-data', [ChangeRoleController::class, 'updateData'])->name('update-data');
         });
     });
 

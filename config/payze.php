@@ -26,8 +26,8 @@ return [
      * Set names of success and fail views. Setting null will redirect to "/" by default
      */
     'views' => [
-        'success' => 'payze::success',
-        'fail' => 'payze::fail',
+        'success' => 'payment.success',
+        'fail' => 'payment.fal',
     ],
 
     /*

@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\Contracts\HasApiTokens as ContractsHasApiTokens;
@@ -145,6 +146,11 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
             'message' => 'Role updated successfully'
         ]);
     }
+
+//    public function updateData(Request $request): void
+//    {
+//        $request->validate();
+//    }
 
     /**
      * Check if the phone number is exist.
