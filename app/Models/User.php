@@ -147,6 +147,27 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
         ]);
     }
 
+    /**
+     * Change user profile avatar
+     *
+     * @param string $url
+     * @return JsonResponse
+     */
+    public function changeAvatar(string $url): JsonResponse
+    {
+        $role = $this->role;
+
+        match ($role) {
+            'customer' => $this->customer()->update(['avatar' => $url]),
+            'candidate' => $this->candidate()->update(['avatar' => $url])
+        };
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Profile avatar updated successfully'
+        ]);
+    }
+
 //    public function updateData(Request $request): void
 //    {
 //        $request->validate();

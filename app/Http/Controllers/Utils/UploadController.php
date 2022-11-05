@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Utils;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use File;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 use Nette\Utils\Random;
 
@@ -30,6 +32,12 @@ class UploadController extends Controller
 
         $image_directory =
             '/uploads/image/avatars/' . $name . '-' . Random::generate() . $mimetype;
+
+        if ( _auth()->check() ) {
+            /** @var Authenticatable|User|null $user */
+            $user = _auth()->user();
+            $user->changeAvatar('https://static.jobo.uz' . $image_directory);
+        }
 
         File::put(base_path('public') . $image_directory, base64_decode($image));
 
