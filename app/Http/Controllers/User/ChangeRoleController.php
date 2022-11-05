@@ -12,7 +12,7 @@ class ChangeRoleController extends Controller
 {
     public function update(Request $request): JsonResponse
     {
-        /** @var Authenticatable|User $user */
+        /** @var Authenticatable|User|null $user */
         $user = _auth()->user();
 
         $user->changeRole($request->input('role'));
@@ -23,14 +23,16 @@ class ChangeRoleController extends Controller
         ]);
     }
 
-//    public function updateData(Request $request): JsonResponse
-//    {
-//        /** @var Authenticatable|User $user */
-//        $user = _auth()->user();
-//
+    public function updateData(Request $request): JsonResponse
+    {
+        /** @var Authenticatable|User|null $user */
+        $user = _auth()->user();
+
+        return $user->updateData($request);
+
 //        return response()->json([
 //            'status' => true,
 //            'message' => 'User role successfully updated'
 //        ]);
-//    }
+    }
 }

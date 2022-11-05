@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\Request;
 
 /**
  * @property User $user
@@ -51,6 +52,22 @@ class Candidate extends Model
         'spheres' => 'array',
         'birthday' => 'datetime',
     ];
+
+    /**
+     * Update user data's
+     *
+     * @param Request $request
+     */
+    public function updateData(Request $request): void
+    {
+        $this->update([
+            'name' => $request->get('name'),
+            'surname' => $request->get('surname'),
+            'specialization' => $request->get('specialization'),
+            'address' => $request->get('address'),
+            'birthday' => $request->get('birthday'),
+        ]);
+    }
 
     /**
      * Set user avatar mutation
