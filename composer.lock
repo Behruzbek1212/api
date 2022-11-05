@@ -1613,7 +1613,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/b9bd194b016114d6ff6765c09d40c7d427e4e3f6",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/60f3760352fe08e918bc3b1acae4e91af092ebe1",
                 "reference": "b9bd194b016114d6ff6765c09d40c7d427e4e3f6",
                 "shasum": ""
             },
@@ -2314,16 +2314,16 @@
         },
         {
             "name": "payzeio/laravel-payze",
-            "version": "v1.8.8",
+            "version": "v1.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/payzeio/laravel-payze.git",
-                "reference": "1ffad08e0469b54e82f0b13b353b3d2921e4d370"
+                "reference": "61a2a6dc6cdd9576b2492663b6eb441458485b7f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/payzeio/laravel-payze/zipball/1ffad08e0469b54e82f0b13b353b3d2921e4d370",
-                "reference": "1ffad08e0469b54e82f0b13b353b3d2921e4d370",
+                "url": "https://api.github.com/repos/payzeio/laravel-payze/zipball/61a2a6dc6cdd9576b2492663b6eb441458485b7f",
+                "reference": "61a2a6dc6cdd9576b2492663b6eb441458485b7f",
                 "shasum": ""
             },
             "require": {
@@ -2361,9 +2361,9 @@
             "description": "Payze.io Payment Integration for Laravel",
             "support": {
                 "issues": "https://github.com/payzeio/laravel-payze/issues",
-                "source": "https://github.com/payzeio/laravel-payze/tree/v1.8.8"
+                "source": "https://github.com/payzeio/laravel-payze/tree/v1.9.1"
             },
-            "time": "2022-09-24T14:16:54+00:00"
+            "time": "2022-10-21T20:21:05+00:00"
         },
         {
             "name": "phenx/php-font-lib",
