@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\Request;
 
 /**
  * @property int $id
@@ -56,6 +57,21 @@ class Customer extends Model
     protected $casts = [
         'owned_date' => 'datetime',
     ];
+
+    /**
+     * Update user data's
+     *
+     * @param Request $request
+     */
+    public function updateData(Request $request): void
+    {
+        $this->update([
+            'name' => $request->get('name'),
+            'location' => $request->get('location'),
+            'address' => $request->get('address'),
+            'owned_date' => $request->get('owned_date'),
+        ]);
+    }
 
     /**
      * Display the user information

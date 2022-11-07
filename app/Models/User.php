@@ -168,10 +168,33 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
         ]);
     }
 
-//    public function updateData(Request $request): void
-//    {
-//        $request->validate();
-//    }
+    /**
+     * Update user data's
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function updateData(Request $request): JsonResponse
+    {
+        $role = $this->role;
+
+        if ( $request->input('email') != $this->email ) {
+            $this->update([
+                'email' => $request->input('email'),
+                'email_verified_at' => null
+            ]);
+        }
+
+        match ($role) {
+            'customer' => $this->customer()->updateData($request),
+            'candidate' => $this->candidate()->updateData($request)
+        };
+
+        return response()->json([
+            'status' => true,
+            'message' => 'User data updated successfully'
+        ]);
+    }
 
     /**
      * Check if the phone number is exist.
