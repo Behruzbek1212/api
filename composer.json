@@ -15,7 +15,7 @@
         "laravel/framework": "^9.11",
         "laravel/sanctum": "^3.0.0",
         "laravel/tinker": "^2.7",
-        "payzeio/laravel-payze": "^1.8"
+        "payzeio/laravel-payze": "^2.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
