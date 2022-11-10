@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\RestoreController;
+use App\Http\Controllers\Bots\ADSON\MainController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\HomeController;
@@ -125,6 +126,12 @@ Route::prefix('/v1')->group(function () {
 
     Route::prefix('/utils')->name('utils.')->group(function () {
         Route::post('upload', [UploadController::class, 'upload'])->name('upload');
+    });
+
+    // Bots ------------------------------
+    Route::prefix('/_utils/_bots/_adson-crater')->name('bots.')->group(function () {
+        Route::post('store', [MainController::class, 'store'])->name('store');
+        Route::post('check', [MainController::class, 'check'])->name('check');
     });
 });
 
