@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\RestoreController;
+use App\Http\Controllers\Bots\ADSON\AdminController;
 use App\Http\Controllers\Bots\ADSON\MainController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\GuideController;
@@ -132,6 +133,13 @@ Route::prefix('/v1')->group(function () {
     Route::prefix('/_utils/_bots/_adson-crater')->name('bots.')->group(function () {
         Route::post('store', [MainController::class, 'store'])->name('store');
         Route::post('check', [MainController::class, 'check'])->name('check');
+        Route::post('get-url', [MainController::class, 'getUrl'])->name('url-get');
+        Route::post('get-info', [MainController::class, 'getInfo'])->name('info-get');
+
+        Route::prefix('admin')->name('admin.')->group(function () {
+            Route::post('add-links', [AdminController::class, 'addLinks'])->name('add-links');
+            Route::post('get-users', [AdminController::class, 'getUsers'])->name('get-users');
+            Route::post('get-user', [AdminController::class, 'getUser'])->name('get-user');
+        });
     });
 });
-

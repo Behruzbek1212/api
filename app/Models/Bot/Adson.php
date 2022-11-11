@@ -3,6 +3,7 @@
 namespace App\Models\Bot;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Adson extends Model
 {
@@ -47,4 +48,14 @@ class Adson extends Model
     protected $casts = [
         'info' => 'json',
     ];
+
+    /**
+     * Get url parameter for identification
+     *
+     * @return HasOne
+     */
+    public function link(): HasOne
+    {
+        return $this->hasOne(AdsonCrater::class, 'identification', 'identification');
+    }
 }

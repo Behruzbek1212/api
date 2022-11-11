@@ -16,8 +16,9 @@ class MainController extends Controller
             'info' => ['array', 'required']
         ]);
 
-        $data = Adson::query()->firstOrCreate($credentials)
-            ->get(['uuid', 'identification', 'info']);
+        $data = Adson::query()->firstOrCreate([
+            'uuid' => $credentials['uuid']
+        ], $credentials)->get(['uuid', 'identification', 'info']);
 
         return response()->json([
             'status' => true,
@@ -40,6 +41,36 @@ class MainController extends Controller
         return response()->json([
             'status' => true,
             'data' => $data
+        ]);
+    }
+
+    public function getUrl(Request $request)
+    {
+        $credentials = $request->validate([
+            'identification' => ['string', 'required']
+        ]);
+
+        $data = Adson::query()->where('uuid', '=', $credentials['identification'])
+            ->first()->link->url;
+
+        return response()->json([
+            'status' => true,
+            'data' => $data
+        ]);
+    }
+
+    public function getInfo(Request $request)
+    {
+        $credentials = $request->validate([
+            'telegram_id' => ['string', 'required']
+        ]);
+
+        $data = Adson::query()->where('telegram_id', '=', $credentials['telegram_id'])
+            ->first(['info'])->toArray();
+
+        return response()->json([
+            'status' => true,
+            'data' => $data['info']
         ]);
     }
 }

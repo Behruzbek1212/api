@@ -12,4 +12,14 @@ class AdsonCrater extends Model
      * @var string
      */
     protected $table = 'bot_adson_craters';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'identification',
+        'url'
+    ];
 }
