@@ -51,11 +51,15 @@ class MainController extends Controller
         ]);
 
         $data = Adson::query()->where('uuid', '=', $credentials['identification'])
+            ->first(['info']);
+
+        $url = Adson::query()->where('uuid', '=', $credentials['identification'])
             ->first()->link->url;
 
         return response()->json([
             'status' => true,
-            'data' => $data
+            'data' => $data['info'],
+            'url' => $url
         ]);
     }
 
