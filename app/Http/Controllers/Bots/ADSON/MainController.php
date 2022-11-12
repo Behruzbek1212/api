@@ -66,8 +66,15 @@ class MainController extends Controller
         ]);
 
         $data = Adson::query()->where('telegram_id', '=', $credentials['telegram_id'])
-            ->first(['info'])->toArray();
+            ->first(['info']);
 
+        if ( $data == null ) {
+            return response()->json([
+                'status' => true,
+                'data' => null
+            ]);
+        }
+        
         return response()->json([
             'status' => true,
             'data' => $data['info']
