@@ -62,7 +62,7 @@ class MainController extends Controller
     public function getInfo(Request $request)
     {
         $credentials = $request->validate([
-            'telegram_id' => ['required']
+            'telegram_id' => ['numeric', 'required']
         ]);
 
         $data = Adson::query()->where('telegram_id', '=', $credentials['telegram_id'])
