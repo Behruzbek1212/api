@@ -3,31 +3,19 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\PasswordReset;
 use App\Models\User;
 use App\Services\MobileService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Nette\Utils\Random;
 use Exception;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class RestoreController extends Controller
 {
-    protected Builder $model;
-
-    /**
-     * Restore controller constructor.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->model = DB::table('password_resets');
-    }
-
     /**
      * Restore passwords from the database.
      *
@@ -36,30 +24,34 @@ class RestoreController extends Controller
      */
     public function restore(Request $request): JsonResponse
     {
-        $model = $this->model
-            ->where('phone', '=', $request->input('phone'))
-            ->orWhere('email', '=', $request->input('email'));
+        $params = $request->validate([
+            'phone' => ['regex:/[\d\w\+]+/i', 'nullable'],
+            'email' => ['email', 'nullable'],
+            'code' => ['numeric', 'required'],
+            'password' => ['string', 'required']
+        ]);
+
+        $model = PasswordReset::query()
+            ->where('token', '=', $params['code'])
+            ->where(function (Builder $query) use ($params) {
+                $query
+                    ->where('phone', '=', $params['phone'])
+                    ->orWhere('email', '=', $params['email']);
+            });
 
         $user = User::query()
-            ->where('phone', $request->input('phone'))
-            ->orWhere('email', $request->input('phone'));
+            ->where('phone', $params['phone'])
+            ->orWhere('email', $params['phone']);
 
-        if (is_null($model->first()) || is_null($user->first()))
-            return response()->json([
-                'status' => false,
-                'message' => 'No user found with provided phone or email address'
-            ]);
-
-        if (! Hash::check($request->input('code'), $model->get('token')->first()->token))
-            return response()->json([
-                'status' => false,
-                'message' => 'Verification code is not valid'
-            ]);
+        if (is_null($model->first()) || is_null($user->first())) return response()->json([
+            'status' => false,
+            'message' => 'No user found with provided phone or email address or verification code is not valid'
+        ]);
 
         $model->delete();
-        $user->update([
-            'password' => Hash::make($request->input('password'))
-        ]);
+        $user->update(
+            ['password' => Hash::make($params['password'])]
+        );
 
         return response()->json([
             'status' => true,
@@ -77,32 +69,29 @@ class RestoreController extends Controller
      */
     public function send(Request $request): JsonResponse
     {
-        $request->validate([
-            'phone' => ['numeric', 'nullable'],
+        $params = $request->validate([
+            'phone' => ['regex:/[\d\w\+]+/i', 'nullable'],
             'email' => ['email', 'nullable'],
-            'type' => ['required', 'string', 'in:phone,email']
+            'type' =>  ['required', 'string', 'in:phone,email']
         ]);
 
-        $user = User::query()
-            ->where('phone', '=', $request->input('phone'))
-            ->orWhere('email', '=', $request->input('email'))
-            ->first();
-
-        if (is_null($user)) {
-            return response()->json([
-                'status' => false,
-                'message' => 'User not found'
-            ]);
-        }
-
         $code = Random::generate(5, '0-9');
+        $user = User::query()
+            ->where('phone', '=', $params['phone'])
+            ->orWhere('email', '=', $params['email'])
+            ->first( [ '*' ] );
 
-        match ($request->input('type')) {
+        if ( is_null($user) ) return response()->json([
+            'status' => false,
+            'message' => 'User not found'
+        ]);
+
+        match ($params['type']) {
             'phone' =>
-                $this->withPhone($request->input('phone'), $code),
+                $this->withPhone($params['phone'], $code),
 
             'email' =>
-                $this->withEmail($request->input('email'), $code),
+                $this->withEmail($params['email'], $code),
 
             default =>
                 throw new Exception('Invalid request type')
@@ -122,18 +111,23 @@ class RestoreController extends Controller
      */
     public function verify(Request $request): JsonResponse
     {
-        $model = $this->model
-            ->where('phone', '=', $request->input('phone'))
-            ->orWhere('email', '=', $request->input('email'))
-            ->get('token')
-            ->first();
+        $params = $request->validate([
+            'phone' => ['regex:/[\d\w\+]+/i', 'required'],
+            'email' => ['email', 'required'],
+            'code' => ['numeric', 'required']
+        ]);
 
-        if (is_null($model)) return response()->json([
+        $model = PasswordReset::query()
+            ->where('phone', '=', $params['phone'])
+            ->orWhere('email', '=', $params['email'])
+            ->first(['token']);
+
+        if ( is_null($model) ) return response()->json([
             'status' => false,
             'message' => 'No user found with provided phone or email address'
         ]);
 
-        if (!Hash::check($request->input('code'), $model->token)) return response()->json([
+        if ($params['code'] != $model['token']) return response()->json([
             'status' => false,
             'message' => 'Verification code is not valid',
         ]);
@@ -155,14 +149,14 @@ class RestoreController extends Controller
      */
     protected function withPhone(int|string $phone, int|string $code): void
     {
-        if (!$phone || !$code) {
+        if ( !$phone || !$code ) {
             throw new Exception('Invalid phone number');
         }
 
-        $this->model->insert([
-            'phone' => $phone,
-            'token' => Hash::make($code)
-        ]);
+        PasswordReset::query()->updateOrCreate(
+            ['phone' => $phone],
+            ['token' => $code]
+        );
 
         (new MobileService)
             ->send($phone, __('mobile.send.verification_code', ['code' => $code]));
@@ -179,17 +173,17 @@ class RestoreController extends Controller
      */
     protected function withEmail(string $email, int|string $code): void
     {
-        if (!$email || !$code) {
+        if ( !$email || !$code ) {
             throw new Exception('Invalid email address');
         }
 
-        $this->model->insert([
-            'email' => $email,
-            'token' => Hash::make($code)
-        ]);
+        PasswordReset::query()->updateOrCreate(
+            ['email' => $email],
+            ['token' => $code]
+        );
 
         (new MailMessage)
-            ->subject("Код подтверждение")
-            ->line("Код подтверждение: " . $code);
+            ->subject(__('mobile.send.verification_code', ['code' => $code]))
+            ->line(__('mobile.send.verification_code', ['code' => $code]));
     }
 }

@@ -39,14 +39,14 @@ Route::prefix('/v1')->group(function () {
 
     // Authorization --------------------------------
     Route::prefix('/auth')->name('auth.')->group(function () {
-        Route::prefix('/check')->name('check.')->group(function () {
-            Route::post('/', [VerificationController::class, 'check'])->name('index');
-            Route::post('/verify', [VerificationController::class, 'verify'])->name('verify');
-        });
-
         Route::middleware('guest:sanctum')->group(function () {
             Route::post('/register', [RegisterController::class, 'register'])->name('register');
             Route::post('/login', [LoginController::class, 'login'])->name('login');
+
+            Route::prefix('/check')->name('check.')->group(function () {
+                Route::post('/', [VerificationController::class, 'check'])->name('index');
+                Route::post('/verify', [VerificationController::class, 'verify'])->name('verify');
+            });
 
             Route::prefix('/restore')->name('restore.')->group(function () {
                 Route::post('/send', [RestoreController::class, 'send'])->name('send');
