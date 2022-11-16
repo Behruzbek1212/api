@@ -19,7 +19,7 @@ class WishlistSeeder extends Seeder
         do {
             DB::table('wishlists')->insert([
                 'user_id' => fake()->unique()->numberBetween(1, 40),
-                'job_id' => fake()->unique()->numberBetween(1, 80)
+                'job_slug' => fake()->unique()->slug()
             ]);
 
             $this->count++;

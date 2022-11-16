@@ -3,31 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\PasswordVerification;
 use App\Services\MobileService;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Nette\Utils\Random;
 
 class VerificationController extends Controller
 {
-    protected Builder $model;
-
-    /**
-     * Controller constructor
-     *
-     * @return VerificationController
-     */
-    public function __construct()
-    {
-        $this->model = DB::table('password_verification');
-
-        return $this;
-    }
-
     /**
      * Checking that the user's
      * phone number is not empty
@@ -37,23 +20,17 @@ class VerificationController extends Controller
      */
     public function check(Request $request): JsonResponse
     {
-        $request->validate([
-            'phone' => ['required', 'numeric', 'unique:users,phone']
+        $params = $request->validate([
+            'phone' => ['exists:users,phone', 'regex:/[\d\w\+]+/i', 'required']
         ]);
 
         $token = Random::generate(5, '0-9');
-        $phone = str_replace('+', '', $request->input('phone'));
-        $model = $this->model->where('phone', $phone);
+        $phone = str_replace('+', '', $params['phone']);
 
-        if (! is_null($model->first()))
-            $model->update([
-                'token' => $token
-            ]);
-        else
-            $this->model->insert([
-                'phone' => $phone,
-                'token' => $token
-            ]);
+        PasswordVerification::query()->updateOrCreate(
+            ['phone' => $params['phone']],
+            ['token' => $token],
+        );
 
         (new MobileService)
             ->send($phone, __('mobile.send.verification_code', ['code' => $token]));
@@ -73,28 +50,19 @@ class VerificationController extends Controller
      */
     public function verify(Request $request): JsonResponse
     {
-        $request->validate([
-            'phone' => ['required', 'numeric', 'unique:users,phone'],
-            'code' => ['required', 'numeric']
+        $params = $request->validate([
+            'phone' => ['required', 'regex:/[\w\d\+]+/i', 'exists:users,phone'],
+            'verification_code' => ['numeric', 'required']
         ]);
 
-        $phone = str_replace('+', '', $request->input('phone'));
-        $model = $this->model->where('phone', $phone);
+        $model = PasswordVerification::query()
+            ->where('phone', '=', $params['phone'])
+            ->where('token', '=', $params['verification_code']);
 
-        if (is_null($model->first()))
-            return response()->json([
-                'status' => false,
-                'message' => __('error.verification_request_not_found')
-            ]);
-
-        $token = $model->first(['token'])->token;
-        $verification_code = $request->input('code');
-        if ( $verification_code != $token ) {
-            return response()->json([
-                'status' => false,
-                'message' => __('error.verification_code_is_invalid')
-            ]);
-        }
+        if ( is_null($model->first()) ) return response()->json([
+            'status' => false,
+            'message' => __('error.verification_request_not_found')
+        ]);
 
         $model->delete();
         return response()->json([
