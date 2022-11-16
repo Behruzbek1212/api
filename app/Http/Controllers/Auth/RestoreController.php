@@ -112,8 +112,8 @@ class RestoreController extends Controller
     public function verify(Request $request): JsonResponse
     {
         $params = $request->validate([
-            'phone' => ['regex:/[\d\w\+]+/i', 'required'],
-            'email' => ['email', 'required'],
+            'phone' => ['regex:/[\d\w\+]+/i', 'nullable'],
+            'email' => ['email', 'nullable'],
             'code' => ['numeric', 'required']
         ]);
 
