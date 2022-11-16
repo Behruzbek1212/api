@@ -75,7 +75,7 @@ class VerificationController extends Controller
     {
         $request->validate([
             'phone' => ['required', 'numeric', 'unique:users,phone'],
-            'verification_code' => ['required', 'numeric']
+            'code' => ['required', 'numeric']
         ]);
 
         $phone = str_replace('+', '', $request->input('phone'));
@@ -88,7 +88,7 @@ class VerificationController extends Controller
             ]);
 
         $token = $model->first(['token'])->token;
-        $verification_code = $request->input('verification_code');
+        $verification_code = $request->input('code');
         if ( $verification_code != $token ) {
             return response()->json([
                 'status' => false,
