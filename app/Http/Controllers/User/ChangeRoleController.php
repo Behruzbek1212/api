@@ -10,6 +10,12 @@ use Illuminate\Http\Request;
 
 class ChangeRoleController extends Controller
 {
+    /**
+     * Update user role
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function update(Request $request): JsonResponse
     {
         /** @var Authenticatable|User|null $user */
@@ -23,16 +29,17 @@ class ChangeRoleController extends Controller
         ]);
     }
 
+    /**
+     * Update user information data's
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function updateData(Request $request): JsonResponse
     {
         /** @var Authenticatable|User|null $user */
         $user = _auth()->user();
 
         return $user->updateData($request);
-
-//        return response()->json([
-//            'status' => true,
-//            'message' => 'User role successfully updated'
-//        ]);
     }
 }
