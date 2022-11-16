@@ -81,9 +81,9 @@ Route::prefix('/v1')->group(function () {
 
         // Admin routes | TODO:Building 🏗
         Route::middleware('auth:sanctum')->group(function () {
-            Route::post('/create', [GuideController::class, 'create'])->name('create');
-            Route::post('/edit/{id}', [GuideController::class, 'edit'])->name('edit');
-            Route::post('/destroy/{id}', [GuideController::class, 'destroy'])->name('destroy');
+            Route::post('/create', [JobController::class, 'create'])->name('create');
+            Route::post('/edit/{id}', [JobController::class, 'edit'])->name('edit');
+            Route::post('/destroy/{id}', [JobController::class, 'destroy'])->name('destroy');
         });
     });
 

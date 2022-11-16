@@ -21,7 +21,7 @@ class VerificationController extends Controller
     public function check(Request $request): JsonResponse
     {
         $params = $request->validate([
-            'phone' => ['exists:users,phone', 'regex:/[\d\w\+]+/i', 'required']
+            'phone' => ['unique:users,phone', 'regex:/[\d\w\+]+/i', 'required']
         ]);
 
         $token = Random::generate(5, '0-9');
@@ -51,7 +51,7 @@ class VerificationController extends Controller
     public function verify(Request $request): JsonResponse
     {
         $params = $request->validate([
-            'phone' => ['required', 'regex:/[\w\d\+]+/i', 'exists:users,phone'],
+            'phone' => ['required', 'regex:/[\w\d\+]+/i', 'unique:users,phone'],
             'verification_code' => ['numeric', 'required']
         ]);
 
