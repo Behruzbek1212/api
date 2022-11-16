@@ -47,12 +47,12 @@ class VerificationController extends Controller
 
         if (! is_null($model->first()))
             $model->update([
-                'token' => Hash::make($token)
+                'token' => $token
             ]);
         else
             $this->model->insert([
                 'phone' => $phone,
-                'token' => Hash::make($token)
+                'token' => $token
             ]);
 
         (new MobileService)
@@ -87,13 +87,14 @@ class VerificationController extends Controller
                 'message' => __('error.verification_request_not_found')
             ]);
 
-        $token = $model->get('token')->first()->token;
+        $token = $model->first(['token'])->token;
         $verification_code = $request->input('verification_code');
-        if (! Hash::check($verification_code, $token))
+        if ( $verification_code != $token ) {
             return response()->json([
                 'status' => false,
                 'message' => __('error.verification_code_is_invalid')
             ]);
+        }
 
         $model->delete();
         return response()->json([
