@@ -13,6 +13,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ResumeController;
+use App\Http\Controllers\User\ChangePasswordController;
 use App\Http\Controllers\User\ChangeRoleController;
 use App\Http\Controllers\Utils\UploadController;
 use App\Http\Controllers\WishlistController;
@@ -118,6 +119,7 @@ Route::prefix('/v1')->group(function () {
         Route::prefix('/settings')->name('settings.')->group(function () {
             Route::post('/change-role', [ChangeRoleController::class, 'update'])->name('change-role');
             Route::post('/update-data', [ChangeRoleController::class, 'updateData'])->name('update-data');
+            Route::post('/change-password', [ChangePasswordController::class, 'change'])->name('change-password');
         });
     });
 
