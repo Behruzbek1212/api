@@ -186,8 +186,8 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
         }
 
         match ($role) {
-            'customer' => $this->customer()->updateData($request),
-            'candidate' => $this->candidate()->updateData($request)
+            'customer' => $this->customer->updateData($request),
+            'candidate' => $this->candidate->updateData($request)
         };
 
         return response()->json([

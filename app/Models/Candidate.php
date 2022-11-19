@@ -61,11 +61,11 @@ class Candidate extends Model
     public function updateData(Request $request): void
     {
         $this->update([
-            'name' => $request->get('name'),
-            'surname' => $request->get('surname'),
-            'specialization' => $request->get('specialization'),
-            'address' => $request->get('address'),
-            'birthday' => $request->get('birthday'),
+            'name' => $request->get('candidate')['name'],
+            'surname' => $request->get('candidate')['surname'],
+            'specialization' => $request->get('candidate')['specialization'],
+            'address' => $request->get('candidate')['address'],
+            'birthday' => $request->get('candidate')['birthday'],
         ]);
     }
 

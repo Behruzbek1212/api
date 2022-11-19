@@ -36,7 +36,7 @@ class RestoreController extends Controller
             ->where(function (Builder $query) use ($params) {
                 $query
                     ->where('phone', '=', $params['phone'])
-                    ->orWhere('email', '=', $params['email']);
+                    ->where('email', '=', $params['email']);
             });
 
         $user = User::query()

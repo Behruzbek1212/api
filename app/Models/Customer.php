@@ -66,10 +66,10 @@ class Customer extends Model
     public function updateData(Request $request): void
     {
         $this->update([
-            'name' => $request->get('name'),
-            'location' => $request->get('location'),
-            'address' => $request->get('address'),
-            'owned_date' => $request->get('owned_date'),
+            'name' => $request->get('customer')['name'],
+            'location' => $request->get('customer')['location'],
+            'address' => $request->get('customer')['address'],
+            'owned_date' => $request->get('customer')['owned_date'],
         ]);
     }
 
