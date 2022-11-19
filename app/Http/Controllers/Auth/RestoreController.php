@@ -119,8 +119,8 @@ class RestoreController extends Controller
 
         $model = PasswordReset::query()
             ->where('phone', '=', $params['phone'])
-            ->orWhere('email', '=', $params['email'])
-            ->first(['token']);
+            ->where('email', '=', $params['email'])
+            ->first(['token'])->toArray();
 
         if ( is_null($model) ) return response()->json([
             'status' => false,
