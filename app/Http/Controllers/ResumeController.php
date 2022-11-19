@@ -43,7 +43,7 @@ class ResumeController extends Controller
         $resume = $user->resumes()->findOrFail($id);
         return response()->json([
             'status' => true,
-            'data' => $resume
+            'data' => $resume['data']
         ]);
     }
 
