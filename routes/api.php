@@ -112,6 +112,7 @@ Route::prefix('/v1')->group(function () {
             Route::get('/', [ResumeController::class, 'index'])->name('index');
             Route::post('/make', [ResumeController::class, 'store'])->name('make');
             Route::post('/edit', [ResumeController::class, 'update'])->name('make');
+            Route::post('/get/{id}', [ResumeController::class, 'get'])->name('get');
             Route::post('/remove/{id}', [ResumeController::class, 'destroy'])->name('remove');
         });
 

@@ -5,12 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Job;
 use App\Models\Resume;
 use App\Models\User;
-use App\Notifications\AuthorizedNotification;
 use App\Notifications\RespondMessageNotification;
 use App\Notifications\RespondNotification;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -24,13 +22,12 @@ class JobController extends Controller
      */
     public function all(Request $request): JsonResponse
     {
-        /** @var Builder $jobs */
         $jobs = Job::query()
             // Check if customer status is active
-            ->whereHas('customer', function (EloquentBuilder $query) {
+            ->with('customer')
+            ->whereHas('customer', function (Builder $query) {
                 $query->where('active', '=', true);
             })
-            ->with('customer')
             ->where('status', '=', 'approved');
 
         if ($title = $request->get('title'))
@@ -42,10 +39,10 @@ class JobController extends Controller
         if ($location_id = $request->get('location_id'))
             $jobs->where('location_id', '=', $location_id);
 
+        /** @see https://laravel.com/docs/9.x/queries#json-where-clauses */
         if ($salary = $request->get('salary'))
             $jobs->where('salary->amount', 'like', '%' . $salary . '%');
 
-        /** @see https://laravel.com/docs/9.x/queries#json-where-clauses */
         if ($currency = $request->get('currency'))
             $jobs->whereJsonContains('salary->currency', $currency);
 
@@ -67,7 +64,7 @@ class JobController extends Controller
     public function get(string $slug): JsonResponse
     {
         $job = Job::query()->with('customer')
-            ->whereHas('customer', function (EloquentBuilder $query) {
+            ->whereHas('customer', function (Builder $query) {
                 $query->where('active', '=', true);
             })
             ->where('status', '=', 'approved')
@@ -106,6 +103,26 @@ class JobController extends Controller
             'job' => $job->toArray(),
             'message' => $message ?? null
         ]));
+
+        return response()->json([
+            'status' => true
+        ]);
+    }
+
+    /**
+     * Create job
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function create(Request $request): JsonResponse
+    {
+        $params = $request->validate([
+            'title' => ['string', 'required'],
+            'type' => ['string', 'required'],
+            'content' => ['string', 'required'],
+            'salary' => ['array', 'required']
+        ]);
 
         return response()->json([
             'status' => true

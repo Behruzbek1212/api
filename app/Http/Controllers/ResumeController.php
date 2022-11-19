@@ -30,6 +30,24 @@ class ResumeController extends Controller
     }
 
     /**
+     * Get resume information
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function get(int $id): JsonResponse
+    {
+        /** @var Authenticatable|User|null $user */
+        $user = _auth()->user();
+
+        $resume = $user->resumes()->findOrFail($id);
+        return response()->json([
+            'status' => true,
+            'data' => $resume
+        ]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param Request $request

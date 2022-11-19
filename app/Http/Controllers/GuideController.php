@@ -11,11 +11,6 @@ use Illuminate\Http\Request;
 
 class GuideController extends Controller
 {
-    public function index()
-    {
-        //
-    }
-
     /**
      * Display all guides
      *

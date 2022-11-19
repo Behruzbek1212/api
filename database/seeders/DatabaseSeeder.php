@@ -27,7 +27,8 @@ class DatabaseSeeder extends Seeder
         // Resume::factory(8)->create();
 
         $this->call([
-            WishlistSeeder::class
+            WishlistSeeder::class,
+            LocationSeeder::class
         ]);
     }
 }
