@@ -18,7 +18,7 @@ class CandidatesController extends Controller
     public function all(Request $request): JsonResponse
     {
         $candidates = Candidate::query()
-            ->with('user')
+            ->with(['user:id,email,phone,verified'])
             ->whereHas('user', function (Builder $query) {
                 $query->where('role', '=', 'candidate');
             })
@@ -52,7 +52,7 @@ class CandidatesController extends Controller
     public function get(int $id): JsonResponse
     {
         $candidate = Candidate::query()
-            ->with('user')
+            ->with(['user:id,email,phone,verified', 'user.resumes'])
             ->whereHas('user', function (Builder $query) {
                 $query->where('role', '=', 'candidate');
             })
