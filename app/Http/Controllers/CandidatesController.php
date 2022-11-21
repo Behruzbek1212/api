@@ -31,8 +31,8 @@ class CandidatesController extends Controller
             });
 
         /** @see https://laravel.com/docs/9.x/queries#json-where-clauses */
-        if ($salary = $request->get('sphere'))
-            $candidates->whereJsonContains('spheres', $salary);
+        if ($sphere = $request->get('sphere'))
+            $candidates->whereJsonContains('spheres', $sphere);
 
         if ($limit = $request->get('limit'))
             $candidates->limit($limit);
