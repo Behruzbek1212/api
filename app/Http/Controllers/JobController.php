@@ -34,7 +34,7 @@ class JobController extends Controller
             $jobs->where('title', 'like', '%' . $title . '%');
 
         if ($type = $request->get('type'))
-            $jobs->where('type', 'like', '&' . $type . '&');
+            $jobs->where('type', 'like', '%' . $type . '%');
 
         if ($location_id = $request->get('location_id'))
             $jobs->where('location_id', '=', $location_id);
