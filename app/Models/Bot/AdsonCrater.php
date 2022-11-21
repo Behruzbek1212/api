@@ -20,6 +20,6 @@ class AdsonCrater extends Model
      */
     protected $fillable = [
         'identification',
-        'url'
+        'url', 'image'
     ];
 }
