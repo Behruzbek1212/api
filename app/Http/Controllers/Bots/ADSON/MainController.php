@@ -53,13 +53,14 @@ class MainController extends Controller
         $data = Adson::query()->where('uuid', '=', $credentials['identification'])
             ->first(['info']);
 
-        $url = Adson::query()->where('uuid', '=', $credentials['identification'])
-            ->first()->link->url;
+        $crate = Adson::query()->where('uuid', '=', $credentials['identification'])
+            ->first()->link;
 
         return response()->json([
             'status' => true,
             'data' => $data['info'],
-            'url' => $url
+            'url' => $crate['url'],
+            'image' => $crate['image']
         ]);
     }
 
@@ -78,7 +79,7 @@ class MainController extends Controller
                 'data' => null
             ]);
         }
-        
+
         return response()->json([
             'status' => true,
             'data' => $data['info']
