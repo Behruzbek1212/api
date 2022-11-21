@@ -13,7 +13,8 @@ class AdminController extends Controller
     {
         $credentials = $request->validate([
             'identification' => ['string', 'required'],
-            'url' => ['string', 'required']
+            'url' => ['string', 'required'],
+            'image' => ['string', 'required']
         ]);
 
         AdsonCrater::query()->updateOrCreate([
