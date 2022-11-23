@@ -178,7 +178,7 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
     {
         $role = $this->role;
 
-        if ( $request->input('email') != $this->email ) {
+        if ( !is_null($request->input('email')) && $request->input('email') != $this->email ) {
             $this->update([
                 'email' => $request->input('email'),
                 'email_verified_at' => null

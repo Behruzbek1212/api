@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
  * @property int $id
  * @property int $user_id
  * @property string $name
+ * @property string $about
  * @property int $balance
  * @property string $address
  * @property bool $active
@@ -32,6 +33,7 @@ class Customer extends Model
     protected $fillable = [
         'user_id',
         'name',
+        'about',
         'avatar',
         'balance',
         'owned_date',
@@ -67,6 +69,7 @@ class Customer extends Model
     {
         $this->update([
             'name' => $request->get('customer')['name'],
+            'about' => $request->get('customer')['about'],
             'location' => $request->get('customer')['location'],
             'address' => $request->get('customer')['address'],
             'owned_date' => $request->get('customer')['owned_date'],

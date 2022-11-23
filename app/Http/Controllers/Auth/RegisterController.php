@@ -92,11 +92,13 @@ class RegisterController extends Controller
             'avatar' => ['nullable', 'string'],
             'owned_date' => ['required', 'date'],
             'location' => ['required', 'string'],
-            'address' => ['required', 'string']
+            'address' => ['required', 'string'],
+            'about' => ['string', 'nullable']
         ]);
 
         $customer = $user->customer()->create([
             'name' => $request->input('name'),
+            'about' => $request->input('about'),
             'avatar' => $request->input('avatar') ?? null,
             'owned_date' => $request->input('owned_date'),
             'location' => $request->input('location'),
