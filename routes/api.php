@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\RestoreController;
 use App\Http\Controllers\Bots\ADSON\AdminController;
 use App\Http\Controllers\Bots\ADSON\MainController;
 use App\Http\Controllers\CandidatesController;
+use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\HomeController;
@@ -93,6 +94,12 @@ Route::prefix('/v1')->group(function () {
     Route::prefix('/candidates')->name('candidates.')->group(function () {
         Route::get('/', [CandidatesController::class, 'all'])->name('all');
         Route::get('/get/{id}', [CandidatesController::class, 'get'])->name('get');
+    });
+
+    // Companies -----------------------------------------
+    Route::prefix('/companies')->name('companies.')->group(function () {
+        Route::get('/', [CompaniesController::class, 'all'])->name('all');
+        Route::get('/get/{id}', [CompaniesController::class, 'get'])->name('get');
     });
 
     Route::middleware('auth:sanctum')->group(function () {
