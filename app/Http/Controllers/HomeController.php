@@ -15,7 +15,7 @@ class HomeController extends Controller
     {
         return response()->json([
             'version' => 'v' . config('app.version'),
-            'development' => 'ADON A.K.A Infoshop',
+            'development' => 'AdsON A.K.A Infoshop',
             'repo' => 'https://github.com/jobo-uz/'
         ]);
     }
@@ -30,7 +30,7 @@ class HomeController extends Controller
         return response()->json([
             'status' => 404,
             'version' => 'v' . config('app.version'),
-            'development' => 'infoshop',
+            'development' => 'AdsON A.K.A Infoshop',
             'repo' => 'https://github.com/jobo-uz/',
         ], 404);
     }

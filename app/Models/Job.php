@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
+use Nette\Utils\Random;
 
 /**
  * @property string title
@@ -50,9 +53,9 @@ class Job extends Model
         'title',
         'salary',
         'type',
-        'requirements',
-        'tasks',
-        'advantages',
+        'about',
+        'work_type',
+        'experience',
         'location_id',
         'slug',
         'status'
@@ -101,6 +104,19 @@ class Job extends Model
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    /**
+     * Set slug attribute while creating new vacancy
+     *
+     * @return Attribute
+     */
+    public function slug(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($val, $attr) => is_null($val) ?
+                Str::slug($attr['type']) . '-' . Random::generate('5', '0-9') : $val
+        );
     }
 
     /**

@@ -110,7 +110,7 @@ class JobController extends Controller
     }
 
     /**
-     * Create job
+     * Create vacancy
      *
      * @param Request $request
      * @return JsonResponse
@@ -118,14 +118,82 @@ class JobController extends Controller
     public function create(Request $request): JsonResponse
     {
         $params = $request->validate([
-            'title' => ['string', 'required'],
-            'type' => ['string', 'required'],
-            'content' => ['string', 'required'],
-            'salary' => ['array', 'required']
+            'position' => ['string', 'required'],
+            'location' => ['numeric', 'required'],
+            'experience' => ['string', 'required'],
+            'salary' => ['array:amount,currency,agreement', 'required'],
+            'work_type' => ['string', 'required', 'in:fulltime,remote,partial,hybrid'],
+            'about' => ['string', 'required'],
+        ]);
+
+        $request->user()->customer->jobs()->create([
+            'title' => $params['position'],
+            'type' => $params['position'],
+            'salary' => $params['salary'],
+            'about' => $params['about'],
+            'work_type' => $params['work_type'],
+            'experience' => $params['experience'],
+            'location_id' => $params['location'],
+            'slug' => null
         ]);
 
         return response()->json([
-            'status' => true
+            'status' => true,
+            'message' => 'Job successfully created',
+        ]);
+    }
+
+    /**
+     * Update vacancy
+     *
+     * @param Request $request
+     * @param string $slug
+     * @return JsonResponse
+     */
+    public function edit(Request $request, string $slug): JsonResponse
+    {
+        $params = $request->validate([
+            'position' => ['string', 'required'],
+            'location' => ['numeric', 'required'],
+            'experience' => ['string', 'required'],
+            'salary' => ['array:amount,currency,agreement', 'required'],
+            'work_type' => ['string', 'required', 'in:fulltime,remote,partial,hybrid'],
+            'about' => ['string', 'required'],
+        ]);
+
+        $job = $request->user()->customer->jobs()->findOrFail($slug);
+        $job->update([
+            'title' => $params['position'],
+            'type' => $params['position'],
+            'salary' => $params['salary'],
+            'about' => $params['about'],
+            'work_type' => $params['work_type'],
+            'experience' => $params['experience'],
+            'location_id' => $params['location'],
+            'status' => 'moderating'
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Successfully updated'
+        ]);
+    }
+
+    /**
+     * Destroy vacancy
+     *
+     * @param Request $request
+     * @param string $slug
+     * @return JsonResponse
+     */
+    public function destroy(Request $request, string $slug): JsonResponse
+    {
+        $job = $request->user()->customer->jobs()->findOrFail($slug);
+        $job->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Successfully deleted'
         ]);
     }
 }

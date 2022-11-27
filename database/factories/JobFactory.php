@@ -17,29 +17,22 @@ class JobFactory extends Factory
     public function definition()
     {
         $rand_int = $this->faker->numberBetween(0, 2);
-
         $currency = ['USD', 'RUB', 'UZS'];
-
-        $requirements = [
-            ['lorem', 'ipsum', 'dolor', 'sit', 'amet'],
-            ['ipsum', 'dolor', 'lorem', 'amet', 'sit'],
-            ['dolor', 'ipsum', 'lorem', 'sit', 'amet'],
-        ];
-
         $status = ['approved', 'rejected', 'moderating'];
+        $work_type = ['fulltime', 'remote', 'hybrid', 'partial'];
 
         return [
             'customer_id' => $this->faker->numberBetween(1, 8),
             'title' => $this->faker->jobTitle(),
+            'type'=> $this->faker->jobTitle(),
             'salary' => [
                 'amount' => $this->faker->randomNumber(),
-                'currency' => $currency[$rand_int]
+                'currency' => $currency[$rand_int],
+                'agreement' => $this->faker->boolean
             ],
-            'type'=> $this->faker->jobTitle(),
-            'requirements' => $requirements[$rand_int],
-            'tasks' => $requirements[$rand_int],
-            'advantages' => $requirements[$rand_int],
-            'location_id' => $this->faker->numberBetween(1, 10),
+            'about' => $this->faker->randomHtml,
+            'work_type' => $work_type[$rand_int],
+            'location_id' => $this->faker->numberBetween(101, 112),
             'slug' => $this->faker->unique()->slug(),
             'status' => $status[$rand_int]
         ];
