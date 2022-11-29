@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -42,6 +43,15 @@ class Resume extends Model
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array<int, string>
+     */
+    protected $appends = [
+        'experience'
+    ];
+
+    /**
      * The attributes that should be cast.
      *
      * @var array<string, string>
@@ -61,5 +71,43 @@ class Resume extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Calculate experience time
+     *
+     * @param array $data
+     * @return int
+     */
+    public function calculate_experience(array $data): int
+    {
+        $employments = $data['employment'];
+        $exp_time = 0;
+
+        foreach ($employments as $employment) {
+            $start_year = $employment['date']['start']['year'] * 1;
+            $start_month = $employment['date']['start']['month'] * 1;
+
+            $end_year = $employment['date']['end']['year'] * 1;
+            $end_month = $employment['date']['end']['month'] * 1;
+
+            $exp_time += ($end_year - $start_year) * 12;
+            $exp_time += $end_month - $start_month;
+        }
+
+        return $exp_time;
+    }
+
+    /**
+     * Append `experience` column
+     *
+     * @return Attribute
+     */
+    public function experience(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($_val, $attr) =>
+                $this->calculate_experience(json_decode($attr['data'], JSON_PRETTY_PRINT))
+        );
     }
 }

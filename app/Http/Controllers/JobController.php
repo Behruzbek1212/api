@@ -27,8 +27,8 @@ class JobController extends Controller
             ->with('customer')
             ->whereHas('customer', function (Builder $query) {
                 $query->where('active', '=', true);
-            })
-            ->where('status', '=', 'approved');
+            });
+            // TODO: ->where('status', '=', 'approved');
 
         if ($title = $request->get('title'))
             $jobs->where('title', 'like', '%' . $title . '%');
@@ -67,7 +67,7 @@ class JobController extends Controller
             ->whereHas('customer', function (Builder $query) {
                 $query->where('active', '=', true);
             })
-            ->where('status', '=', 'approved')
+            // TODO: ->where('status', '=', 'approved')
             ->findOrFail($slug);
 
         return response()->json([
