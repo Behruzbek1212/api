@@ -18,7 +18,7 @@ class CompaniesController extends Controller
     public function all(Request $request): JsonResponse
     {
         $companies = Customer::query()
-            ->with(['user:id,email,phone,verified'])
+            ->with(['user:id,email,phone,verified', 'jobs'])
             ->whereHas('user', function (Builder $query) {
                 $query->where('role', '=', 'customer');
             })
@@ -48,7 +48,7 @@ class CompaniesController extends Controller
     public function get(int $id): JsonResponse
     {
         $company = Customer::query()
-            ->with(['user:id,email,phone,verified'])
+            ->with(['user:id,email,phone,verified', 'jobs'])
             ->whereHas('user', function (Builder $query) {
                 $query->where('role', '=', 'customer');
             })
