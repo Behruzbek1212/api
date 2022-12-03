@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Chat\Chat;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Nette\Utils\Random;
@@ -165,5 +167,16 @@ class Job extends Model
     public function getLikedAttribute(): bool
     {
         return ! is_null($this->getLikedByCurrentUser());
+    }
+
+    /**
+     * Get chats list
+     *
+     * @return HasMany
+     * @see https://laravel.com/docs/9.x/eloquent-relationships#one-to-many
+     */
+    public function chats(): HasMany
+    {
+        return $this->hasMany(Chat::class);
     }
 }

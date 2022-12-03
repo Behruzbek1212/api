@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Chat\Chat;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -96,5 +97,16 @@ class Customer extends Model
     public function jobs(): HasMany
     {
         return $this->hasMany(Job::class);
+    }
+
+    /**
+     * Get chats list
+     *
+     * @return HasMany
+     * @see https://laravel.com/docs/9.x/eloquent-relationships#one-to-many
+     */
+    public function chats(): HasMany
+    {
+        return $this->hasMany(Chat::class);
     }
 }

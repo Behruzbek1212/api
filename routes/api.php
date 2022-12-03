@@ -82,7 +82,6 @@ Route::prefix('/v1')->group(function () {
         Route::get('/get/{slug}', [JobController::class, 'get'])->name('get');
         Route::post('/respond', [JobController::class, 'respond'])->name('respond');
 
-        // Admin routes | TODO:Building 🏗
         Route::middleware(['auth:sanctum', 'is_customer'])->group(function () {
             Route::post('/create', [JobController::class, 'create'])->name('create');
             Route::post('/edit/{slug}', [JobController::class, 'edit'])->name('edit');
