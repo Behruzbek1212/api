@@ -90,25 +90,22 @@ class JobController extends Controller
         $resume = Resume::query()->findOrFail($request->input('resume_id'));
         $job = Job::query()->findOrFail($request->input('job_slug'));
 
-        $job->chats()->create([
+        $chat = $job->chats()->create([
             'job_slug' => $params['job_slug'],
             'resume_id' => $params['resume_id'],
             'customer_id' => $job->customer->id,
-            'candidate_id' => $user->id,
+            'candidate_id' => $user->candidate->id,
             'status' => 'review'
+        ]);
+
+        $params['message'] && $job->chats()->find($chat->id)->messages()->create([
+            'message' => $params['message']
         ]);
 
         $job->customer->user->notify(new RespondMessageNotification([
             'candidate' => $user->toArray(),
             'resume' => $resume->toArray(),
             'job' => $job->toArray()
-        ]));
-
-        $user->notify(new RespondNotification([
-            'user' => $user->toArray(),
-            'customer' => $job->customer->toArray(),
-            'job' => $job->toArray(),
-            'message' => $params['message'] ?? null
         ]));
 
         return response()->json([

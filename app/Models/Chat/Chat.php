@@ -70,6 +70,16 @@ class Chat extends Model
     }
 
     /**
+     * Get candidate attribute
+     *
+     * @return Candidate|Model|BelongsTo
+     */
+    public function getCandidateAttribute(): BelongsTo|Model|Candidate
+    {
+        return $this->candidate()->first();
+    }
+
+    /**
      * Get messages
      *
      * @return BelongsTo
@@ -81,6 +91,16 @@ class Chat extends Model
     }
 
     /**
+     * Get customer attribute
+     *
+     * @return Customer|Model|BelongsTo
+     */
+    public function getCustomerAttribute(): BelongsTo|Model|Customer
+    {
+        return $this->customer()->first();
+    }
+
+    /**
      * Get messages
      *
      * @return BelongsTo
@@ -89,5 +109,15 @@ class Chat extends Model
     public function job(): BelongsTo
     {
         return $this->belongsTo(Job::class);
+    }
+
+    /**
+     * Get candidate attribute
+     *
+     * @return Job|Model|BelongsTo
+     */
+    public function getJobAttribute(): BelongsTo|Model|Job
+    {
+        return $this->job()->first();
     }
 }

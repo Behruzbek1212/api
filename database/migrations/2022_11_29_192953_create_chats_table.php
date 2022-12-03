@@ -10,10 +10,11 @@ return new class extends Migration {
         Schema::create('chats', function (Blueprint $table) {
             $table->id();
             $table->string('job_slug');
-            $table->bigInteger('resume_id');
+            $table->bigInteger('resume_id')->nullable();
             $table->bigInteger('customer_id');
             $table->bigInteger('candidate_id');
             $table->enum('status', ['approve', 'reject', 'review']);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

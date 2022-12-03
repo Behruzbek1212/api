@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\RestoreController;
 use App\Http\Controllers\Bots\ADSON\AdminController;
 use App\Http\Controllers\Bots\ADSON\MainController;
 use App\Http\Controllers\CandidatesController;
+use App\Http\Controllers\ChatsController;
 use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\GuideController;
@@ -93,6 +94,7 @@ Route::prefix('/v1')->group(function () {
     Route::prefix('/candidates')->name('candidates.')->group(function () {
         Route::get('/', [CandidatesController::class, 'all'])->name('all');
         Route::get('/get/{id}', [CandidatesController::class, 'get'])->name('get');
+        Route::post('/respond', [CandidatesController::class, 'respond'])->middleware(['auth:sanctum', 'is_customer'])->name('respond');
     });
 
     // Companies -----------------------------------------
@@ -111,6 +113,14 @@ Route::prefix('/v1')->group(function () {
             // Destroy
             Route::post('/destroy/all', [NotificationController::class, 'destroy_all'])->name('destroy.all');
             Route::post('/destroy/{id}', [NotificationController::class, 'destroy'])->name('destroy');
+        });
+
+        // Chat -----------------------------------------
+        Route::prefix('/chats')->name('chats.')->group(function () {
+            Route::post('/', [ChatsController::class, 'list'])->name('index');
+            Route::post('/{id}', [ChatsController::class, 'get'])->name('get');
+
+            Route::post('/{id}/send', [ChatsController::class, 'send'])->name('send');
         });
 
         // Wishlist -------------------------------------

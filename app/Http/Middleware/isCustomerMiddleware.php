@@ -12,7 +12,7 @@ class isCustomerMiddleware
         if ( !in_array($request->user()->role, ['admin', 'customer']) ) {
             return response()->json([
                 'status' => false,
-                'message' => 'This is not possible for customers!'
+                'message' => 'This is not possible for candidates!'
             ]);
         }
         return $next($request);
