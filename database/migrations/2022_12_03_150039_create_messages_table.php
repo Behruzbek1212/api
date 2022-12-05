@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->bigInteger('chat_id');
             $table->text('message');
-            $table->timestamp('read_at');
+            $table->date('read_at')->nullable()->default(null);
             $table->softDeletes();
             $table->timestamps();
         });

@@ -98,7 +98,7 @@ class JobController extends Controller
             'status' => 'review'
         ]);
 
-        $params['message'] && $job->chats()->find($chat->id)->messages()->create([
+        @$params['message'] && $job->chats()->find($chat->id)->messages()->create([
             'message' => $params['message']
         ]);
 
@@ -198,6 +198,48 @@ class JobController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Successfully deleted'
+        ]);
+    }
+
+    /**
+     * Description
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function acceptance(Request $request): JsonResponse
+    {
+        $params = $request->validate([
+            'job_slug' => ['string', 'required'],
+            'candidate_id' => ['numeric', 'required'],
+            'status' => ['string', 'in:approve,reject', 'required'],
+            'message' => ['string', 'nullable']
+        ]);
+
+        /** @var Authenticatable|User $user */
+        $user = _auth()->user();
+        $chat = $user->customer->chats()->where(function (Builder $query) use ($params) {
+            $query->where('candidate_id', '=', $params['candidate_id']);
+            $query->where('job_slug', '=', $params['job_slug']);
+        })->firstOrFail();
+
+        $chat->update([
+            'status' => $params['status']
+        ]);
+
+        @$params['message'] && $chat->messages()->create([
+            'message' => $params['message']
+        ]);
+
+        $chat->candidate->user->notify(new RespondMessageNotification([
+            'candidate' => $chat->candidate->toArray(),
+            'customer' => $user->customer->toArray(),
+            'job' => $chat->job->toArray(),
+            'message' => $params['message'] ?? null
+        ]));
+
+        return response()->json([
+            'status' => true
         ]);
     }
 }
