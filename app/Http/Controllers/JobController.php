@@ -78,7 +78,7 @@ class JobController extends Controller
 
     public function respond(Request $request): JsonResponse
     {
-        $request->validate([
+        $params = $request->validate([
             'resume_id' => ['required', 'numeric'],
             'job_slug' => ['required', 'string'],
             'message' => ['nullable', 'string']
@@ -86,22 +86,26 @@ class JobController extends Controller
 
         /** @var Authenticatable|User $user */
         $user = _auth()->user();
+
         $resume = Resume::query()->findOrFail($request->input('resume_id'));
         $job = Job::query()->findOrFail($request->input('job_slug'));
-        $message = $request->input('message');
-        $customer = $job->customer;
 
-        $customer->user->notify(new RespondMessageNotification([
+        $chat = $job->chats()->create([
+            'job_slug' => $params['job_slug'],
+            'resume_id' => $params['resume_id'],
+            'customer_id' => $job->customer->id,
+            'candidate_id' => $user->candidate->id,
+            'status' => 'review'
+        ]);
+
+        @$params['message'] && $job->chats()->find($chat->id)->messages()->create([
+            'message' => $params['message']
+        ]);
+
+        $job->customer->user->notify(new RespondMessageNotification([
             'candidate' => $user->toArray(),
             'resume' => $resume->toArray(),
             'job' => $job->toArray()
-        ]));
-
-        $user->notify(new RespondNotification([
-            'user' => $user->toArray(),
-            'customer' => $customer->toArray(),
-            'job' => $job->toArray(),
-            'message' => $message ?? null
         ]));
 
         return response()->json([
@@ -194,6 +198,48 @@ class JobController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Successfully deleted'
+        ]);
+    }
+
+    /**
+     * Description
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function acceptance(Request $request): JsonResponse
+    {
+        $params = $request->validate([
+            'job_slug' => ['string', 'required'],
+            'candidate_id' => ['numeric', 'required'],
+            'status' => ['string', 'in:approve,reject', 'required'],
+            'message' => ['string', 'nullable']
+        ]);
+
+        /** @var Authenticatable|User $user */
+        $user = _auth()->user();
+        $chat = $user->customer->chats()->where(function (Builder $query) use ($params) {
+            $query->where('candidate_id', '=', $params['candidate_id']);
+            $query->where('job_slug', '=', $params['job_slug']);
+        })->firstOrFail();
+
+        $chat->update([
+            'status' => $params['status']
+        ]);
+
+        @$params['message'] && $chat->messages()->create([
+            'message' => $params['message']
+        ]);
+
+        $chat->candidate->user->notify(new RespondMessageNotification([
+            'candidate' => $chat->candidate->toArray(),
+            'customer' => $user->customer->toArray(),
+            'job' => $chat->job->toArray(),
+            'message' => $params['message'] ?? null
+        ]));
+
+        return response()->json([
+            'status' => true
         ]);
     }
 }
