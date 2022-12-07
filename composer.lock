@@ -2652,16 +2652,16 @@
         },
         {
             "name": "payzeio/laravel-payze",
-            "version": "v3.0.1",
+            "version": "v3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/payzeio/laravel-payze.git",
-                "reference": "f02673018de1644aa1ea2d78cc0fd9831aa29209"
+                "reference": "56699efdbaf5df18ccb5d88b27323f18a49767e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/payzeio/laravel-payze/zipball/f02673018de1644aa1ea2d78cc0fd9831aa29209",
-                "reference": "f02673018de1644aa1ea2d78cc0fd9831aa29209",
+                "url": "https://api.github.com/repos/payzeio/laravel-payze/zipball/56699efdbaf5df18ccb5d88b27323f18a49767e7",
+                "reference": "56699efdbaf5df18ccb5d88b27323f18a49767e7",
                 "shasum": ""
             },
             "require": {
@@ -2699,9 +2699,9 @@
             "description": "Payze.io Payment Integration for Laravel",
             "support": {
                 "issues": "https://github.com/payzeio/laravel-payze/issues",
-                "source": "https://github.com/payzeio/laravel-payze/tree/v3.0.1"
+                "source": "https://github.com/payzeio/laravel-payze/tree/v3.0.2"
             },
-            "time": "2022-12-02T15:35:07+00:00"
+            "time": "2022-12-06T21:34:17+00:00"
         },
         {
             "name": "phenx/php-font-lib",
