@@ -102,7 +102,8 @@ class RegisterController extends Controller
             'avatar' => $request->input('avatar') ?? null,
             'owned_date' => $request->input('owned_date'),
             'location' => $request->input('location'),
-            'address' => $request->input('address'),
+	    'address' => $request->input('address'),
+	    'active' => true
         ]);
 
         return response()->json($customer);
@@ -132,7 +133,8 @@ class RegisterController extends Controller
             'spheres' => $request->input('spheres'),
             'specialization' => $request->input('specialization'),
             'birthday' => $request->input('birthday'),
-            'address' => $request->input('address'),
+	    'address' => $request->input('address'),
+	    'active' => true
         ]);
 
         return response()->json($candidate);
