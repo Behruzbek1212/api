@@ -76,7 +76,8 @@ class ChatsController extends Controller
 
         $chat = Chat::query()->findOrFail($id);
         $chat->messages()->create([
-            'message' => $params['message']
+            'message' => $params['message'],
+            'role' => $request->user()->role
         ]);
 
         return response()->json([
