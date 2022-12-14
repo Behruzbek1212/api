@@ -95,7 +95,7 @@ class JobController extends Controller
             'resume_id' => $params['resume_id'],
             'customer_id' => $job->customer->id,
             'candidate_id' => $user->candidate->id,
-            'status' => 'review'
+            'status' => 'approve'
         ]);
 
         @$params['message'] && $job->chats()->find($chat->id)->messages()->create([
