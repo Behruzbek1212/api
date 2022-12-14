@@ -95,7 +95,7 @@ class JobController extends Controller
             'resume_id' => $params['resume_id'],
             'customer_id' => $job->customer->id,
             'candidate_id' => $user->candidate->id,
-            'status' => 'approve'
+            'status' => 'review'
         ]);
 
         @$params['message'] && $job->chats()->find($chat->id)->messages()->create([
@@ -138,7 +138,8 @@ class JobController extends Controller
             'work_type' => $params['work_type'],
             'experience' => $params['experience'],
             'location_id' => $params['location'],
-            'slug' => null
+	    'slug' => null,
+	    'status' => 'approved'
         ]);
 
         return response()->json([
@@ -174,7 +175,7 @@ class JobController extends Controller
             'work_type' => $params['work_type'],
             'experience' => $params['experience'],
             'location_id' => $params['location'],
-            'status' => 'moderating'
+            'status' => 'approved'
         ]);
 
         return response()->json([
