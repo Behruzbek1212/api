@@ -243,4 +243,27 @@ class JobController extends Controller
             'status' => true
         ]);
     }
+
+    /**
+     * Get applications list
+     *
+     * @param string $slug
+     * @return JsonResponse
+     */
+    public function applications(string $slug): JsonResponse
+    {
+        $job = Job::query()->findOrFail($slug);
+
+        $data = $job->chats()->with('candidate')->get()->makeHidden([
+            'id', 'job_slug', 'resume_id',
+            'customer_id', 'candidate_id',
+            'status', 'created_at', 'updated_at',
+            'customer', 'job'
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'data' => $data
+        ]);
+    }
 }

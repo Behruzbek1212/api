@@ -89,6 +89,7 @@ Route::prefix('/v1')->group(function () {
             Route::post('/destroy/{slug}', [JobController::class, 'destroy'])->name('destroy');
 
             Route::post('/acceptance', [JobController::class, 'acceptance'])->name('acceptance');
+            Route::post('/{slug}/applications', [JobController::class, 'applications'])->name('applications');
         });
     });
 

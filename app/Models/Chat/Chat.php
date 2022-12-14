@@ -5,6 +5,7 @@ namespace App\Models\Chat;
 use App\Models\Candidate;
 use App\Models\Customer;
 use App\Models\Job;
+use App\Models\Resume;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -35,6 +36,7 @@ class Chat extends Model
     protected $appends = [
         'customer',
         'candidate',
+        'resume',
         'job'
     ];
 
@@ -98,6 +100,27 @@ class Chat extends Model
     public function getCustomerAttribute(): BelongsTo|Model|Customer
     {
         return $this->customer()->first();
+    }
+
+    /**
+     * Get messages
+     *
+     * @return BelongsTo
+     * @see https://laravel.com/docs/9.x/eloquent-relationships#one-to-one-defining-the-inverse-of-the-relationship
+     */
+    public function resume(): BelongsTo
+    {
+        return $this->belongsTo(Resume::class);
+    }
+
+    /**
+     * Get customer attribute
+     *
+     * @return Customer|Model|BelongsTo
+     */
+    public function getResumeAttribute(): BelongsTo|Model|Customer
+    {
+        return $this->resume()->first();
     }
 
     /**
