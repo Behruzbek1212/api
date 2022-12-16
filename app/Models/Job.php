@@ -148,13 +148,13 @@ class Job extends Model
 	    /** @var Authenticatable|User|null $user */
 	    $user = _auth()->user();
 
-	    $responded = $user->notifications()
-            ->whereJsonContains('data->job->slug', $this->slug)
-            ->get()->toArray();
+        $job = Job::query()->find($this->slug);
+        $responded = $job->chats()
+            ->where('candidate_id', '=', @$user->candidate->id)
+            ->first();
 
-	    if (! count($responded)) {
-		    return false;
-	    }
+	    if ($responded == null)
+            return false;
 
 	    return true;
     }
