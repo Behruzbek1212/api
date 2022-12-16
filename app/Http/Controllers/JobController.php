@@ -99,7 +99,8 @@ class JobController extends Controller
         ]);
 
         @$params['message'] && $job->chats()->find($chat->id)->messages()->create([
-            'message' => $params['message']
+            'message' => $params['message'],
+            'role' => $user->role
         ]);
 
         $job->customer->user->notify(new RespondMessageNotification([
@@ -138,8 +139,8 @@ class JobController extends Controller
             'work_type' => $params['work_type'],
             'experience' => $params['experience'],
             'location_id' => $params['location'],
-	    'slug' => null,
-	    'status' => 'approved'
+            'slug' => null,
+            'status' => 'approved'
         ]);
 
         return response()->json([
