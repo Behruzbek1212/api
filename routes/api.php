@@ -61,6 +61,7 @@ Route::prefix('/v1')->group(function () {
 
         Route::middleware('auth:sanctum')->group(function () {
             Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
+            Route::post('/role', [RegisterController::class, 'role'])->name('role');
         });
     });
 

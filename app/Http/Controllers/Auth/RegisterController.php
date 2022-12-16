@@ -79,6 +79,36 @@ class RegisterController extends Controller
     }
 
     /**
+     * Registration of new roles
+     *
+     * @param Request $request
+     * @return JsonResponse
+     *
+     * @throws Exception
+     */
+    public function role(Request $request): JsonResponse
+    {
+        match ($request->user()->role) {
+            'candidate' =>
+                $this->registerCandidate($request, $request->user()),
+
+            'customer' =>
+                $this->registerCustomer($request, $request->user()),
+
+            default =>
+                throw new Exception('Invalid role')
+        };
+
+        return response()->json([
+            'status' => true,
+            'message' => 'User successfully registered',
+            'user' => User::query()
+                ->with('customer', 'candidate')
+                ->find($request->user()->id),
+        ]);
+    }
+
+    /**
      * Register a customer user
      *
      * @param  Request $request
@@ -102,8 +132,8 @@ class RegisterController extends Controller
             'avatar' => $request->input('avatar') ?? null,
             'owned_date' => $request->input('owned_date'),
             'location' => $request->input('location'),
-	    'address' => $request->input('address'),
-	    'active' => true
+            'address' => $request->input('address'),
+            'active' => true
         ]);
 
         return response()->json($customer);
@@ -133,8 +163,8 @@ class RegisterController extends Controller
             'spheres' => $request->input('spheres'),
             'specialization' => $request->input('specialization'),
             'birthday' => $request->input('birthday'),
-	    'address' => $request->input('address'),
-	    'active' => true
+            'address' => $request->input('address'),
+            'active' => true
         ]);
 
         return response()->json($candidate);
