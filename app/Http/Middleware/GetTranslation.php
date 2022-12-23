@@ -16,7 +16,7 @@ class GetTranslation
      */
     public function handle(Request $request, Closure $next)
     {
-        $language = $request->header('JB-Lang');
+        $language = $request->header('JB-Lang') ?? $request->get('language');
 
         if (in_array($language, config('app.available_locales'))) {
             app()->setLocale($language);

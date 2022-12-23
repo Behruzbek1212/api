@@ -131,7 +131,7 @@ class ResumeController extends Controller
 
         return (new ResumeService)
             ->load(compact('data', 'candidate'))
-            ->stream();
+            ->stream($candidate->name . '.pdf');
     }
 
     /**

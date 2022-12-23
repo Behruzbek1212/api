@@ -16,10 +16,10 @@ class ResumeService extends ResumeServiceConst
     /**
      * @param array $data
      * @param array $mergeData
-     * @param string|null $encode
+     * @param string $encode
      * @return ResumeService
      */
-    public function load(array $data, array $mergeData = [], ?string $encode = null): ResumeService
+    public function load(array $data, array $mergeData = [], string $encode = 'utf-8'): ResumeService
     {
         $this->pdf = PDF::loadView('resume.v1', $data, $mergeData, $encode)
             ->setPaper('A4', 'horizontal')
@@ -50,15 +50,17 @@ class ResumeService extends ResumeServiceConst
     /**
      * Render and display PDF file
      *
+     * @param string $name
+     *
      * @return Response
      * @throws JsonException
      */
-    public function stream(): Response
+    public function stream(string $name = 'download.pdf'): Response
     {
         if (is_null($this->pdf))
             throw new JsonException('DomPDF not initialized');
 
-        return $this->pdf->stream('download.pdf');
+        return $this->pdf->stream($name);
     }
 
     /**

@@ -21,7 +21,7 @@
     <style type="text/css">
         @page {
             margin: 40px;
-            font-family: sans-serif;
+            font-family: "DejaVu Sans", sans-serif;
         }
 
         footer {
