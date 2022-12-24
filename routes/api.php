@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\RestoreController;
 use App\Http\Controllers\Bots\ADSON\AdminController;
 use App\Http\Controllers\Bots\ADSON\MainController;
 use App\Http\Controllers\CandidatesController;
+use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ChatsController;
 use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\Controller;
@@ -105,6 +106,11 @@ Route::prefix('/v1')->group(function () {
     Route::prefix('/companies')->name('companies.')->group(function () {
         Route::get('/', [CompaniesController::class, 'all'])->name('all');
         Route::get('/get/{id}', [CompaniesController::class, 'get'])->name('get');
+    });
+
+    // Categories -----------------------------------------
+    Route::prefix('/categories')->name('categories.')->group(function () {
+        Route::get('/', [CategoriesController::class, 'index'])->name('index');
     });
 
     Route::middleware('auth:sanctum')->group(function () {

@@ -59,6 +59,7 @@ class Job extends Model
         'work_type',
         'experience',
         'location_id',
+        'category_id',
         'slug',
         'status'
     ];
