@@ -64,6 +64,9 @@ class CandidatesController extends Controller
             ->where('id', '=', $id)
             ->firstOrFail();
 
+        _auth()->check() && _user()->candidateStats()
+            ->syncWithoutDetaching($candidate);
+
         return response()->json([
             'status' => true,
             'data' => $candidate

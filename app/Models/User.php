@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Interfaces\MustVerifyPhone as ContractsMustVerifyPhone;
+use App\Traits\HasStatistics;
 use App\Traits\MustVerifyPhone;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -40,6 +41,7 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
 {
     use HasApiTokens;
     use HasFactory;
+    use HasStatistics;
     use HasTransactions;
     use MustVerifyPhone;
     use Notifiable;

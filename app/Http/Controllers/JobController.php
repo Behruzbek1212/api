@@ -70,6 +70,9 @@ class JobController extends Controller
             // TODO: ->where('status', '=', 'approved')
             ->findOrFail($slug);
 
+        _auth()->check() && _user()->jobStats()
+            ->syncWithoutDetaching($job);
+
         return response()->json([
             'status' => true,
             'job' => $job
