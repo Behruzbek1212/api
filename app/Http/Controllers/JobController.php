@@ -258,10 +258,10 @@ class JobController extends Controller
     {
         $job = Job::query()->findOrFail($slug);
 
-        $data = $job->chats()->with('candidate')->get()->makeHidden([
-            'id', 'job_slug', 'resume_id',
+        $data = $job->chats()->with(['candidate', 'candidate.user'])->get()->makeHidden([
+            'job_slug', 'resume_id',
             'customer_id', 'candidate_id',
-            'status', 'created_at', 'updated_at',
+            'created_at', 'updated_at',
             'customer', 'job'
         ]);
 
