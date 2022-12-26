@@ -271,14 +271,25 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
     }
 
     /**
-     * Display the wishlist
+     * Display the jobs wishlist
      *
      * @return BelongsToMany
      * @see https://laravel.com/docs/9.x/eloquent-relationships#many-to-many
      */
-    public function wishlist(): BelongsToMany
+    public function jobsWishlist(): BelongsToMany
     {
         return $this->belongsToMany(Job::class, 'wishlists');
+    }
+
+    /**
+     * Display the candidates wishlist
+     *
+     * @return BelongsToMany
+     * @see https://laravel.com/docs/9.x/eloquent-relationships#many-to-many
+     */
+    public function candidateWishlist(): BelongsToMany
+    {
+        return $this->belongsToMany(Candidate::class, 'wishlists');
     }
 
     /**

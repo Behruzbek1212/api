@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Candidate;
 use App\Models\Job;
-use App\Models\User;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -18,13 +17,17 @@ class WishlistController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        /** @var Authenticatable|User $user */
-        $user = _auth()->user();
+        $list = match ( $request->user()->role ) {
+            'customer' => $request->user()->candidateWishlist()
+                ->with('user'),
+
+            'candidate' => $request->user()->jobsWishlist()
+                ->with('customer'),
+        };
 
         return response()->json([
             'status' => true,
-            'list' => $user->wishlist()
-                ->with('customer')
+            'list' => $list->orderByDesc('id')
                 ->paginate(15)
         ]);
     }
@@ -37,23 +40,18 @@ class WishlistController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $request->validate([
-            'job_id' => ['required']
+        $params = $request->validate([
+            'job_id' => ['string', 'nullable'],
+            'candidate_id' => ['numeric', 'nullable']
         ]);
 
-        /** @var Authenticatable|User $user */
-        $user = _auth()->user();
-        $job = Job::query()->find($request->input('job_id'));
+        match ( $request->user()->role ) {
+            'candidate' => $request->user()->jobsWishlist()
+                ->syncWithoutDetaching(Job::query()->findOrFail($params['job_id'])),
 
-        if (is_null($job)) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Job not found'
-            ]);
-        }
-
-        $user->wishlist()
-            ->syncWithoutDetaching($job);
+            'customer' => $request->user()->candidateWishlist()
+                ->syncWithoutDetaching(Candidate::query()->findOrFail($params['candidate_id']))
+        };
 
         return response()->json([
             'status' => true,
@@ -69,18 +67,18 @@ class WishlistController extends Controller
      */
     public function destroy(Request $request): JsonResponse
     {
-        /** @var Authenticatable|User $user */
-        $user = _auth()->user();
-        $job = Job::query()->find($request->input('job_id'));
+        $params = $request->validate([
+            'job_id' => ['string', 'nullable'],
+            'candidate_id' => ['numeric', 'nullable']
+        ]);
 
-        if (is_null($job)) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Job not found'
-            ]);
-        }
+        match ( $request->user()->role ) {
+            'candidate' => $request->user()->jobsWishlist()
+                ->detach(Job::query()->findOrFail($params['job_id'])),
 
-        $user->wishlist()->detach($job);
+            'customer' => $request->user()->candidateWishlist()
+                ->detach(Candidate::query()->findOrFail($params['candidate_id']))
+        };
 
         return response()->json([
             'status' => true,
