@@ -25,7 +25,7 @@ return new class extends Migration {
     public function down()
     {
         DB::statement("ALTER TABLE `jobs` MODIFY COLUMN `status` ENUM('approved', 'rejected', 'moderating') NOT NULL DEFAULT 'moderating'");
-        DB::statement("ALTER TABLE `chats` MODIFY COLUMN `status` ENUM('approv', 'reject', 'review') NOT NULL DEFAULT 'review'");
+        DB::statement("ALTER TABLE `chats` MODIFY COLUMN `status` ENUM('approve', 'reject', 'review') NOT NULL DEFAULT 'review'");
 
         // Schema::table('jobs', function (Blueprint $table) {
         //     $table->dropColumn('status');
