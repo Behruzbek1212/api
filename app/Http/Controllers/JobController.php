@@ -137,7 +137,7 @@ class JobController extends Controller
 
         $request->user()->customer->jobs()->create([
             'title' => $params['position'],
-            'type' => $params['position'],
+            'type' => $params['work_type'],
             'salary' => $params['salary'],
             'about' => $params['about'],
             'work_type' => $params['work_type'],
@@ -176,7 +176,7 @@ class JobController extends Controller
         $job = $request->user()->customer->jobs()->findOrFail($slug);
         $job->update([
             'title' => $params['position'],
-            'type' => $params['position'],
+            'type' => $params['work_type'],
             'salary' => $params['salary'],
             'about' => $params['about'],
             'work_type' => $params['work_type'],
