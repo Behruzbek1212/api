@@ -55,7 +55,7 @@ class Job extends Model
         'title',
         'salary',
         'languages',
-        'type',
+        'sphere',
         'about',
         'work_type',
         'experience',
