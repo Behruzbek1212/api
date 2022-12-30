@@ -31,6 +31,7 @@ class Candidate extends Model
         'surname',
         'sex',
         'spheres',
+        'languages',
         'birthday',
         'address',
         'specialization',
@@ -54,6 +55,7 @@ class Candidate extends Model
      */
     protected $casts = [
         'spheres' => 'array',
+        'languages' => 'array',
         'birthday' => 'datetime',
     ];
 

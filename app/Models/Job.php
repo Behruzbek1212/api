@@ -54,6 +54,7 @@ class Job extends Model
         'customer_id',
         'title',
         'salary',
+        'languages',
         'type',
         'about',
         'work_type',
@@ -91,8 +92,7 @@ class Job extends Model
      */
     protected $casts = [
         'salary' => 'array',
-        'requirements' => 'array',
-        'tasks' => 'array',
+        'languages' => 'array',
         'advantages' => 'array',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
