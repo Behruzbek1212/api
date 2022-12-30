@@ -129,6 +129,7 @@ class JobController extends Controller
             'position' => ['string', 'required'],
             'location' => ['numeric', 'required'],
             'experience' => ['string', 'required'],
+            'languages' => ['nullable'],
             'salary' => ['array:amount,currency,agreement', 'required'],
             'work_type' => ['string', 'required', 'in:fulltime,remote,partial,hybrid'],
             'about' => ['string', 'required'],
@@ -142,6 +143,7 @@ class JobController extends Controller
             'work_type' => $params['work_type'],
             'experience' => $params['experience'],
             'location_id' => $params['location'],
+            'languages' => $params['languages'],
             'slug' => null,
             'status' => 'approved'
         ]);
@@ -165,6 +167,7 @@ class JobController extends Controller
             'position' => ['string', 'required'],
             'location' => ['numeric', 'required'],
             'experience' => ['string', 'required'],
+            'languages' => ['nullable'],
             'salary' => ['array:amount,currency,agreement', 'required'],
             'work_type' => ['string', 'required', 'in:fulltime,remote,partial,hybrid'],
             'about' => ['string', 'required'],
@@ -179,6 +182,7 @@ class JobController extends Controller
             'work_type' => $params['work_type'],
             'experience' => $params['experience'],
             'location_id' => $params['location'],
+            'languages' => $params['languages'],
             'status' => 'approved'
         ]);
 
