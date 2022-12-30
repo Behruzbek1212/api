@@ -29,10 +29,12 @@ class Candidate extends Model
         'avatar',
         'name',
         'surname',
+        'sex',
         'spheres',
         'birthday',
         'address',
         'specialization',
+        'education_level',
         'active'
     ];
 
