@@ -129,6 +129,7 @@ class JobController extends Controller
             'position' => ['string', 'required'],
             'location' => ['numeric', 'required'],
             'experience' => ['string', 'required'],
+            'sphere' => ['string', 'required'],
             'languages' => ['nullable'],
             'salary' => ['array:amount,currency,agreement', 'required'],
             'work_type' => ['string', 'required', 'in:fulltime,remote,partial,hybrid'],
@@ -137,13 +138,13 @@ class JobController extends Controller
 
         $request->user()->customer->jobs()->create([
             'title' => $params['position'],
-            'type' => $params['work_type'],
             'salary' => $params['salary'],
             'about' => $params['about'],
             'work_type' => $params['work_type'],
             'experience' => $params['experience'],
             'location_id' => $params['location'],
             'languages' => $params['languages'],
+            'sphere' => $params['sphere'],
             'slug' => null,
             'status' => 'approved'
         ]);
@@ -167,6 +168,7 @@ class JobController extends Controller
             'position' => ['string', 'required'],
             'location' => ['numeric', 'required'],
             'experience' => ['string', 'required'],
+            'sphere' => ['string', 'required'],
             'languages' => ['nullable'],
             'salary' => ['array:amount,currency,agreement', 'required'],
             'work_type' => ['string', 'required', 'in:fulltime,remote,partial,hybrid'],
@@ -176,13 +178,13 @@ class JobController extends Controller
         $job = $request->user()->customer->jobs()->findOrFail($slug);
         $job->update([
             'title' => $params['position'],
-            'type' => $params['work_type'],
             'salary' => $params['salary'],
             'about' => $params['about'],
             'work_type' => $params['work_type'],
             'experience' => $params['experience'],
             'location_id' => $params['location'],
             'languages' => $params['languages'],
+            'sphere' => $params['sphere'],
             'status' => 'approved'
         ]);
 
