@@ -71,6 +71,7 @@ class Candidate extends Model
             'name' => $request->get('candidate')['name'],
             'surname' => $request->get('candidate')['surname'],
             'specialization' => $request->get('candidate')['specialization'],
+            'languages' => $request->get('languages'),
             'address' => $request->get('candidate')['address'],
             'birthday' => $request->get('candidate')['birthday'],
         ]);
