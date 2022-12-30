@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Chat\Chat;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -137,6 +138,14 @@ class Candidate extends Model
      */
     public function chats(): HasMany
     {
-        return $this->hasMany(Chat::class);
+        return $this->hasMany(Chat::class)
+            ->whereHas('resume', function (Builder $table) {
+                $table->whereNull('deleted_at');
+            })
+            ->whereHas('customer', function (Builder $table) {
+                $table->where('active', '=', true);
+                $table->whereNull('deleted_at');
+            })
+            ->whereNull('deleted_at');
     }
 }
