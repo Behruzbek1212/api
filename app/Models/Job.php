@@ -118,7 +118,7 @@ class Job extends Model
     {
         return Attribute::make(
             set: fn ($val, $attr) => is_null($val) ?
-                Str::slug($attr['type']) . '-' . Random::generate('5', '0-9') : $val
+                Str::slug($attr['work_type']) . '-' . Random::generate('5', '0-9') : $val
         );
     }
 
