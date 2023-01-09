@@ -102,9 +102,8 @@ class Guide extends Model
     {
         $locale = 'content_' . app()->getLocale();
 
-        return Attribute::make(
-            get: fn ($value, $attr) =>
-                $attr[$locale]
+        return Attribute::get(
+            fn ($value, $attr) => $attr[$locale]
         );
     }
 }
