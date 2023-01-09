@@ -8,8 +8,8 @@
 
     $faker = \Faker\Factory::create();
 
-    $avatar = explode('/', $candidate->avatar);
-    $avatar = public_path('uploads/image/avatars/') . array_pop($avatar);
+    $avatar = str_replace("https://static.jobo.uz/", "", $candidate->avatar);
+    $avatar = public_path($avatar);
 
     if (! file_exists($avatar))
         throw new \ErrorException('File does not exist');
@@ -90,7 +90,7 @@
     <main>
         <table class="w-full">
             <tr class="w-full">
-                @if(! str_contains($avatar, 'default.webp'))
+                @if(! str_contains($avatar, 'default.webp') && ! str_contains($avatar, 'avatar.png'))
                     <td style="width: 135px; padding-right: 20px">
                         <img
                             src="{{ $avatar }}"
