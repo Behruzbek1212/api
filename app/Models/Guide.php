@@ -85,7 +85,7 @@ class Guide extends Model
      */
     public function title(): Attribute
     {
-        $locale = 'content_' . app()->getLocale();
+        $locale = 'title_' . app()->getLocale();
 
         return Attribute::make(
             get: fn ($value, $attr) =>
