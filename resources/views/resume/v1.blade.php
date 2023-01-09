@@ -104,7 +104,7 @@
                     <h1>{{ $candidate->name }}</h1>
                     <p>{{ $candidate->specialization }}</p>
                     <p style="line-height: 20px">
-                        {{ $candidate->address }} <br />
+                        {{ $candidate->location }} <br />
                         {{ $candidate->email }} <br />
                         {{ $candidate->phone }} <br />
                     </p>

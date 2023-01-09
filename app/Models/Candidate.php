@@ -150,4 +150,18 @@ class Candidate extends Model
             })
             ->whereNull('deleted_at');
     }
+
+    /**
+     * Get location name
+     *
+     * @return Attribute
+     */
+    public function location(): Attribute
+    {
+        if ( empty($this->attributes['address']) )
+            return Attribute::get(fn () => '');
+
+        $location = $this->belongsTo(Location::class, 'address')->first()['title'];
+        return Attribute::get(fn () => __($location));
+    }
 }
