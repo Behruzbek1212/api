@@ -43,7 +43,9 @@ class GuideFactory extends Factory
         ];
 
         return [
-            'title' => $this->faker->text(50),
+            'title_uz' => $this->faker->text(50),
+            'title_ru' => $this->faker->text(50),
+            'title_en' => $this->faker->text(50),
             'background' => [
                 'color' => $backgrounds[$rand_int],
                 'image' => $images[$rand_int]
@@ -53,7 +55,9 @@ class GuideFactory extends Factory
                 'color' => '#FFFFFF',
                 'background' => $buttons[$rand_int]
             ],
-            'content' => $this->faker->realTextBetween(700, 1200),
+            'content_uz' => $this->faker->realTextBetween(700, 1200),
+            'content_ru' => $this->faker->realTextBetween(700, 1200),
+            'content_en' => $this->faker->realTextBetween(700, 1200),
             'role' => $roles[$rand_int],
             'slug' => $this->faker->unique()->slug()
         ];

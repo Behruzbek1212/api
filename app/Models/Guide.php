@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -43,7 +44,25 @@ class Guide extends Model
      * @var array<int, string>
      */
     protected $hidden = [
-        'blank'
+        'blank',
+
+        'title_uz',
+        'title_ru',
+        'title_en',
+
+        'content_uz',
+        'content_ru',
+        'content_en',
+    ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array<int, string>
+     */
+    protected $appends = [
+        'title',
+        'content'
     ];
 
     /**
@@ -58,4 +77,34 @@ class Guide extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    /**
+     * Get translated title
+     *
+     * @return Attribute
+     */
+    public function title(): Attribute
+    {
+        $locale = 'content_' . app()->getLocale();
+
+        return Attribute::make(
+            get: fn ($value, $attr) =>
+                $attr[$locale]
+        );
+    }
+
+    /**
+     * Get translated content
+     *
+     * @return Attribute
+     */
+    public function content(): Attribute
+    {
+        $locale = 'content_' . app()->getLocale();
+
+        return Attribute::make(
+            get: fn ($value, $attr) =>
+                $attr[$locale]
+        );
+    }
 }
