@@ -151,8 +151,8 @@ class RegisterController extends Controller
         $request->validate([
             'name' => ['required', 'string'],
             'surname' => ['nullable', 'string'],
-	    'sex' => ['string', 'in:male,female', 'nullable'],
-	    'education_level' => ['string', 'nullable'],
+            'sex' => ['string', 'in:male,female', 'nullable'],
+            'education_level' => ['string', 'nullable'],
             'birthday' => ['required', 'date'],
             'languages' => ['nullable'],
             'spheres' => ['nullable'],
@@ -164,13 +164,12 @@ class RegisterController extends Controller
             'name' => $request->input('name'),
             'surname' => $request->input('surname'),
             'sex' => $request->input('sex') ?? 'male',
-	    'spheres' => $request->input('spheres'),
-	    'education_level' => $request->input('education_level') ?? null,
+            'spheres' => $request->input('spheres'),
+            'education_level' => $request->input('education_level') ?? null,
             'specialization' => $request->input('specialization'),
             'languages' => $request->input('languages'),
             'birthday' => $request->input('birthday'),
             'address' => $request->input('address'),
-            'education_level' => $request->input('education_level') ?? null,
             'active' => true
         ]);
 
