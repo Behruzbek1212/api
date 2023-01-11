@@ -32,7 +32,7 @@ class JobController extends Controller
             // TODO: ->where('status', '=', 'approved');
 
         if ($title = $request->get('title'))
-            $jobs->where('title', 'like', '%' . $title . '%');
+            $jobs->whereRaw('`title` like ?', ['%'.$title.'%']);
 
         if ($type = $request->get('work_type'))
             $jobs->where('work_type', '=', $type);

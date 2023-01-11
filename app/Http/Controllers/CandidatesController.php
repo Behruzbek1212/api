@@ -37,7 +37,10 @@ class CandidatesController extends Controller
 
         if ($title = $request->get('title'))
             $candidates->whereHas('user.resumes', function (Builder $query) use ($title) {
-                $query->where('data->position', 'like', '%'.$title.'%');
+                $query->whereRaw(
+                    'lower(json_unquote(json_extract(`data`, \'$."position"\'))) like ?',
+                    ['%'.strtolower($title).'%']
+                );
             });
 
         /** @see https://laravel.com/docs/9.x/queries#json-where-clauses */
