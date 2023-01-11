@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Chat\Chat;
+use App\Traits\HasScopes;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -30,6 +31,7 @@ class Job extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use HasScopes;
 
     /**
      * The primary key for the model.
@@ -91,6 +93,7 @@ class Job extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'sphere' => 'array',
         'salary' => 'array',
         'languages' => 'array',
         'advantages' => 'array',

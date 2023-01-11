@@ -34,8 +34,9 @@ class GuideController extends Controller
                     $query->where('role', '=', 'all');
                 })
                 ->limit($limit)
+                ->orderByDesc('id')
                 ->get();
-        } else $guides = Guide::query()->limit($limit)->get();
+        } else $guides = Guide::query()->limit($limit)->orderByDesc('id')->get();
 
         return response()->json([
             'status' => true,

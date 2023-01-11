@@ -19,6 +19,7 @@ class CompaniesController extends Controller
     {
         $companies = Customer::query()
             ->with(['user:id,email,phone,verified', 'jobs'])
+            ->orderByDesc('id')
             ->whereHas('user', function (Builder $query) {
                 $query->where('role', '=', 'customer');
             })

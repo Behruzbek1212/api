@@ -25,6 +25,7 @@ class JobController extends Controller
         $jobs = Job::query()
             // Check if customer status is active
             ->with('customer')
+            ->orderByDesc('id')
             ->whereHas('customer', function (Builder $query) {
                 $query->where('active', '=', true);
             });
@@ -33,18 +34,30 @@ class JobController extends Controller
         if ($title = $request->get('title'))
             $jobs->where('title', 'like', '%' . $title . '%');
 
-        if ($type = $request->get('type'))
-            $jobs->where('type', 'like', '%' . $type . '%');
+        if ($type = $request->get('work_type'))
+            $jobs->where('work_type', '=', $type);
 
         if ($location_id = $request->get('location_id'))
-            $jobs->where('location_id', '=', $location_id);
+            $jobs->isLocation($location_id);
+
+        if ($category_id = $request->get('category_id'))
+            $jobs->where('category_id', '=', $category_id);
 
         /** @see https://laravel.com/docs/9.x/queries#json-where-clauses */
         if ($salary = $request->get('salary'))
             $jobs->where('salary->amount', 'like', '%' . $salary . '%');
 
+        if ($range_start = $request->get('start'))
+            $jobs->where('salary->amount', '>=', $range_start);
+
+        if ($range_end = $request->get('end'))
+            $jobs->where('salary->amount', '<=', $range_end);
+
         if ($currency = $request->get('currency'))
             $jobs->whereJsonContains('salary->currency', $currency);
+
+        if ($sphere = $request->get('sphere'))
+            $jobs->whereJsonContains('sphere', $sphere);
 
         if ($limit = $request->get('limit'))
             $jobs->limit($limit);
