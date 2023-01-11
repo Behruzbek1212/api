@@ -302,7 +302,7 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
      */
     public function resumes(): HasMany
     {
-        return $this->hasMany(Resume::class);
+        return $this->hasMany(Resume::class)->orderByDesc('id');
     }
 
     /**

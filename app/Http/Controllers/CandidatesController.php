@@ -23,6 +23,7 @@ class CandidatesController extends Controller
     {
         $candidates = Candidate::query()
             ->with(['user:id,email,phone,verified', 'user.resumes'])
+            ->orderByDesc('id')
             ->whereHas('user', function (Builder $query) {
                 $query->where('role', '=', 'candidate');
             })
@@ -30,8 +31,8 @@ class CandidatesController extends Controller
 
         if ($name = $request->get('name'))
             $candidates->where(function (Builder $query) use ($name) {
-                $query->where('name', 'like', '%'.$name.'%')
-                    ->orWhere('surname', 'like', '%'.$name.'%');
+                $query->where('name', 'like', '%'.$name.'%');
+                $query->orWhere('surname', 'like', '%'.$name.'%');
             });
 
         /** @see https://laravel.com/docs/9.x/queries#json-where-clauses */
