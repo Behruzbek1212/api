@@ -117,7 +117,7 @@ class Candidate extends Model
         return Attribute::make(
             get: fn () => $this->user->email,
             set: fn ($value) =>
-            $this->user()->update([ 'email' => $value ])
+                $this->user()->update([ 'email' => $value ])
         );
     }
 

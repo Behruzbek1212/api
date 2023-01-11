@@ -35,6 +35,11 @@ class CandidatesController extends Controller
                 $query->orWhere('surname', 'like', '%'.$name.'%');
             });
 
+        if ($title = $request->get('title'))
+            $candidates->whereHas('user.resumes', function (Builder $query) use ($title) {
+                $query->where('data->position', 'like', '%'.$title.'%');
+            });
+
         /** @see https://laravel.com/docs/9.x/queries#json-where-clauses */
         if ($sphere = $request->get('sphere'))
             $candidates->whereJsonContains('spheres', $sphere);
