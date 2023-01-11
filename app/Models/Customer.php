@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Chat\Chat;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -117,5 +118,20 @@ class Customer extends Model
                 $table->whereNull('deleted_at');
             })
             ->whereNull('deleted_at');
+    }
+
+    /**
+     * Set user avatar mutation
+     *
+     * @return Attribute
+     */
+    public function avatar(): Attribute
+    {
+        $default_avatar = 'https://static.jobo.uz/img/default.webp';
+
+        return Attribute::make(
+            set: fn ($value) =>
+                is_null($value) ? $default_avatar : $value
+        );
     }
 }
