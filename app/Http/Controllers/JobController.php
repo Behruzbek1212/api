@@ -142,7 +142,7 @@ class JobController extends Controller
             'position' => ['string', 'required'],
             'location' => ['numeric', 'required'],
             'experience' => ['string', 'required'],
-            'sphere' => ['string', 'required'],
+            'sphere' => ['array', 'required'],
             'languages' => ['nullable'],
             'salary' => ['array:amount,currency,agreement', 'required'],
             'work_type' => ['string', 'required', 'in:fulltime,remote,partial,hybrid'],
