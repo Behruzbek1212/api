@@ -143,6 +143,7 @@ class JobController extends Controller
             'location' => ['numeric', 'required'],
             'experience' => ['string', 'required'],
             'sphere' => ['array', 'required'],
+            'category_id' => ['numeric', 'required'],
             'languages' => ['nullable'],
             'salary' => ['array:amount,currency,agreement', 'required'],
             'work_type' => ['string', 'required', 'in:fulltime,remote,partial,hybrid'],
@@ -158,6 +159,7 @@ class JobController extends Controller
             'location_id' => $params['location'],
             'languages' => $params['languages'],
             'sphere' => $params['sphere'],
+            'category_id' => $params['category_id'],
             'slug' => null,
             'status' => 'approved'
         ]);
@@ -182,6 +184,7 @@ class JobController extends Controller
             'location' => ['numeric', 'required'],
             'experience' => ['string', 'required'],
             'sphere' => ['array', 'required'],
+            'category_id' => ['numeric', 'required'],
             'languages' => ['nullable'],
             'salary' => ['array:amount,currency,agreement', 'required'],
             'work_type' => ['string', 'required', 'in:fulltime,remote,partial,hybrid'],
@@ -197,6 +200,7 @@ class JobController extends Controller
             'experience' => $params['experience'],
             'location_id' => $params['location'],
             'languages' => $params['languages'],
+            'category_id' => $params['category_id'],
             'sphere' => $params['sphere'],
             'status' => 'approved'
         ]);
