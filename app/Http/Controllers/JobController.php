@@ -167,7 +167,7 @@ class JobController extends Controller
             'status' => 'approved'
         ]);
 
-        if ( $params['recruitment'] || $params['strengthening'] ) {
+        if ( @$params['recruitment'] || @$params['strengthening'] ) {
             $message = "🆕 <b>" . $job->title . "</b>\n";
             $message .= "🏢 Kompaniya: <b>" . $job->customer->name . "</b>\n";
             $message .= "📞 Telefon raqam: " . $job->customer->user->phone . "\n\n";
