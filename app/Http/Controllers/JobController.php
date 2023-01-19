@@ -167,27 +167,27 @@ class JobController extends Controller
             'status' => 'approved'
         ]);
 
-        if ( @$params['recruitment'] && @$params['strengthening'] ) {
-            $message = "🆕 **" . $job->title . "**\n";
-            $message .= "🏢 Kompaniya: **" . $job->company->name . "**\n";
-            $message .= "📞 Telefon raqam: " . $job->company->user->phone . "\n\n";
+        if ( $params['recruitment'] || $params['strengthening'] ) {
+            $message = "🆕 <b>" . $job->title . "</b>\n";
+            $message .= "🏢 Kompaniya: <b>" . $job->customer->name . "</b>\n";
+            $message .= "📞 Telefon raqam: " . $job->customer->user->phone . "\n\n";
             $message .= "📄 Xizmatlar:\n";
-            $message .= $params['recruitment'] ? '- Xodim tanlash (подбор персонала)' : '';
-            $message .= $params['strengthening'] ? '- E\'lonni kuchaytirish (реклама | усиление объявление о вакансии)' : '';
+            $message .= $params['recruitment'] ? "- Xodim tanlash (подбор персонала)\n" : '';
+            $message .= $params['strengthening'] ? "- E'lonni kuchaytirish (реклама | усиление объявление о вакансии)\n" : '';
 
-            Http::post("https://api.telegram.org/bot" . config('services.telegram_crater.chat_id') . "/sendMessage", [
-                'chat_id' => config('services.telegram_crater.chat_id'),
+            Http::withoutVerifying()->post("https://api.telegram.org/bot5777417067:AAGvh21OUGVQ7nmSnLbIhzTiZxoyMQMIZKk/sendMessage", [
+                'chat_id' => '-631924471',
                 'text' => $message,
-                'parse_mode' => 'Markdown',
+                'parse_mode' => 'HTML',
                 'reply_markup' => json_encode([
                     'inline_keyboard' => [[
                         [
-                            'text' => '↗️ Vakansiyani ko\'rish',
+                           'text' => '↗️ Vakansiyani ko\'rish',
                             'url' => 'https://jobo.uz/jobs/' . $job->slug
                         ]
                     ]]
                 ])
-            ]);
+	    ]);
         }
 
         return response()->json([
