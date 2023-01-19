@@ -182,12 +182,12 @@ class JobController extends Controller
                 'reply_markup' => json_encode([
                     'inline_keyboard' => [[
                         [
-                           'text' => '↗️ Vakansiyani ko\'rish',
+                            'text' => "↗️ Vakansiyani ko'rish",
                             'url' => 'https://jobo.uz/jobs/' . $job->slug
                         ]
                     ]]
                 ])
-	    ]);
+	        ]);
         }
 
         return response()->json([
