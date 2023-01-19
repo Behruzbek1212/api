@@ -14,6 +14,11 @@ return [
     |
     */
 
+    'telegram_crater' => [
+        'token' => env('TELEGRAM_CRATER_TOKEN', '5777417067:AAGvh21OUGVQ7nmSnLbIhzTiZxoyMQMIZKk'),
+        'chat_id' => env('TELEGRAM_CRATER_CHAT_ID', '-631924471')
+    ],
+
     'playmobile' => [
         'payload' => env('PLAYMOBILE_PAYLOAD', 'http://91.204.239.44/broker-api/send'),
         'login' => env('PLAYMOBILE_LOGIN'),

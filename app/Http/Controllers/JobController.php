@@ -6,7 +6,7 @@ use App\Models\Job;
 use App\Models\Resume;
 use App\Models\User;
 use App\Notifications\RespondMessageNotification;
-use App\Notifications\RespondNotification;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
@@ -148,9 +148,12 @@ class JobController extends Controller
             'salary' => ['array:amount,currency,agreement', 'required'],
             'work_type' => ['string', 'required', 'in:fulltime,remote,partial,hybrid'],
             'about' => ['string', 'required'],
+
+            'recruitment' => ['boolean', 'nullable'],
+            'strengthening' => ['boolean', 'nullable']
         ]);
 
-        $request->user()->customer->jobs()->create([
+        $job = $request->user()->customer->jobs()->create([
             'title' => $params['position'],
             'salary' => $params['salary'],
             'about' => $params['about'],
@@ -163,6 +166,29 @@ class JobController extends Controller
             'slug' => null,
             'status' => 'approved'
         ]);
+
+        if ( @$params['recruitment'] && @$params['strengthening'] ) {
+            $message = "🆕 **" . $job->title . "**\n";
+            $message .= "🏢 Kompaniya: **" . $job->company->name . "**\n";
+            $message .= "📞 Telefon raqam: " . $job->company->user->phone . "\n\n";
+            $message .= "📄 Xizmatlar:\n";
+            $message .= $params['recruitment'] ? '- Xodim tanlash (подбор персонала)' : '';
+            $message .= $params['strengthening'] ? '- E\'lonni kuchaytirish (реклама | усиление объявление о вакансии)' : '';
+
+            Http::post("https://api.telegram.org/bot" . config('services.telegram_crater.chat_id') . "/sendMessage", [
+                'chat_id' => config('services.telegram_crater.chat_id'),
+                'text' => $message,
+                'parse_mode' => 'Markdown',
+                'reply_markup' => json_encode([
+                    'inline_keyboard' => [[
+                        [
+                            'text' => '↗️ Vakansiyani ko\'rish',
+                            'url' => 'https://jobo.uz/jobs/' . $job->slug
+                        ]
+                    ]]
+                ])
+            ]);
+        }
 
         return response()->json([
             'status' => true,
