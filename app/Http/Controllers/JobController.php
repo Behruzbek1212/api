@@ -179,14 +179,14 @@ class JobController extends Controller
                 'chat_id' => config('services.telegram_crater.chat_id'),
                 'text' => $message,
                 'parse_mode' => 'Markdown',
-                // 'reply_markup' => json_encode([
-                //     'inline_keyboard' => [[
-                //         [
-                //             'text' => '↗️ Vakansiyani ko\'rish',
-                //             'url' => 'https://jobo.uz/jobs/' . $job->slug
-                //         ]
-                //     ]]
-                // ])
+                'reply_markup' => json_encode([
+                    'inline_keyboard' => [[
+                        [
+                            'text' => '↗️ Vakansiyani ko\'rish',
+                            'url' => 'https://jobo.uz/jobs/' . $job->slug
+                        ]
+                    ]]
+                ])
             ]);
         }
 
