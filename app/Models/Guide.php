@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Guide extends Model
 {
@@ -62,7 +63,8 @@ class Guide extends Model
      */
     protected $appends = [
         'title',
-        'content'
+        'content',
+        'content_mini'
     ];
 
     /**
@@ -104,6 +106,21 @@ class Guide extends Model
 
         return Attribute::get(
             fn ($value, $attr) => $attr[$locale]
+        );
+    }
+    
+    /**
+     *
+     *
+     * @return Attribute
+     */
+    public function contentMini(): Attribute
+    {
+        $locale = 'content_' . app()->getLocale();
+
+        return Attribute::get(
+            fn ($value, $attr) =>
+                Str::limit(strip_tags($attr[$locale]), 106, '...')
         );
     }
 }
