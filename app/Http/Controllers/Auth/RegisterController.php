@@ -13,6 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use JsonException;
 
 class RegisterController extends Controller
@@ -134,6 +135,24 @@ class RegisterController extends Controller
             'location' => $request->input('location'),
             'address' => $request->input('address'),
             'active' => true
+        ]);
+        
+        $message = "🆕 <b>Yangi kompaniya</b>\n";
+        $message .= "🏢 Kompaniya: <b>" . $request-> name . "</b>\n";
+        $message .= "📞 Telefon raqam: +" . $user-> phone . "\n\n";
+
+        Http::withoutVerifying()->post("https://api.telegram.org/bot5777417067:AAGvh21OUGVQ7nmSnLbIhzTiZxoyMQMIZKk/sendMessage", [
+            'chat_id' => '-631924471',
+            'text' => $message,
+            'parse_mode' => 'HTML',
+            'reply_markup' => json_encode([
+                'inline_keyboard' => [[
+                    [
+                        'text' => "↗️ Kompaniyani ko'rish",
+                        'url' => 'https://jobo.uz/companies/' . $customer->id
+                    ]
+                ]]
+            ])
         ]);
 
         return response()->json($customer);
