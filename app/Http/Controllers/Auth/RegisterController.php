@@ -149,7 +149,7 @@ class RegisterController extends Controller
                 'inline_keyboard' => [[
                     [
                         'text' => "↗️ Kompaniyani ko'rish",
-                        'url' => 'https://jobo.uz/companies/' . $customer->id
+                        'url' => 'https://jobo.uz/company/' . $customer->id
                     ]
                 ]]
             ])
