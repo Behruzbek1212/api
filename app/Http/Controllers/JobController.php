@@ -162,7 +162,7 @@ class JobController extends Controller
             'experience' => $params['experience'],
             'location_id' => $params['location'],
             'languages' => $params['languages'],
-            'education_level' => $params['education_level'],
+            'education_level' => $params['education_level'] ?? null, // TODO: remove `null` value
             'sphere' => $params['sphere'],
             'category_id' => $params['category_id'],
             'slug' => null,
@@ -229,7 +229,7 @@ class JobController extends Controller
             'experience' => $params['experience'],
             'location_id' => $params['location'],
             'languages' => $params['languages'],
-            'education_level' => $params['education_level'],
+            'education_level' => $params['education_level'] ?? null, // TODO: remove `null` value
             'category_id' => $params['category_id'],
             'sphere' => $params['sphere'],
             'status' => 'approved'
