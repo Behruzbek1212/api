@@ -34,7 +34,7 @@ class LoginController extends Controller
 
         /** @var User $user */
         $user = auth()->user();
-        $token = $user->createToken($user->name . '-' . Hash::make($user->id))
+        $token = $user->createToken(@$user->name ?? 'admin' . '-' . Hash::make($user->id))
             ->plainTextToken;
 
         return response()->json([

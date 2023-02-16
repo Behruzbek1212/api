@@ -84,7 +84,6 @@ class Job extends Model
      * @var array<int, string>
      */
     protected $hidden = [
-        'deleted_at',
         'customer_id'
     ];
 
@@ -146,7 +145,7 @@ class Job extends Model
      */
     public function GetRespondedAttribute()
     {
-        if (! _auth()->check()) {
+        if ((! _auth()->check()) || (@_auth()->user()->role == 'admin')) {
             return false;
         }
 
