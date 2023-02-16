@@ -21,6 +21,10 @@ class CandidatesController extends Controller
      */
     public function all(Request $request): JsonResponse
     {
+        $params = $request->validate([
+            'limit' => ['integer', 'nullable']
+        ]);
+
         $candidates = Candidate::query()
             ->with(['user:id,email,phone,verified', 'user.resumes'])
             ->orderByDesc('id')
@@ -47,12 +51,9 @@ class CandidatesController extends Controller
         if ($sphere = $request->get('sphere'))
             $candidates->whereJsonContains('spheres', $sphere);
 
-        if ($limit = $request->get('limit'))
-            $candidates->limit($limit);
-
         return response()->json([
             'status' => true,
-            'data' => $candidates->get()
+            'data' => $candidates->paginate($params['limit'] ?? null)
         ]);
     }
 

@@ -24,7 +24,6 @@ class JobFactory extends Factory
         return [
             'customer_id' => $this->faker->numberBetween(1, 8),
             'title' => $this->faker->jobTitle(),
-            'type'=> $this->faker->jobTitle(),
             'salary' => [
                 'amount' => $this->faker->randomNumber(),
                 'currency' => $currency[$rand_int],

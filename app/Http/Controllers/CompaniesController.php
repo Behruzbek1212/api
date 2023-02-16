@@ -17,6 +17,10 @@ class CompaniesController extends Controller
      */
     public function all(Request $request): JsonResponse
     {
+        $params = $request->validate([
+            'limit' => ['integer', 'nullable']
+        ]);
+
         $companies = Customer::query()
             ->with(['user:id,email,phone,verified', 'jobs'])
             ->orderByDesc('id')
@@ -31,12 +35,9 @@ class CompaniesController extends Controller
         if ($location = $request->get('location'))
             $companies->where('location', $location);
 
-        if ($limit = $request->get('limit'))
-            $companies->limit($limit);
-
         return response()->json([
             'status' => true,
-            'data' => $companies->get()
+            'data' => $companies->paginate($params['limit'] ?? null)
         ]);
     }
 
