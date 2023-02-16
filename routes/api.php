@@ -178,4 +178,8 @@ Route::prefix('/v1')->group(function () {
             Route::post('get-user', [AdminController::class, 'getUser'])->name('get-user');
         });
     });
+
+    Route::prefix('/admin')->middleware('is_admin')->name('admin.')->group(function () {
+        require_once __DIR__ . '/admin.php';
+    });
 });
