@@ -22,6 +22,10 @@ class JobController extends Controller
      */
     public function all(Request $request): JsonResponse
     {
+        $params = $request->validate([
+            'limit' => ['integer', 'nullable']
+        ]);
+
         $jobs = Job::query()
             // Check if customer status is active
             ->with('customer')
@@ -59,12 +63,9 @@ class JobController extends Controller
         if ($sphere = $request->get('sphere'))
             $jobs->whereJsonContains('sphere', $sphere);
 
-        if ($limit = $request->get('limit'))
-            $jobs->limit($limit);
-
         return response()->json([
             'status' => true,
-            'jobs' => $jobs->get()
+            'jobs' => $jobs->paginate($params['limit'] ?? null)
         ]);
     }
 
