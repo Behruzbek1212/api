@@ -23,6 +23,7 @@ class CompaniesController extends Controller
                 $query->where('role', '=', 'customer');
             }])
             ->where('active', '=', true)
+            ->withCount('jobs')
             ->orderByDesc('updated_at');
 
         return response()->json([
@@ -75,6 +76,7 @@ class CompaniesController extends Controller
                 $query->where('role', '=', 'customer');
             }])
             ->where('active', '=', true)
+            ->withCount('jobs')
             ->findOrFail($id);
 
         return response()->json([
