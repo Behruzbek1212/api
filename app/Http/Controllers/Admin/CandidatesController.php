@@ -3,79 +3,106 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Customer;
-use App\Models\Job;
+use App\Models\Candidate;
+use App\Models\User;
+use App\Services\MobileService;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-
-// TODO: re-write
+use Illuminate\Support\Facades\Hash;
+use Nette\Utils\Random;
 
 class CandidatesController extends Controller
 {
     public function index(): JsonResponse
     {
-        $jobs = Job::query()
+        $candidates = Candidate::query()
             ->withTrashed()
-            ->with(['customer' => function (BelongsTo $query) {
-                $query->where('active', '=', true);
+            ->with(['user' => function (BelongsTo $query) {
+                $query->where('role', '=', 'candidate');
             }])
-            ->whereNot('status', '=', 'closed')
+            ->where('active', '=', true)
             ->orderByDesc('updated_at');
 
         return response()->json([
             'status' => true,
-            'data' => $jobs->paginate(20)
+            'data' => $candidates->paginate(20)
         ]);
     }
 
     public function create(Request $request): JsonResponse
     {
-        $this->validateParams($request, [
-            'customer_id' => ['numeric', 'required']
-        ]);
+        $this->validateParams($request, []);
+        $password = Random::generate();
 
-        $customer = Customer::query()
-            ->findOrFail($request->get('customer_id'));
+        try {
+            $user = User::query()->create(array_merge(
+                $request->only([ 'phone', 'email' ]),
+                ['password' => Hash::make($password)],
+                ['role' => 'candidate']
+            ));
 
-        $customer->jobs()->create(array_merge(
-            $request->except( ['customer_id', 'slug'] ),
-            ['slug' => null, 'status' => 'approved']
-        ));
+            $user->candidate()->create(array_merge(
+                $request->except([ 'phone', 'email' ]),
+                ['avatar' => $request->get('avatar') ?? null]
+            ));
+        } catch (QueryException $exception) {
+            return response()->json([
+                'status' => false,
+                'error' => true,
+                'message' => $exception->getMessage()
+            ]);
+        }
+
+        (new MobileService())->send(
+            $request->get('phone'),
+            'Sizning JOBO.uz ga kirish parolingiz: ' . $password
+        );
 
         return response()->json([
             'status' => true,
+            'password' => $password,
             'data' => []
         ]);
     }
 
-    public function show(string $slug): JsonResponse
+    public function show(int $id): JsonResponse
     {
-        $job = Job::query()
+        $candidate = Candidate::query()
             ->withTrashed()
-            ->with(['customer' => function (BelongsTo $query) {
-                $query->where('active', '=', true);
+            ->with(['user' => function (BelongsTo $query) {
+                $query->where('role', '=', 'candidate');
             }])
-            ->whereNOt('status', '=', 'closed')
-            ->findOrFail($slug);
+            ->where('active', '=', true)
+            ->findOrFail($id);
 
         return response()->json([
             'status' => true,
-            'data' => $job
+            'data' => $candidate
         ]);
     }
 
     public function edit(Request $request): JsonResponse
     {
         $this->validateParams($request, [
-            'slug' => ['string', 'required']
+            'id' => ['integer', 'required'],
+            'phone' => ['numeric', 'required'],
+            'email' => ['email', 'required']
         ]);
 
-        $job = Job::query()
+        $candidate = Candidate::query()
             ->withTrashed()
-            ->findOrFail($request->get('slug'));
+            ->findOrFail($request->get('id'));
 
-        $job->update( $request->except( ['slug'] ) );
+        $candidate->update(array_merge(
+            $request->except( ['id', 'phone', 'email'] ),
+            ['avatar' => $request->get('avatar') ?? null]
+        ));
+
+        $candidate->user()->update(array_merge(
+            $request->only([ 'phone', 'email' ])
+        ));
 
         return response()->json([
             'status' => true,
@@ -86,15 +113,15 @@ class CandidatesController extends Controller
     public function destroy(Request $request): JsonResponse
     {
         $params = $request->validate([
-            'slug' => ['string', 'required']
+            'id' => ['integer', 'required']
         ]);
 
-        $job = Job::query()
+        $candidate = Candidate::query()
             ->withTrashed()
-            ->findOrFail($params['slug']);
+            ->findOrFail($params['id']);
 
-        if (! $job->trashed())
-            $job->delete();
+        if (! $candidate->trashed())
+            $candidate->delete();
 
         return response()->json([
             'status' => true,
@@ -111,16 +138,21 @@ class CandidatesController extends Controller
      */
     private function validateParams(Request $request, array $rule): void
     {
-        $params = $request->validate(array_merge([
-            'location_id' => ['numeric', 'required'],
-            'category_id' => ['numeric', 'required'],
+        $request->validate(array_merge([
+            'name' => ['string', 'required'],
+            'surname' => ['string', 'required'],
+            'sex' => ['string', 'in:male,female', 'nullable'],
+            'spheres' => ['array', 'nullable'],
             'education_level' => ['string', 'nullable'],
-            'experience' => ['string', 'required'],
-            'about' => ['string', 'required'],
-            'work_type' => ['string', 'in:fulltime,remote,partial,hybrid', 'required'],
-            'sphere' => ['array', 'required'],
-            'languages' => ['array', 'nullable'],
-            'salary' => ['array:amount,currency,agreement', 'required'],
+            'languages' => ['array', 'required'],
+            'specialization' => ['string', 'required'],
+            'birthday' => ['date', 'required'],
+            'address' => ['numeric', 'required'],
+            'phone' => ['numeric', 'unique:users,phone', 'required'],
+            'email' => ['email', 'unique:users,email', 'required'],
+
+            '__comment' => ['string', 'nullable'],
+            '__conversation' => ['boolean', 'required']
         ], $rule));
     }
 }

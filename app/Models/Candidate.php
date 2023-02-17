@@ -37,7 +37,10 @@ class Candidate extends Model
         'address',
         'specialization',
         'education_level',
-        'active'
+        'active',
+
+        '__comment',
+        '__conversation'
     ];
 
     /**
@@ -58,6 +61,8 @@ class Candidate extends Model
         'spheres' => 'array',
         'languages' => 'array',
         'birthday' => 'datetime',
+
+        '__conversation' => 'boolean'
     ];
 
     /**

@@ -54,7 +54,7 @@ class JobsController extends Controller
             ->with(['customer' => function (BelongsTo $query) {
                 $query->where('active', '=', true);
             }])
-            ->whereNOt('status', '=', 'closed')
+            ->whereNot('status', '=', 'closed')
             ->findOrFail($slug);
 
         return response()->json([
