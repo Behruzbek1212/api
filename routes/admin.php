@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CandidatesController;
+use App\Http\Controllers\Admin\CompaniesController;
 use App\Http\Controllers\Admin\JobsController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,4 +19,12 @@ Route::prefix('/candidates')->name('candidates.')->group(function () {
     Route::post('/create', [CandidatesController::class, 'create']);
     Route::post('/edit', [CandidatesController::class, 'edit']);
     Route::post('/destroy', [CandidatesController::class, 'destroy']);
+});
+
+Route::prefix('/companies')->name('candidates.')->group(function () {
+    Route::get('/', [CompaniesController::class, 'index']);
+    Route::get('/{id}', [CompaniesController::class, 'show']);
+    Route::post('/create', [CompaniesController::class, 'create']);
+    Route::post('/edit', [CompaniesController::class, 'edit']);
+    Route::post('/destroy', [CompaniesController::class, 'destroy']);
 });

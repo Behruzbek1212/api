@@ -109,7 +109,7 @@ class JobsController extends Controller
      */
     private function validateParams(Request $request, array $rule): void
     {
-        $params = $request->validate(array_merge([
+        $request->validate(array_merge([
             'location_id' => ['numeric', 'required'],
             'category_id' => ['numeric', 'required'],
             'education_level' => ['string', 'nullable'],
