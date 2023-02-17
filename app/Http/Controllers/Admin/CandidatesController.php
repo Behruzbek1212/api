@@ -152,7 +152,8 @@ class CandidatesController extends Controller
             'email' => ['email', 'unique:users,email', 'required'],
 
             '__comment' => ['string', 'nullable'],
-            '__conversation' => ['boolean', 'required']
+            '__conversation' => ['boolean', 'required'],
+            '__conversation_date' => ['date', 'nullable']
         ], $rule));
     }
 }

@@ -40,7 +40,8 @@ class Candidate extends Model
         'active',
 
         '__comment',
-        '__conversation'
+        '__conversation',
+        '__conversation_date'
     ];
 
     /**
@@ -62,7 +63,8 @@ class Candidate extends Model
         'languages' => 'array',
         'birthday' => 'datetime',
 
-        '__conversation' => 'boolean'
+        '__conversation' => 'boolean',
+        '__conversation_date' => 'datetime'
     ];
 
     /**
