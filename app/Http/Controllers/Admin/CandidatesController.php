@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Candidate;
 use App\Models\User;
 use App\Services\MobileService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
@@ -15,7 +16,7 @@ use Nette\Utils\Random;
 
 class CandidatesController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $candidates = Candidate::query()
             ->withTrashed()
@@ -24,6 +25,12 @@ class CandidatesController extends Controller
             }])
             ->where('active', '=', true)
             ->orderByDesc('updated_at');
+
+        if ($request->has('title'))
+            $candidates->where(function (Builder $query) use ($request) {
+                $query->where('name', 'like', '%'.$request->get('title').'%');
+                $query->orWhere('surname', 'like', '%'.$request->get('title').'%');
+            });
 
         return response()->json([
             'status' => true,

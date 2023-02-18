@@ -15,7 +15,7 @@ use Nette\Utils\Random;
 
 class CompaniesController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $customers = Customer::query()
             ->withTrashed()
@@ -25,6 +25,9 @@ class CompaniesController extends Controller
             ->where('active', '=', true)
             ->withCount('jobs')
             ->orderByDesc('updated_at');
+
+        if ($request->has('title'))
+            $customers->where('name', 'like', '%'.$request->get('title').'%');
 
         return response()->json([
             'status' => true,

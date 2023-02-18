@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 class JobsController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $jobs = Job::query()
             ->withTrashed()
@@ -20,6 +20,9 @@ class JobsController extends Controller
             }])
             ->whereNot('status', '=', 'closed')
             ->orderByDesc('updated_at');
+
+        if ($request->has('title'))
+            $jobs->where('title', 'like', '%'.$request->get('title').'%');
 
         return response()->json([
             'status' => true,
