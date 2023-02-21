@@ -49,7 +49,8 @@ class CompaniesController extends Controller
 
             $user->customer()->create(array_merge(
                 $request->only([ 'name', 'about', 'owned_date', 'location', 'address' ]),
-                ['avatar' => $request->get('avatar') ?? null]
+                ['avatar' => $request->get('avatar') ?? null],
+                ['active' => true]
             ));
         } catch (QueryException $exception) {
             return response()->json([

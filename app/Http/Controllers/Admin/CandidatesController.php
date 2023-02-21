@@ -52,7 +52,8 @@ class CandidatesController extends Controller
 
             $user->candidate()->create(array_merge(
                 $request->except([ 'phone', 'email' ]),
-                ['avatar' => $request->get('avatar') ?? null]
+                ['avatar' => $request->get('avatar') ?? null],
+                ['active' => true]
             ));
         } catch (QueryException $exception) {
             return response()->json([
