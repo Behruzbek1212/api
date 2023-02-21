@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CandidatesController;
 use App\Http\Controllers\Admin\CompaniesController;
+use App\Http\Controllers\Admin\GuidesController;
 use App\Http\Controllers\Admin\JobsController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,4 +28,12 @@ Route::prefix('/companies')->name('candidates.')->group(function () {
     Route::post('/create', [CompaniesController::class, 'create']);
     Route::post('/edit', [CompaniesController::class, 'edit']);
     Route::post('/destroy', [CompaniesController::class, 'destroy']);
+});
+
+Route::prefix('/guides')->name('guides.')->group(function () {
+    Route::get('/', [GuidesController::class, 'index']);
+    Route::get('/{slug}', [GuidesController::class, 'show']);
+    Route::post('/create', [GuidesController::class, 'create']);
+    Route::post('/edit', [GuidesController::class, 'edit']);
+    Route::post('/destroy', [GuidesController::class, 'destroy']);
 });
