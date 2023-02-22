@@ -62,7 +62,9 @@ class CompaniesController extends Controller
 
         (new MobileService())->send(
             $request->get('phone'),
-            'Sizning JOBO.uz ga kirish parolingiz: ' . $password
+            "Sizning JOBO.uz ga kirish parolingiz: " . $password .
+            "\n Quyidagi link orqali tezkor kirishni amalga oshirishingiz mumkin: " .
+            vsprintf("https://jobo.uz/auth/verifier/%s/?p=%s", [$password, $request->get('phone')])
         );
 
         return response()->json([
