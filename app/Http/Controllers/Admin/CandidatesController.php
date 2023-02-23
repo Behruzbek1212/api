@@ -22,7 +22,7 @@ class CandidatesController extends Controller
             ->withTrashed()
             ->with(['user' => function (BelongsTo $query) {
                 $query->where('role', '=', 'candidate');
-            }])
+            }, 'user.resumes'])
             ->where('active', '=', true)
             ->orderByDesc('updated_at');
 
@@ -81,7 +81,7 @@ class CandidatesController extends Controller
             ->withTrashed()
             ->with(['user' => function (BelongsTo $query) {
                 $query->where('role', '=', 'candidate');
-            }])
+            }, 'user.resumes'])
             ->where('active', '=', true)
             ->findOrFail($id);
 
