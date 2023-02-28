@@ -91,6 +91,11 @@ class Resume extends Model
             $end_year = $employment['date']['end']['year'] * 1;
             $end_month = $employment['date']['end']['month'] * 1;
 
+            if ($employment['date']['present'] === true) {
+                $end_year = date('Y');
+                $end_month = date('m');
+            }
+
             $exp_time += ($end_year - $start_year) * 12;
             $exp_time += $end_month - $start_month;
         }
@@ -105,9 +110,8 @@ class Resume extends Model
      */
     public function experience(): Attribute
     {
-        return Attribute::make(
-            get: fn ($_val, $attr) =>
-                $this->calculate_experience(json_decode($attr['data'], JSON_PRETTY_PRINT))
+        return Attribute::get(fn ($_val, $attr) =>
+            $this->calculate_experience(json_decode($attr['data'], JSON_PRETTY_PRINT))
         );
     }
 }
