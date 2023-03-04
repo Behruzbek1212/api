@@ -21,7 +21,7 @@ class ResumeService extends ResumeServiceConst
      */
     public function load(array $data, array $mergeData = [], string $encode = 'utf-8'): ResumeService
     {
-        $this->pdf = PDF::loadView('resume.v1', $data, $mergeData, $encode)
+        $this->pdf = PDF::loadView('resume.v2', $data, $mergeData, $encode)
             ->setPaper('A4', 'horizontal')
             ->setWarnings(true);
 
