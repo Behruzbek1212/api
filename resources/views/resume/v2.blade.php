@@ -257,7 +257,7 @@
                                 <td>
                                     <p class="font-bold text-md" align="right">
                                         {{
-                                            $data['salary']['agreement'] ?
+                                            @$data['salary']['agreement'] ?
                                                 __('resume.message.agreement') :
                                                 $data['salary']['amount'] . ' ' . __('currency.' . $data['salary']['currency'])
                                         }}
@@ -480,9 +480,9 @@
             </table>
         @endif
 
-	@php
+        @php
             $arr = [];
-	    $driving_exp = false;
+            $driving_exp = false;
 
             if (@$data['driving_experience'])
                 $arr = array_filter($data['driving_experience']['categories_of_driving'], function ($value) {
