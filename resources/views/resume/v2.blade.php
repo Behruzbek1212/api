@@ -21,21 +21,21 @@
 @section('style')
     <style id="fonts" type="text/css">
         @font-face {
-            font-family: 'Gilroy';
+            font-family: 'Roboto';
             font-style: normal;
             font-weight: 400;
-            src: url({{ storage_path("fonts/Gilroy-Regular.ttf") }}) format("truetype");
+            src: url({{ storage_path("fonts/Roboto-Regular.ttf") }}) format("truetype");
         }
 
         @font-face {
-            font-family: 'Gilroy';
+            font-family: 'Roboto';
             font-style: normal;
             font-weight: 600;
-            src: url({{ storage_path("fonts/Gilroy-Semibold.ttf") }}) format("truetype");
+            src: url({{ storage_path("fonts/Roboto-Medium.ttf") }}) format("truetype");
         }
 
         @font-face {
-            font-family: 'Gilroy';
+            font-family: 'Roboto';
             font-style: normal;
             font-weight: 700;
             src: url({{ storage_path("fonts/Gilroy-Bold.ttf") }}) format("truetype");
@@ -45,7 +45,7 @@
     <style id="header" type="text/css">
         header {
             position: fixed;
-            inset: -40px -40px auto;
+            inset: -50px -40px auto;
         }
 
         header span {
@@ -82,14 +82,18 @@
 
     <style id="normalizer" type="text/css">
         @page {
-            margin: 40px;
-            font-family: "Gilroy", sans-serif;
+            margin: 60px 40px 40px;
+            font-family: Roboto, sans-serif;
         }
 
         h1, h2, h3, h4, h5, h6, p {
             padding: 0;
             margin: 0;
             color: #595959;
+        }
+
+        table {
+            z-index: 50;
         }
     </style>
 
@@ -112,6 +116,10 @@
 
         .w-full {
             width: 100%;
+        }
+
+        .font-normal {
+            font-weight: 400;
         }
 
         .font-semibold {
@@ -163,6 +171,7 @@
 
         .right-side {
             font-size: 14px;
+            vertical-align: top
         }
     </style>
 
@@ -258,65 +267,243 @@
                         </tr>
                     </table>
 
-                    <p class="text-sm">{{ __('resume.message.sphere') }}:
-                        @foreach($candidate->spheres as $sphere)
-                            {{ $sphere }}
-                        @endforeach
-                    </p>
+                    <p class="text-sm">{{ __('resume.message.sphere') }}: {{ __('sphere.' . @$data['sphere']) }}</p>
                     <p class="text-sm">{{ __('resume.message.location') }}: {{ $candidate->location }}</p>
-                    <p class="text-sm">{{ __('resume.message.type') }}: {{ $data['work_type'] }}</p>
+                    <p class="text-sm">{{ __('resume.message.type') }}: {{ __('resume.types.' . @$data['work_type']) }}</p>
                 </td>
             </tr>
         </table>
 
-        <table id="experience" class="w-full relative">
-            <div class="timeline-line"></div>
-            <tr class="w-full table-row">
-                <td class="left-side">
-                    <p class="font-bold">{{ __('resume.list.experience') }}</p>
-                </td>
-                <td class="w-full right-side">
-                    <div class="splitter"></div>
-                </td>
-            </tr>
-            @foreach($data['employment'] as $employment)
-                <tr class="w-full table-row timeline">
+        @if(count($data['employment']))
+            <table id="experience" class="w-full relative">
+                @if(count($data['employment']) > 1)
+                    <div class="timeline-line"></div>
+                @endif
+                <tr class="w-full table-row">
                     <td class="left-side">
-                        <span class="tl-fixer"></span>
-                        <table id="experience-timeline" class="w-full table-space-none">
-                            <tr class="w-full">
-                                <td>
-                                    <div class="timeline-dot"></div>
-                                </td>
-                                <td>
-                                    <p style="font-size: 10px">
-                                        {{
-                                            __('month.' . $employment['date']['start']['month']) . ' ' .
-                                            $employment['date']['start']['year']
-                                        }}
-                                        &mdash;
-                                        {{
-                                            $employment['date']['present'] ?
-                                                __('resume.message.agreement') :
-                                                __('month.' . $employment['date']['end']['month']) . ' ' . $employment['date']['end']['year']
-                                        }}
-                                    </p>
-                                </td>
-                            </tr>
-                        </table>
+                        <p class="font-bold">{{ __('resume.list.experience') }}</p>
                     </td>
                     <td class="w-full right-side">
-                        <h3 class="font-bold text-md">{{ strip_tags($employment['employer']) }}</h3>
-                        <p class="text-sm mb-4">{{ strip_tags($employment['title']) }}</p>
+                        <div class="splitter"></div>
+                    </td>
+                </tr>
+                @foreach($data['employment'] as $employment)
+                    <tr class="w-full table-row timeline">
+                        <td class="left-side">
+                            @if(count($data['employment']) > 1)
+                                <span class="tl-fixer"></span>
+                            @endif
+                            <table id="experience-timeline" class="w-full table-space-none">
+                                <tr class="w-full">
+                                    @if(count($data['employment']) > 1)
+                                        <td>
+                                            <div class="timeline-dot"></div>
+                                        </td>
+                                    @endif
+                                    <td>
+                                        <p style="font-size: 10px">
+                                            {{
+                                                __('month.' . $employment['date']['start']['month']) . ' ' .
+                                                $employment['date']['start']['year']
+                                            }}
+                                            &mdash;
+                                            {{
+                                                $employment['date']['present'] ?
+                                                    __('resume.message.present') :
+                                                    __('month.' . $employment['date']['end']['month']) . ' ' . $employment['date']['end']['year']
+                                            }}
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="w-full right-side">
+                            <h3 class="font-bold text-md">{{ strip_tags($employment['employer']) }}</h3>
+                            <p class="text-sm mb-4">{{ strip_tags($employment['title']) }}</p>
 
-                        <p class="text-sm mb-4">{{
+                            <p class="text-sm mb-4">{{
                                 strlen(strip_tags($employment['description'])) !== 0 ?
                                     strip_tags($employment['description']) :
                                     __('resume.message.not_found')
                         }}</p>
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
+        @endif
+
+        @if(count($data['education']))
+            <table id="education" class="w-full relative">
+                @if(count($data['education']) > 1)
+                    <div class="timeline-line"></div>
+                @endif
+                <tr class="w-full table-row">
+                    <td class="left-side">
+                        <p class="font-bold">{{ __('resume.list.education') }}</p>
+                    </td>
+                    <td class="w-full right-side">
+                        <div class="splitter"></div>
                     </td>
                 </tr>
-            @endforeach
-        </table>
+                @foreach($data['education'] as $education)
+                    <tr class="w-full table-row timeline">
+                        <td class="left-side">
+                            @if(count($data['education']) > 1)
+                                <span class="tl-fixer"></span>
+                            @endif
+                            <table id="experience-timeline" class="w-full table-space-none">
+                                <tr class="w-full">
+                                    @if(count($data['education']) > 1)
+                                        <td>
+                                            <div class="timeline-dot"></div>
+                                        </td>
+                                    @endif
+                                    <td>
+                                        <p style="font-size: 10px">
+                                            {{
+                                                __('month.' . $education['date']['start']['month']) . ' ' .
+                                                $education['date']['start']['year']
+                                            }}
+                                            &mdash;
+                                            {{
+                                                $education['date']['present'] ?
+                                                    __('resume.message.present') :
+                                                    __('month.' . $education['date']['end']['month']) . ' ' . $education['date']['end']['year']
+                                            }}
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="w-full right-side">
+                            <h3 class="font-bold text-md">{{ strip_tags($education['school']) }} <span class="text-sm mb-4 font-normal">{{ strip_tags($education['degree']) }}</span></h3>
+
+                            <p class="text-sm mb-4">{{
+                                strlen(strip_tags($education['description'])) !== 0 ?
+                                    strip_tags($education['description']) :
+                                    __('resume.message.not_found')
+                        }}</p>
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
+        @endif
+
+        @if(count($data['additional_education']))
+            <table id="education" class="w-full relative">
+                @if(count($data['additional_education']) > 1)
+                    <div class="timeline-line"></div>
+                @endif
+                <tr class="w-full table-row">
+                    <td class="left-side">
+                        <p class="font-bold">{{ __('resume.list.additional_education') }}</p>
+                    </td>
+                    <td class="w-full right-side">
+                        <div class="splitter"></div>
+                    </td>
+                </tr>
+                @foreach($data['additional_education'] as $education)
+                    <tr class="w-full table-row timeline">
+                        <td class="left-side">
+                            @if(count($data['additional_education']) > 1)
+                                <span class="tl-fixer"></span>
+                            @endif
+                            <table id="experience-timeline" class="w-full table-space-none">
+                                <tr class="w-full">
+                                    @if(count($data['additional_education']) > 1)
+                                        <td>
+                                            <div class="timeline-dot"></div>
+                                        </td>
+                                    @endif
+                                    <td>
+                                        <p style="font-size: 10px">
+                                            {{
+                                                __('month.' . $education['date']['start']['month']) . ' ' .
+                                                $education['date']['start']['year']
+                                            }}
+                                            &mdash;
+                                            {{
+                                                $education['date']['present'] ?
+                                                    __('resume.message.present') :
+                                                    __('month.' . $education['date']['end']['month']) . ' ' . $education['date']['end']['year']
+                                            }}
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="w-full right-side">
+                            <h3 class="font-bold text-md">{{ strip_tags($education['school']) }}</h3>
+
+                            <p class="text-sm mb-4">{{
+                                    strlen(strip_tags($education['description'])) !== 0 ?
+                                        strip_tags($education['description']) :
+                                        __('resume.message.not_found')
+                            }}</p>
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
+        @endif
+
+        @if(count($data['skills']))
+            <table id="desired-jobs-and-salary" class="w-full">
+                <tr class="w-full table-row">
+                    <td class="left-side">
+                        <p class="font-bold">{{ __('resume.list.skills') }}</p>
+                    </td>
+                    <td class="w-full right-side">
+                        <div class="splitter"></div>
+
+                        @foreach($data['skills'] as $skill)
+                            <p>- {{ $skill }}</p>
+                        @endforeach
+                    </td>
+                </tr>
+            </table>
+        @endif
+
+        @if(count($data['computer_skills']))
+            <table id="desired-jobs-and-salary" class="w-full">
+                <tr class="w-full table-row">
+                    <td class="left-side">
+                        <p class="font-bold">{{ __('resume.list.computer_skills') }}</p>
+                    </td>
+                    <td class="w-full right-side">
+                        <div class="splitter"></div>
+
+                        @foreach($data['computer_skills'] as $skill)
+                            <p>- {{ $skill }}</p>
+                        @endforeach
+                    </td>
+                </tr>
+            </table>
+        @endif
+
+        @php
+            $driving_exp = false;
+
+            $arr = array_filter($data['driving_experience']['categories_of_driving'], function ($value) {
+                return $value == true;
+            });
+
+            if (count($arr))
+                $driving_exp = true;
+        @endphp
+
+        @if($driving_exp)
+            <table id="desired-jobs-and-salary" class="w-full">
+                <tr class="w-full table-row">
+                    <td class="left-side">
+                        <p class="font-bold">{{ __('resume.list.driving_experience') }}</p>
+                    </td>
+                    <td class="w-full right-side">
+                        <div class="splitter"></div>
+
+                        <p>{{ __('resume.message.categories_of_driving') }} {{ join(", ", array_keys($arr)) }}</p>
+                    </td>
+                </tr>
+            </table>
+        @endif
     </main>
 @endsection
