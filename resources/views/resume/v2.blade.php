@@ -308,7 +308,7 @@
                                             }}
                                             &mdash;
                                             {{
-                                                $employment['date']['present'] ?
+                                                @$employment['date']['present'] ?
                                                     __('resume.message.present') :
                                                     __('month.' . $employment['date']['end']['month']) . ' ' . $employment['date']['end']['year']
                                             }}
@@ -366,7 +366,7 @@
                                             }}
                                             &mdash;
                                             {{
-                                                $education['date']['present'] ?
+                                                @$education['date']['present'] ?
                                                     __('resume.message.present') :
                                                     __('month.' . $education['date']['end']['month']) . ' ' . $education['date']['end']['year']
                                             }}
@@ -389,7 +389,7 @@
             </table>
         @endif
 
-        @if(count($data['additional_education']))
+        @if(@$data['additional_education'] && count($data['additional_education']))
             <table id="education" class="w-full relative">
                 @if(count($data['additional_education']) > 1)
                     <div class="timeline-line"></div>
@@ -446,7 +446,7 @@
             </table>
         @endif
 
-        @if(count($data['skills']))
+        @if(@$data['skills'] && count($data['skills']))
             <table id="desired-jobs-and-salary" class="w-full">
                 <tr class="w-full table-row">
                     <td class="left-side">
@@ -463,7 +463,7 @@
             </table>
         @endif
 
-        @if(count($data['computer_skills']))
+        @if(@$data['computer_skills'] && count($data['computer_skills']))
             <table id="desired-jobs-and-salary" class="w-full">
                 <tr class="w-full table-row">
                     <td class="left-side">
@@ -480,12 +480,14 @@
             </table>
         @endif
 
-        @php
-            $driving_exp = false;
+	@php
+            $arr = [];
+	    $driving_exp = false;
 
-            $arr = array_filter($data['driving_experience']['categories_of_driving'], function ($value) {
-                return $value == true;
-            });
+            if (@$data['driving_experience'])
+                $arr = array_filter($data['driving_experience']['categories_of_driving'], function ($value) {
+                    return $value == true;
+                });
 
             if (count($arr))
                 $driving_exp = true;
