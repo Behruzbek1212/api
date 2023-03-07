@@ -90,6 +90,7 @@
             padding: 0;
             margin: 0;
             color: #595959;
+            font-family: Roboto, sans-serif;
         }
 
         table {
@@ -98,6 +99,12 @@
     </style>
 
     <style id="components" type="text/css">
+        .unstyled {
+            color: #595959;
+            font-weight: 400;
+            text-decoration: none;
+        }
+
         .text-blue {
             color: #0079FE;
         }
@@ -220,8 +227,8 @@
                 <td class="space-1">
                     <h1 class="candidate-name">{{ $candidate->name . ' ' . @$candidate->surname }}</h1>
                     <p class="text-sm"><span class="font-semibold">{{ __('resume.email') }}:</span> {{ $candidate->email }}</p>
-                    <p class="text-sm"><span class="font-semibold">{{ __('resume.phone') }}:</span> {{ $candidate->phone }}</p>
-                    <p class="text-sm"><span class="font-semibold">{{ __('resume.birthday') }}: </span> {{ $candidate->birthday }}</p>
+                    <p class="text-sm"><span class="font-semibold">{{ __('resume.phone') }}:</span> <a href="tel:{{ $candidate->phone }}" class="unstyled">{{ $candidate->phone }}</a></p>
+                    <p class="text-sm"><span class="font-semibold">{{ __('resume.birthday') }}: </span> {{ date('Y.m.d', strtotime($candidate->birthday)) }}</p>
                     <p class="text-sm"><span class="font-semibold">{{ __('resume.address') }}:</span> {{ $candidate->location }}</p>
                 </td>
 
@@ -321,11 +328,7 @@
                             <h3 class="font-bold text-md">{{ strip_tags($employment['employer']) }}</h3>
                             <p class="text-sm mb-4">{{ strip_tags($employment['title']) }}</p>
 
-                            <p class="text-sm mb-4">{{
-                                strlen(strip_tags($employment['description'])) !== 0 ?
-                                    strip_tags($employment['description']) :
-                                    __('resume.message.not_found')
-                        }}</p>
+                            <p class="text-sm mb-4">{{ str_replace(['&nbsp;', '&amp;'], [' ', '&'], strip_tags($employment['description'])) }}</p>
                         </td>
                     </tr>
                 @endforeach
@@ -378,11 +381,7 @@
                         <td class="w-full right-side">
                             <h3 class="font-bold text-md">{{ strip_tags($education['school']) }} <span class="text-sm mb-4 font-normal">{{ strip_tags($education['degree']) }}</span></h3>
 
-                            <p class="text-sm mb-4">{{
-                                strlen(strip_tags($education['description'])) !== 0 ?
-                                    strip_tags($education['description']) :
-                                    __('resume.message.not_found')
-                        }}</p>
+                            <p class="text-sm mb-4">{{ str_replace(['&nbsp;', '&amp;'], [' ', '&'], strip_tags($education['description'])) }}</p>
                         </td>
                     </tr>
                 @endforeach
@@ -435,11 +434,7 @@
                         <td class="w-full right-side">
                             <h3 class="font-bold text-md">{{ strip_tags($education['school']) }}</h3>
 
-                            <p class="text-sm mb-4">{{
-                                    strlen(strip_tags($education['description'])) !== 0 ?
-                                        strip_tags($education['description']) :
-                                        __('resume.message.not_found')
-                            }}</p>
+                            <p class="text-sm mb-4">{{ str_replace(['&nbsp;', '&amp;'], [' ', '&'], strip_tags($education['description'])) }}</p>
                         </td>
                     </tr>
                 @endforeach
@@ -455,9 +450,7 @@
                     <td class="w-full right-side">
                         <div class="splitter"></div>
 
-                        @foreach($data['skills'] as $skill)
-                            <p>- {{ $skill }}</p>
-                        @endforeach
+                        <p>{{ join(', ', $data['skills']) }}</p>
                     </td>
                 </tr>
             </table>
@@ -472,9 +465,7 @@
                     <td class="w-full right-side">
                         <div class="splitter"></div>
 
-                        @foreach($data['computer_skills'] as $skill)
-                            <p>- {{ $skill }}</p>
-                        @endforeach
+                        <p>{{ join(', ', $data['computer_skills']) }}</p>
                     </td>
                 </tr>
             </table>
