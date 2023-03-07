@@ -422,7 +422,7 @@
                                             }}
                                             &mdash;
                                             {{
-                                                $education['date']['present'] ?
+                                                @$education['date']['present'] ?
                                                     __('resume.message.present') :
                                                     __('month.' . $education['date']['end']['month']) . ' ' . $education['date']['end']['year']
                                             }}
