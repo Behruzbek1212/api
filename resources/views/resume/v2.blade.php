@@ -314,7 +314,7 @@
                                                 $employment['date']['start']['year']
                                             }}
                                             &mdash;
-                                            @if(@$employment['date']['present'])
+                                            @if(!@$employment['date']['present'])
                                                 {{ __('month.' . $employment['date']['end']['month']) . ' ' . $employment['date']['end']['year'] }}
                                             @else
                                                 {{
@@ -372,7 +372,7 @@
                                                 $education['date']['start']['year']
                                             }}
                                             &mdash;
-                                            @if(@$education['date']['present'])
+                                            @if(!@$education['date']['present'])
                                                 {{ __('month.' . $education['date']['end']['month']) . ' ' . $education['date']['end']['year'] }}
                                             @else
                                                 {{
@@ -429,7 +429,7 @@
                                                 $education['date']['start']['year']
                                             }}
                                             &mdash;
-                                            @if(@$education['date']['present'])
+                                            @if(!@$education['date']['present'])
                                                 {{ __('month.' . $education['date']['end']['month']) . ' ' . $education['date']['end']['year'] }}
                                             @else
                                                 {{
