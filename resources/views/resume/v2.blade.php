@@ -314,11 +314,15 @@
                                                 $employment['date']['start']['year']
                                             }}
                                             &mdash;
-                                            {{
-                                                @$employment['date']['present'] ?
-                                                    __('resume.message.present') :
-                                                    __('month.' . $employment['date']['end']['month']) . ' ' . $employment['date']['end']['year']
-                                            }}
+                                            @if(@$employment['date']['present'])
+                                                {{ __('month.' . $employment['date']['end']['month']) . ' ' . $employment['date']['end']['year'] }}
+                                            @else
+                                                {{
+                                                    $employment['date']['present'] ?
+                                                        __('resume.message.present') :
+                                                        __('month.' . $employment['date']['end']['month']) . ' ' . $employment['date']['end']['year']
+                                                }}
+                                            @endif
                                         </p>
                                     </td>
                                 </tr>
@@ -368,11 +372,15 @@
                                                 $education['date']['start']['year']
                                             }}
                                             &mdash;
-                                            {{
-                                                @$education['date']['present'] ?
-                                                    __('resume.message.present') :
-                                                    __('month.' . $education['date']['end']['month']) . ' ' . $education['date']['end']['year']
-                                            }}
+                                            @if(@$education['date']['present'])
+                                                {{ __('month.' . $education['date']['end']['month']) . ' ' . $education['date']['end']['year'] }}
+                                            @else
+                                                {{
+                                                    $education['date']['present'] ?
+                                                        __('resume.message.present') :
+                                                        __('month.' . $education['date']['end']['month']) . ' ' . $education['date']['end']['year']
+                                                }}
+                                            @endif
                                         </p>
                                     </td>
                                 </tr>
@@ -421,11 +429,15 @@
                                                 $education['date']['start']['year']
                                             }}
                                             &mdash;
-                                            {{
-                                                @$education['date']['present'] ?
-                                                    __('resume.message.present') :
-                                                    __('month.' . $education['date']['end']['month']) . ' ' . $education['date']['end']['year']
-                                            }}
+                                            @if(@$education['date']['present'])
+                                                {{ __('month.' . $education['date']['end']['month']) . ' ' . $education['date']['end']['year'] }}
+                                            @else
+                                                {{
+                                                    $education['date']['present'] ?
+                                                        __('resume.message.present') :
+                                                        __('month.' . $education['date']['end']['month']) . ' ' . $education['date']['end']['year']
+                                                }}
+                                            @endif
                                         </p>
                                     </td>
                                 </tr>
