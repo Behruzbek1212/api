@@ -53,6 +53,7 @@ class CandidatesController extends Controller
             $user->candidate()->create(array_merge(
                 $request->except([ 'phone', 'email' ]),
                 ['avatar' => $request->get('avatar') ?? null],
+                ['__conversation_date' => $request->get('__conversation') ? date('Y-m-d') : null],
                 ['active' => true]
             ));
         } catch (QueryException $exception) {
