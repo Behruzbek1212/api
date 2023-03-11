@@ -9,6 +9,12 @@
     app()->setLocale('ru');
     $faker = \Faker\Factory::create();
 
+    // Blue colored generator
+    // $qrcode = qrcode(50)->color(0, 121, 254)->generate(request()->url());
+
+    // Dark colored generator
+    $qrcode = qrcode(50)->color(89, 89, 89)->generate(request()->url());
+
     $avatar = str_replace("https://static.jobo.uz/", "", $candidate->avatar);
     $avatar = public_path($avatar);
 
@@ -68,7 +74,7 @@
     <style id="footer" type="text/css">
         footer {
             position: fixed;
-            bottom: -20px;
+            bottom: -45px;
             left: 0;
             right: 0;
         }
@@ -82,7 +88,7 @@
 
     <style id="normalizer" type="text/css">
         @page {
-            margin: 60px 40px 40px;
+            margin: 60px 40px;
             font-family: Roboto, sans-serif;
         }
 
@@ -218,7 +224,16 @@
     </header>
 
     <footer>
-        <a href="https://jobo.uz" class="text-blue">www.jobo.uz</a>
+        <table class="w-full table-space-none">
+            <tr class="w-full">
+                <td class="space-1">
+                    <a href="https://jobo.uz" class="text-blue">www.jobo.uz</a>
+                </td>
+                <td align="right">
+                    <img src="data:image/svg+xml;base64,{{ base64_encode($qrcode) }}" />
+                </td>
+            </tr>
+        </table>
     </footer>
 
     <main id="root">
