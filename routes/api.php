@@ -166,16 +166,5 @@ Route::prefix('/v1')->group(function () {
     });
 
     // Bots ------------------------------
-    Route::prefix('/_utils/_bots/_adson-crater')->name('bots.')->group(function () {
-        Route::post('store', [MainController::class, 'store'])->name('store');
-        Route::post('check', [MainController::class, 'check'])->name('check');
-        Route::post('get-url', [MainController::class, 'getUrl'])->name('url-get');
-        Route::post('get-info', [MainController::class, 'getInfo'])->name('info-get');
-
-        Route::prefix('admin')->name('admin.')->group(function () {
-            Route::post('add-links', [AdminController::class, 'addLinks'])->name('add-links');
-            Route::post('get-users', [AdminController::class, 'getUsers'])->name('get-users');
-            Route::post('get-user', [AdminController::class, 'getUser'])->name('get-user');
-        });
-    });
+    require_once __DIR__ . '/bots.php';
 });
