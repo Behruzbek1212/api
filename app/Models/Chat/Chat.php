@@ -114,11 +114,11 @@ class Chat extends Model
     }
 
     /**
-     * Get customer attribute
+     * Get resume attribute
      *
-     * @return Customer|Model|BelongsTo
+     * @return Resume|Model|BelongsTo
      */
-    public function getResumeAttribute(): BelongsTo|Model|Customer
+    public function getResumeAttribute(): BelongsTo|Model|Resume
     {
         return $this->resume()->first();
     }
