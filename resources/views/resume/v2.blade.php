@@ -9,11 +9,13 @@
     app()->setLocale('ru');
     $faker = \Faker\Factory::create();
 
+    $candidate_page = 'https://jobo.uz/candidates/'
+
     // Blue colored generator
-    // $qrcode = qrcode(50)->color(0, 121, 254)->generate(request()->url());
+    // $qrcode = qrcode(50)->color(0, 121, 254)->generate($candidate_page . $candidate->id);
 
     // Dark colored generator
-    $qrcode = qrcode(50)->color(89, 89, 89)->generate(request()->url());
+    $qrcode = qrcode(50)->color(89, 89, 89)->generate($candidate_page . $candidate->id);
 
     $avatar = str_replace("https://static.jobo.uz/", "", $candidate->avatar);
     $avatar = public_path($avatar);
