@@ -9,7 +9,7 @@
     app()->setLocale('ru');
     $faker = \Faker\Factory::create();
 
-    $candidate_page = 'https://jobo.uz/candidates/'
+    $candidate_page = 'https://jobo.uz/candidates/';
 
     // Blue colored generator
     // $qrcode = qrcode(50)->color(0, 121, 254)->generate($candidate_page . $candidate->id);
