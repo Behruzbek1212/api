@@ -91,7 +91,7 @@ class Resume extends Model
             $end_year = $employment['date']['end']['year'] * 1;
             $end_month = $employment['date']['end']['month'] * 1;
 
-            if ($employment['date']['present'] === true) {
+            if (@$employment['date']['present'] === true) {
                 $end_year = date('Y');
                 $end_month = date('m');
             }

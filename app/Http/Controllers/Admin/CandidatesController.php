@@ -20,10 +20,9 @@ class CandidatesController extends Controller
     {
         $candidates = Candidate::query()
             ->withTrashed()
-            ->with(['user' => function (BelongsTo $query) {
-                $query->where('role', '=', 'candidate');
-            }, 'user.resumes'])
+            ->whereHas('user', fn (Builder $query) => $query->where('role', '=', 'candidate'))
             ->where('active', '=', true)
+            ->with(['user', 'user.resumes'])
             ->orderByDesc('updated_at');
 
         if ($request->has('title'))
@@ -31,6 +30,10 @@ class CandidatesController extends Controller
                 $query->where('name', 'like', '%'.$request->get('title').'%');
                 $query->orWhere('surname', 'like', '%'.$request->get('title').'%');
             });
+
+        /** @see https://laravel.com/docs/9.x/queries#json-where-clauses */
+        if ($sphere = $request->get('sphere'))
+            $candidates->whereJsonContains('spheres', $sphere);
 
         return response()->json([
             'status' => true,
@@ -52,8 +55,8 @@ class CandidatesController extends Controller
 
             $user->candidate()->create(array_merge(
                 $request->except([ 'phone', 'email' ]),
-                ['avatar' => $request->get('avatar') ?? null],
                 ['__conversation_date' => $request->get('__conversation') ? date('Y-m-d') : null],
+                ['avatar' => $request->get('avatar') ?? null],
                 ['active' => true]
             ));
         } catch (QueryException $exception) {

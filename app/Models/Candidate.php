@@ -50,7 +50,11 @@ class Candidate extends Model
      * @var array<int, string>
      */
     protected $hidden = [
-        'user_id'
+        'user_id',
+
+        '__comment',
+        '__conversation',
+        '__conversation_date'
     ];
 
     /**
