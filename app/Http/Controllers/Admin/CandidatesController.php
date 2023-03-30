@@ -37,7 +37,11 @@ class CandidatesController extends Controller
 
         return response()->json([
             'status' => true,
-            'data' => $candidates->paginate(20)
+            'data' => $candidates->paginate(20)->makeVisible([
+                '__comment',
+                '__conversation',
+                '__conversation_date'
+            ])
         ]);
     }
 
