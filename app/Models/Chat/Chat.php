@@ -46,6 +46,9 @@ class Chat extends Model
      * @var array<int, string>
      */
     protected $hidden = [
+        'customer_exists',
+        'candidate_exists',
+        'resume_exists',
         'deleted_at'
     ];
 

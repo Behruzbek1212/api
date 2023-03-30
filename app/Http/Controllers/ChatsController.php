@@ -22,10 +22,14 @@ class ChatsController extends Controller
 
         $chats = match ($user->role) {
             'candidate' =>
-                $user->candidate->chats,
+                $user->candidate->chats()
+                    ->withExists(['resume', 'customer'])
+                    ->get(),
 
             'customer' =>
-                $user->customer->chats,
+                $user->customer->chats()
+                    ->withExists(['resume', 'candidate'])
+                    ->get(),
 
             default => null
         };
@@ -49,10 +53,16 @@ class ChatsController extends Controller
 
         $chat = match ($user->role) {
             'candidate' =>
-                $user->candidate->chats()->with('messages')->findOrFail($id),
+                $user->candidate->chats()
+                    ->withExists(['resume', 'customer'])
+                    ->with('messages')
+                    ->findOrFail($id),
 
             'customer' =>
-                $user->customer->chats()->with('messages')->findOrFail($id),
+                $user->customer->chats()
+                    ->withExists(['resume', 'candidate'])
+                    ->with('messages')
+                    ->findOrFail($id),
 
             default => null
         };
