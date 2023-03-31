@@ -35,13 +35,15 @@ class CandidatesController extends Controller
         if ($sphere = $request->get('sphere'))
             $candidates->whereJsonContains('spheres', $sphere);
 
+        $candidates = $candidates->paginate(20);
+        $_data = $candidates->makeVisible(['__comment', '__conversation', '__conversation_date']);
+
         return response()->json([
             'status' => true,
-            'data' => $candidates->paginate(20)->makeVisible([
-                '__comment',
-                '__conversation',
-                '__conversation_date'
-            ])
+            'data' => array_merge(
+                $candidates->toArray(),
+                ['data' => $_data]
+            )
         ]);
     }
 
@@ -87,11 +89,11 @@ class CandidatesController extends Controller
     {
         $candidate = Candidate::query()
             ->withTrashed()
-            ->with(['user' => function (BelongsTo $query) {
-                $query->where('role', '=', 'candidate');
-            }, 'user.resumes'])
+            ->whereHas('user', fn (Builder $query) => $query->where('role', '=', 'candidate'))
             ->where('active', '=', true)
-            ->findOrFail($id);
+            ->with(['user', 'user.resumes'])
+            ->findOrFail($id)
+            ->makeVisible(['__comment', '__conversation', '__conversation_date']);
 
         return response()->json([
             'status' => true,
