@@ -28,7 +28,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             WishlistSeeder::class,
-            LocationSeeder::class
+            LocationSeeder::class,
+            SpheresSeeder::class
         ]);
     }
 }
