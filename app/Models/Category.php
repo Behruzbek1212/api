@@ -16,7 +16,8 @@ class Category extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name'
+        'name',
+        'text'
     ];
 
     /**
@@ -27,6 +28,10 @@ class Category extends Model
     protected $appends = [
         'count'
     ];
+    protected $casts = [
+        'text' => 'array',
+    ];
+    public $timestamps = false;
 
     /**
      * Get jobs list
