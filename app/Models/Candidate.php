@@ -37,6 +37,8 @@ class Candidate extends Model
         'address',
         'specialization',
         'education_level',
+        'services',
+        'test',
         'active'
     ];
 
@@ -60,6 +62,7 @@ class Candidate extends Model
      */
     protected $casts = [
         'spheres' => 'array',
+        'test' => 'array',
         'languages' => 'array',
         'birthday' => 'datetime',
     ];

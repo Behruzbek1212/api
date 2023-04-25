@@ -42,4 +42,18 @@ class ChangeRoleController extends Controller
 
         return $user->updateData($request);
     }
+
+     /**
+     * Update user information data's
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function updateCandidateServicesData(Request $request): JsonResponse
+    {
+        /** @var Authenticatable|User|null $user */
+        $user = _auth()->user();
+        
+        return $user->updateCandidateServices($request);
+    }
 }

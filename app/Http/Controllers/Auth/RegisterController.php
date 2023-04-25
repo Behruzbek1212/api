@@ -189,6 +189,8 @@ class RegisterController extends Controller
             'languages' => $request->input('languages'),
             'birthday' => $request->input('birthday'),
             'address' => $request->input('address'),
+            'test' => null,
+            'services' => null,
             'active' => true
         ]);
 

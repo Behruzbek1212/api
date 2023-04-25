@@ -153,6 +153,7 @@ Route::prefix('/v1')->group(function () {
         Route::prefix('/settings')->name('settings.')->group(function () {
             Route::post('/change-role', [ChangeRoleController::class, 'update'])->name('change-role');
             Route::post('/update-data', [ChangeRoleController::class, 'updateData'])->name('update-data');
+            // Route::post('/change-candidate-services', [ChangeRoleController::class, 'updateCandidateServicesData'])->name('change-candidate-services');
             Route::post('/change-password', [ChangePasswordController::class, 'change'])->name('change-password');
         });
     });
