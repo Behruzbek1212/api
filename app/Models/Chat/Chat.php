@@ -46,6 +46,9 @@ class Chat extends Model
      * @var array<int, string>
      */
     protected $hidden = [
+        'customer_exists',
+        'candidate_exists',
+        'resume_exists',
         'deleted_at'
     ];
 
@@ -114,11 +117,11 @@ class Chat extends Model
     }
 
     /**
-     * Get customer attribute
+     * Get resume attribute
      *
-     * @return Customer|Model|BelongsTo
+     * @return Resume|Model|BelongsTo
      */
-    public function getResumeAttribute(): BelongsTo|Model|Customer
+    public function getResumeAttribute(): BelongsTo|Model|Resume
     {
         return $this->resume()->first();
     }

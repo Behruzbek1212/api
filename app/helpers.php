@@ -5,6 +5,8 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Factory;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\StatefulGuard;
+use SimpleSoftwareIO\QrCode\Generator;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 if (! function_exists('_auth')) {
     /**
@@ -28,5 +30,17 @@ if (! function_exists('_user')) {
     function _user(): Authenticatable|User|null
     {
         return _auth()->user();
+    }
+}
+
+if (! function_exists('qrcode')) {
+    /**
+     * Generate Qr-code facade helper
+     *
+     * @return Generator
+     */
+    function qrcode(int $size): Generator
+    {
+        return QrCode::size($size);
     }
 }

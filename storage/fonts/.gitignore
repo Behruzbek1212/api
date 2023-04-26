@@ -1,0 +1,5 @@
+# Ignore all files / directories
+*
+
+# Exclude true type font
+!*.ttf

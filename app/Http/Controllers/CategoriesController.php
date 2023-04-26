@@ -15,8 +15,8 @@ class CategoriesController extends Controller
      */
     public function index(): JsonResponse
     {
-        $categories = Category::all()
-            ->makeHidden(['created_at', 'updated_at']);
+        $categories = Category::all();
+
 
         return response()->json([
             'status' => true,

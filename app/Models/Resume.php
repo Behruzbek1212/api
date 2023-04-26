@@ -88,8 +88,13 @@ class Resume extends Model
             $start_year = $employment['date']['start']['year'] * 1;
             $start_month = $employment['date']['start']['month'] * 1;
 
-            $end_year = $employment['date']['end']['year'] * 1;
-            $end_month = $employment['date']['end']['month'] * 1;
+            $end_year = $employment['date']['end']['year'] * 1 ?? 0;
+            $end_month = $employment['date']['end']['month'] * 1 ?? 0;
+
+            if (@$employment['date']['present'] === true) {
+                $end_year = date('Y');
+                $end_month = date('m');
+            }
 
             if (@$employment['date']['present'] === true) {
                 $end_year = date('Y');
