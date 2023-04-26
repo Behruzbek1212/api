@@ -63,6 +63,7 @@ class Candidate extends Model
     protected $casts = [
         'spheres' => 'array',
         'test' => 'array',
+        'services' => 'array',
         'languages' => 'array',
         'birthday' => 'datetime',
     ];
