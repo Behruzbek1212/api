@@ -83,6 +83,35 @@ class CandidatesController extends Controller
         ]);
     }
 
+     /**
+     * add candidates test result
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+
+    public function addTestResult(Request $request):JsonResponse
+    {
+        $params = $request->validate([
+            'candidate_id' => ['numeric', 'required']
+        ]);
+
+        $candidate = Candidate::query()->findOrFail($params['candidate_id']);
+
+        $candidate -> update([
+            'test' => $request->get('result')
+        ]);
+
+        if($candidate->test === null){
+            $candidate->test=[];
+        };
+
+        return response()->json([
+            'status' => true,
+            'data' => $candidate
+        ]);
+    }
+
     public function respond(Request $request): JsonResponse
     {
         $params = $request->validate([
