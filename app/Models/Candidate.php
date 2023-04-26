@@ -68,6 +68,7 @@ class Candidate extends Model
         'spheres' => 'array',
         'languages' => 'array',
         'test' => 'array',
+        'services' => 'array',
         'birthday' => 'datetime',
 
         '__conversation' => 'boolean',
