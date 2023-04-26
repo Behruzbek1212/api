@@ -83,6 +83,49 @@ class CandidatesController extends Controller
         ]);
     }
 
+     /**
+     * add candidates test result
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+
+    public function addTestResult(Request $request):JsonResponse
+    {
+        $params = $request->validate([
+            'candidate_id' => ['numeric', 'required']
+        ]);
+        $result = $request->get('result');
+
+        $candidate = Candidate::query()->findOrFail($params['candidate_id']);
+
+        // $candidate -> update([
+        //     'test' => $request->get('result')
+        // ]);
+
+        // Make a copy of the test attribute
+        $test = $candidate->test;
+
+        // Initialize test attribute to empty array if it is null
+        if ($test === null) {
+            $test = [];
+        }
+
+        // Add new test result to the end of the test array
+        $test[] = $result;
+
+        // Set the modified test attribute back to the model
+        $candidate->test = $test;
+
+        // Save changes to database
+        $candidate->save();
+
+        return response()->json([
+            'status' => true,
+            'data' => $candidate
+        ]);
+    }
+
     public function respond(Request $request): JsonResponse
     {
         $params = $request->validate([

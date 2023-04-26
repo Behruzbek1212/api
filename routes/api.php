@@ -100,6 +100,7 @@ Route::prefix('/v1')->group(function () {
         Route::get('/', [CandidatesController::class, 'all'])->name('all');
         Route::get('/get/{id}', [CandidatesController::class, 'get'])->name('get');
         Route::post('/respond', [CandidatesController::class, 'respond'])->middleware(['auth:sanctum', 'is_customer'])->name('respond');
+        Route::post('/add-test', [CandidatesController::class, 'addTestResult'])->name('add-test-result');
     });
 
     // Companies -----------------------------------------
