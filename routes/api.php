@@ -153,6 +153,7 @@ Route::prefix('/v1')->group(function () {
         Route::prefix('/settings')->name('settings.')->group(function () {
             Route::post('/change-role', [ChangeRoleController::class, 'update'])->name('change-role');
             Route::post('/update-data', [ChangeRoleController::class, 'updateData'])->name('update-data');
+            // Route::post('/change-candidate-services', [ChangeRoleController::class, 'updateCandidateServicesData'])->name('change-candidate-services');
             Route::post('/change-password', [ChangePasswordController::class, 'change'])->name('change-password');
         });
     });
@@ -165,19 +166,6 @@ Route::prefix('/v1')->group(function () {
         Route::post('upload', [UploadController::class, 'upload'])->name('upload');
     });
 
-    // Bots ------------------------------
-    Route::prefix('/_utils/_bots/_adson-crater')->name('bots.')->group(function () {
-        Route::post('store', [MainController::class, 'store'])->name('store');
-        Route::post('check', [MainController::class, 'check'])->name('check');
-        Route::post('get-url', [MainController::class, 'getUrl'])->name('url-get');
-        Route::post('get-info', [MainController::class, 'getInfo'])->name('info-get');
-
-        Route::prefix('admin')->name('admin.')->group(function () {
-            Route::post('add-links', [AdminController::class, 'addLinks'])->name('add-links');
-            Route::post('get-users', [AdminController::class, 'getUsers'])->name('get-users');
-            Route::post('get-user', [AdminController::class, 'getUser'])->name('get-user');
-        });
-    });
 
     Route::prefix('/admin')->middleware('is_admin')->name('admin.')->group(function () {
         require_once __DIR__ . '/admin.php';

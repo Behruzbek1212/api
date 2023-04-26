@@ -20,6 +20,7 @@ Route::prefix('/candidates')->name('candidates.')->group(function () {
     Route::post('/create', [CandidatesController::class, 'create']);
     Route::post('/edit', [CandidatesController::class, 'edit']);
     Route::post('/destroy', [CandidatesController::class, 'destroy']);
+    Route::post('/change-services', [CandidatesController::class, 'updateServices']);
 });
 
 Route::prefix('/companies')->name('candidates.')->group(function () {

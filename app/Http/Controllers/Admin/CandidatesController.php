@@ -128,6 +128,33 @@ class CandidatesController extends Controller
         ]);
     }
 
+         /**
+     * Update candidate services data's
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function updateServices(Request $request): JsonResponse
+    {
+        $candidate = Candidate::query()
+        ->withTrashed()
+        ->whereHas('user', fn (Builder $query) => $query->where('role', '=', 'candidate'))
+        ->where('active', '=', true)
+        ->findOrFail($request->get('id'));
+        
+        $services = [
+            'resume' => $request->get('resume') ?? false,
+            'conversation' => $request->get('conversation') ?? false,
+        ];
+
+        $candidate->update(['services' => $services]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Candidate services successfully updated'
+        ]);
+    }
+
     public function destroy(Request $request): JsonResponse
     {
         $params = $request->validate([
@@ -168,6 +195,8 @@ class CandidatesController extends Controller
             'address' => ['numeric', 'required'],
             'phone' => ['numeric', 'unique:users,phone', 'required'],
             'email' => ['email', 'unique:users,email', 'required'],
+            'services' => ['json', 'nullable'],
+            'test' => ['array', 'nullable'],
 
             '__comment' => ['string', 'nullable'],
             '__conversation' => ['boolean', 'required'],

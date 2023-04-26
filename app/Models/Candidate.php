@@ -37,6 +37,8 @@ class Candidate extends Model
         'address',
         'specialization',
         'education_level',
+        'services',
+        'test',
         'active',
 
         '__comment',
@@ -65,6 +67,7 @@ class Candidate extends Model
     protected $casts = [
         'spheres' => 'array',
         'languages' => 'array',
+        'test' => 'array',
         'birthday' => 'datetime',
 
         '__conversation' => 'boolean',
