@@ -307,6 +307,21 @@
             </tr>
         </table>
 
+        @if(@$data['about'])
+            <table id="desired-jobs-and-salary" class="w-full">
+                <tr class="w-full table-row">
+                    <td class="left-side">
+                        <p class="font-bold">{{ __('resume.list.about') }}</p>
+                    </td>
+                    <td class="w-full right-side">
+                        <div class="splitter"></div>
+
+                        <p>{!! $data['about'] !!}</p>
+                    </td>
+                </tr>
+            </table>
+        @endif
+
         @if(count($data['employment']))
             <table id="experience" class="w-full relative">
                 @if(count($data['employment']) > 1)

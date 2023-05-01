@@ -26,7 +26,8 @@ return [
         "computer_skills" => "Компьютерные навыки",
         "result_of_tests" => "Резултаты теста",
         "driving_experience" => "Навык вождения",
-        "language" => "Знание языков"
+        "language" => "Знание языков",
+        "about" => "Обо мне"
     ],
 
     "languages" => [
