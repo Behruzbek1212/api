@@ -590,33 +590,35 @@
                     </td>
                 </tr>
                 @foreach($candidate['test'] as $test)
-                    <tr class="w-full table-row timeline">
-                        <td class="left-side">
-                            @if(count($candidate['test']) > 1)
-                                <span class="tl-fixer"></span>
-                            @endif
-                            <table id="experience-timeline" class="w-full table-space-none">
-                                <tr class="w-full">
-                                    @if(count($candidate['test']) > 1)
+                    @if($test['quizGroup'] !== 'bookmaker')
+                        <tr class="w-full table-row timeline">
+                            <td class="left-side">
+                                @if(count($candidate['test']) > 1)
+                                    <span class="tl-fixer"></span>
+                                @endif
+                                <table id="experience-timeline" class="w-full table-space-none">
+                                    <tr class="w-full">
+                                        @if(count($candidate['test']) > 1)
+                                            <td>
+                                                <div class="timeline-dot"></div>
+                                            </td>
+                                        @endif
                                         <td>
-                                            <div class="timeline-dot"></div>
+                                            <p class="font-bold" style="font-size: 12px">
+                                                {{
+                                                   strip_tags($test['title'])
+                                                }}
+                                                &mdash;
+                                            </p>
                                         </td>
-                                    @endif
-                                    <td>
-                                        <p class="font-bold" style="font-size: 12px">
-                                            {{
-                                               strip_tags($test['title'])
-                                            }}
-                                            &mdash;
-                                        </p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td class="w-full right-side">
-                            <p class="text-sm mb-4">{{ str_replace(['&nbsp;', '&amp;'], [' ', '&'], strip_tags($test['result'])) }}</p>
-                        </td>
-                    </tr>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td class="w-full right-side">
+                                <p class="text-sm mb-4">{{ str_replace(['&nbsp;', '&amp;'], [' ', '&'], strip_tags($test['result'])) }}</p>
+                            </td>
+                        </tr>
+                    @endif
                 @endforeach
             </table>
         @endif
