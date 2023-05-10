@@ -42,6 +42,7 @@ class Customer extends Model
         'owned_date',
         'location',
         'address',
+        'services',
         'active'
     ];
 
@@ -61,6 +62,7 @@ class Customer extends Model
      */
     protected $casts = [
         'owned_date' => 'datetime',
+        'services' => 'array'
     ];
 
     /**

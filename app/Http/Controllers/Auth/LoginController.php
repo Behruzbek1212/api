@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
@@ -27,6 +28,8 @@ class LoginController extends Controller
             'phone', 'password'
         ]));
 
+//        dd($loggedIn);
+
         if (!$loggedIn) return response()->json([
             'status' => false,
             'message' => 'Phone or password is incorrect'
@@ -34,6 +37,8 @@ class LoginController extends Controller
 
         /** @var User $user */
         $user = auth()->user();
+
+        dd($user);
         $token = $user->createToken($user->name . '-' . Hash::make($user->id))
             ->plainTextToken;
 
