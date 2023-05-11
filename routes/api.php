@@ -170,14 +170,15 @@ Route::prefix('/v1')->group(function () {
        Route::post('/register', [TestUserController::class, 'register'])->name('register');
        Route::post('/login', [TestUserController::class, 'login'])->name('login');
         Route::middleware(['auth:sanctum', 'is_customer'])->group(function (){
-            Route::get('list', [TestUserController::class, ''])->name('list');
+            Route::get('/list', [TestUserController::class, 'list'])->name('list');
         });
         Route::middleware('auth:sanctum')->group(function () {
             Route::get('/me', [TestUserController::class, 'me'])->name('me');
             Route::post('/add-test', [TestUserController::class, 'addTestResult'])->name('addTestResult');
         });
-//       Route::get('/me', [TestUserController::class, 'loginWithToken'])->name('login-with-token');
+    //       Route::get('/me', [TestUserController::class, 'loginWithToken'])->name('login-with-token');
     });
+
 
     Route::prefix('/utils')->name('utils.')->group(function () {
         Route::post('upload', [UploadController::class, 'upload'])->name('upload');

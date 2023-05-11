@@ -104,6 +104,18 @@ class Customer extends Model
     }
 
     /**
+     * Display the resumes
+     *
+     * @return HasMany
+     * @see https://laravel.com/docs/9.x/eloquent-relationships#one-to-many
+     */
+    public function testUsers(): HasMany
+    {
+        return $this->hasMany(TestUser::class, 'company_id', 'id');
+    }
+
+
+    /**
      * Get chats list
      *
      * @return HasMany
