@@ -42,6 +42,7 @@ class Customer extends Model
         'owned_date',
         'location',
         'address',
+        'services',
         'active'
     ];
 
@@ -61,6 +62,7 @@ class Customer extends Model
      */
     protected $casts = [
         'owned_date' => 'datetime',
+        'services' => 'array'
     ];
 
     /**
@@ -100,6 +102,18 @@ class Customer extends Model
     {
         return $this->hasMany(Job::class);
     }
+
+    /**
+     * Display the resumes
+     *
+     * @return HasMany
+     * @see https://laravel.com/docs/9.x/eloquent-relationships#one-to-many
+     */
+    public function testUsers(): HasMany
+    {
+        return $this->hasMany(TestUser::class, 'company_id', 'id');
+    }
+
 
     /**
      * Get chats list
