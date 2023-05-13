@@ -121,7 +121,8 @@ class CompaniesController extends Controller
     public function addServices(Request $request):JsonResponse
     {
         $request->validate([
-            'id' => ['integer', 'required']
+            'id' => ['integer', 'required'],
+            'service' => ['array', 'required']
         ]);
 //        $this->validateParams($request, [
 //            'id' => ['integer', 'required'],
@@ -139,30 +140,19 @@ class CompaniesController extends Controller
             ]);
         }
 
-        $result = $request->get('service');
+        $services = $customer->services ?? (object)[];
+
+        $newService = (object)$request->get('service');
+        $services = (object)array_merge((array)$services, (array)$newService);
 
         $requestData = $request->all();
+        $requestData['services'] = $services;
 
-        // Извлеките значения service.name и service.value
-        $serviceName = $requestData['service']['name'];
-        $serviceValue = $requestData['service']['value'];
-
-        // Make a copy of the test attribute
-        $services = $customer->services;
-
-
-        $services['name'] = $serviceName;
-        $services-> $serviceName = $serviceValue;
-
-        // Set the modified test attribute back to the model
-        $customer->services = $services;
-
-        // Save changes to database
-        $customer->save();
+        $customer->update($requestData);
 
         return response()->json([
             'status'=> true,
-            'message'=> $customer
+            'result'=> $customer->services
         ]);
     }
 
