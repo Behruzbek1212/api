@@ -4,18 +4,20 @@
     /**
      * @var \App\Models\Candidate|\Illuminate\Contracts\Auth\Authenticatable $candidate
      * @var array $data
+     * @var int $resume_id
      */
 
     app()->setLocale('ru');
     $faker = \Faker\Factory::create();
 
     $candidate_page = 'https://jobo.uz/candidates/';
+    $show_resume_page = 'https://api.jobo.uz/v1/resume/show/';
 
     // Blue colored generator
     // $qrcode = qrcode(50)->color(0, 121, 254)->generate($candidate_page . $candidate->id);
 
     // Dark colored generator
-    $qrcode = qrcode(50)->color(89, 89, 89)->generate($candidate_page . $candidate->id);
+    $qrcode = qrcode(50)->color(89, 89, 89)->generate($show_resume_page . $resume_id);
 
     $avatar = str_replace("https://static.jobo.uz/", "", $candidate->avatar);
     $avatar = public_path($avatar);
@@ -104,6 +106,13 @@
         table {
             z-index: 50;
         }
+        /*table tr td, table tr th {*/
+        /*    page-break-inside: avoid !important;*/
+        /*}*/
+        /*table { page-break-inside:auto }*/
+        /*tr    { page-break-inside:avoid; page-break-after:auto }*/
+        /*thead { display:table-header-group }*/
+        /*tfoot { display:table-footer-group }*/
     </style>
 
     <style id="components" type="text/css">
@@ -298,6 +307,21 @@
             </tr>
         </table>
 
+        @if(@$data['about'])
+            <table id="desired-jobs-and-salary" class="w-full">
+                <tr class="w-full table-row">
+                    <td class="left-side">
+                        <p class="font-bold">{{ __('resume.list.about') }}</p>
+                    </td>
+                    <td class="w-full right-side">
+                        <div class="splitter"></div>
+
+                        <p>{!! $data['about'] !!}</p>
+                    </td>
+                </tr>
+            </table>
+        @endif
+
         @if(count($data['employment']))
             <table id="experience" class="w-full relative">
                 @if(count($data['employment']) > 1)
@@ -470,6 +494,30 @@
             </table>
         @endif
 
+        @if($candidate['languages'] && count($candidate['languages']))
+            <table id="desired-jobs-and-salary" class="w-full">
+                <tr class="w-full table-row">
+                    <td class="left-side">
+                        <p class="font-bold">{{ __('resume.list.language') }}</p>
+                    </td>
+                    <td class="w-full right-side">
+                        <div class="splitter"></div>
+
+                        @foreach($candidate['languages'] as $language)
+                            <table class="w-full">
+                                <tr class="table-row w-full">
+                                    <td class="right-side">
+                                        <h3 class="font-bold text-md">{{ __('resume.languages.' . @$language['language']) }}: {{ strtoupper(strip_tags($language['rate'])) }} </h3>
+                                    </td>
+                                </tr>
+                            </table>
+                        @endforeach
+
+                    </td>
+                </tr>
+            </table>
+        @endif
+
         @if(@$data['skills'] && count($data['skills']))
             <table id="desired-jobs-and-salary" class="w-full">
                 <tr class="w-full table-row">
@@ -527,5 +575,53 @@
                 </tr>
             </table>
         @endif
+
+        @if($candidate['test'] && count($candidate['test']))
+            <table id="languages" class="w-full relative">
+                @if(count($candidate['test']) > 1)
+                    <div class="timeline-line"></div>
+                @endif
+                <tr class="w-full table-row">
+                    <td class="left-side">
+                        <p class="font-bold">{{ __('resume.list.result_of_tests') }}</p>
+                    </td>
+                    <td class="w-full right-side">
+                        <div class="splitter"></div>
+                    </td>
+                </tr>
+                @foreach($candidate['test'] as $test)
+                    @if($test['quizGroup'] !== 'bookmaker')
+                        <tr class="w-full table-row timeline">
+                            <td class="left-side">
+                                @if(count($candidate['test']) > 1)
+                                    <span class="tl-fixer"></span>
+                                @endif
+                                <table id="experience-timeline" class="w-full table-space-none">
+                                    <tr class="w-full">
+                                        @if(count($candidate['test']) > 1)
+                                            <td>
+                                                <div class="timeline-dot"></div>
+                                            </td>
+                                        @endif
+                                        <td>
+                                            <p class="font-bold" style="font-size: 12px">
+                                                {{
+                                                   strip_tags($test['title'])
+                                                }}
+                                                &mdash;
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td class="w-full right-side">
+                                <p class="text-sm mb-4">{{ str_replace(['&nbsp;', '&amp;'], [' ', '&'], strip_tags($test['result'])) }}</p>
+                            </td>
+                        </tr>
+                    @endif
+                @endforeach
+            </table>
+        @endif
+
     </main>
 @endsection

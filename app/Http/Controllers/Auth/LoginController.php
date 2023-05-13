@@ -33,7 +33,7 @@ class LoginController extends Controller
         ]);
 
         /** @var User $user */
-        $user = auth()->user();
+        $user = auth('web')->user();
         $token = $user->createToken(@$user->name ?? 'admin' . '-' . Hash::make($user->id))
             ->plainTextToken;
 

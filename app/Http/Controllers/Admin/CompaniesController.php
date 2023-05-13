@@ -118,6 +118,54 @@ class CompaniesController extends Controller
         ]);
     }
 
+    public function addServices(Request $request):JsonResponse
+    {
+        $request->validate([
+            'id' => ['integer', 'required']
+        ]);
+//        $this->validateParams($request, [
+//            'id' => ['integer', 'required'],
+////            'service' => ['json', 'required']
+//        ]);
+
+        $customer = Customer::query()
+            ->withTrashed()
+            ->findOrFail($request->get('id'));
+
+        if(!$customer){
+            return response()->json([
+                'status'=>false,
+                'message'=> 'Customer not found'
+            ]);
+        }
+
+        $result = $request->get('service');
+
+        $requestData = $request->all();
+
+        // Извлеките значения service.name и service.value
+        $serviceName = $requestData['service']['name'];
+        $serviceValue = $requestData['service']['value'];
+
+        // Make a copy of the test attribute
+        $services = $customer->services;
+
+
+        $services['name'] = $serviceName;
+        $services-> $serviceName = $serviceValue;
+
+        // Set the modified test attribute back to the model
+        $customer->services = $services;
+
+        // Save changes to database
+        $customer->save();
+
+        return response()->json([
+            'status'=> true,
+            'message'=> $customer
+        ]);
+    }
+
     public function destroy(Request $request): JsonResponse
     {
         $params = $request->validate([

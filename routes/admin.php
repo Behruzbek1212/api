@@ -29,6 +29,7 @@ Route::prefix('/companies')->name('candidates.')->group(function () {
     Route::post('/create', [CompaniesController::class, 'create']);
     Route::post('/edit', [CompaniesController::class, 'edit']);
     Route::post('/destroy', [CompaniesController::class, 'destroy']);
+    Route::post('/add-service', [CompaniesController::class, 'addServices']);
 });
 
 Route::prefix('/guides')->name('guides.')->group(function () {

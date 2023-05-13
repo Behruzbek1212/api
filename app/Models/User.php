@@ -101,6 +101,7 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
      */
     public function name(): Attribute
     {
+//        dd($this->role);
         return Attribute::make(
             get: fn () => $this[$this->role]->name
         );
@@ -197,6 +198,7 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
             'message' => 'User data updated successfully'
         ]);
     }
+
 
         /**
      * Update user data's

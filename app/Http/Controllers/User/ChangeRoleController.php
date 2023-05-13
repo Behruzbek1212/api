@@ -43,9 +43,8 @@ class ChangeRoleController extends Controller
         return $user->updateData($request);
     }
 
-    
      /**
-     * Update candidate services information data's
+     * Update user information data's
      *
      * @param Request $request
      * @return JsonResponse
@@ -54,7 +53,7 @@ class ChangeRoleController extends Controller
     {
         /** @var Authenticatable|User|null $user */
         $user = _auth()->user();
-
+        
         return $user->updateCandidateServices($request);
     }
 }

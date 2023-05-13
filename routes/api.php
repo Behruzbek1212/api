@@ -5,8 +5,6 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\RestoreController;
-use App\Http\Controllers\Bots\ADSON\AdminController;
-use App\Http\Controllers\Bots\ADSON\MainController;
 use App\Http\Controllers\CandidatesController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ChatsController;
@@ -17,6 +15,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ResumeController;
+use App\Http\Controllers\TestUserController;
 use App\Http\Controllers\User\ChangePasswordController;
 use App\Http\Controllers\User\ChangeRoleController;
 use App\Http\Controllers\Utils\UploadController;
@@ -100,6 +99,7 @@ Route::prefix('/v1')->group(function () {
         Route::get('/', [CandidatesController::class, 'all'])->name('all');
         Route::get('/get/{id}', [CandidatesController::class, 'get'])->name('get');
         Route::post('/respond', [CandidatesController::class, 'respond'])->middleware(['auth:sanctum', 'is_customer'])->name('respond');
+        Route::post('/add-test', [CandidatesController::class, 'addTestResult'])->name('add-test-result');
     });
 
     // Companies -----------------------------------------
@@ -161,6 +161,22 @@ Route::prefix('/v1')->group(function () {
     // Resume Display|Download ---------------------------------------
     Route::get('resume/show/{id}', [ResumeController::class, 'show'])->name('resume.show');
     Route::get('resume/download/{id}', [ResumeController::class, 'download'])->name('resume.download');
+
+    Route::prefix('/test-user')->name('test-user.')->group(function () {
+       Route::get('/', [TestUserController::class, 'index'])->name('index');
+       Route::get('/check-status', [TestUserController::class, 'checkStatus'])->name('checkStatus');
+       Route::post('/register', [TestUserController::class, 'register'])->name('register');
+       Route::post('/login', [TestUserController::class, 'login'])->name('login');
+        Route::middleware(['auth:sanctum', 'is_customer'])->group(function (){
+            Route::get('/list', [TestUserController::class, 'list'])->name('list');
+        });
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::get('/me', [TestUserController::class, 'me'])->name('me');
+            Route::post('/add-test', [TestUserController::class, 'addTestResult'])->name('addTestResult');
+        });
+    //       Route::get('/me', [TestUserController::class, 'loginWithToken'])->name('login-with-token');
+    });
+
 
     Route::prefix('/utils')->name('utils.')->group(function () {
         Route::post('upload', [UploadController::class, 'upload'])->name('upload');

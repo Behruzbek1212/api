@@ -39,11 +39,7 @@ class Candidate extends Model
         'education_level',
         'services',
         'test',
-        'active',
-
-        '__comment',
-        '__conversation',
-        '__conversation_date'
+        'active'
     ];
 
     /**
@@ -66,13 +62,10 @@ class Candidate extends Model
      */
     protected $casts = [
         'spheres' => 'array',
-        'languages' => 'array',
         'test' => 'array',
         'services' => 'array',
+        'languages' => 'array',
         'birthday' => 'datetime',
-
-        '__conversation' => 'boolean',
-        '__conversation_date' => 'datetime'
     ];
 
     /**
@@ -103,7 +96,8 @@ class Candidate extends Model
         $default_avatar = 'https://static.jobo.uz/img/default.webp';
 
         return Attribute::make(
-            set: fn($value) => is_null($value) ? $default_avatar : $value
+            set: fn ($value) =>
+                is_null($value) ? $default_avatar : $value
         );
     }
 
@@ -115,8 +109,9 @@ class Candidate extends Model
     public function phone(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->user->phone,
-            set: fn($value) => $this->user()->update(['phone' => $value])
+            get: fn () => $this->user->phone,
+            set: fn ($value) =>
+                $this->user()->update([ 'phone' => $value ])
         );
     }
 
@@ -128,8 +123,9 @@ class Candidate extends Model
     public function email(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->user->email,
-            set: fn($value) => $this->user()->update(['email' => $value])
+            get: fn () => $this->user->email,
+            set: fn ($value) =>
+                $this->user()->update([ 'email' => $value ])
         );
     }
 
@@ -170,10 +166,10 @@ class Candidate extends Model
      */
     public function location(): Attribute
     {
-        if (empty($this->attributes['address']))
-            return Attribute::get(fn() => '');
+        if ( empty($this->attributes['address']) )
+            return Attribute::get(fn () => '');
 
         $location = $this->belongsTo(Location::class, 'address')->first()['title'];
-        return Attribute::get(fn() => __($location));
+        return Attribute::get(fn () => __($location));
     }
 }

@@ -24,7 +24,16 @@ return [
         "additional_education" => "Дополнительное образование",
         "skills" => "Навыки",
         "computer_skills" => "Компьютерные навыки",
-        "driving_experience" => "Навык вождения"
+        "result_of_tests" => "Резултаты теста",
+        "driving_experience" => "Навык вождения",
+        "language" => "Знание языков",
+        "about" => "Обо мне"
+    ],
+
+    "languages" => [
+        "uz" => "O'zbekcha",
+        "ru" => "Русский",
+        "en" => "English"
     ],
 
     "types" => [
