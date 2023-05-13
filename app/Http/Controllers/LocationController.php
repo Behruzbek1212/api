@@ -31,7 +31,7 @@ class LocationController extends Controller
 
     public function region(Request $request)
     {
-        $user = Location::where('id', '>', 100000)->get();
+        $user = Location::whereBetween('id',[100000,100100])->get();
         return response()->json([
             'status' => true,
             'data' => $user,
