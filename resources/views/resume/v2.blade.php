@@ -27,6 +27,10 @@
         throw new \ErrorException('File does not exist');
 @endphp
 
+@section('header')
+    <meta charset="utf-8">
+@endsection
+
 @section('title', $candidate->name)
 
 @section('style')
@@ -107,9 +111,9 @@
         table {
             z-index: 50;
         }
-        table tr td, table tr th {
-            page-break-inside: avoid !important;
-        }
+        /*table tr td, table tr th {*/
+        /*    page-break-inside: avoid !important;*/
+        /*}*/
         /*table { page-break-inside:auto }*/
         /*tr    { page-break-inside:avoid; page-break-after:auto }*/
         /*thead { display:table-header-group }*/
@@ -225,14 +229,6 @@
             background-color: #0079FE;
             border-radius: 9999px;
             margin-right: 2px;
-        }
-    </style>
-    <style>
-        table {
-            page-break-inside: auto !important;
-        }
-        .page_break {
-            page-break-inside: auto !important;
         }
     </style>
 @endsection
@@ -571,24 +567,19 @@
         @endif
 
         @if(@$data['about'])
-            <table id="desired-jobs-and-salary" class="w-full">
-                <tr class="page_break w-full table-row">
-                    <td class="left-side">
-                        <p class="font-bold">{{ __('resume.list.about') }}</p>
-                    </td>
-                    <td class="page_break w-full right-side">
-                        <div class="splitter"></div>
-                    </td>
-                </tr>
-                <tr class="page_break w-full table-row">
-                    <td class="left-side">
-
-                    </td>
-                    <td class="page_break w-full right-side">
-                        <p class="page_break">{!! $data['about'] !!}</p>
-                    </td>
-                </tr>
-            </table>
+            <div class="about_container">
+                <div id="about_me" class="w-full">
+                    <div class="page_break w-full table-row">
+                        <div class="left-side">
+                            <p class="font-bold">{{ __('resume.list.about') }}</p>
+                        </div>
+                        <div class="page_break w-full right-side about_text">
+                            <div class="splitter"></div>
+                            <p class="">{!! $data['about'] !!}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         @endif
 
         @if($candidate['test'] && count($candidate['test']))

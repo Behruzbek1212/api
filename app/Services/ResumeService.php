@@ -80,4 +80,3 @@ class ResumeService extends ResumeServiceConst
         return $this->pdf->download($name);
     }
 }
-
