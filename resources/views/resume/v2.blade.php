@@ -107,9 +107,9 @@
         table {
             z-index: 50;
         }
-        /*table tr td, table tr th {*/
-        /*    page-break-inside: avoid !important;*/
-        /*}*/
+        table tr td, table tr th {
+            page-break-inside: avoid !important;
+        }
         /*table { page-break-inside:auto }*/
         /*tr    { page-break-inside:avoid; page-break-after:auto }*/
         /*thead { display:table-header-group }*/
@@ -225,6 +225,14 @@
             background-color: #0079FE;
             border-radius: 9999px;
             margin-right: 2px;
+        }
+    </style>
+    <style>
+        table {
+            page-break-inside: auto !important;
+        }
+        .page_break {
+            page-break-inside: auto !important;
         }
     </style>
 @endsection
@@ -564,14 +572,20 @@
 
         @if(@$data['about'])
             <table id="desired-jobs-and-salary" class="w-full">
-                <tr class="w-full table-row">
+                <tr class="page_break w-full table-row">
                     <td class="left-side">
                         <p class="font-bold">{{ __('resume.list.about') }}</p>
                     </td>
-                    <td class="w-full right-side">
+                    <td class="page_break w-full right-side">
                         <div class="splitter"></div>
+                    </td>
+                </tr>
+                <tr class="page_break w-full table-row">
+                    <td class="left-side">
 
-                        <p>{!! $data['about'] !!}</p>
+                    </td>
+                    <td class="page_break w-full right-side">
+                        <p class="page_break">{!! $data['about'] !!}</p>
                     </td>
                 </tr>
             </table>

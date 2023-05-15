@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Constants\ResumeServiceConst;
+use TCPDF;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Barryvdh\DomPDF\PDF as DomPDF;
 use Illuminate\Http\Response;
@@ -79,3 +80,4 @@ class ResumeService extends ResumeServiceConst
         return $this->pdf->download($name);
     }
 }
+
