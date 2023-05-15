@@ -15,6 +15,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ResumeController;
 use App\Http\Controllers\TestUserController;
@@ -109,7 +110,13 @@ Route::prefix('/v1')->group(function () {
         Route::get('/', [CompaniesController::class, 'all'])->name('all');
         Route::get('/get/{id}', [CompaniesController::class, 'get'])->name('get');
     });
-
+    // Locations -----------------------------------------
+    Route::prefix('/location')->group(function () {
+        Route::get('/', [LocationController::class, 'all']);
+        Route::get('/get/{id}', [LocationController::class, 'get']);
+        Route::get('/region', [LocationController::class, 'region']);
+        Route::get('/add', [LocationController::class, 'add']);
+    });
     // Categories -----------------------------------------
     Route::prefix('/categories')->name('categories.')->group(function () {
         Route::get('/', [CategoriesController::class, 'index'])->name('index');

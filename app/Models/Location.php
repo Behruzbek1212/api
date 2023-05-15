@@ -14,7 +14,8 @@ class Location extends Model
     protected $fillable = [
         'id',
         'parent_id',
-        'title'
+        'title',
+        'name'
     ];
 
     /**
@@ -25,5 +26,6 @@ class Location extends Model
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'name' => 'array',
     ];
 }
