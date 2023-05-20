@@ -231,6 +231,12 @@
             margin-right: 2px;
         }
     </style>
+
+    <style type="text/css">
+        .about_container{
+            margin-left: 7px;
+        }
+    </style>
 @endsection
 
 @section('content')
