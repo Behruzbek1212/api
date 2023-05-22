@@ -43,7 +43,8 @@ class RegisterController extends Controller
         $request->validate([
             'phone' => ['required', 'numeric', 'unique:users,phone'],
             'password' => ['required', 'min:8'],
-            'role' => ['required', 'in:admin,customer,candidate']
+            'role' => ['required', 'in:admin,customer,candidate'],
+            'email'=> ['email', 'unique:users,email']
         ]);
 
         /** @var User $user */
