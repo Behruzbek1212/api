@@ -91,7 +91,6 @@ Route::prefix('/v1')->group(function () {
             Route::post('/create', [JobController::class, 'create'])->name('create');
             Route::post('/edit/{slug}', [JobController::class, 'edit'])->name('edit');
             Route::post('/destroy/{slug}', [JobController::class, 'destroy'])->name('destroy');
-
             Route::post('/acceptance', [JobController::class, 'acceptance'])->name('acceptance');
             Route::post('/{slug}/applications', [JobController::class, 'applications'])->name('applications');
         });
@@ -172,18 +171,18 @@ Route::prefix('/v1')->group(function () {
     Route::get('resume/download/{id}', [ResumeController::class, 'download'])->name('resume.download');
 
     Route::prefix('/test-user')->name('test-user.')->group(function () {
-       Route::get('/', [TestUserController::class, 'index'])->name('index');
-       Route::get('/check-status', [TestUserController::class, 'checkStatus'])->name('checkStatus');
-       Route::post('/register', [TestUserController::class, 'register'])->name('register');
-       Route::post('/login', [TestUserController::class, 'login'])->name('login');
-        Route::middleware(['auth:sanctum', 'is_customer'])->group(function (){
+        Route::get('/', [TestUserController::class, 'index'])->name('index');
+        Route::get('/check-status', [TestUserController::class, 'checkStatus'])->name('checkStatus');
+        Route::post('/register', [TestUserController::class, 'register'])->name('register');
+        Route::post('/login', [TestUserController::class, 'login'])->name('login');
+        Route::middleware(['auth:sanctum', 'is_customer'])->group(function () {
             Route::get('/list', [TestUserController::class, 'list'])->name('list');
         });
         Route::middleware('auth:sanctum')->group(function () {
             Route::get('/me', [TestUserController::class, 'me'])->name('me');
             Route::post('/add-test', [TestUserController::class, 'addTestResult'])->name('addTestResult');
         });
-    //       Route::get('/me', [TestUserController::class, 'loginWithToken'])->name('login-with-token');
+        //       Route::get('/me', [TestUserController::class, 'loginWithToken'])->name('login-with-token');
     });
 
 
