@@ -170,9 +170,9 @@ class JobController extends Controller
             'category_id' => $params['category_id'],
             'slug' => null,
             'status' => 'approved',
-            'work_hours'=> $params['work_hours'],
-            'for_communication_phone'=> $params['for_communication_phone'],
-            'for_communication_link'=> $params['for_communication_link']
+            'work_hours'=> $params['work_hours'] ?? null,
+            'for_communication_phone'=> $params['for_communication_phone'] ?? null,
+            'for_communication_link'=> $params['for_communication_link'] ?? null
         ]);
 
         if ( @$params['recruitment'] || @$params['strengthening'] ) {
@@ -242,9 +242,9 @@ class JobController extends Controller
             'category_id' => $params['category_id'],
             'sphere' => $params['sphere'],
             'status' => 'approved',
-            'work_hours'=> $params['work_hours'],
-            'for_communication_phone'=> $params['for_communication_phone'],
-            'for_communication_link'=> $params['for_communication_link']
+            'work_hours'=> $params['work_hours'] ?? null,
+            'for_communication_phone'=> $params['for_communication_phone'] ?? null,
+            'for_communication_link'=> $params['for_communication_link'] ?? null
         ]);
 
         return response()->json([
