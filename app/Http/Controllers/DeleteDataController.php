@@ -20,33 +20,32 @@ class DeleteDataController extends Controller
         if($user !== null){
             DB::table('users')->where('id', $user->id)->delete();
             $wishlists = DB::table('wishlists')->where('user_id', $user->id)->get();
-            $resumes = Resume::where('user_id',  $user->id)->get();
+           
             if($wishlists !== null){
                 foreach($wishlists as $wishlist){
                     DB::table('wishlists')->where('id', $wishlist->id)->delete();
                 }
             }
 
-            if ($resumes !== null){
-                foreach($resumes as $resume){
-                    DB::table('resumes')->where('id', $resume->id)->delete();
-                    DB::table('chats')->where('resume_id', $resume->id)->delete();
-                }
-            }
-
-
              if($user->role == 'customer') {
                 $customer = Customer::where('user_id', $user->id)->first();
+               
                 if( $customer !== null){
                     DB::table('customers')->where('id', $customer->id)->delete();
                     $jobs =   DB::table('jobs')->where('customer_id', $customer->id)->get();
+                    $chats = DB::table('chats')->where('customer_id', $customer->id)->get();
                     if($jobs !== null){
                         foreach($jobs as $job){
                             DB::table('jobs')->where('id', $job->id )->delete();
                         }
                     }
+                    if($chats !== null){
+                        foreach($chats as $chat){
+                            DB::table('chats')->where('id', $chat->id)->delete();
+                        }
+                    }
                 }  
-
+               
                 return response()->json([
                     'status' => true,
                     'user'=>$user,
@@ -54,12 +53,26 @@ class DeleteDataController extends Controller
               ]);
 
              } elseif($user->role == 'candidate'){
-
-                $condidat =  DB::table('candidates')->where('user_id', $user->id)->delete();
-               
+                $condidat= DB::table('candidates')->where('user_id', $user->id)->first();
+                $chats = DB::table('chats')->where('candidate_id', $condidat->id)->get();
+                $resumes = Resume::where('user_id',  $user->id)->get();
+                DB::table('candidates')->where('user_id', $user->id)->delete();
+              
+                if ($resumes !== null){
+                    foreach($resumes as $resume){
+                        DB::table('resumes')->where('id', $resume->id)->delete();
+                        DB::table('chats')->where('resume_id', $resume->id)->delete();
+                    }
+                }
+                if($chats !== null){
+                    foreach($chats as $chat){
+                        DB::table('chats')->where('id', $chat->id)->delete();
+                    }
+                }
                 return response()->json([
                 'status' => true,
                 'user'=>$user,
+                'chat' => $chats,
                 'condidat' => $condidat,
                ]);
              }
