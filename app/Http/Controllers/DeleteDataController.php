@@ -48,13 +48,14 @@ class DeleteDataController extends Controller
                
                 return response()->json([
                     'status' => true,
+                    'message' => 'success deleted',
                     'user'=>$user,
                     'customer' => $customer,
               ]);
 
              } elseif($user->role == 'candidate'){
-                $condidat= DB::table('candidates')->where('user_id', $user->id)->first();
-                $chats = DB::table('chats')->where('candidate_id', $condidat->id)->get();
+                $candidate= DB::table('candidates')->where('user_id', $user->id)->first();
+                $chats = DB::table('chats')->where('candidate_id', $candidate->id)->get();
                 $resumes = Resume::where('user_id',  $user->id)->get();
                 DB::table('candidates')->where('user_id', $user->id)->delete();
               
@@ -71,9 +72,10 @@ class DeleteDataController extends Controller
                 }
                 return response()->json([
                 'status' => true,
+                'message' => 'success deleted',
                 'user'=>$user,
                 'chat' => $chats,
-                'condidat' => $condidat,
+                'candidate' => $candidate,
                ]);
              }
             
