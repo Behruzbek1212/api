@@ -37,6 +37,7 @@ class ChangeRoleController extends Controller
      */
     public function updateData(Request $request): JsonResponse
     {
+        
         /** @var Authenticatable|User|null $user */
         $user = _auth()->user();
 
