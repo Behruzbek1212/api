@@ -37,6 +37,9 @@ class ChangeRoleController extends Controller
      */
     public function updateData(Request $request): JsonResponse
     {
+        $request->validate([
+            'email'=> ['email', 'unique:users,email']
+        ]);
         /** @var Authenticatable|User|null $user */
         $user = _auth()->user();
 

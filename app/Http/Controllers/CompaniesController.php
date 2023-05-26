@@ -57,10 +57,10 @@ class CompaniesController extends Controller
             ->where('active', '=', true)
             ->where('id', '=', $id)
             ->firstOrFail();
-
+            
         _auth()->check() && _user()->customerStats()
             ->syncWithoutDetaching($company);
-
+        
         return response()->json([
             'status' => true,
             'data' => $company
