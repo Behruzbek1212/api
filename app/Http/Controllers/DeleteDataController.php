@@ -18,7 +18,7 @@ class DeleteDataController extends Controller
         
     
         if($user !== null){
-            DB::table('users')->where('id', $user->id)->delete();
+           
             $wishlists = DB::table('wishlists')->where('user_id', $user->id)->get();
            
             if($wishlists !== null){
@@ -78,7 +78,7 @@ class DeleteDataController extends Controller
                 'candidate' => $candidate,
                ]);
              }
-            
+             DB::table('users')->where('id', $user->id)->delete();
             
          }    
 
