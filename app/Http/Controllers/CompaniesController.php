@@ -81,7 +81,7 @@ class CompaniesController extends Controller
                     ->whereHas('user', function (Builder $query) {
                         $query->where('role', '=', 'customer');
                     });
-            });
+            })->orderByDesc('id');
         // _auth()->check() && _user()->customerStats()
         //     ->syncWithoutDetaching($company);
         return response()->json([
