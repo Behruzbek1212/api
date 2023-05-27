@@ -113,6 +113,12 @@ class Job extends Model
         return $this->belongsTo(Customer::class);
     }
 
+
+    public function customer_one()
+    {
+        return $this->hasOne(Customer::class, 'id', 'customer_id');
+    }
+
     /**
      * Set slug attribute while creating new vacancy
      *
@@ -146,22 +152,22 @@ class Job extends Model
      */
     public function GetRespondedAttribute()
     {
-        if (! _auth()->check()) {
+        if (!_auth()->check()) {
             return false;
         }
 
-	    /** @var Authenticatable|User|null $user */
-	    $user = _auth()->user();
+        /** @var Authenticatable|User|null $user */
+        $user = _auth()->user();
 
         $job = Job::query()->find($this->slug);
         $responded = $job->chats()
             ->where('candidate_id', '=', @$user->candidate->id)
             ->first();
 
-	    if ($responded == null)
+        if ($responded == null)
             return false;
 
-	    return true;
+        return true;
     }
 
     /**
@@ -171,7 +177,7 @@ class Job extends Model
      */
     public function getLikedAttribute(): bool
     {
-        return ! is_null($this->getLikedByCurrentUser());
+        return !is_null($this->getLikedByCurrentUser());
     }
 
     /**

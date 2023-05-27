@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Job;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -30,7 +31,7 @@ class CompaniesController extends Controller
             ->where('active', '=', true);
 
         if ($name = $request->get('name'))
-            $companies->where('name', 'like', '%'.$name.'%');
+            $companies->where('name', 'like', '%' . $name . '%');
 
         if ($location = $request->get('location'))
             $companies->where('location', $location);
@@ -49,21 +50,43 @@ class CompaniesController extends Controller
      */
     public function get(int $id): JsonResponse
     {
+
         $company = Customer::query()
-            ->with(['user:id,email,phone,verified', 'jobs'])
+            ->with(['user:id,email,phone,verified'])
             ->whereHas('user', function (Builder $query) {
                 $query->where('role', '=', 'customer');
             })
             ->where('active', '=', true)
             ->where('id', '=', $id)
             ->firstOrFail();
-
         _auth()->check() && _user()->customerStats()
             ->syncWithoutDetaching($company);
-
         return response()->json([
             'status' => true,
             'data' => $company
+        ]);
+    }
+
+    public function job(Request $request, int $id): JsonResponse
+    {
+        $params = $request->validate([
+            'limit' => ['integer', 'nullable']
+        ]);
+
+        $company = Job::query()
+            ->WhereHas('customer', function ($query) use ($id) {
+                $query->where('active', '=', true)
+                    ->where('id', '=', $id);
+                $query->with(['user:id,email,phone,verified'])
+                    ->whereHas('user', function (Builder $query) {
+                        $query->where('role', '=', 'customer');
+                    });
+            });
+        // _auth()->check() && _user()->customerStats()
+        //     ->syncWithoutDetaching($company);
+        return response()->json([
+            'status' => true,
+            'data' => $company->paginate($params['limit'] ?? null)
         ]);
     }
 }

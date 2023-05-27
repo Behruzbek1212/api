@@ -84,6 +84,8 @@ Route::prefix('/v1')->group(function () {
     // Jobs -----------------------------------------
     Route::prefix('/jobs')->name('jobs.')->group(function () {
         Route::get('/', [JobController::class, 'all'])->name('all');
+        Route::get('/similar_jobs', [JobController::class, 'similar_jobs'])->name('similar_jobs');
+        Route::get('/customer_releted_jobs', [JobController::class, 'customer_releted_jobs'])->name('customer_releted_jobs');
         Route::get('/get/{slug}', [JobController::class, 'get'])->name('get');
         Route::post('/respond', [JobController::class, 'respond'])->name('respond');
 
@@ -108,6 +110,7 @@ Route::prefix('/v1')->group(function () {
     Route::prefix('/companies')->name('companies.')->group(function () {
         Route::get('/', [CompaniesController::class, 'all'])->name('all');
         Route::get('/get/{id}', [CompaniesController::class, 'get'])->name('get');
+        Route::get('/job/{id}', [CompaniesController::class, 'job'])->name('job');
     });
     // Locations -----------------------------------------
     Route::prefix('/location')->group(function () {
