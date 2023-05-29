@@ -7,8 +7,10 @@
      * @var int $resume_id
      */
 
-    app()->setLocale('ru');
-//    app()->getLocale();
+    // app()->setLocale('ru');
+    app()->setlocale(request()->header('JB-Lang', 'ru'));
+    // @dd(app()->getLocale());
+
     $faker = \Faker\Factory::create();
 
     $candidate_page = 'https://jobo.uz/candidates/';

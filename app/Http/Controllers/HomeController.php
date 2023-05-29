@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 
+use App\Http\Controllers\ResumeController;
+use Illuminate\Support\Facades\Route;
+
 class HomeController extends Controller
 {
     /**
@@ -13,12 +16,17 @@ class HomeController extends Controller
      */
     public function __invoke(): JsonResponse
     {
+        
         return response()->json([
             'version' => 'v' . config('app.version'),
             'development' => 'AdsON A.K.A Infoshop',
-            'repo' => 'https://github.com/jobo-uz/'
+            'repo' => 'https://github.com/jobo-uz/',
+
+
         ]);
     }
+
+
 
     /**
      * Handle the incoming request.

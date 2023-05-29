@@ -24,7 +24,6 @@ use App\Http\Controllers\User\ChangeRoleController;
 use App\Http\Controllers\Utils\UploadController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -40,6 +39,7 @@ Route::get('/', HomeController::class);
 Route::fallback([HomeController::class, 'fallback']);
 
 Route::prefix('/v1')->group(function () {
+
     // User | Me ------------------------------------
     Route::get('/me', [Controller::class, 'user'])
         ->middleware('auth:sanctum');
@@ -67,6 +67,7 @@ Route::prefix('/v1')->group(function () {
             Route::post('/role', [RegisterController::class, 'role'])->name('role');
         });
     });
+    // Route::get('/resume/show/{id}', [ResumeController::class, 'show']);
 
     // Guides ---------------------------------------
     Route::prefix('/guides')->name('guides.')->group(function () {

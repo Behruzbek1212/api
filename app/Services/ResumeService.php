@@ -20,8 +20,9 @@ class ResumeService extends ResumeServiceConst
      * @param string $encode
      * @return ResumeService
      */
-    public function load(array $data, array $mergeData = [], string $encode = 'utf-8'): ResumeService
+    public function load(array $data, array $mergeData = [], string $encode = 'utf-8')
     {
+        // return view('resume.v2', compact('data','mergeData','encode'));
         $this->pdf = PDF::loadView('resume.v2', $data, $mergeData, $encode)
             ->setPaper('A4', 'horizontal')
             ->setWarnings(true);
@@ -42,7 +43,7 @@ class ResumeService extends ResumeServiceConst
 
         $this->pdf->save(
             base_path('public/uploads/resume/') .
-            Random::generate() . '.pdf'
+                Random::generate() . '.pdf'
         );
 
         return $this;
