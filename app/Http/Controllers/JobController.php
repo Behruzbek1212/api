@@ -71,6 +71,9 @@ class JobController extends Controller
 
     public function customer_releted_jobs(Request $request)
     {
+        $params = $request->validate([
+            'limit' => ['integer', 'nullable']
+        ]);
         $jobs = Job::query()
             // Check if customer status is active
             ->with('customer')
@@ -78,7 +81,7 @@ class JobController extends Controller
             ->WhereHas('customer', function (Builder $query) {
                 $query->where('active', '=', true);
             })
-            ->take($request->limit_job ?? 7)->get();
+            ->take($params['limit'] ?? 7)->get();
         return response()->json([
             'status' => true,
             'jobs' => $jobs
@@ -87,6 +90,10 @@ class JobController extends Controller
 
     public function similar_jobs(Request $request)
     {
+
+        $params = $request->validate([
+            'limit' => ['integer', 'nullable']
+        ]);
         $jobs = Job::query()
             // Check if customer status is active
             // ->with('customer')
@@ -121,7 +128,7 @@ class JobController extends Controller
             // ->WhereHas('customer', function (Builder $query) {
             //     $query->where('active', '=', true);
             // })
-            ->take($request->limit_job ?? 7)->get();
+            ->take($params['limit'] ?? 7)->get();
         return response()->json([
             'status' => true,
             'jobs' => $jobs
