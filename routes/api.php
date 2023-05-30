@@ -111,7 +111,7 @@ Route::prefix('/v1')->group(function () {
     Route::prefix('/companies')->name('companies.')->group(function () {
         Route::get('/', [CompaniesController::class, 'all'])->name('all');
         Route::get('/get/{id}', [CompaniesController::class, 'get'])->name('get');
-        Route::get('/job/{id}', [CompaniesController::class, 'job'])->name('job');
+        Route::get('/job', [CompaniesController::class, 'job'])->name('job');
     });
     // Locations -----------------------------------------
     Route::prefix('/location')->group(function () {

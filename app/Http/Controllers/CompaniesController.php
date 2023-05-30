@@ -67,16 +67,16 @@ class CompaniesController extends Controller
         ]);
     }
 
-    public function job(Request $request, int $id): JsonResponse
+    public function job(Request $request): JsonResponse
     {
         $params = $request->validate([
             'limit' => ['integer', 'nullable']
         ]);
 
         $company = Job::query()
-            ->WhereHas('customer', function ($query) use ($id) {
-                $query->where('active', '=', true)
-                    ->where('id', '=', $id);
+            ->with('customer')
+            ->WhereHas('customer', function ($query) {
+                $query->where('active', '=', true);
                 $query->with(['user:id,email,phone,verified'])
                     ->whereHas('user', function (Builder $query) {
                         $query->where('role', '=', 'customer');
