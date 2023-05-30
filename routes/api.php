@@ -86,7 +86,7 @@ Route::prefix('/v1')->group(function () {
     Route::prefix('/jobs')->name('jobs.')->group(function () {
         Route::get('/', [JobController::class, 'all'])->name('all');
         Route::get('/similar_jobs', [JobController::class, 'similar_jobs'])->name('similar_jobs');
-        Route::get('/customer_releted_jobs', [JobController::class, 'customer_releted_jobs'])->name('customer_releted_jobs');
+        Route::get('/customer_releted_jobs/{id}', [JobController::class, 'customer_releted_jobs'])->name('customer_releted_jobs');
         Route::get('/get/{slug}', [JobController::class, 'get'])->name('get');
         Route::post('/respond', [JobController::class, 'respond'])->name('respond');
 
