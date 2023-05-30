@@ -94,7 +94,7 @@ class Resume extends Model
                 $unique_employments[$key] = $employment;
             }
         }
-        
+       
         $output = [];
         
         foreach ($unique_employments as $employment) {
