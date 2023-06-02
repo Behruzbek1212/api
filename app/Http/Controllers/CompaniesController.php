@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CompaniesResource;
+use App\Http\Resources\CompanyResource;
 use App\Models\Customer;
 use App\Models\Job;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,30 +18,31 @@ class CompaniesController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function all(Request $request): JsonResponse
+    public function all(Request $request)
     {
         $params = $request->validate([
             'limit' => ['integer', 'nullable']
         ]);
 
         $companies = Customer::query()
-            ->with(['user:id,email,phone,verified', 'jobs'])
+            // ->with(['user:id,email,phone,verified', 'jobs'])
+            ->withCount('jobs as jobs_count')
             ->orderByDesc('id')
             ->whereHas('user', function (Builder $query) {
                 $query->where('role', '=', 'customer');
             })
-            ->where('active', '=', true);
+            ->where('active', '=', true)->paginate($params['limit'] ?? null);
 
         if ($name = $request->get('name'))
             $companies->where('name', 'like', '%' . $name . '%');
 
         if ($location = $request->get('location'))
             $companies->where('location', $location);
-
-        return response()->json([
+            $list = CompaniesResource::collection($companies);
+        return [
             'status' => true,
-            'data' => $companies->paginate($params['limit'] ?? null)
-        ]);
+            'data' => $list,
+        ];
     }
 
     /**
@@ -52,10 +55,11 @@ class CompaniesController extends Controller
     {
 
         $company = Customer::query()
-            ->with(['user:id,email,phone,verified'])
+            // ->with(['user:id,email,phone,verified'])
             ->whereHas('user', function (Builder $query) {
                 $query->where('role', '=', 'customer');
             })
+            ->withCount('jobs as jobs_count')
             ->where('active', '=', true)
             ->where('id', '=', $id)
             ->firstOrFail();
@@ -63,7 +67,7 @@ class CompaniesController extends Controller
             ->syncWithoutDetaching($company);
         return response()->json([
             'status' => true,
-            'data' => $company
+            'data' => new CompanyResource($company)
         ]);
     }
 
