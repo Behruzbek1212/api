@@ -12,6 +12,7 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ChatsController;
 use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\DeleteDataController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobController;
@@ -193,7 +194,7 @@ Route::prefix('/v1')->group(function () {
     Route::prefix('/utils')->name('utils.')->group(function () {
         Route::post('upload', [UploadController::class, 'upload'])->name('upload');
     });
-
+    Route::post('delete/user', [DeleteDataController::class, 'delete'])->middleware('api_token');
     // Bots ------------------------------
     require_once __DIR__ . '/bots.php';
 });
