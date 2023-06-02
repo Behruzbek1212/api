@@ -48,6 +48,8 @@ class ChangeRoleController extends Controller
                 'email'=> ['email', 'unique:users,email']
             ]);
         }
+        
+        /** @var Authenticatable|User|null $user */
 
         return $user->updateData($request);
     }
