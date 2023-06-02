@@ -219,7 +219,9 @@ class JobController extends Controller
             'salary' => ['array:amount,currency,agreement', 'required'],
             'work_type' => ['string', 'required', 'in:fulltime,remote,partial,hybrid'],
             'about' => ['string', 'required'],
-
+            'work_hours' => ['string', 'nullable'],
+            'for_communication_phone' => ['array', 'nullable'],
+            'for_communication_link' => ['array', 'nullable'],
             'recruitment' => ['boolean', 'nullable'],
             'strengthening' => ['boolean', 'nullable']
         ]);
@@ -236,7 +238,10 @@ class JobController extends Controller
             'sphere' => $params['sphere'],
             'category_id' => $params['category_id'],
             'slug' => null,
-            'status' => 'approved'
+            'status' => 'approved',
+            'work_hours'=> $params['work_hours'] ?? null,
+            'for_communication_phone'=> $params['for_communication_phone'] ?? null,
+            'for_communication_link'=> $params['for_communication_link'] ?? null
         ]);
 
         if (@$params['recruitment'] || @$params['strengthening']) {
@@ -288,6 +293,9 @@ class JobController extends Controller
             'salary' => ['array:amount,currency,agreement', 'required'],
             'work_type' => ['string', 'required', 'in:fulltime,remote,partial,hybrid'],
             'about' => ['string', 'required'],
+            'work_hours' => ['string', 'nullable'],
+            'for_communication_phone' => ['array', 'nullable'],
+            'for_communication_link' => ['array', 'nullable'],
         ]);
 
         $job = $request->user()->customer->jobs()->findOrFail($slug);
@@ -302,7 +310,10 @@ class JobController extends Controller
             'education_level' => $params['education_level'] ?? null, // TODO: remove `null` value
             'category_id' => $params['category_id'],
             'sphere' => $params['sphere'],
-            'status' => 'approved'
+            'status' => 'approved',
+            'work_hours'=> $params['work_hours'] ?? null,
+            'for_communication_phone'=> $params['for_communication_phone'] ?? null,
+            'for_communication_link'=> $params['for_communication_link'] ?? null
         ]);
 
         return response()->json([

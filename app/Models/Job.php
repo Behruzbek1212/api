@@ -65,7 +65,10 @@ class Job extends Model
         'location_id',
         'category_id',
         'slug',
-        'status'
+        'status',
+        'work_hours',
+        'for_communication_phone',
+        'for_communication_link'
     ];
 
     /**
@@ -98,6 +101,8 @@ class Job extends Model
         'salary' => 'array',
         'languages' => 'array',
         'advantages' => 'array',
+        'for_communication_link'=> 'array',
+        'for_communication_phone'=> 'array',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
