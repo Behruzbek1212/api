@@ -36,8 +36,13 @@ class ChangeRoleController extends Controller
      * @return JsonResponse
      */
     public function updateData(Request $request): JsonResponse
-    {   
+    {
+//         $request->validate([
+//             'email'=> ['email', 'unique:users,email']
+//         ]);
+        /** @var Authenticatable|User|null $user */
         $user = _auth()->user();
+        
         if($user->email !== $request->email){
             $request->validate([
                 'email'=> ['email', 'unique:users,email']
@@ -45,7 +50,6 @@ class ChangeRoleController extends Controller
         }
         
         /** @var Authenticatable|User|null $user */
-       
 
         return $user->updateData($request);
     }
