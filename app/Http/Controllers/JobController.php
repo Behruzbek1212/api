@@ -33,10 +33,10 @@ class JobController extends Controller
             ->whereHas('customer', function (Builder $query) {
                 $query->where('active', '=', true);
             });
-            // TODO: ->where('status', '=', 'approved');
+        // TODO: ->where('status', '=', 'approved');
 
         if ($title = $request->get('title'))
-            $jobs->whereRaw('`title` like ?', ['%'.$title.'%']);
+            $jobs->whereRaw('`title` like ?', ['%' . $title . '%']);
 
         if ($type = $request->get('work_type'))
             $jobs->where('work_type', '=', $type);
@@ -66,6 +66,75 @@ class JobController extends Controller
         return response()->json([
             'status' => true,
             'jobs' => $jobs->paginate($params['limit'] ?? null)
+        ]);
+    }
+
+    public function customer_releted_jobs(Request $request, $id)
+    {
+        // return response()->json($id);
+        $params = $request->validate([
+            'limit' => ['integer', 'nullable']
+        ]);
+        $jobs = Job::query()
+            // Check if customer status is active
+            ->with('customer')
+            ->orderByDesc('id')
+            ->WhereHas('customer', function (Builder $query) use ($id) {
+                $query->where('active', '=', true);
+                $query->where('id', $id);
+            })
+            ->take($params['limit'] ?? 7)->get();
+        return response()->json([
+            'status' => true,
+            'jobs' => $jobs
+        ]);
+    }
+
+    public function similar_jobs(Request $request)
+    {
+
+        $params = $request->validate([
+            'limit' => ['integer', 'nullable']
+        ]);
+
+        $jobs = Job::query()
+            // Check if customer status is active
+            // ->with('customer')
+            ->when(request('title'), function ($query) {
+                $query->whereRaw('`title` like ?', ['%' . request('title') . '%']);
+            })
+            ->when(request('work_type'), function ($query) {
+                $query->where('work_type', '=', request('work_type'));
+            })
+            ->when(request('location_id'), function ($query) {
+                $query->isLocation(request('location_id'));
+            })
+            ->when(request('category_id'), function ($query) {
+                $query->where('category_id', '=', request('category_id'));
+            })
+            ->when(request('salary'), function ($query) {
+                $query->where('salary->amount', 'like', '%' . request('salary') . '%');
+            })
+            ->when(request('start'), function ($query) {
+                $query->where('salary->amount', '>=', request('start'));
+            })
+            ->when(request('end'), function ($query) {
+                $query->where('salary->amount', '<=', request('end'));
+            })
+            ->when(request('currency'), function ($query) {
+                $query->whereJsonContains('salary->currency', request('currency'));
+            })
+            ->when(request('sphere'), function ($query) {
+                $query->whereJsonContains('sphere', request('sphere'));
+            })
+            ->orderByDesc('id')
+            // ->WhereHas('customer', function (Builder $query) {
+            //     $query->where('active', '=', true);
+            // })
+            ->take($params['limit'] ?? 7)->get();
+        return response()->json([
+            'status' => true,
+            'jobs' => $jobs
         ]);
     }
 
@@ -175,7 +244,7 @@ class JobController extends Controller
             'for_communication_link'=> $params['for_communication_link'] ?? null
         ]);
 
-        if ( @$params['recruitment'] || @$params['strengthening'] ) {
+        if (@$params['recruitment'] || @$params['strengthening']) {
             $message = "🆕 <b>" . $job->title . "</b>\n";
             $message .= "🏢 Kompaniya: <b>" . $job->customer->name . "</b>\n";
             $message .= "📞 Telefon raqam: " . $job->customer->user->phone . "\n\n";
@@ -195,7 +264,7 @@ class JobController extends Controller
                         ]
                     ]]
                 ])
-	        ]);
+            ]);
         }
 
         return response()->json([

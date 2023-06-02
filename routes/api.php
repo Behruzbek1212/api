@@ -25,7 +25,6 @@ use App\Http\Controllers\User\ChangeRoleController;
 use App\Http\Controllers\Utils\UploadController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -41,6 +40,7 @@ Route::get('/', HomeController::class);
 Route::fallback([HomeController::class, 'fallback']);
 
 Route::prefix('/v1')->group(function () {
+
     // User | Me ------------------------------------
     Route::get('/me', [Controller::class, 'user'])
         ->middleware('auth:sanctum');
@@ -68,6 +68,7 @@ Route::prefix('/v1')->group(function () {
             Route::post('/role', [RegisterController::class, 'role'])->name('role');
         });
     });
+    // Route::get('/resume/show/{id}', [ResumeController::class, 'show']);
 
     // Guides ---------------------------------------
     Route::prefix('/guides')->name('guides.')->group(function () {
@@ -85,6 +86,8 @@ Route::prefix('/v1')->group(function () {
     // Jobs -----------------------------------------
     Route::prefix('/jobs')->name('jobs.')->group(function () {
         Route::get('/', [JobController::class, 'all'])->name('all');
+        Route::get('/similar_jobs', [JobController::class, 'similar_jobs'])->name('similar_jobs');
+        Route::get('/customer_releted_jobs/{id}', [JobController::class, 'customer_releted_jobs'])->name('customer_releted_jobs');
         Route::get('/get/{slug}', [JobController::class, 'get'])->name('get');
         Route::post('/respond', [JobController::class, 'respond'])->name('respond');
 
@@ -109,6 +112,7 @@ Route::prefix('/v1')->group(function () {
     Route::prefix('/companies')->name('companies.')->group(function () {
         Route::get('/', [CompaniesController::class, 'all'])->name('all');
         Route::get('/get/{id}', [CompaniesController::class, 'get'])->name('get');
+        Route::get('/job', [CompaniesController::class, 'job'])->name('job');
     });
     // Locations -----------------------------------------
     Route::prefix('/location')->group(function () {

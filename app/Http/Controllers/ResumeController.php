@@ -23,9 +23,11 @@ class ResumeController extends Controller
         /** @var Authenticatable|User|null $user */
         $user = _auth()->user();
 
+
         return response()->json([
             'status' => true,
-            'resumes' => $user->resumes
+            'resumes' => $user->resumes,
+
         ]);
     }
 
@@ -56,7 +58,7 @@ class ResumeController extends Controller
     public function store(Request $request): JsonResponse
     {
         /** @var Authenticatable|User|null $user */
-        $user = _auth()->user();
+        $user = auth()->user();
 
         $user->resumes()->updateOrCreate([
             'data' => $request->toArray()
@@ -119,7 +121,7 @@ class ResumeController extends Controller
      * @return Response
      * @throws JsonException
      */
-    public function show(string|int $id): Response
+    public function show(string|int $id)
     {
         $resume = Resume::query()
             ->with('user')
