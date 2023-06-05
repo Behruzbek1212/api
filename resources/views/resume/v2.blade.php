@@ -8,7 +8,7 @@
      */
 
     // app()->setLocale('ru');
-    app()->setlocale(request('lang'));
+    app()->setlocale(request('lang') ?? 'ru');
     // @dd(app()->getLocale());
 
     $faker = \Faker\Factory::create();
@@ -20,13 +20,13 @@
     // $qrcode = qrcode(50)->color(0, 121, 254)->generate($candidate_page . $candidate->id);
 
     // Dark colored generator
-    $qrcode = qrcode(50)->color(89, 89, 89)->generate($show_resume_page . $resume_id);
+    // $qrcode = qrcode(50)->color(89, 89, 89)->generate($show_resume_page . $resume_id);
 
-    $avatar = str_replace("https://static.jobo.uz/", "", $candidate->avatar);
-    $avatar = public_path($avatar);
+    // $avatar = str_replace("https://static.jobo.uz/", "", $candidate->avatar);
+    // $avatar = public_path($avatar);
 
-    if (! file_exists($avatar))
-        throw new \ErrorException('File does not exist');
+    // if (! file_exists($avatar))
+    //     throw new \ErrorException('File does not exist');
 @endphp
 
 @section('header')
@@ -243,7 +243,7 @@
 
 @section('content')
     <header>
-        <img src="{{ public_path('assets/logo.png') }}" alt="Logo" />
+        {{-- <img src="{{ public_path('assets/logo.png') }}" alt="Logo" /> --}}
         <span></span>
     </header>
 
@@ -254,7 +254,7 @@
                     <a href="https://jobo.uz" class="text-blue">www.jobo.uz</a>
                 </td>
                 <td align="right">
-                    <img src="data:image/svg+xml;base64,{{ base64_encode($qrcode) }}" />
+                    {{-- <img src="data:image/svg+xml;base64,{{ base64_encode($qrcode) }}" /> --}}
                 </td>
             </tr>
         </table>
@@ -271,7 +271,7 @@
                     <p class="text-sm"><span class="font-semibold">{{ __('resume.address') }}:</span> {{ $candidate->location }}</p>
                 </td>
 
-                @if( !str_contains($avatar, 'default.webp') && !str_contains($avatar, 'avatar.png') )
+                {{-- @if( !str_contains($avatar, 'default.webp') && !str_contains($avatar, 'avatar.png') ) --}}
                     <td style="width: 175px; padding-left: 25px">
                         <img
                             {{-- src="{{ $avatar }}" --}}
@@ -280,7 +280,7 @@
                             width="100%"
                         />
                     </td>
-                @endif
+                {{-- @endif --}}
             </tr>
         </table>
 
