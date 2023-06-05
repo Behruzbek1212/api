@@ -8,7 +8,7 @@
      */
 
     // app()->setLocale('ru');
-    app()->setlocale(request()->header('JB-Lang', 'ru'));
+    app()->setlocale(request('lang'));
     // @dd(app()->getLocale());
 
     $faker = \Faker\Factory::create();
@@ -274,7 +274,7 @@
                 @if( !str_contains($avatar, 'default.webp') && !str_contains($avatar, 'avatar.png') )
                     <td style="width: 175px; padding-left: 25px">
                         <img
-                            src="{{ $avatar }}"
+                            {{-- src="{{ $avatar }}" --}}
                             alt="{{ $candidate->name }}"
                             class="profile-avatar"
                             width="100%"

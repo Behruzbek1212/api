@@ -26,7 +26,6 @@ class ResumeService extends ResumeServiceConst
         $this->pdf = PDF::loadView('resume.v2', $data, $mergeData, $encode)
             ->setPaper('A4', 'horizontal')
             ->setWarnings(true);
-
         return $this;
     }
 
