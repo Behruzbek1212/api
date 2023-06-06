@@ -7,7 +7,10 @@
      * @var int $resume_id
      */
 
-    app()->setLocale('ru');
+    // app()->setLocale('ru');
+    app()->setlocale(request('lang'));
+    // @dd(app()->getLocale());
+
     $faker = \Faker\Factory::create();
 
     $candidate_page = 'https://jobo.uz/candidates/';
@@ -25,6 +28,10 @@
     if (! file_exists($avatar))
         throw new \ErrorException('File does not exist');
 @endphp
+
+@section('header')
+    <meta charset="utf-8">
+@endsection
 
 @section('title', $candidate->name)
 
@@ -226,6 +233,12 @@
             margin-right: 2px;
         }
     </style>
+
+    <style type="text/css">
+        .about_container{
+            margin-left: 7px;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -306,21 +319,6 @@
                 </td>
             </tr>
         </table>
-
-        @if(@$data['about'])
-            <table id="desired-jobs-and-salary" class="w-full">
-                <tr class="w-full table-row">
-                    <td class="left-side">
-                        <p class="font-bold">{{ __('resume.list.about') }}</p>
-                    </td>
-                    <td class="w-full right-side">
-                        <div class="splitter"></div>
-
-                        <p>{!! $data['about'] !!}</p>
-                    </td>
-                </tr>
-            </table>
-        @endif
 
         @if(count($data['employment']))
             <table id="experience" class="w-full relative">
@@ -574,6 +572,22 @@
                     </td>
                 </tr>
             </table>
+        @endif
+
+        @if(@$data['about'])
+            <div class="about_container">
+                <div id="about_me" class="w-full">
+                    <div class="page_break w-full table-row">
+                        <div class="left-side">
+                            <p class="font-bold">{{ __('resume.list.about') }}</p>
+                        </div>
+                        <div class="page_break w-full right-side about_text">
+                            <div class="splitter"></div>
+                            <p class="">{!! $data['about'] !!}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         @endif
 
         @if($candidate['test'] && count($candidate['test']))

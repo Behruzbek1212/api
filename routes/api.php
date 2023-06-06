@@ -10,9 +10,11 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ChatsController;
 use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\DeleteDataController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ResumeController;
 use App\Http\Controllers\TestUserController;
@@ -21,7 +23,6 @@ use App\Http\Controllers\User\ChangeRoleController;
 use App\Http\Controllers\Utils\UploadController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -37,6 +38,7 @@ Route::get('/', HomeController::class);
 Route::fallback([HomeController::class, 'fallback']);
 
 Route::prefix('/v1')->group(function () {
+
     // User | Me ------------------------------------
     Route::get('/me', [Controller::class, 'user'])
         ->middleware('auth:sanctum');
@@ -64,6 +66,7 @@ Route::prefix('/v1')->group(function () {
             Route::post('/role', [RegisterController::class, 'role'])->name('role');
         });
     });
+    // Route::get('/resume/show/{id}', [ResumeController::class, 'show']);
 
     // Guides ---------------------------------------
     Route::prefix('/guides')->name('guides.')->group(function () {
@@ -81,6 +84,8 @@ Route::prefix('/v1')->group(function () {
     // Jobs -----------------------------------------
     Route::prefix('/jobs')->name('jobs.')->group(function () {
         Route::get('/', [JobController::class, 'all'])->name('all');
+        Route::get('/similar_jobs', [JobController::class, 'similar_jobs'])->name('similar_jobs');
+        Route::get('/customer_releted_jobs/{id}', [JobController::class, 'customer_releted_jobs'])->name('customer_releted_jobs');
         Route::get('/get/{slug}', [JobController::class, 'get'])->name('get');
         Route::post('/respond', [JobController::class, 'respond'])->name('respond');
 
@@ -88,7 +93,6 @@ Route::prefix('/v1')->group(function () {
             Route::post('/create', [JobController::class, 'create'])->name('create');
             Route::post('/edit/{slug}', [JobController::class, 'edit'])->name('edit');
             Route::post('/destroy/{slug}', [JobController::class, 'destroy'])->name('destroy');
-
             Route::post('/acceptance', [JobController::class, 'acceptance'])->name('acceptance');
             Route::post('/{slug}/applications', [JobController::class, 'applications'])->name('applications');
         });
@@ -106,8 +110,15 @@ Route::prefix('/v1')->group(function () {
     Route::prefix('/companies')->name('companies.')->group(function () {
         Route::get('/', [CompaniesController::class, 'all'])->name('all');
         Route::get('/get/{id}', [CompaniesController::class, 'get'])->name('get');
+        Route::get('/job', [CompaniesController::class, 'job'])->name('job');
     });
-
+    // Locations -----------------------------------------
+    Route::prefix('/location')->group(function () {
+        Route::get('/', [LocationController::class, 'all']);
+        Route::get('/get/{id}', [LocationController::class, 'get']);
+        Route::get('/region', [LocationController::class, 'region']);
+        Route::get('/add', [LocationController::class, 'add']);
+    });
     // Categories -----------------------------------------
     Route::prefix('/categories')->name('categories.')->group(function () {
         Route::get('/', [CategoriesController::class, 'index'])->name('index');
@@ -163,18 +174,18 @@ Route::prefix('/v1')->group(function () {
     Route::get('resume/download/{id}', [ResumeController::class, 'download'])->name('resume.download');
 
     Route::prefix('/test-user')->name('test-user.')->group(function () {
-       Route::get('/', [TestUserController::class, 'index'])->name('index');
-       Route::get('/check-status', [TestUserController::class, 'checkStatus'])->name('checkStatus');
-       Route::post('/register', [TestUserController::class, 'register'])->name('register');
-       Route::post('/login', [TestUserController::class, 'login'])->name('login');
-        Route::middleware(['auth:sanctum', 'is_customer'])->group(function (){
+        Route::get('/', [TestUserController::class, 'index'])->name('index');
+        Route::get('/check-status', [TestUserController::class, 'checkStatus'])->name('checkStatus');
+        Route::post('/register', [TestUserController::class, 'register'])->name('register');
+        Route::post('/login', [TestUserController::class, 'login'])->name('login');
+        Route::middleware(['auth:sanctum', 'is_customer'])->group(function () {
             Route::get('/list', [TestUserController::class, 'list'])->name('list');
         });
         Route::middleware('auth:sanctum')->group(function () {
             Route::get('/me', [TestUserController::class, 'me'])->name('me');
             Route::post('/add-test', [TestUserController::class, 'addTestResult'])->name('addTestResult');
         });
-    //       Route::get('/me', [TestUserController::class, 'loginWithToken'])->name('login-with-token');
+        //       Route::get('/me', [TestUserController::class, 'loginWithToken'])->name('login-with-token');
     });
 
 
@@ -182,8 +193,8 @@ Route::prefix('/v1')->group(function () {
         Route::post('upload', [UploadController::class, 'upload'])->name('upload');
     });
 
-
     Route::prefix('/admin')->middleware('is_admin')->name('admin.')->group(function () {
         require_once __DIR__ . '/admin.php';
     });
+
 });

@@ -65,7 +65,10 @@ class Job extends Model
         'location_id',
         'category_id',
         'slug',
-        'status'
+        'status',
+        'work_hours',
+        'for_communication_phone',
+        'for_communication_link'
     ];
 
     /**
@@ -97,6 +100,8 @@ class Job extends Model
         'salary' => 'array',
         'languages' => 'array',
         'advantages' => 'array',
+        'for_communication_link'=> 'array',
+        'for_communication_phone'=> 'array',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
@@ -110,6 +115,12 @@ class Job extends Model
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
+    }
+
+
+    public function customer_one()
+    {
+        return $this->hasOne(Customer::class, 'id', 'customer_id');
     }
 
     /**
@@ -146,21 +157,22 @@ class Job extends Model
     public function GetRespondedAttribute()
     {
         if ((! _auth()->check()) || (@_auth()->user()->role == 'admin')) {
+
             return false;
         }
 
-	    /** @var Authenticatable|User|null $user */
-	    $user = _auth()->user();
+        /** @var Authenticatable|User|null $user */
+        $user = _auth()->user();
 
         $job = Job::query()->find($this->slug);
         $responded = $job->chats()
             ->where('candidate_id', '=', @$user->candidate->id)
             ->first();
 
-	    if ($responded == null)
+        if ($responded == null)
             return false;
 
-	    return true;
+        return true;
     }
 
     /**
@@ -170,7 +182,7 @@ class Job extends Model
      */
     public function getLikedAttribute(): bool
     {
-        return ! is_null($this->getLikedByCurrentUser());
+        return !is_null($this->getLikedByCurrentUser());
     }
 
     /**

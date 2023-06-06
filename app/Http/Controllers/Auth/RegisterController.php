@@ -40,12 +40,13 @@ class RegisterController extends Controller
      */
     public function register(Request $request): JsonResponse
     {
+        // return response()->json($request->all());
         $request->validate([
             'phone' => ['required', 'numeric', 'unique:users,phone'],
             'password' => ['required', 'min:8'],
-            'role' => ['required', 'in:admin,customer,candidate']
+            'role' => ['required', 'in:admin,customer,candidate'],
+            'email'=> ['email', 'unique:users,email']
         ]);
-
         /** @var User $user */
         $user = User::query()->create([
             'phone' => $request->input('phone'),
@@ -53,6 +54,7 @@ class RegisterController extends Controller
             'password' => Hash::make($request->input('password')),
             'role' => $request->input('role'),
         ]);
+
 
         match ($user->role) {
             'candidate' =>
@@ -64,7 +66,6 @@ class RegisterController extends Controller
             default =>
                 throw new Exception('Invalid role')
         };
-
         $user->markPhoneAsVerified();
         $token = $user->createToken($user->name . '-' . Hash::make($user->id))
             ->plainTextToken;
@@ -136,7 +137,7 @@ class RegisterController extends Controller
             'address' => $request->input('address'),
             'active' => true
         ]);
-        
+
         $message = "🆕 <b>Yangi kompaniya</b>\n";
         $message .= "🏢 Kompaniya: <b>" . $request-> name . "</b>\n";
         $message .= "📞 Telefon raqam: " . $user-> phone . "\n\n";
@@ -167,6 +168,7 @@ class RegisterController extends Controller
      */
     public function registerCandidate(Request $request, User $user): JsonResponse
     {
+
         $request->validate([
             'name' => ['required', 'string'],
             'surname' => ['nullable', 'string'],

@@ -103,7 +103,7 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
     {
 //        dd($this->role);
         return Attribute::make(
-            get: fn () => $this[$this->role]->name
+            get: fn () => $this[$this->role]->name ?? null
         );
     }
 
