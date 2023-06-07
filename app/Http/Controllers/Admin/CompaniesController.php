@@ -140,6 +140,7 @@ class CompaniesController extends Controller
             ]);
         }
 
+
         $services = $customer->services ?? (object)[];
 
         $newService = (object)$request->get('service');
