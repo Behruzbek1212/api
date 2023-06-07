@@ -85,10 +85,10 @@ class JobController extends Controller
                 $query->where('id', $id);
             })
             ->take($params['limit'] ?? 7)->get();
-        $jobResur = JobResource::collection($jobs);
+        $jobResources = JobResource::collection($jobs);
         return response()->json([
             'status' => true,
-            'jobs' => $jobResur
+            'jobs' =>  $jobResources
         ]);
     }
 
@@ -134,10 +134,10 @@ class JobController extends Controller
             //     $query->where('active', '=', true);
             // })
             ->take($params['limit'] ?? 7)->get();
-            $jobResur = JobResource::collection($jobs);
+            $jobResources = JobResource::collection($jobs);
         return response()->json([
             'status' => true,
-            'jobs' => $jobResur
+            'jobs' =>  $jobResources
         ]);
     }
 
