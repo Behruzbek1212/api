@@ -97,7 +97,7 @@ class Candidate extends Model
 
         return Attribute::make(
             set: fn ($value) =>
-                is_null($value) ? $default_avatar : $value
+            is_null($value) ? $default_avatar : $value
         );
     }
 
@@ -111,7 +111,7 @@ class Candidate extends Model
         return Attribute::make(
             get: fn () => $this->user->phone,
             set: fn ($value) =>
-                $this->user()->update([ 'phone' => $value ])
+            $this->user()->update(['phone' => $value])
         );
     }
 
@@ -125,7 +125,7 @@ class Candidate extends Model
         return Attribute::make(
             get: fn () => $this->user->email,
             set: fn ($value) =>
-                $this->user()->update([ 'email' => $value ])
+            $this->user()->update(['email' => $value])
         );
     }
 
@@ -146,18 +146,18 @@ class Candidate extends Model
      * @return HasMany
      * @see https://laravel.com/docs/9.x/eloquent-relationships#one-to-many
      */
-    // public function chats(): HasMany
-    // {
-    //     return $this->hasMany(Chat::class)
-    //         ->whereHas('resume', function (Builder $table) {
-    //             $table->whereNull('deleted_at');
-    //         })
-    //         ->whereHas('customer', function (Builder $table) {
-    //             $table->where('active', '=', true);
-    //             $table->whereNull('deleted_at');
-    //         })
-    //         ->whereNull('deleted_at');
-    // }
+    public function chats(): HasMany
+    {
+        return $this->hasMany(Chat::class)
+            ->whereHas('resume', function (Builder $table) {
+                $table->whereNull('deleted_at');
+            })
+            ->whereHas('customer', function (Builder $table) {
+                $table->where('active', '=', true);
+                $table->whereNull('deleted_at');
+            })
+            ->whereNull('deleted_at');
+    }
 
     /**
      * Get location name
@@ -166,7 +166,7 @@ class Candidate extends Model
      */
     public function location(): Attribute
     {
-        if ( empty($this->attributes['address']) )
+        if (empty($this->attributes['address']))
             return Attribute::get(fn () => '');
 
         $location = $this->belongsTo(Location::class, 'address')->first()['title'];

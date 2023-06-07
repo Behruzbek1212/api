@@ -9,6 +9,7 @@ use App\Models\Job;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CompaniesController extends Controller
 {
@@ -38,7 +39,7 @@ class CompaniesController extends Controller
 
         if ($location = $request->get('location'))
             $companies->where('location', $location);
-            $list = CompaniesResource::collection($companies);
+        $list = CompaniesResource::collection($companies);
         return [
             'status' => true,
             'data' => $list,
@@ -63,10 +64,10 @@ class CompaniesController extends Controller
             ->where('active', '=', true)
             ->where('id', '=', $id)
             ->firstOrFail();
-            
+
         _auth()->check() && _user()->customerStats()
             ->syncWithoutDetaching($company);
-        
+
         return response()->json([
             'status' => true,
             'data' => new CompanyResource($company)
@@ -79,9 +80,11 @@ class CompaniesController extends Controller
             'limit' => ['integer', 'nullable']
         ]);
 
+        $costumer_id = Customer::query()->where('user_id', auth()->id())->first()->id;
         $company = Job::query()
             ->with('customer')
-            ->WhereHas('customer', function ($query) {
+            ->WhereHas('customer', function ($query) use ($costumer_id) {
+                $query->where('id', '=', $costumer_id);
                 $query->where('active', '=', true);
                 $query->with(['user:id,email,phone,verified'])
                     ->whereHas('user', function (Builder $query) {
