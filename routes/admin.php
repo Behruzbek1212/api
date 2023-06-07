@@ -4,7 +4,6 @@ use App\Http\Controllers\Admin\CandidatesController;
 use App\Http\Controllers\Admin\CompaniesController;
 use App\Http\Controllers\Admin\GuidesController;
 use App\Http\Controllers\Admin\JobsController;
-use App\Http\Controllers\StatisticAdminController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/jobs')->name('jobs.')->group(function () {
@@ -39,13 +38,4 @@ Route::prefix('/guides')->name('guides.')->group(function () {
     Route::post('/create', [GuidesController::class, 'create']);
     Route::post('/edit', [GuidesController::class, 'edit']);
     Route::post('/destroy', [GuidesController::class, 'destroy']);
-});
-
-
-  // Admin statistics 
-Route::prefix('/statis')->name('statis.')->group(function() {
-    Route::get('/', [StatisticAdminController::class, 'getStatis'])->name('all');
-    Route::post('/customer', [StatisticAdminController::class, 'getCustomer'])->name('customer');
-    Route::post('/candidate', [StatisticAdminController::class, 'getCandidates'])->name('candidate');
-    Route::post('/vacancies', [StatisticAdminController::class, 'getVacancies'])->name('vacancies');
 });
