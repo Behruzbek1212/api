@@ -7,6 +7,7 @@
      * @var int $resume_id
      */
 
+
     // app()->setLocale('ru');
     app()->setlocale(request('lang'));
     // @dd(app()->getLocale());
