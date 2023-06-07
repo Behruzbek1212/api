@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\JobResource;
 use App\Models\Job;
 use App\Models\Resume;
 use App\Models\User;
@@ -84,9 +85,10 @@ class JobController extends Controller
                 $query->where('id', $id);
             })
             ->take($params['limit'] ?? 7)->get();
+        $jobResur = JobResource::collection($jobs);
         return response()->json([
             'status' => true,
-            'jobs' => $jobs
+            'jobs' => $jobResur
         ]);
     }
 
@@ -99,7 +101,7 @@ class JobController extends Controller
 
         $jobs = Job::query()
             // Check if customer status is active
-            // ->with('customer')
+            ->with('customer')
             ->when(request('title'), function ($query) {
                 $query->whereRaw('`title` like ?', ['%' . request('title') . '%']);
             })
@@ -132,9 +134,10 @@ class JobController extends Controller
             //     $query->where('active', '=', true);
             // })
             ->take($params['limit'] ?? 7)->get();
+            $jobResur = JobResource::collection($jobs);
         return response()->json([
             'status' => true,
-            'jobs' => $jobs
+            'jobs' => $jobResur
         ]);
     }
 
