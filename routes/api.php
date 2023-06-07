@@ -12,7 +12,6 @@ use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\DeleteDataController;
 use App\Http\Controllers\GuideController;
-use App\Http\Controllers\StatisticAdminController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\LocationController;
@@ -187,14 +186,6 @@ Route::prefix('/v1')->group(function () {
             Route::post('/add-test', [TestUserController::class, 'addTestResult'])->name('addTestResult');
         });
         //       Route::get('/me', [TestUserController::class, 'loginWithToken'])->name('login-with-token');
-    });
-    
-        // Admin statistics 
-    Route::prefix('/statis')->name('statis.')->group(function() {
-        Route::get('/', [StatisticAdminController::class, 'getStatis'])->name('all');
-        Route::post('/customer', [StatisticAdminController::class, 'getCustomer'])->name('customer');
-        Route::post('/candidate', [StatisticAdminController::class, 'getCandidates'])->name('candidate');
-        Route::post('/vacancies', [StatisticAdminController::class, 'getVacancies'])->name('vacancies');
     });
 
 
