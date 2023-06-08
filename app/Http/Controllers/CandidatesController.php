@@ -108,9 +108,27 @@ class CandidatesController extends Controller
 
         // Initialize test attribute to empty array if it is null
         if ($test === null) {
-            $test = [];
-        }
+            $test[] = $result;
+            // Set the modified test attribute back to the model
+            $candidate->test = $test;
+            // Save changes to database
+            $candidate->save();
 
+            return response()->json([
+                 'status' => true,
+                 'data' => $candidate
+              ]);
+        }
+      
+        foreach($test as $testkey){
+            if($testkey['quizGroup'] === $result['quizGroup']){
+                return response()->json([
+                    'status' => false,
+                    'data' => $candidate
+                ]);
+            } 
+            
+        }
         // Add new test result to the end of the test array
         $test[] = $result;
 
