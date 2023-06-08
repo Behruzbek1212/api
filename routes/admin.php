@@ -41,7 +41,7 @@ Route::prefix('/guides')->name('guides.')->group(function () {
     Route::post('/destroy', [GuidesController::class, 'destroy']);
 });
 
-Route::prefix('/statis')->name('statis.')->group(function() {
+Route::prefix('/statistic')->name('statistic.')->group(function() {
     Route::get('/', [StatisticAdminController::class, 'getStatis'])->name('all');
     Route::post('/customer', [StatisticAdminController::class, 'getCustomer'])->name('customer');
     Route::post('/candidate', [StatisticAdminController::class, 'getCandidates'])->name('candidate');
