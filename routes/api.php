@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\RestoreController;
+use App\Http\Controllers\Bitrix\BitrixController;
 use App\Http\Controllers\Bots\ADSON\AdminController;
 use App\Http\Controllers\Bots\ADSON\MainController;
 use App\Http\Controllers\CandidatesController;
@@ -38,7 +39,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class);
 Route::fallback([HomeController::class, 'fallback']);
-
+Route::post('/bitrix', [BitrixController::class, 'index'])->name('index');
 Route::prefix('/v1')->group(function () {
 
     // User | Me ------------------------------------
@@ -50,6 +51,7 @@ Route::prefix('/v1')->group(function () {
         Route::middleware('guest:sanctum')->group(function () {
             Route::post('/register', [RegisterController::class, 'register'])->name('register');
             Route::post('/login', [LoginController::class, 'login'])->name('login');
+
 
             Route::prefix('/check')->name('check.')->group(function () {
                 Route::post('/', [VerificationController::class, 'check'])->name('index');

@@ -8,7 +8,7 @@
      */
 
     // app()->setLocale('ru');
-    app()->setlocale(request('lang'));
+    app()->setlocale(request('lang') ?? 'ru');
     // @dd(app()->getLocale());
 
     $faker = \Faker\Factory::create();

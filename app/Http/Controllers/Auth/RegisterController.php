@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Bitrix\BitrixController;
 use App\Http\Controllers\Controller;
 use App\Models\Candidate;
 use App\Models\Customer;
 use App\Models\User;
+use App\Services\BitrixService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Query\Builder;
@@ -40,12 +42,13 @@ class RegisterController extends Controller
      */
     public function register(Request $request): JsonResponse
     {
-        // return response()->json($request->all());
+        // return response()->json();
+
         $request->validate([
             'phone' => ['required', 'numeric', 'unique:users,phone'],
             'password' => ['required', 'min:8'],
             'role' => ['required', 'in:admin,customer,candidate'],
-            'email'=> ['email', 'unique:users,email']
+            'email' => ['email', 'unique:users,email']
         ]);
         /** @var User $user */
         $user = User::query()->create([
@@ -55,20 +58,21 @@ class RegisterController extends Controller
             'role' => $request->input('role'),
         ]);
 
-
         match ($user->role) {
             'candidate' =>
-                $this->registerCandidate($request, $user),
+            $this->registerCandidate($request, $user),
 
             'customer' =>
-                $this->registerCustomer($request, $user),
+            $this->registerCustomer($request, $user),
 
             default =>
-                throw new Exception('Invalid role')
+            throw new Exception('Invalid role')
         };
         $user->markPhoneAsVerified();
         $token = $user->createToken($user->name . '-' . Hash::make($user->id))
             ->plainTextToken;
+
+
 
         return response()->json([
             'status' => true,
@@ -92,13 +96,13 @@ class RegisterController extends Controller
     {
         match ($request->user()->role) {
             'candidate' =>
-                $this->registerCandidate($request, $request->user()),
+            $this->registerCandidate($request, $request->user()),
 
             'customer' =>
-                $this->registerCustomer($request, $request->user()),
+            $this->registerCustomer($request, $request->user()),
 
             default =>
-                throw new Exception('Invalid role')
+            throw new Exception('Invalid role')
         };
 
         return response()->json([
@@ -139,8 +143,8 @@ class RegisterController extends Controller
         ]);
 
         $message = "🆕 <b>Yangi kompaniya</b>\n";
-        $message .= "🏢 Kompaniya: <b>" . $request-> name . "</b>\n";
-        $message .= "📞 Telefon raqam: " . $user-> phone . "\n\n";
+        $message .= "🏢 Kompaniya: <b>" . $request->name . "</b>\n";
+        $message .= "📞 Telefon raqam: " . $user->phone . "\n\n";
 
         Http::withoutVerifying()->post("https://api.telegram.org/bot5777417067:AAGvh21OUGVQ7nmSnLbIhzTiZxoyMQMIZKk/sendMessage", [
             'chat_id' => '-844005009',
@@ -154,6 +158,22 @@ class RegisterController extends Controller
                     ]
                 ]]
             ])
+        ]);
+
+        $data = User::query()
+            ->with('candidate')
+            ->find($user->id);
+        $response = Http::post('https://jobo-uz.bitrix24.ru/rest/1/tl9n71594xu4o6tt/crm.lead.add.json', [
+            "fields" => array(
+                "TITLE" => $data->phone,
+                "NAME" => $user->customer?->name ?? null,
+                "PHONE" => [array("VALUE" => $data->phone, "VALUE_TYPE" => "WORK")],
+                "ADDRESS_CITY" =>  $data->customer?->address ?? null,
+                "SOURCE_ID" => 'web site',
+                "ASSIGNED_BY_ID" => 1,
+                "STATUS_ID" => "NEW",
+                "OPENED" => "Y",
+            ),
         ]);
 
         return response()->json($customer);
@@ -194,6 +214,26 @@ class RegisterController extends Controller
             'test' => null,
             'services' => null,
             'active' => true
+        ]);
+
+        $data = User::query()
+            ->with('candidate')
+            ->find($user->id);
+        $response = Http::post('https://jobo-uz.bitrix24.ru/rest/1/tl9n71594xu4o6tt/crm.lead.add.json', [
+            "fields" => array(
+                "TITLE" => $data->phone,
+                "NAME" => $user->candidate?->name ?? null,
+                "LAST_NAME" => $data->candidate->surname ?? "",
+                "PHONE" => [array("VALUE" => $data->phone, "VALUE_TYPE" => "WORK")],
+                "ADDRESS_CITY" =>  $data->candidate?->address ?? null,
+                "SOURCE_ID" => 'web site',
+                "ASSIGNED_BY_ID" => 1,
+                "STATUS_ID" => "NEW",
+                "OPENED" => "Y",
+                // "SPHERES" => $data->candidate?->spheres ?? null,
+                // "SPECIALIZATION" => $data->candidate?->specialization ?? null,
+                // "LANGUAGES" => $data->candidate?->languages ?? null,
+            ),
         ]);
 
         return response()->json($candidate);

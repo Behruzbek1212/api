@@ -72,7 +72,6 @@ class JobController extends Controller
 
     public function customer_releted_jobs(Request $request, $id)
     {
-        // return response()->json($id);
         $params = $request->validate([
             'limit' => ['integer', 'nullable']
         ]);
@@ -85,7 +84,12 @@ class JobController extends Controller
                 $query->where('id', $id);
             })
             ->take($params['limit'] ?? 7)->get();
+
+        _auth()->check() && _user()->jobStats()
+            ->syncWithoutDetaching($jobs);
+
         $jobResources = JobResource::collection($jobs);
+
         return response()->json([
             'status' => true,
             'jobs' =>  $jobResources
@@ -242,9 +246,9 @@ class JobController extends Controller
             'category_id' => $params['category_id'],
             'slug' => null,
             'status' => 'approved',
-            'work_hours'=> $params['work_hours'] ?? null,
-            'for_communication_phone'=> $params['for_communication_phone'] ?? null,
-            'for_communication_link'=> $params['for_communication_link'] ?? null
+            'work_hours' => $params['work_hours'] ?? null,
+            'for_communication_phone' => $params['for_communication_phone'] ?? null,
+            'for_communication_link' => $params['for_communication_link'] ?? null
         ]);
 
         if (@$params['recruitment'] || @$params['strengthening']) {
@@ -314,9 +318,9 @@ class JobController extends Controller
             'category_id' => $params['category_id'],
             'sphere' => $params['sphere'],
             'status' => 'approved',
-            'work_hours'=> $params['work_hours'] ?? null,
-            'for_communication_phone'=> $params['for_communication_phone'] ?? null,
-            'for_communication_link'=> $params['for_communication_link'] ?? null
+            'work_hours' => $params['work_hours'] ?? null,
+            'for_communication_phone' => $params['for_communication_phone'] ?? null,
+            'for_communication_link' => $params['for_communication_link'] ?? null
         ]);
 
         return response()->json([
