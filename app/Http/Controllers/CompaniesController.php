@@ -19,7 +19,7 @@ class CompaniesController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function all(Request $request)
+    public function all(Request $request): JsonResponse
     {
         $params = $request->validate([
             'limit' => ['integer', 'nullable']
@@ -40,10 +40,10 @@ class CompaniesController extends Controller
         if ($location = $request->get('location'))
             $companies->where('location', $location);
         $list = CompaniesResource::collection($companies);
-        return [
+        return response()->json([
             'status' => true,
             'data' => $list,
-        ];
+        ]);
     }
 
     /**
@@ -80,11 +80,12 @@ class CompaniesController extends Controller
             'limit' => ['integer', 'nullable']
         ]);
 
-        $costumer_id = Customer::query()->where('user_id', auth()->id())->first()->id;
+        $customer_id = _auth()->user()->customer->id;
+//        dd($costumer_id);
         $company = Job::query()
             ->with('customer')
-            ->WhereHas('customer', function ($query) use ($costumer_id) {
-                $query->where('id', '=', $costumer_id);
+            ->WhereHas('customer', function ($query) use ($customer_id) {
+                $query->where('id', '=', $customer_id);
                 $query->where('active', '=', true);
                 $query->with(['user:id,email,phone,verified'])
                     ->whereHas('user', function (Builder $query) {
