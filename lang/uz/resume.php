@@ -23,7 +23,7 @@ return [
         "education" => "Ta'lim",
         "additional_education" => "Qo‘shimcha ta'lim",
         "skills" => "Ko'nikmalar",
-        "computer_skills" => "kompyuter ko'nikmalari",
+        "computer_skills" => "Kompyuter ko'nikmalari",
         "result_of_tests" => "Test javoblari",
         "driving_experience" => "Haydovchilik tajribasi",
         "language" => "Chet tillarini bilish",

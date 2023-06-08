@@ -146,18 +146,19 @@ class Candidate extends Model
      * @return HasMany
      * @see https://laravel.com/docs/9.x/eloquent-relationships#one-to-many
      */
-    public function chats(): HasMany
-    {
-        return $this->hasMany(Chat::class)
-            ->whereHas('resume', function (Builder $table) {
-                $table->whereNull('deleted_at');
-            })
-            ->whereHas('customer', function (Builder $table) {
-                $table->where('active', '=', true);
-                $table->whereNull('deleted_at');
-            })
-            ->whereNull('deleted_at');
-    }
+
+     public function chats(): HasMany
+     {
+         return $this->hasMany(Chat::class)
+             ->whereHas('resume', function (Builder $table) {
+                 $table->whereNull('deleted_at');
+             })
+             ->whereHas('customer', function (Builder $table) {
+                 $table->where('active', '=', true);
+                 $table->whereNull('deleted_at');
+             })
+             ->whereNull('deleted_at');
+     }
 
     /**
      * Get location name
