@@ -11,11 +11,17 @@ return [
         "sphere" => "Sfera",
         "location" => "Manzil",
         "type" => "Ish turi",
-        "agreement" => "Rozilik",
+        "agreement" => "Kelishilgan holda",
         "present" => "Hozirgi kungacha",
         "categories_of_driving" => "Haydovchilik guvohnomasi",
         "not_found" => "(description) kiritilmagan"
     ],
+
+    "dates" => [
+        "year" => "yil",
+        "month" => "oy"
+    ],
+
 
     "list" => [
         "desired" => "Lavozim va ish haqi",

@@ -11,10 +11,15 @@ return [
         "sphere" => "Sphere",
         "location" => "Location",
         "type" => "Employment type",
-        "agreement" => "Agreement",
+        "agreement" => "By agreement",
         "present" => "present tense",
         "categories_of_driving" => "Category rights",
         "not_found" => "Not found (description)"
+    ],
+
+    "dates" => [
+        "year" => "year(s)",
+        "month" => "month(s)"
     ],
 
     "list" => [

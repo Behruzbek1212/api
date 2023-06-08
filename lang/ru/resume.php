@@ -11,10 +11,15 @@ return [
         "sphere" => "Сфера",
         "location" => "Локация",
         "type" => "Тип занятости",
-        "agreement" => "Соглашение",
+        "agreement" => "По договоренности",
         "present" => "Настоящее время",
         "categories_of_driving" => "Права категории",
         "not_found" => "Not found (description)"
+    ],
+
+    "dates" => [
+        "year" => "год(а)",
+        "month" => "месяц(а)"
     ],
 
     "list" => [
