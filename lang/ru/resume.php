@@ -60,5 +60,10 @@ return [
         "partial" => "Частичная работа",
         "hybrid" => "Гибрид",
         "all-work-types" => "Все типы"
+    ],
+    "education_levels" => [
+        "secondary" => "Среднее образование",
+        "incomplete_higher" => "Неоконченное высшее",
+        "higher" => "Высшее образование"
     ]
 ];

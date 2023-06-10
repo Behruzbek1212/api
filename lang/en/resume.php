@@ -60,5 +60,10 @@ return [
         "partial" => "Partial work",
         "hybrid" => "Hybrid",
         "all-work-types" => "All types"
+    ],
+    "education_levels" => [
+        "secondary" => "Secondary",
+        "incomplete_higher" => "Unfinished higher education",
+        "higher" => "Higher education"
     ]
 ];

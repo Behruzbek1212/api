@@ -6,6 +6,7 @@
      * @var array $data
      * @var int $resume_id
      * @var int $experience
+     * @var string $level
      */
 
     // app()->setLocale('ru');
@@ -54,6 +55,15 @@
       $exp_time += $end_month - $start_month;
 
       return $exp_time;
+    }
+
+    function showEducationLevels($level):string {
+        if ($level !== 'higher' && $level !== 'secondary' && $level !== 'incomplete_higher') {
+            return $level;
+        }
+        $temp = 'resume.education_levels.' . $level;
+        $str = __($temp);
+        return $str;
     }
 
     // Dark colored generator
@@ -476,7 +486,9 @@
                             </table>
                         </td>
                         <td class="w-full right-side">
-                            <h3 class="font-bold text-md">{{ strip_tags($education['school']) }} <span class="text-sm mb-4 font-normal">{{ strip_tags($education['degree']) }}</span></h3>
+                            <h3 class="font-bold text-md">{{ strip_tags($education['school']) }}
+                                <span class="text-sm mb-4 font-normal">{{ showEducationLevels($education['degree']) }}</span>
+                            </h3>
 
                             <p class="text-sm mb-4">{{ str_replace(['&nbsp;', '&amp;'], [' ', '&'], strip_tags($education['description'])) }}</p>
                         </td>

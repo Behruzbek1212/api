@@ -61,5 +61,10 @@ return [
         "partial" => "Qo‘shimcha ish",
         "hybrid" => "Gibrid",
         "all-work-types" => "Hammasi"
+    ],
+    "education_levels" => [
+        "secondary" => "O'rta ta'lim",
+        "incomplete_higher" => "Tugallanmagan oliy",
+        "higher" => "Oliy ta'lim"
     ]
 ];
