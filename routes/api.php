@@ -13,12 +13,16 @@ use App\Http\Controllers\ChatsController;
 use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\DeleteDataController;
+use App\Http\Controllers\EducationLevelController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\LanguageLevelsController;
+use App\Http\Controllers\LanguagesController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ResumeController;
+use App\Http\Controllers\SocialStatusController;
 use App\Http\Controllers\TestUserController;
 use App\Http\Controllers\User\ChangePasswordController;
 use App\Http\Controllers\User\ChangeRoleController;
@@ -188,6 +192,24 @@ Route::prefix('/v1')->group(function () {
             Route::post('/add-test', [TestUserController::class, 'addTestResult'])->name('addTestResult');
         });
         //       Route::get('/me', [TestUserController::class, 'loginWithToken'])->name('login-with-token');
+    });
+    
+    Route::prefix('/education-level')->name('education-level.')->group(function () {
+         Route::get('/', [EducationLevelController::class, 'index'])->name('index');
+    });
+    
+    Route::prefix('/social-status')->name('social-status.')->group(function () {
+        Route::get('/', [SocialStatusController::class, 'index'])->name('index');
+    });
+
+
+    Route::prefix('/language')->name('language.')->group(function () {
+        Route::get('/', [LanguagesController::class, 'index'])->name('index');
+    });
+
+
+    Route::prefix('/language-level')->name('language-level.')->group(function () {
+        Route::get('/', [LanguageLevelsController::class, 'index'])->name('index');
     });
 
 
