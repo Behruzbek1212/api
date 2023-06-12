@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CompaniesController;
 use App\Http\Controllers\Admin\GuidesController;
 use App\Http\Controllers\Admin\JobsController;
 use App\Http\Controllers\Admin\StatisticAdminController;
+use App\Http\Controllers\ResumeController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/jobs')->name('jobs.')->group(function () {
@@ -47,3 +48,6 @@ Route::prefix('/statistic')->name('statistic.')->group(function() {
     Route::post('/candidate', [StatisticAdminController::class, 'getCandidates'])->name('candidate');
     Route::post('/vacancies', [StatisticAdminController::class, 'getVacancies'])->name('vacancies');
 });
+
+Route::get('resume/show/{id}', [ResumeController::class, 'showForAdmin'])->name('resume.show');
+Route::get('resume/download/{id}', [ResumeController::class, 'downloadForAdmin'])->name('resume.download');
