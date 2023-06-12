@@ -160,13 +160,15 @@ class ResumeController extends Controller
         $candidate = $resume->user
             ->candidate;
 
+        $experience = $resume->experience;
+
         $resume_id = $id;
 
         $resume->increment('downloads');
         $resume->increment('visits');
 
         return (new ResumeService)
-            ->load(compact('data', 'candidate', 'resume_id'))
+            ->load(compact('data', 'candidate', 'resume_id', 'experience'))
             ->download($candidate->name . '.pdf');
     }
 }
