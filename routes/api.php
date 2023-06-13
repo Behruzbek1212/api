@@ -176,6 +176,8 @@ Route::prefix('/v1')->group(function () {
     // Resume Display|Download ---------------------------------------
     Route::get('resume/show/{id}', [ResumeController::class, 'show'])->name('resume.show');
     Route::get('resume/download/{id}', [ResumeController::class, 'download'])->name('resume.download');
+    Route::get('resume/admin/show/{id}', [ResumeController::class, 'showForAdmin'])->name('resume.show');
+    Route::get('resume/admin/download/{id}', [ResumeController::class, 'downloadForAdmin'])->name('resume.download');
 
     Route::prefix('/test-user')->name('test-user.')->group(function () {
         Route::get('/', [TestUserController::class, 'index'])->name('index');

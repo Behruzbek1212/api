@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Resume;
 use App\Models\User;
+use App\Services\AdminResumeService;
 use App\Services\ResumeService;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\JsonResponse;
@@ -143,6 +144,34 @@ class ResumeController extends Controller
     }
 
     /**
+     * Display a resume for admin.
+     *
+     * @param string|int $id
+     *
+     * @return Response
+     * @throws JsonException
+     */
+    public function showForAdmin(string|int $id): Response
+    {
+        $resume = Resume::query()
+            ->with('user')
+            ->findOrFail($id);
+
+        $data = $resume->data;
+        $candidate = $resume->user
+            ->candidate;
+        $experience = $resume -> experience;
+
+        $resume_id = $id;
+
+        $resume->increment('visits');
+
+        return (new AdminResumeService)
+            ->load(compact('data', 'candidate', 'resume_id', 'experience'))
+            ->stream($candidate->name . '.pdf');
+    }
+
+    /**
      * Download resume.
      *
      * @param string|int $id
@@ -168,6 +197,36 @@ class ResumeController extends Controller
         $resume->increment('visits');
 
         return (new ResumeService)
+            ->load(compact('data', 'candidate', 'resume_id', 'experience'))
+            ->download($candidate->name . '.pdf');
+    }
+
+    /**
+     * Download resume for admin.
+     *
+     * @param string|int $id
+     *
+     * @return Response
+     * @throws JsonException
+     */
+    public function downloadForAdmin(string|int $id): Response
+    {
+        $resume = Resume::query()
+            ->with('user')
+            ->findOrFail($id);
+
+        $data = $resume->data;
+        $candidate = $resume->user
+            ->candidate;
+
+        $resume_id = $id;
+
+        $experience = $resume -> experience;
+
+        $resume->increment('downloads');
+        $resume->increment('visits');
+
+        return (new AdminResumeService)
             ->load(compact('data', 'candidate', 'resume_id', 'experience'))
             ->download($candidate->name . '.pdf');
     }
