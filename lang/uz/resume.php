@@ -8,7 +8,7 @@ return [
 
     "message" => [
         "position" => "Lavozim nomi",
-        "sphere" => "Sfera",
+        "sphere" => "Yo'nalish",
         "location" => "Manzil",
         "type" => "Ish turi",
         "agreement" => "Kelishilgan holda",
