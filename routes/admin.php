@@ -49,5 +49,3 @@ Route::prefix('/statistic')->name('statistic.')->group(function() {
     Route::post('/vacancies', [StatisticAdminController::class, 'getVacancies'])->name('vacancies');
 });
 
-Route::get('resume/show/{id}', [ResumeController::class, 'showForAdmin'])->name('resume.show');
-Route::get('resume/download/{id}', [ResumeController::class, 'downloadForAdmin'])->name('resume.download');
