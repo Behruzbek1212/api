@@ -72,6 +72,8 @@
     $avatar = str_replace("https://static.jobo.uz/", "", $candidate->avatar);
     $avatar = public_path($avatar);
 
+    dd($avatar);
+
     if (! file_exists($avatar))
         throw new \ErrorException('File does not exist');
 @endphp
@@ -328,7 +330,7 @@
                 @if( !str_contains($avatar, 'default.webp') && !str_contains($avatar, 'avatar.png') )
                     <td style="width: 175px; padding-left: 25px">
                         <img
-                            src="{{ $avatar }}"
+                            src="{{ $avatar ?? null }}"
                             alt="{{ $candidate->name }}"
                             class="profile-avatar"
                             width="100%"
