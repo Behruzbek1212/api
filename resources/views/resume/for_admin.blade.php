@@ -69,11 +69,11 @@
     // Dark colored generator
     $qrcode = qrcode(50)->color(89, 89, 89)->generate($show_resume_page . $resume_id);
 
-  $avatar = str_replace("https://static.jobo.uz/", "", $candidate->avatar);
-    $avatar = "/var/www/jobo.uz/_api/public/" . $avatar;
+  $avatar = $candidate->avatar;
+//    $avatar = "/var/www/jobo.uz/_api/public/" . $avatar;
 
-    if (! file_exists($avatar))
-        throw new \ErrorException('File does not exist');
+//    if (! file_exists($avatar))
+//        throw new \ErrorException('File does not exist');
 @endphp
 
 @section('header')
