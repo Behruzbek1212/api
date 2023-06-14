@@ -81,7 +81,7 @@ class CandidatesController extends Controller
         return response()->json([
             'status' => true,
             'password' => $password,
-            'data' => []
+            'user_id' =>  $user->id
         ]);
     }
 
