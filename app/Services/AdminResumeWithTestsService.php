@@ -10,7 +10,7 @@ use Illuminate\Http\Response;
 use JsonException;
 use Nette\Utils\Random;
 
-class AdminResumeService extends ResumeServiceConst
+class AdminResumeWithTestsService extends ResumeServiceConst
 {
     protected ?DomPDF $pdf = null;
 
@@ -18,12 +18,12 @@ class AdminResumeService extends ResumeServiceConst
      * @param array $data
      * @param array $mergeData
      * @param string $encode
-     * @return AdminResumeService
+     * @return AdminResumeWithTestsService
      */
     public function load(array $data, array $mergeData = [], string $encode = 'utf-8')
     {
         // return view('resume.v2', compact('data','mergeData','encode'));
-        $this->pdf = PDF::loadView('resume.for_admin', $data, $mergeData, $encode)
+        $this->pdf = PDF::loadView('resume.for_admin_with_test_result', $data, $mergeData, $encode)
             ->setPaper('A4', 'horizontal')
             ->setWarnings(true);
         return $this;
@@ -32,10 +32,10 @@ class AdminResumeService extends ResumeServiceConst
     /**
      * Save PDF file to storage
      *
-     * @return AdminResumeService
+     * @return AdminResumeWithTestsService
      * @throws JsonException
      */
-    public function save(): AdminResumeService
+    public function save(): AdminResumeWithTestsService
     {
         if (is_null($this->pdf))
             throw new JsonException('DomPDF not initialized');
