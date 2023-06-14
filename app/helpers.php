@@ -8,7 +8,7 @@ use Illuminate\Contracts\Auth\StatefulGuard;
 use SimpleSoftwareIO\QrCode\Generator;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
-if (! function_exists('_auth')) {
+if (!function_exists('_auth')) {
     /**
      * Get the available auth instance.
      *
@@ -21,7 +21,15 @@ if (! function_exists('_auth')) {
     }
 }
 
-if (! function_exists('_user')) {
+function formatDateTime($date_string, $format = 'd.m.Y H:i')
+{
+    if ($date_string == null || $date_string == '') {
+        return '';
+    }
+    return date($format, strtotime($date_string));
+}
+
+if (!function_exists('_user')) {
     /**
      * Get current user information.
      *
@@ -33,7 +41,7 @@ if (! function_exists('_user')) {
     }
 }
 
-if (! function_exists('qrcode')) {
+if (!function_exists('qrcode')) {
     /**
      * Generate Qr-code facade helper
      *
@@ -43,4 +51,26 @@ if (! function_exists('qrcode')) {
     {
         return QrCode::size($size);
     }
+}
+
+function getRequest($request = null)
+{
+    return $request ?? request();
+}
+
+function requestOrder(): array
+{
+    $order = request()->get('order', '-id');
+    if ($order[0] == '-') {
+        $result = [
+            'key' => substr($order, 1),
+            'value' => 'desc',
+        ];
+    } else {
+        $result = [
+            'key' => $order,
+            'value' => 'asc',
+        ];
+    }
+    return $result;
 }

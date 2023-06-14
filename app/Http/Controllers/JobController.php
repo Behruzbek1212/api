@@ -7,6 +7,8 @@ use App\Models\Job;
 use App\Models\Resume;
 use App\Models\User;
 use App\Notifications\RespondMessageNotification;
+use App\Services\JobServices;
+use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,6 +17,7 @@ use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
+    use ApiResponse;
     /**
      * Display all jobs
      *
@@ -68,6 +71,16 @@ class JobController extends Controller
             'status' => true,
             'jobs' => $jobs->paginate($params['limit'] ?? null)
         ]);
+    }
+
+    public function all_jobs(Request $request)
+    {
+        return $this->successPaginationResponse(JobResource::collection(JobServices::getInstance()->list($request)));
+    }
+
+    public function cron_jobs()
+    {
+        return JobServices::getInstance()->dropTrafic();
     }
 
     public function customer_releted_jobs(Request $request, $id)
@@ -138,7 +151,7 @@ class JobController extends Controller
             //     $query->where('active', '=', true);
             // })
             ->take($params['limit'] ?? 7)->get();
-            $jobResources = JobResource::collection($jobs);
+        $jobResources = JobResource::collection($jobs);
         return response()->json([
             'status' => true,
             'jobs' =>  $jobResources
@@ -230,9 +243,10 @@ class JobController extends Controller
             'for_communication_phone' => ['array', 'nullable'],
             'for_communication_link' => ['array', 'nullable'],
             'recruitment' => ['boolean', 'nullable'],
-            'strengthening' => ['boolean', 'nullable']
+            'strengthening' => ['boolean', 'nullable'],
+            'trafic_id' => ['integer', 'nullable'],
+            'trafic_expired_at' => ['date', 'nullable'],
         ]);
-
         $job = $request->user()->customer->jobs()->create([
             'title' => $params['position'],
             'salary' => $params['salary'],
@@ -240,7 +254,7 @@ class JobController extends Controller
             'work_type' => $params['work_type'],
             'experience' => $params['experience'],
             'location_id' => $params['location'],
-            'languages' => $params['languages'],
+            'languages' => $params['languages'] ?? null,
             'education_level' => $params['education_level'] ?? null, // TODO: remove `null` value
             'sphere' => $params['sphere'],
             'category_id' => $params['category_id'],
@@ -248,7 +262,9 @@ class JobController extends Controller
             'status' => 'approved',
             'work_hours' => $params['work_hours'] ?? null,
             'for_communication_phone' => $params['for_communication_phone'] ?? null,
-            'for_communication_link' => $params['for_communication_link'] ?? null
+            'for_communication_link' => $params['for_communication_link'] ?? null,
+            'trafic_id' => $params['trafic_id'] ?? null,
+            'trafic_expired_at' => $params['trafic_expired_at'] ?? null
         ]);
 
         if (@$params['recruitment'] || @$params['strengthening']) {
@@ -303,6 +319,8 @@ class JobController extends Controller
             'work_hours' => ['string', 'nullable'],
             'for_communication_phone' => ['array', 'nullable'],
             'for_communication_link' => ['array', 'nullable'],
+            'trafic_id' => ['integer', 'nullable'],
+            'trafic_expired_at' => ['date', 'nullable']
         ]);
 
         $job = $request->user()->customer->jobs()->findOrFail($slug);
@@ -320,7 +338,9 @@ class JobController extends Controller
             'status' => 'approved',
             'work_hours' => $params['work_hours'] ?? null,
             'for_communication_phone' => $params['for_communication_phone'] ?? null,
-            'for_communication_link' => $params['for_communication_link'] ?? null
+            'for_communication_link' => $params['for_communication_link'] ?? null,
+            'trafic_id' => $params['trafic_id'] ?? null,
+            'trafic_expired_at' => $params['trafic_expired_at'] ?? null
         ]);
 
         return response()->json([
