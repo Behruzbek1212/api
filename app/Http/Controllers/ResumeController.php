@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Resume;
 use App\Models\User;
 use App\Services\ResumeService;
+use App\Services\AdminResumeService;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -121,7 +122,7 @@ class ResumeController extends Controller
      * @return Response
      * @throws JsonException
      */
-    public function show(string|int $id)
+    public function show(string|int $id): Response
     {
         $resume = Resume::query()
             ->with('user')
@@ -130,6 +131,7 @@ class ResumeController extends Controller
         $data = $resume->data;
         $candidate = $resume->user
             ->candidate;
+        $experience = $resume -> experience;
 
         $experience = $resume->experience;
 
@@ -138,6 +140,35 @@ class ResumeController extends Controller
         $resume->increment('visits');
 
         return (new ResumeService)
+            ->load(compact('data', 'candidate', 'resume_id', 'experience'))
+            ->load(compact('data', 'candidate', 'resume_id', 'experience'))
+            ->stream($candidate->name . '.pdf');
+    }
+
+    /**
+     * Display a resume for admin.
+     *
+     * @param string|int $id
+     *
+     * @return Response
+     * @throws JsonException
+     */
+    public function showForAdmin(string|int $id): Response
+    {
+        $resume = Resume::query()
+            ->with('user')
+            ->findOrFail($id);
+
+        $data = $resume->data;
+        $candidate = $resume->user
+            ->candidate;
+        $experience = $resume -> experience;
+
+        $resume_id = $id;
+
+        $resume->increment('visits');
+
+        return (new AdminResumeService)
             ->load(compact('data', 'candidate', 'resume_id', 'experience'))
             ->stream($candidate->name . '.pdf');
     }
@@ -164,10 +195,42 @@ class ResumeController extends Controller
 
         $resume_id = $id;
 
+        $experience = $resume -> experience;
+
         $resume->increment('downloads');
         $resume->increment('visits');
 
         return (new ResumeService)
+            ->load(compact('data', 'candidate', 'resume_id', 'experience'))
+            ->download($candidate->name . '.pdf');
+    }
+
+    /**
+     * Download resume for admin.
+     *
+     * @param string|int $id
+     *
+     * @return Response
+     * @throws JsonException
+     */
+    public function downloadForAdmin(string|int $id): Response
+    {
+        $resume = Resume::query()
+            ->with('user')
+            ->findOrFail($id);
+
+        $data = $resume->data;
+        $candidate = $resume->user
+            ->candidate;
+
+        $resume_id = $id;
+
+        $experience = $resume -> experience;
+
+        $resume->increment('downloads');
+        $resume->increment('visits');
+
+        return (new AdminResumeService)
             ->load(compact('data', 'candidate', 'resume_id', 'experience'))
             ->download($candidate->name . '.pdf');
     }
