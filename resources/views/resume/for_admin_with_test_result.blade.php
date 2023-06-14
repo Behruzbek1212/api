@@ -353,20 +353,17 @@
                                     {{ $data['position'] }}
                                 </p>
                             </td>
-                            <td>
-                                <p class="font-bold text-md" align="right">
-                                    {{
-                                        @$data['salary']['agreement'] ?
-                                            __('resume.message.agreement') :
-                                            $data['salary']['amount'] . ' ' . __('currency.' . $data['salary']['currency'])
-                                    }}
-                                </p>
-                                <p class="font-bold text-md" align="right">
-                                    {{
-                                        $data['salary']['amount'] . ' ' . __('currency.' . $data['salary']['currency'])
-                                    }}
-                                </p>
-                            </td>
+                            @if( !$data['hide_salary'] )
+                                <td>
+                                    <p class="font-bold text-md" align="right">
+                                        {{
+                                            @$data['salary']['agreement'] ?
+                                                __('resume.message.agreement') :
+                                                $data['salary']['amount'] . ' ' . __('currency.' . $data['salary']['currency'])
+                                        }}
+                                    </p>
+                                </td>
+                            @endif
                         </tr>
                     </table>
 
