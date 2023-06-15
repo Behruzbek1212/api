@@ -74,3 +74,24 @@ function requestOrder(): array
     }
     return $result;
 }
+
+
+function uploadFile($file, $path, $old = null): ?string
+{
+
+    $result = null;
+    deleteFile($old);
+    if ($file != null) {
+        $model = $file->getClientOriginalName();
+        $file->storeAs("public/$path", $model);
+        $result = "/storage/$path/" . $model;
+    }
+    return $result;
+}
+
+function deleteFile($path): void
+{
+    if ($path != null && file_exists(public_path() . $path)) {
+        unlink(public_path() . $path);
+    }
+}
