@@ -12,17 +12,17 @@ class StatisticRepositories
     {
         if($dbtable == 'jobs'){
             $query  = DB::table($dbtable)
-            ->selectRaw('year(created_at) year,   monthname(created_at) as month, count(*) as total')
+            ->selectRaw('year(created_at) year,   monthname(created_at) as date, count(*) as total')
             ->whereBetween('created_at', [$start, $end])
-            ->groupBy('year',  'month')
+            ->groupBy('year',  'date')
             ->get();
 
             return $query;
         }
         $query  = DB::table($dbtable)->where('active', '1')
-        ->selectRaw('year(created_at) year,   monthname(created_at) as month, count(*) as total')
+        ->selectRaw('year(created_at) year,   monthname(created_at) as date, count(*) as total')
         ->whereBetween('created_at', [$start, $end])
-        ->groupBy('year',  'month')
+        ->groupBy('year',  'date')
         ->get();
         return $query;
     }

@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\StatisticResource;
 
 class StatisticAdminController extends Controller
 {
@@ -69,13 +70,10 @@ class StatisticAdminController extends Controller
              
             $customers = $statisRepository->getChartDate('customers' ,Carbon::now()->subMonth(),  Carbon::now());
             
-            $data  = [
-                'customers' =>  $customers,
-             ];
 
          return response()->json([
             'status'=> true,
-            'data' => $data
+            'data' => $customers
          ]);
         }
 
@@ -87,14 +85,12 @@ class StatisticAdminController extends Controller
         {
            
             $customers = $statisRepository->getChartMonth('customers' ,$start,  $end);
-             
-            $data  = [
-                'customers' => $customers,
-            ];
-    
+            
+            $statistic = StatisticResource::collection($customers);
+
              return response()->json([
                 'status'=> true,
-                'data' => $data
+                'data' => $statistic
              ]);
              
         }
@@ -102,13 +98,9 @@ class StatisticAdminController extends Controller
         $customers = $statisRepository->getChartDate('customers' ,$start,  $end);
 
 
-         $data  = [
-          'customers' => $customers,
-        ];
-
         return response()->json([
            'status'=> true,
-           'data' => $data
+           'data' => $customers
         ]);
 
 
@@ -133,13 +125,10 @@ class StatisticAdminController extends Controller
              
             $candidates = $statisRepository->getChartDate('candidates' ,Carbon::now()->subMonth(),  Carbon::now());
             
-            $data  = [
-                'candidates' =>  $candidates,
-             ];
 
          return response()->json([
             'status'=> true,
-            'data' => $data
+            'data' => $candidates
          ]);
         }
 
@@ -151,25 +140,19 @@ class StatisticAdminController extends Controller
         {
     
             $candidates = $statisRepository->getChartMonth('candidates' ,$start,  $end);
-             
-            $data  = [
-                'candidates' => $candidates,
-            ];
+            $statistic = StatisticResource::collection($candidates);
     
              return response()->json([
                 'status'=> true,
-                'data' => $data
+                'data' => $statistic
              ]);
              
         }
         $candidates = $statisRepository->getChartDate('candidates' ,$start,  $end);
-        $data  = [
-            'candidates' =>    $candidates,
-        ];
 
          return response()->json([
             'status'=> true,
-            'data' => $data
+            'data' => $candidates
          ]);
     }
 
@@ -192,13 +175,10 @@ class StatisticAdminController extends Controller
              
             $vacancies = $statisRepository->getChartDate('jobs' ,Carbon::now()->subMonth(),  Carbon::now());
             
-            $data  = [
-                'vacancies' => $vacancies,
-             ];
 
          return response()->json([
             'status'=> true,
-            'data' => $data
+            'data' => $vacancies
          ]);
         }
 
@@ -208,28 +188,20 @@ class StatisticAdminController extends Controller
          
         if ($days_between > 60)
         {
-    
             $vacancies = $statisRepository->getChartMonth('jobs' ,$start,  $end);
-             
-            $data  = [
-                'vacancies' => $vacancies,
-            ];
-    
+            $statistic = StatisticResource::collection($vacancies);
              return response()->json([
                 'status'=> true,
-                'data' => $data
+                'data' => $statistic
              ]);
              
         }
         $vacancies = $statisRepository->getChartDate('jobs' ,$start,  $end);
 
-         $data  = [
-          'vacancies' => $vacancies
-        ];
 
         return response()->json([
            'status'=> true,
-           'data' => $data
+           'data' => $vacancies
         ]);
         
     }
