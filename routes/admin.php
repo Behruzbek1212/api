@@ -6,7 +6,6 @@ use App\Http\Controllers\Admin\GuidesController;
 use App\Http\Controllers\Admin\JobsController;
 use App\Http\Controllers\Admin\ResumeController;
 use App\Http\Controllers\Admin\StatisticAdminController;
-use App\Http\Controllers\ResumeController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/jobs')->name('jobs.')->group(function () {
