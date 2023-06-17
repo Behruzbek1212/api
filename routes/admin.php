@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\CandidatesController;
 use App\Http\Controllers\Admin\CompaniesController;
 use App\Http\Controllers\Admin\GuidesController;
 use App\Http\Controllers\Admin\JobsController;
+use App\Http\Controllers\Admin\ResumeController;
 use App\Http\Controllers\Admin\StatisticAdminController;
 use App\Http\Controllers\ResumeController;
 use Illuminate\Support\Facades\Route;
@@ -49,3 +50,10 @@ Route::prefix('/statistic')->name('statistic.')->group(function() {
     Route::post('/vacancies', [StatisticAdminController::class, 'getVacancies'])->name('vacancies');
 });
 
+Route::prefix('/resume')->name('resume.')->group(function() {
+    Route::get('/' , [ResumeController::class, 'index']);
+    Route::post('/store' , [ResumeController::class, 'store']);
+    Route::get('/show/{id}' , [ResumeController::class, 'show']);
+    Route::post('/edit' , [ResumeController::class, 'update']);
+    Route::post('/destroy' , [ResumeController::class, 'destroy']);
+});
