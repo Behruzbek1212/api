@@ -9,6 +9,7 @@ use App\Models\Job;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CompaniesController extends Controller
 {
@@ -18,7 +19,7 @@ class CompaniesController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function all(Request $request)
+    public function all(Request $request): JsonResponse
     {
         $params = $request->validate([
             'limit' => ['integer', 'nullable']
@@ -38,11 +39,11 @@ class CompaniesController extends Controller
 
         if ($location = $request->get('location'))
             $companies->where('location', $location);
-            $list = CompaniesResource::collection($companies);
-        return [
+        $list = CompaniesResource::collection($companies);
+        return response()->json([
             'status' => true,
             'data' => $list,
-        ];
+        ]);
     }
 
     /**
@@ -63,10 +64,10 @@ class CompaniesController extends Controller
             ->where('active', '=', true)
             ->where('id', '=', $id)
             ->firstOrFail();
-            
+
         _auth()->check() && _user()->customerStats()
             ->syncWithoutDetaching($company);
-        
+
         return response()->json([
             'status' => true,
             'data' => new CompanyResource($company)
@@ -79,9 +80,12 @@ class CompaniesController extends Controller
             'limit' => ['integer', 'nullable']
         ]);
 
+        $customer_id = _auth()->user()->customer->id;
+//        dd($costumer_id);
         $company = Job::query()
             ->with('customer')
-            ->WhereHas('customer', function ($query) {
+            ->WhereHas('customer', function ($query) use ($customer_id) {
+                $query->where('id', '=', $customer_id);
                 $query->where('active', '=', true);
                 $query->with(['user:id,email,phone,verified'])
                     ->whereHas('user', function (Builder $query) {
