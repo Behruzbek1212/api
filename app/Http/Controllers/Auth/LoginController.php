@@ -28,7 +28,7 @@ class LoginController extends Controller
             'phone', 'password'
         ]));
 
-//        dd($loggedIn);
+        //        dd($loggedIn);
 
         if (!$loggedIn) return response()->json([
             'status' => false,
@@ -38,7 +38,7 @@ class LoginController extends Controller
         /** @var User $user */
         $user = auth('web')->user();
 
-//        dd($user);
+        //        dd($user);
         $token = $user->createToken($user->name . '-' . Hash::make($user->id))
             ->plainTextToken;
 
