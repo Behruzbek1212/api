@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\CandidatesController;
 use App\Http\Controllers\Admin\CompaniesController;
 use App\Http\Controllers\Admin\GuidesController;
 use App\Http\Controllers\Admin\JobsController;
+use App\Http\Controllers\Admin\ResumeBallController;
 use App\Http\Controllers\Admin\ResumeController;
 use App\Http\Controllers\Admin\StatisticAdminController;
 use Illuminate\Support\Facades\Route;
@@ -57,3 +58,11 @@ Route::prefix('/resume')->name('resume.')->group(function() {
     Route::post('/destroy' , [ResumeController::class, 'destroy']);
 });
 
+
+Route::prefix('/resume-ball')->name('resume-ball.')->group(function() {
+    Route::get('/' , [ResumeBallController::class, 'index']);
+    Route::post('/store' , [ResumeBallController::class, 'store']);
+    Route::get('/show/{resumeBall}' , [ResumeBallController::class, 'show']);
+    Route::post('/edit' , [ResumeBallController::class, 'update']);
+    Route::delete('/destroy/{id}' , [ResumeBallController::class, 'destroy']);
+});
