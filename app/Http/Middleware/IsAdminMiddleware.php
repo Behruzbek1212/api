@@ -10,7 +10,7 @@ class IsAdminMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        if ((! _auth()->check()) && (! @$request->user('sanctum')->role == 'admin'))
+        if ((!_auth()->check()) && (!@$request->user('sanctum')->role == 'admin'))
             return throw new NotFoundHttpException('Method not found');
 
         return $next($request);
