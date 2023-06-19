@@ -8,14 +8,20 @@ return [
 
     "message" => [
         "position" => "Lavozim nomi",
-        "sphere" => "Sfera",
+        "sphere" => "Yo'nalish",
         "location" => "Manzil",
         "type" => "Ish turi",
-        "agreement" => "Rozilik",
+        "agreement" => "Kelishilgan holda",
         "present" => "Hozirgi kungacha",
         "categories_of_driving" => "Haydovchilik guvohnomasi",
         "not_found" => "(description) kiritilmagan"
     ],
+
+    "dates" => [
+        "year" => "yil",
+        "month" => "oy"
+    ],
+
 
     "list" => [
         "desired" => "Lavozim va ish haqi",
@@ -55,5 +61,10 @@ return [
         "partial" => "Qo‘shimcha ish",
         "hybrid" => "Gibrid",
         "all-work-types" => "Hammasi"
+    ],
+    "education_levels" => [
+        "secondary" => "O'rta ta'lim",
+        "incomplete_higher" => "Tugallanmagan oliy",
+        "higher" => "Oliy ta'lim"
     ]
 ];

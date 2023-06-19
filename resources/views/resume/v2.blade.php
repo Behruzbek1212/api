@@ -5,10 +5,12 @@
      * @var \App\Models\Candidate|\Illuminate\Contracts\Auth\Authenticatable $candidate
      * @var array $data
      * @var int $resume_id
+     * @var int $experience
+     * @var string $level
      */
 
     // app()->setLocale('ru');
-    app()->setlocale(request('lang'));
+    app()->setlocale(request('lang') ?? 'ru');
     // @dd(app()->getLocale());
 
     $faker = \Faker\Factory::create();
@@ -18,6 +20,51 @@
 
     // Blue colored generator
     // $qrcode = qrcode(50)->color(0, 121, 254)->generate($candidate_page . $candidate->id);
+
+    function calculateYearsAndMonths($months):string {
+      $years = floor($months / 12);
+      $remainingMonths = $months % 12;
+
+      if ($years > 0 && $remainingMonths > 0) {
+        return $years . " " . __('resume.dates.year')." " . $remainingMonths . " " . __('resume.dates.month');
+      } elseif ($years > 0) {
+        return $years . " year(s)";
+      } else {
+        return $remainingMonths . " " . __('resume.dates.month');
+      }
+    }
+
+    $all_experience = calculateYearsAndMonths($experience);
+
+    function calculateEmployment($dates):int {
+      $exp_time = 0;
+      $employment = $dates;
+
+      $start_year = $employment['date']['start']['year'] * 1;
+      $start_month = $employment['date']['start']['month'] * 1;
+
+      $end_year = $employment['date']['end']['year'] * 1 ?? 0;
+      $end_month = $employment['date']['end']['month'] * 1 ?? 0;
+
+      if (@$employment['date']['present'] === true) {
+        $end_year = date('Y');
+        $end_month = date('m');
+      }
+
+      $exp_time += ($end_year - $start_year) * 12;
+      $exp_time += $end_month - $start_month;
+
+      return $exp_time;
+    }
+
+    function showEducationLevels($level):string {
+        if ($level !== 'higher' && $level !== 'secondary' && $level !== 'incomplete_higher') {
+            return $level;
+        }
+        $temp = 'resume.education_levels.' . $level;
+        $str = __($temp);
+        return $str;
+    }
 
     // Dark colored generator
     $qrcode = qrcode(50)->color(89, 89, 89)->generate($show_resume_page . $resume_id);
@@ -221,8 +268,11 @@
         .timeline-line {
             width: 2px;
             position: absolute;
-            inset: 48px auto 0px 6px;
+            inset: 58px auto 0px 6px;
             background-color: #0079FE
+        }
+        .timeline-line.experience{
+            inset: 78px auto 0px 6px;
         }
 
         .timeline-dot {
@@ -235,7 +285,11 @@
     </style>
 
     <style type="text/css">
+        #experience{
+            margin-top: 25px;
+        }
         .about_container{
+            margin-top: 55px;
             margin-left: 7px;
         }
     </style>
@@ -323,13 +377,14 @@
         @if(count($data['employment']))
             <table id="experience" class="w-full relative">
                 @if(count($data['employment']) > 1)
-                    <div class="timeline-line"></div>
+                    <div class="timeline-line experience"></div>
                 @endif
                 <tr class="w-full table-row">
                     <td class="left-side">
                         <p class="font-bold">{{ __('resume.list.experience') }}</p>
                     </td>
                     <td class="w-full right-side">
+                        <p class="font-bold">{{ $all_experience }}</p>
                         <div class="splitter"></div>
                     </td>
                 </tr>
@@ -362,6 +417,11 @@
                                                         __('month.' . $employment['date']['end']['month']) . ' ' . $employment['date']['end']['year']
                                                 }}
                                             @endif
+                                        </p>
+                                        <p style="font-size: 10px" class="font-semibold">
+                                            {{
+                                              calculateYearsAndMonths(calculateEmployment($employment))
+                                            }}
                                         </p>
                                     </td>
                                 </tr>
@@ -426,7 +486,9 @@
                             </table>
                         </td>
                         <td class="w-full right-side">
-                            <h3 class="font-bold text-md">{{ strip_tags($education['school']) }} <span class="text-sm mb-4 font-normal">{{ strip_tags($education['degree']) }}</span></h3>
+                            <h3 class="font-bold text-md">{{ strip_tags($education['school']) }}
+                                <span class="text-sm mb-4 font-normal">{{ showEducationLevels($education['degree']) }}</span>
+                            </h3>
 
                             <p class="text-sm mb-4">{{ str_replace(['&nbsp;', '&amp;'], [' ', '&'], strip_tags($education['description'])) }}</p>
                         </td>
@@ -588,53 +650,6 @@
                     </div>
                 </div>
             </div>
-        @endif
-
-        @if($candidate['test'] && count($candidate['test']))
-            <table id="languages" class="w-full relative">
-                @if(count($candidate['test']) > 1)
-                    <div class="timeline-line"></div>
-                @endif
-                <tr class="w-full table-row">
-                    <td class="left-side">
-                        <p class="font-bold">{{ __('resume.list.result_of_tests') }}</p>
-                    </td>
-                    <td class="w-full right-side">
-                        <div class="splitter"></div>
-                    </td>
-                </tr>
-                @foreach($candidate['test'] as $test)
-                    @if($test['quizGroup'] !== 'bookmaker')
-                        <tr class="w-full table-row timeline">
-                            <td class="left-side">
-                                @if(count($candidate['test']) > 1)
-                                    <span class="tl-fixer"></span>
-                                @endif
-                                <table id="experience-timeline" class="w-full table-space-none">
-                                    <tr class="w-full">
-                                        @if(count($candidate['test']) > 1)
-                                            <td>
-                                                <div class="timeline-dot"></div>
-                                            </td>
-                                        @endif
-                                        <td>
-                                            <p class="font-bold" style="font-size: 12px">
-                                                {{
-                                                   strip_tags($test['title'])
-                                                }}
-                                                &mdash;
-                                            </p>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td class="w-full right-side">
-                                <p class="text-sm mb-4">{{ str_replace(['&nbsp;', '&amp;'], [' ', '&'], strip_tags($test['result'])) }}</p>
-                            </td>
-                        </tr>
-                    @endif
-                @endforeach
-            </table>
         @endif
 
     </main>

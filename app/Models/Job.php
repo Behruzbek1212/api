@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Filters\Filterable;
 use App\Models\Chat\Chat;
 use App\Traits\HasScopes;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -29,6 +30,7 @@ use Nette\Utils\Random;
  */
 class Job extends Model
 {
+    use Filterable;
     use HasFactory;
     use SoftDeletes;
     use HasScopes;
@@ -68,7 +70,8 @@ class Job extends Model
         'status',
         'work_hours',
         'for_communication_phone',
-        'for_communication_link'
+        'trafic_id',
+        'trafic_expired_at',
     ];
 
     /**
@@ -100,8 +103,8 @@ class Job extends Model
         'salary' => 'array',
         'languages' => 'array',
         'advantages' => 'array',
-        'for_communication_link'=> 'array',
-        'for_communication_phone'=> 'array',
+        'for_communication_link' => 'array',
+        'for_communication_phone' => 'array',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
@@ -115,6 +118,11 @@ class Job extends Model
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function trafic()
+    {
+        return $this->hasOne(Trafic::class, 'id', 'trafic_id');
     }
 
 
