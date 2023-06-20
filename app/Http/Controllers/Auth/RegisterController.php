@@ -129,7 +129,10 @@ class RegisterController extends Controller
             'owned_date' => ['required', 'date'],
             'location' => ['required', 'string'],
             'address' => ['required', 'string'],
-            'about' => ['string', 'nullable']
+            'about' => ['string', 'nullable'],
+            'limit_id' => ['integer', 'nullable'],
+            'limit_start_day' => ['date', 'nullable'],
+            'limit_end_day' => ['date', 'nullable']
         ]);
 
         $customer = $user->customer()->create([
@@ -139,7 +142,10 @@ class RegisterController extends Controller
             'owned_date' => $request->input('owned_date'),
             'location' => $request->input('location'),
             'address' => $request->input('address'),
-            'active' => true
+            'active' => true,
+            'limit_id' => $request->limit_id ?? null,
+            'limit_start_day' => $request->limit_start_day ?? null,
+            'limit_end_day' => $request->limit_end_day ?? null
         ]);
 
         $message = "🆕 <b>Yangi kompaniya</b>\n";

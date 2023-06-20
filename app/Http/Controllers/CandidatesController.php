@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CandidateResource;
 use App\Models\Candidate;
 use App\Models\Job;
 use App\Models\User;
 use App\Notifications\RespondMessageNotification;
+use App\Services\CandidateServices;
+use App\Traits\ApiResponse;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
@@ -13,6 +16,7 @@ use Illuminate\Http\Request;
 
 class CandidatesController extends Controller
 {
+    use ApiResponse;
     /**
      * Get candidates list
      *
@@ -26,7 +30,8 @@ class CandidatesController extends Controller
         ]);
 
         $candidates = Candidate::query()
-            ->with(['user:id,email,phone,verified', 'user.resumes'])
+
+            // ->with(['user:id,email,phone,verified', 'user.resumes'])
             ->orderByDesc('id')
             ->whereHas('user', function (Builder $query) {
                 $query->where('role', '=', 'candidate');
@@ -35,15 +40,15 @@ class CandidatesController extends Controller
 
         if ($name = $request->get('name'))
             $candidates->where(function (Builder $query) use ($name) {
-                $query->where('name', 'like', '%'.$name.'%');
-                $query->orWhere('surname', 'like', '%'.$name.'%');
+                $query->where('name', 'like', '%' . $name . '%');
+                $query->orWhere('surname', 'like', '%' . $name . '%');
             });
 
         if ($title = $request->get('title'))
             $candidates->whereHas('user.resumes', function (Builder $query) use ($title) {
                 $query->whereRaw(
                     'lower(json_unquote(json_extract(`data`, \'$."position"\'))) like ?',
-                    ['%'.strtolower($title).'%']
+                    ['%' . strtolower($title) . '%']
                 );
             });
 
@@ -56,6 +61,16 @@ class CandidatesController extends Controller
             'data' => $candidates->paginate($params['limit'] ?? null)
         ]);
     }
+
+    public function candidates(Request $request)
+    {
+        return $this->successResponse(CandidateResource::collection(CandidateServices::getInstance()->list($request)));
+    }
+
+
+
+
+
 
     /**
      * Find candidate with slug
@@ -83,14 +98,14 @@ class CandidatesController extends Controller
         ]);
     }
 
-     /**
+    /**
      * add candidates test result
      *
      * @param Request $request
      * @return JsonResponse
      */
 
-    public function addTestResult(Request $request):JsonResponse
+    public function addTestResult(Request $request): JsonResponse
     {
         $params = $request->validate([
             'candidate_id' => ['numeric', 'required']
@@ -115,19 +130,18 @@ class CandidatesController extends Controller
             $candidate->save();
 
             return response()->json([
-                 'status' => true,
-                 'data' => $candidate
-              ]);
+                'status' => true,
+                'data' => $candidate
+            ]);
         }
-      
-        foreach($test as $testkey){
-            if($testkey['quizGroup'] === $result['quizGroup']){
+
+        foreach ($test as $testkey) {
+            if ($testkey['quizGroup'] === $result['quizGroup']) {
                 return response()->json([
                     'status' => false,
                     'data' => $candidate
                 ]);
-            } 
-            
+            }
         }
         // Add new test result to the end of the test array
         $test[] = $result;
