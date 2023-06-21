@@ -22,8 +22,8 @@ class CandidatesController extends Controller
             ->withTrashed()
             ->whereHas('user', fn (Builder $query) => $query->where('role', '=', 'candidate'))
             ->where('active', '=', true)
-            ->with(['user', 'user.resumes'])
-            ->orderByDesc('created_at','updated_at');
+            ->with(['user', 'user.resumes']);
+            
 
         if ($request->has('title'))
             $candidates->where(function (Builder $query) use ($request) {
@@ -34,11 +34,19 @@ class CandidatesController extends Controller
                     $query->where('phone', 'like', '%'. $request->get('title').'%');
                 });
             });
-
+            
         /** @see https://laravel.com/docs/9.x/queries#json-where-clauses */
         if ($sphere = $request->get('sphere'))
             $candidates->whereJsonContains('spheres', $sphere);
 
+        if ($request->has('sortBy') && $request->has('sortType')) {
+            $sortBy = $request->get('sortBy');
+            $sortType = $request->get('sortType');
+            $candidates->orderBy($sortBy, $sortType);
+        } else {
+                $candidates->orderByDesc('created_at');
+        }
+        
         $candidates = $candidates->paginate($request->limit ?? 10);
         $_data = $candidates->makeVisible(['__comment', '__conversation', '__conversation_date']);
 
