@@ -18,6 +18,8 @@ class CandidatesController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
+         $sortBy = $request->sortBy ?? null;
+         $sortType = $request->sortType ??  null;
         $candidates = Candidate::query()
             ->withTrashed()
             ->whereHas('user', fn (Builder $query) => $query->where('role', '=', 'candidate'))
@@ -39,9 +41,7 @@ class CandidatesController extends Controller
         if ($sphere = $request->get('sphere'))
             $candidates->whereJsonContains('spheres', $sphere);
 
-        if ($request->has('sortBy') && $request->has('sortType')) {
-            $sortBy = $request->get('sortBy');
-            $sortType = $request->get('sortType');
+        if ($sortBy !== null && $sortType !== null) {
             $candidates->orderBy($sortBy, $sortType);
         } else {
                 $candidates->orderByDesc('created_at');
