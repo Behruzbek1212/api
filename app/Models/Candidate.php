@@ -50,9 +50,6 @@ class Candidate extends Model
     protected $hidden = [
         'user_id',
 
-        '__comment',
-        '__conversation',
-        '__conversation_date'
     ];
 
     /**

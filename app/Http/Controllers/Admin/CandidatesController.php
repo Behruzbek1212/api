@@ -201,7 +201,7 @@ class CandidatesController extends Controller
             'sex' => ['string', 'in:male,female', 'nullable'],
             'spheres' => ['array', 'nullable'],
             'education_level' => ['string', 'nullable'],
-            'languages' => ['array', 'required'],
+            'languages' => ['array', 'nullable'] ,
             'specialization' => ['string', 'required'],
             'birthday' => ['date', 'required'],
             'address' => ['numeric', 'required'],
