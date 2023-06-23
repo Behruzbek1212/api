@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\JobsController;
 use App\Http\Controllers\Admin\ResumeBallController;
 use App\Http\Controllers\Admin\ResumeController;
 use App\Http\Controllers\Admin\StatisticAdminController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/jobs')->name('jobs.')->group(function () {
@@ -35,6 +36,14 @@ Route::prefix('/companies')->name('candidates.')->group(function () {
     Route::post('/add-service', [CompaniesController::class, 'addServices']);
 });
 
+Route::prefix('/users')->name('users.')->group(function () {
+    Route::get('/', [UserController::class, 'index']);
+    Route::get('/{id}', [UserController::class, 'show']);
+    Route::post('/create', [UserController::class, 'create']);
+    Route::post('/edit', [UserController::class, 'edit']);
+    Route::post('/destroy', [UserController::class, 'destroy']);
+});
+
 Route::prefix('/guides')->name('guides.')->group(function () {
     Route::get('/', [GuidesController::class, 'index']);
     Route::get('/{slug}', [GuidesController::class, 'show']);
@@ -43,24 +52,24 @@ Route::prefix('/guides')->name('guides.')->group(function () {
     Route::post('/destroy', [GuidesController::class, 'destroy']);
 });
 
-Route::prefix('/statistic')->name('statistic.')->group(function() {
+Route::prefix('/statistic')->name('statistic.')->group(function () {
     Route::get('/', [StatisticAdminController::class, 'getStatis'])->name('all');
     Route::post('/customer', [StatisticAdminController::class, 'getCustomer'])->name('customer');
     Route::post('/candidate', [StatisticAdminController::class, 'getCandidates'])->name('candidate');
     Route::post('/vacancies', [StatisticAdminController::class, 'getVacancies'])->name('vacancies');
 });
 
-Route::prefix('/resume')->name('resume.')->group(function() {
-    Route::get('/' , [ResumeController::class, 'index']);
-    Route::post('/store' , [ResumeController::class, 'store']);
-    Route::get('/show/{id}' , [ResumeController::class, 'show']);
-    Route::post('/edit' , [ResumeController::class, 'update']);
-    Route::post('/destroy' , [ResumeController::class, 'destroy']);
+Route::prefix('/resume')->name('resume.')->group(function () {
+    Route::get('/', [ResumeController::class, 'index']);
+    Route::post('/store', [ResumeController::class, 'store']);
+    Route::get('/show/{id}', [ResumeController::class, 'show']);
+    Route::post('/edit', [ResumeController::class, 'update']);
+    Route::post('/destroy', [ResumeController::class, 'destroy']);
 });
-Route::prefix('/resume-ball')->name('resume-ball.')->group(function() {
-    Route::get('/' , [ResumeBallController::class, 'index']);
-    Route::post('/store' , [ResumeBallController::class, 'store']);
-    Route::get('/show/{resumeBall}' , [ResumeBallController::class, 'show']);
-    Route::post('/edit' , [ResumeBallController::class, 'update']);
-    Route::delete('/destroy/{id}' , [ResumeBallController::class, 'destroy']);
+Route::prefix('/resume-ball')->name('resume-ball.')->group(function () {
+    Route::get('/', [ResumeBallController::class, 'index']);
+    Route::post('/store', [ResumeBallController::class, 'store']);
+    Route::get('/show/{resumeBall}', [ResumeBallController::class, 'show']);
+    Route::post('/edit', [ResumeBallController::class, 'update']);
+    Route::delete('/destroy/{id}', [ResumeBallController::class, 'destroy']);
 });

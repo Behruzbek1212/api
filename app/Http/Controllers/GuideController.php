@@ -37,7 +37,7 @@ class GuideController extends Controller
                 ->orderByDesc('id')
                 ->get();
         } else $guides = Guide::query()->limit($limit)->orderByDesc('id')->get();
-
+        
         return response()->json([
             'status' => true,
             'guides' => $guides
