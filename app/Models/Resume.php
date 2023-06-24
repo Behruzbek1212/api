@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 use Termwind\Components\Dd;
 
 /**
@@ -49,7 +50,8 @@ class Resume extends Model
      * @var array<int, string>
      */
     protected $appends = [
-        'experience'
+        'experience',
+        'percentage'
     ];
 
     /**
@@ -127,6 +129,129 @@ class Resume extends Model
         return $exp_time;
     }
 
+
+    /**
+     * Calculate percentage 
+     *
+     * @param array $data
+     * @return int
+     */
+
+     public function calculate_percentage($data)
+     {
+        $resume = $data;
+        $resumeData = json_decode($resume['data'],JSON_PRETTY_PRINT);
+        $candidate = Candidate::where('user_id', $resume['user_id'])->first();
+        $user =  User::where('id', $resume['user_id'])->first();
+        $resumBalls = DB::table('resume_balls')->get();
+        
+        $candidateData =  [];
+        $candidateData['name'] = $candidate['name'] ?? null;
+        $candidate['email'] = $user['email'] ?? null;
+        $candidateData['surname'] = $candidate['surname'] ?? null;
+        $candidateData['education_level'] = $candidate['education_level'] ?? null;
+        $candidateData['languages'] = $candidate['languages'] ?? null;
+        $candidateData['specialization'] = $candidate['specialization'] ?? null;
+        $candidateData['birthday'] = $candidate['birthday'] ?? null;
+        $candidateData['address'] = $candidate['address'] ?? null;
+        $candidateData['test'] = $candidate['test'] ?? null;
+
+        $filled_fields = 0;
+        $ball = [];
+        $max_ball = 0;
+
+        foreach($resumBalls as $resumBall){
+            $ball[$resumBall->name] = $resumBall->ball;
+            $max_ball += $resumBall->ball;
+        }
+       
+
+        foreach ($candidateData as $key => $value) {
+            
+            if ($value !== null && $value !== '' && $value !== [] ) {
+                $filled_fields += $ball[$key];
+            } 
+        }
+        
+        // dd($resumeData);
+        foreach ($resumeData as $key => $value) {
+            if($value !== '' && $value !== null && $value !== []) {
+              switch($key){
+                case 'about':
+                        if(strlen($value) > 100){
+                            $filled_fields += $ball[$key];
+                        } else {
+                            $filled_fields += 5;
+                        }
+                    break; 
+                case 'position' : 
+                        $filled_fields += $ball[$key];
+                    break;
+                case 'employment' : 
+                        $filled_fields += $ball[$key];
+                    break;
+                case 'sphere' : 
+                        $filled_fields += $ball[$key];
+                    break;
+                case 'salary' : 
+                        $filled_fields += $ball[$key];
+                    break; 
+                case 'location' : 
+                        $filled_fields += $ball[$key];
+                    break; 
+                case 'work_type' : 
+                        $filled_fields += $ball[$key];
+                    break;
+                case 'computer_skills' : 
+                        $filled_fields += $ball[$key];
+                    break;      
+                case 'additional_education' : 
+                        $filled_fields += $ball[$key];
+                    break;
+                case 'education' : 
+                        $filled_fields += $ball[$key];
+                    break; 
+                case 'skills' : 
+                       $filled_fields += $ball[$key];
+                    break;
+                case 'links': 
+                     if($resumeData[$key]['other'] !== null || $resumeData[$key]['gitHub'] !== null ||
+                      $resumeData[$key]['behance'] !== null || $resumeData[$key]['linkedin'] !== null ||
+                      $resumeData[$key]['telegram'] !== null || $resumeData[$key]['whatsapp'] !== null ||  $resumeData[$key]['instagram'] !== null  )
+                     {
+                        $filled_fields += $ball[$key];
+                     }
+                    break;
+                case 'driving_experience':
+                   
+                       if($resumeData[$key]['availability_of_a_car'] !== false){
+                            $filled_fields += $ball['availability_of_a_car'];
+                       }
+                       if(
+                        $resumeData[$key]['categories_of_driving']['A'] == true ||
+                         $resumeData[$key]['categories_of_driving']['B'] == true ||
+                         $resumeData[$key]['categories_of_driving']['C'] == true ||
+                         $resumeData[$key]['categories_of_driving']['D'] == true || $resumeData[$key]['categories_of_driving']['BE'] == true ||
+                         $resumeData[$key]['categories_of_driving']['CE'] == true || $resumeData[$key]['categories_of_driving']['DE'] == true 
+                          )
+                        {
+                         $filled_fields += $ball['categories_of_driving'];
+                        }
+                    
+                        break;
+                }
+               }
+            }
+          
+            $percentage = ($filled_fields * 100) / $max_ball;
+            
+            return $percentage;
+         }
+               
+
+
+
+
     /**
      * Append `experience` column
      *
@@ -138,4 +263,17 @@ class Resume extends Model
             $this->calculate_experience(json_decode($attr['data'], JSON_PRETTY_PRINT))
         );
     }
+
+    /**
+     * Append percentage column
+     *
+     * @return Attribute
+     */
+
+     public function percentage(): Attribute
+     {
+         return Attribute::get(fn ($_val, $attr) =>
+             $this->calculate_percentage($attr)
+         );
+     }
 }
