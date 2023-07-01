@@ -7,6 +7,7 @@ use App\Models\Resume;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use JsonException;
 
 class ResumeController extends Controller
@@ -55,6 +56,7 @@ class ResumeController extends Controller
     {
          $request->validate([
               'user_id' => ['required'],
+              'data' => ['required']
          ]);
         
 
@@ -65,7 +67,7 @@ class ResumeController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Ok'
+            'message' => 'Resume successfully created'
         ]);
     }
 
@@ -80,7 +82,8 @@ class ResumeController extends Controller
 
       
         $request->validate([
-            'resume_id' => ['integer', 'required']
+            'resume_id' => ['integer', 'required'],
+            'data' => ['required']
         ]); 
         
         $resume =  Resume::findOrFail($request->resume_id)
@@ -90,7 +93,7 @@ class ResumeController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Ok'
+            'message' => 'Resume successfully updated'
         ]);
     }
 
@@ -105,12 +108,11 @@ class ResumeController extends Controller
         $request->validate([
             'resume_id' => ['integer', 'required']
         ]);
-        $resume = Resume::findOrFail($request->resume_id)
-            ->delete();
+        $resume = DB::table('resumes')->where('id', '=', $request->resume_id)->delete();
 
         return response()->json([
             'status' => true,
-            'message' => 'Ok'
+            'message' => 'Resume successfully deleted'
         ]);
     }
 

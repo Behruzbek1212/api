@@ -71,7 +71,7 @@ class CandidatesController extends Controller
                 ['role' => 'candidate']
             ));
 
-            $user->candidate()->create(array_merge(
+            $candidate =  $user->candidate()->create(array_merge(
                 $request->except([ 'phone', 'email' ]),
                 ['__conversation_date' => $request->get('__conversation') ? date('Y-m-d') : null],
                 ['avatar' => $request->get('avatar') ?? null],
@@ -85,15 +85,15 @@ class CandidatesController extends Controller
             ]);
         }
 
-        (new MobileService())->send(
-            $request->get('phone'),
-            'Sizning JOBO.uz ga kirish parolingiz: ' . $password
-        );
+        // (new MobileService())->send(
+        //     $request->get('phone'),
+        //     'Sizning JOBO.uz ga kirish parolingiz: ' . $password
+        // );
 
         return response()->json([
             'status' => true,
             'password' => $password,
-            'user_id' =>  $user->id
+            'candidate_id' =>  $candidate->id
         ]);
     }
 

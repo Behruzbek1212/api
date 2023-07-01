@@ -62,5 +62,5 @@ Route::prefix('/resume-ball')->name('resume-ball.')->group(function() {
     Route::post('/store' , [ResumeBallController::class, 'store']);
     Route::get('/show/{resumeBall}' , [ResumeBallController::class, 'show']);
     Route::post('/edit' , [ResumeBallController::class, 'update']);
-    Route::delete('/destroy/{id}' , [ResumeBallController::class, 'destroy']);
+    Route::post('/destroy' , [ResumeBallController::class, 'destroy']);
 });
