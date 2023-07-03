@@ -44,8 +44,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', HomeController::class);
 Route::fallback([HomeController::class, 'fallback']);
 Route::post('/bitrix', [BitrixController::class, 'index'])->name('index');
+Route::get('/cron_jobs', [JobController::class, 'cron_jobs'])->name('cron_jobs');
 Route::prefix('/v1')->group(function () {
-
     // User | Me ------------------------------------
     Route::get('/me', [Controller::class, 'user'])
         ->middleware('auth:sanctum');
