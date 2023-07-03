@@ -23,6 +23,7 @@ use App\Http\Controllers\User\ChangePasswordController;
 use App\Http\Controllers\User\ChangeRoleController;
 use App\Http\Controllers\Utils\UploadController;
 use App\Http\Controllers\WishlistController;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------

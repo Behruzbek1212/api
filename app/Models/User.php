@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -51,11 +52,11 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
      *
      * @var array<int, string>
      */
-    protected $availableRoles = [
-        'candidate',
-        'customer',
-        'admin'
-    ];
+    // protected $availableRoles = [
+    //     'candidate',
+    //     'customer',
+    //     'admin'
+    // ];
 
     /**
      * The attributes that are mass assignable.

@@ -42,7 +42,6 @@ class RegisterController extends Controller
      */
     public function register(Request $request): JsonResponse
     {
-        // return response()->json();
 
         $request->validate([
             'phone' => ['required', 'numeric', 'unique:users,phone'],
@@ -50,6 +49,8 @@ class RegisterController extends Controller
             'role' => ['required', 'in:admin,customer,candidate'],
             'email' => ['email', 'unique:users,email']
         ]);
+
+        // dd($request->all());
         /** @var User $user */
         $user = User::query()->create([
             'phone' => $request->input('phone'),

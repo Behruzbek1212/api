@@ -18,24 +18,39 @@ class CandidatesController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
+         $sortBy = $request->sortBy ?? null;
+         $sortType = $request->sortType ??  null;
         $candidates = Candidate::query()
             ->withTrashed()
             ->whereHas('user', fn (Builder $query) => $query->where('role', '=', 'candidate'))
             ->where('active', '=', true)
             ->with(['user', 'user.resumes'])
-            ->orderByDesc('updated_at');
+            ->orderBy('name')
+            ->orderBy('surname')
+            ->orderBy('specialization')
+            ->orderByDesc('created_at', 'updated_at');            
 
         if ($request->has('title'))
             $candidates->where(function (Builder $query) use ($request) {
-                $query->where('name', 'like', '%'.$request->get('title').'%');
-                $query->orWhere('surname', 'like', '%'.$request->get('title').'%');
+                $query->where('name', 'like', '%' . $request->get('title') . '%');
+                $query->orWhere('surname', 'like', '%' . $request->get('title') . '%');
+                $query->orWhere('specialization', 'like', '%' . $request->get('title') . '%');
+                $query->orWhereHas('user', function ($query) use ($request) {
+                    $query->where('phone', 'like', '%' . $request->get('title') . '%');
+                });
             });
-
+            
         /** @see https://laravel.com/docs/9.x/queries#json-where-clauses */
         if ($sphere = $request->get('sphere'))
             $candidates->whereJsonContains('spheres', $sphere);
 
-        $candidates = $candidates->paginate(20);
+        if ($sortBy !== null && $sortType !== null) {
+            $candidates->orderBy($sortBy, $sortType);
+        } else {
+                $candidates->orderByDesc('created_at');
+        }
+        
+        $candidates = $candidates->paginate($request->limit ?? 10);
         $_data = $candidates->makeVisible(['__comment', '__conversation', '__conversation_date']);
 
         return response()->json([
@@ -54,12 +69,12 @@ class CandidatesController extends Controller
 
         try {
             $user = User::query()->create(array_merge(
-                $request->only([ 'phone', 'email' ]),
+                $request->only(['phone', 'email']),
                 ['password' => Hash::make($password)],
                 ['role' => 'candidate']
             ));
 
-            $user->candidate()->create(array_merge(
+            $candidate =  $user->candidate()->create(array_merge(
                 $request->except([ 'phone', 'email' ]),
                 ['__conversation_date' => $request->get('__conversation') ? date('Y-m-d') : null],
                 ['avatar' => $request->get('avatar') ?? null],
@@ -73,15 +88,16 @@ class CandidatesController extends Controller
             ]);
         }
 
-        (new MobileService())->send(
-            $request->get('phone'),
-            'Sizning JOBO.uz ga kirish parolingiz: ' . $password
-        );
+        // (new MobileService())->send(
+        //     $request->get('phone'),
+        //     'Sizning JOBO.uz ga kirish parolingiz: ' . $password
+        // );
 
         return response()->json([
             'status' => true,
             'password' => $password,
-            'data' => []
+            'candidate_id' =>  $candidate->id,
+            'user_id'=> $user->id
         ]);
     }
 
@@ -114,12 +130,12 @@ class CandidatesController extends Controller
             ->findOrFail($request->get('id'));
 
         $candidate->update(array_merge(
-            $request->except( ['id', 'phone', 'email'] ),
+            $request->except(['id', 'phone', 'email']),
             ['avatar' => $request->get('avatar') ?? null]
         ));
 
         $candidate->user()->update(array_merge(
-            $request->only([ 'phone', 'email' ])
+            $request->only(['phone', 'email'])
         ));
 
         return response()->json([
@@ -128,7 +144,7 @@ class CandidatesController extends Controller
         ]);
     }
 
-         /**
+    /**
      * Update candidate services data's
      *
      * @param Request $request
@@ -137,11 +153,11 @@ class CandidatesController extends Controller
     public function updateServices(Request $request): JsonResponse
     {
         $candidate = Candidate::query()
-        ->withTrashed()
-        ->whereHas('user', fn (Builder $query) => $query->where('role', '=', 'candidate'))
-        ->where('active', '=', true)
-        ->findOrFail($request->get('id'));
-        
+            ->withTrashed()
+            ->whereHas('user', fn (Builder $query) => $query->where('role', '=', 'candidate'))
+            ->where('active', '=', true)
+            ->findOrFail($request->get('id'));
+
         $services = [
             'resume' => $request->get('resume') ?? false,
             'conversation' => $request->get('conversation') ?? false,
@@ -165,7 +181,7 @@ class CandidatesController extends Controller
             ->withTrashed()
             ->findOrFail($params['id']);
 
-        if (! $candidate->trashed())
+        if (!$candidate->trashed())
             $candidate->delete();
 
         return response()->json([
@@ -189,7 +205,7 @@ class CandidatesController extends Controller
             'sex' => ['string', 'in:male,female', 'nullable'],
             'spheres' => ['array', 'nullable'],
             'education_level' => ['string', 'nullable'],
-            'languages' => ['array', 'required'],
+            'languages' => ['array', 'nullable'] ,
             'specialization' => ['string', 'required'],
             'birthday' => ['date', 'required'],
             'address' => ['numeric', 'required'],
