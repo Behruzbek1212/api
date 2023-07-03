@@ -18,6 +18,8 @@ class CandidatesController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
+         $sortBy = $request->sortBy ?? null;
+         $sortType = $request->sortType ??  null;
         $candidates = Candidate::query()
             ->withTrashed()
             ->whereHas('user', fn (Builder $query) => $query->where('role', '=', 'candidate'))
@@ -26,7 +28,7 @@ class CandidatesController extends Controller
             ->orderBy('name')
             ->orderBy('surname')
             ->orderBy('specialization')
-            ->orderByDesc('created_at', 'updated_at');
+            ->orderByDesc('created_at', 'updated_at');            
 
         if ($request->has('title'))
             $candidates->where(function (Builder $query) use ($request) {
@@ -37,11 +39,17 @@ class CandidatesController extends Controller
                     $query->where('phone', 'like', '%' . $request->get('title') . '%');
                 });
             });
-
+            
         /** @see https://laravel.com/docs/9.x/queries#json-where-clauses */
         if ($sphere = $request->get('sphere'))
             $candidates->whereJsonContains('spheres', $sphere);
 
+        if ($sortBy !== null && $sortType !== null) {
+            $candidates->orderBy($sortBy, $sortType);
+        } else {
+                $candidates->orderByDesc('created_at');
+        }
+        
         $candidates = $candidates->paginate($request->limit ?? 10);
         $_data = $candidates->makeVisible(['__comment', '__conversation', '__conversation_date']);
 
@@ -66,8 +74,8 @@ class CandidatesController extends Controller
                 ['role' => 'candidate']
             ));
 
-            $user->candidate()->create(array_merge(
-                $request->except(['phone', 'email']),
+            $candidate =  $user->candidate()->create(array_merge(
+                $request->except([ 'phone', 'email' ]),
                 ['__conversation_date' => $request->get('__conversation') ? date('Y-m-d') : null],
                 ['avatar' => $request->get('avatar') ?? null],
                 ['active' => true]
@@ -80,15 +88,16 @@ class CandidatesController extends Controller
             ]);
         }
 
-        (new MobileService())->send(
-            $request->get('phone'),
-            'Sizning JOBO.uz ga kirish parolingiz: ' . $password
-        );
+        // (new MobileService())->send(
+        //     $request->get('phone'),
+        //     'Sizning JOBO.uz ga kirish parolingiz: ' . $password
+        // );
 
         return response()->json([
             'status' => true,
             'password' => $password,
-            'user_id' =>  $user->id
+            'candidate_id' =>  $candidate->id,
+            'user_id'=> $user->id
         ]);
     }
 
@@ -196,7 +205,7 @@ class CandidatesController extends Controller
             'sex' => ['string', 'in:male,female', 'nullable'],
             'spheres' => ['array', 'nullable'],
             'education_level' => ['string', 'nullable'],
-            'languages' => ['array', 'required'],
+            'languages' => ['array', 'nullable'] ,
             'specialization' => ['string', 'required'],
             'birthday' => ['date', 'required'],
             'address' => ['numeric', 'required'],

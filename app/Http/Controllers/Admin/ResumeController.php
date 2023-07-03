@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Candidate;
 use App\Models\Resume;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use JsonException;
 
 class ResumeController extends Controller
@@ -53,20 +56,41 @@ class ResumeController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+
          $request->validate([
               'user_id' => ['required'],
+              'data' => ['required']
          ]);
         
-
-        $resumes = Resume::query()->create([
-            'user_id' => $request->user_id,
-            'data' => $request->data
-        ]);
+        $user = User::query()->findOrFail($request->user_id);
+        if($user !== null){
+            if($user->role !== 'candidate'){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Invalid role'
+                ]);
+            }
+    
+            $resumes = Resume::query()->create([
+                'user_id' => $request->user_id,
+                'data' => $request->data
+            ]);
+            
+            $candidate  = Candidate::query()->where('user_id', $resumes['user_id'])->first();
+          
+       
+            return response()->json([
+                'status' => true,
+                'message' => 'Resume successfully created',
+                'candidate_id' => $candidate->id
+            ]);
+        }
 
         return response()->json([
-            'status' => true,
-            'message' => 'Ok'
+            'status' => false,
+            'message' => 'User not found'
         ]);
+       
     }
 
     /**
@@ -80,7 +104,8 @@ class ResumeController extends Controller
 
       
         $request->validate([
-            'resume_id' => ['integer', 'required']
+            'resume_id' => ['integer', 'required'],
+            'data' => ['required']
         ]); 
         
         $resume =  Resume::findOrFail($request->resume_id)
@@ -90,7 +115,7 @@ class ResumeController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Ok'
+            'message' => 'Resume successfully updated'
         ]);
     }
 
@@ -105,12 +130,11 @@ class ResumeController extends Controller
         $request->validate([
             'resume_id' => ['integer', 'required']
         ]);
-        $resume = Resume::findOrFail($request->resume_id)
-            ->delete();
+        $resume = DB::table('resumes')->where('id', '=', $request->resume_id)->delete();
 
         return response()->json([
             'status' => true,
-            'message' => 'Ok'
+            'message' => 'Resume successfully deleted'
         ]);
     }
 
