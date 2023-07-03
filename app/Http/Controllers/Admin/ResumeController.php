@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Candidate;
 use App\Models\Resume;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -74,10 +75,14 @@ class ResumeController extends Controller
                 'user_id' => $request->user_id,
                 'data' => $request->data
             ]);
-    
+            
+            $candidate  = Candidate::query()->where('user_id', $resumes['user_id'])->first();
+          
+       
             return response()->json([
                 'status' => true,
-                'message' => 'Resume successfully created'
+                'message' => 'Resume successfully created',
+                'candidate_id' => $candidate->id
             ]);
         }
 
