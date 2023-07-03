@@ -22,6 +22,7 @@ use App\Http\Controllers\LanguageLevelsController;
 use App\Http\Controllers\LanguagesController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ResumeBallsController;
 use App\Http\Controllers\ResumeController;
 use App\Http\Controllers\SocialStatusController;
 use App\Http\Controllers\TestUserController;
@@ -217,6 +218,9 @@ Route::prefix('/v1')->group(function () {
         Route::get('/', [LanguageLevelsController::class, 'index'])->name('index');
     });
 
+
+    // Resume balls
+    Route::get('resume-ball', [ResumeBallsController::class, 'getBall'])->name('resume-ball');
 
     Route::prefix('/utils')->name('utils.')->group(function () {
         Route::post('upload', [UploadController::class, 'upload'])->name('upload');
