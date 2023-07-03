@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Resume;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -54,21 +55,37 @@ class ResumeController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+
          $request->validate([
               'user_id' => ['required'],
               'data' => ['required']
          ]);
         
-
-        $resumes = Resume::query()->create([
-            'user_id' => $request->user_id,
-            'data' => $request->data
-        ]);
+        $user = User::find($request->user_id);
+        if($user !== null){
+            if($user->role !== 'candidate'){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Invalid role'
+                ]);
+            }
+    
+            $resumes = Resume::query()->create([
+                'user_id' => $request->user_id,
+                'data' => $request->data
+            ]);
+    
+            return response()->json([
+                'status' => true,
+                'message' => 'Resume successfully created'
+            ]);
+        }
 
         return response()->json([
-            'status' => true,
-            'message' => 'Resume successfully created'
+            'status' => false,
+            'message' => 'User not found'
         ]);
+       
     }
 
     /**
