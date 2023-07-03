@@ -17,7 +17,7 @@ class WishlistController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $list = match ( $request->user()->role ) {
+        $list = match ($request->user()->role) {
             'customer' => $request->user()->candidateWishlist()
                 ->with('user'),
 
@@ -45,7 +45,7 @@ class WishlistController extends Controller
             'candidate_id' => ['numeric', 'nullable']
         ]);
 
-        match ( $request->user()->role ) {
+        match ($request->user()->role) {
             'candidate' => $request->user()->jobsWishlist()
                 ->syncWithoutDetaching(Job::query()->findOrFail($params['job_id'])),
 
@@ -72,7 +72,7 @@ class WishlistController extends Controller
             'candidate_id' => ['numeric', 'nullable']
         ]);
 
-        match ( $request->user()->role ) {
+        match ($request->user()->role) {
             'candidate' => $request->user()->jobsWishlist()
                 ->detach(Job::query()->findOrFail($params['job_id'])),
 

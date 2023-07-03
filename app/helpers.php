@@ -95,3 +95,8 @@ function deleteFile($path): void
         unlink(public_path() . $path);
     }
 }
+
+function user()
+{
+    return _auth()->user();
+}

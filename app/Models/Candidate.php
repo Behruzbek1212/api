@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Filters\Filterable;
 use App\Models\Chat\Chat;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -18,6 +19,7 @@ use Kyslik\ColumnSortable\Sortable;
  */
 class Candidate extends Model
 {
+    use Filterable;
     use HasFactory;
     use SoftDeletes;
 

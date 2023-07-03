@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TraficRequest extends FormRequest
+class LimitRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,15 +24,10 @@ class TraficRequest extends FormRequest
     {
         return [
             'slug' => ['numeric'],
-            'image' => ['image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
-            'name' => ['string'],
+            'day' => ['string'],
             'price' => ['numeric'],
-            'title' => ['string'],
-            'description' => ['string'],
-            'top_day' => ['numeric'],
-            'count_rise' => ['numeric'],
-            'vip_day' => ['numeric'],
-            'type' => ['numeric'],
+            'condidate_limit' => ['numeric'],
+            'code' => ['numeric'],
         ];
     }
 }

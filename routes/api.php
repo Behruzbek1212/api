@@ -14,6 +14,7 @@ use App\Http\Controllers\DeleteDataController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\LimitController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ResumeController;
@@ -86,6 +87,7 @@ Route::prefix('/v1')->group(function () {
     // Jobs -----------------------------------------
     Route::prefix('/jobs')->name('jobs.')->group(function () {
         Route::get('/', [JobController::class, 'all'])->name('all');
+        Route::get('/all_jobs', [JobController::class, 'all_jobs'])->name('all_jobs');
         Route::get('/similar_jobs', [JobController::class, 'similar_jobs'])->name('similar_jobs');
         Route::get('/customer_releted_jobs/{id}', [JobController::class, 'customer_releted_jobs'])->name('customer_releted_jobs');
         Route::get('/get/{slug}', [JobController::class, 'get'])->name('get');
@@ -98,14 +100,22 @@ Route::prefix('/v1')->group(function () {
             Route::post('/acceptance', [JobController::class, 'acceptance'])->name('acceptance');
             Route::post('/{slug}/applications', [JobController::class, 'applications'])->name('applications');
         });
+
+        // limits ---------------------------------------
+
     });
 
     // Candidates -----------------------------------------
     Route::prefix('/candidates')->name('candidates.')->group(function () {
         Route::get('/', [CandidatesController::class, 'all'])->name('all');
+        Route::get('/candidates', [CandidatesController::class, 'candidates'])->name('candidates');
         Route::get('/get/{id}', [CandidatesController::class, 'get'])->name('get');
         Route::post('/respond', [CandidatesController::class, 'respond'])->middleware(['auth:sanctum', 'is_customer'])->name('respond');
         Route::post('/add-test', [CandidatesController::class, 'addTestResult'])->name('add-test-result');
+    });
+
+    Route::prefix('/limits')->name('limits.')->group(function () {
+        Route::get('/', [LimitController::class, 'all'])->name('limits');
     });
 
     // Companies -----------------------------------------
