@@ -93,7 +93,8 @@ class CandidatesController extends Controller
         return response()->json([
             'status' => true,
             'password' => $password,
-            'candidate_id' =>  $candidate->id
+            'candidate_id' =>  $candidate->id,
+            'user_id'=> $user->id
         ]);
     }
 
