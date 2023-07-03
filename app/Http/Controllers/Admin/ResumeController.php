@@ -61,7 +61,7 @@ class ResumeController extends Controller
               'data' => ['required']
          ]);
         
-        $user = User::find($request->user_id);
+        $user = User::query()->findOrFail($request->user_id);
         if($user !== null){
             if($user->role !== 'candidate'){
                 return response()->json([
