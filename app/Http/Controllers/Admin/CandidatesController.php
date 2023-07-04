@@ -24,11 +24,8 @@ class CandidatesController extends Controller
             ->withTrashed()
             ->whereHas('user', fn (Builder $query) => $query->where('role', '=', 'candidate'))
             ->where('active', '=', true)
-            ->with(['user', 'user.resumes'])
-            ->orderBy('name')
-            ->orderBy('surname')
-            ->orderBy('specialization')
-            ->orderByDesc('created_at', 'updated_at');            
+            ->with(['user', 'user.resumes']);
+            
 
         if ($request->has('title'))
             $candidates->where(function (Builder $query) use ($request) {
@@ -47,7 +44,7 @@ class CandidatesController extends Controller
         if ($sortBy !== null && $sortType !== null) {
             $candidates->orderBy($sortBy, $sortType);
         } else {
-                $candidates->orderByDesc('created_at');
+            $candidates->orderByDesc('created_at', 'updated_at');
         }
         
         $candidates = $candidates->paginate($request->limit ?? 10);
