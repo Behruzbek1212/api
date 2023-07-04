@@ -118,8 +118,8 @@ Route::prefix('/v1')->group(function () {
         Route::post('/add-test', [CandidatesController::class, 'addTestResult'])->name('add-test-result');
     });
 
-      // Candidates -----------------------------------------
-      Route::prefix('/trafics')->name('trafics.')->group(function () {
+    // Trafics -----------------------------------------
+    Route::prefix('/trafics')->name('trafics.')->group(function () {
         Route::get('/', [TraficController::class, 'all'])->name('all');
     });
 
@@ -209,7 +209,7 @@ Route::prefix('/v1')->group(function () {
     });
 
     Route::prefix('/education-level')->name('education-level.')->group(function () {
-         Route::get('/', [EducationLevelController::class, 'index'])->name('index');
+        Route::get('/', [EducationLevelController::class, 'index'])->name('index');
     });
 
     Route::prefix('/social-status')->name('social-status.')->group(function () {
