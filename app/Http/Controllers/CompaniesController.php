@@ -81,7 +81,7 @@ class CompaniesController extends Controller
         ]);
 
         $customer_id = _auth()->user()->customer->id;
-//        dd($costumer_id);
+        //        dd($costumer_id);
         $company = Job::query()
             ->with('customer')
             ->WhereHas('customer', function ($query) use ($customer_id) {

@@ -20,7 +20,8 @@
         "mehdi-fathi/eloquent-filter": "^3.4",
         "payzeio/laravel-payze": "^3.0",
         "s-damian/larasort": "^1.0",
-        "simplesoftwareio/simple-qrcode": "^4.2"
+        "simplesoftwareio/simple-qrcode": "^4.2",
+        "spatie/laravel-activitylog": "^4.7"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
