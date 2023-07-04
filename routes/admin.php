@@ -21,19 +21,19 @@ Route::prefix('/jobs')->name('jobs.')->group(function () {
 });
 
 Route::prefix('/trafics')->name('trafics.')->group(function () {
-    Route::get('/', [TraficController::class, 'index']);
-    Route::get('/{slug}', [TraficController::class, 'show']);
-    Route::post('/create', [TraficController::class, 'create']);
-    Route::post('/edit', [TraficController::class, 'edit']);
-    Route::post('/destroy', [TraficController::class, 'destroy']);
+    Route::get('/', [App\Http\Controllers\Admin\TraficController::class, 'index']);
+    Route::get('/{slug}', [App\Http\Controllers\Admin\TraficController::class, 'show']);
+    Route::post('/create', [App\Http\Controllers\Admin\TraficController::class, 'create']);
+    Route::post('/edit', [App\Http\Controllers\Admin\TraficController::class, 'edit']);
+    Route::post('/destroy', [App\Http\Controllers\Admin\TraficController::class, 'destroy']);
 });
 
 Route::prefix('/limits')->name('limits.')->group(function () {
-    Route::get('/', [ App\Http\Controllers\Admin\LimitController::class, 'index']);
-    Route::get('/{slug}', [ App\Http\Controllers\Admin\LimitController::class, 'show']);
-    Route::post('/create', [ App\Http\Controllers\Admin\LimitController::class, 'create']);
-    Route::post('/edit', [ App\Http\Controllers\Admin\LimitController::class, 'edit']);
-    Route::post('/destroy', [ App\Http\Controllers\Admin\LimitController::class, 'destroy']);
+    Route::get('/', [App\Http\Controllers\Admin\LimitController::class, 'index']);
+    Route::get('/{slug}', [App\Http\Controllers\Admin\LimitController::class, 'show']);
+    Route::post('/create', [App\Http\Controllers\Admin\LimitController::class, 'create']);
+    Route::post('/edit', [App\Http\Controllers\Admin\LimitController::class, 'edit']);
+    Route::post('/destroy', [App\Http\Controllers\Admin\LimitController::class, 'destroy']);
 });
 
 Route::prefix('/candidates')->name('candidates.')->group(function () {

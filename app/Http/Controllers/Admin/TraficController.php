@@ -95,10 +95,10 @@ class TraficController extends Controller
     public function destroy(TraficRequest $request): JsonResponse
     {
         $trafic = Trafic::query()
-            ->withTrashed()
+            // ->withTrashed()
             ->findOrFail($request->slug);
 
-        if (!$trafic->trashed())
+        // if (!$trafic->trashed())
             $trafic->delete();
 
         return response()->json([
