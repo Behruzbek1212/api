@@ -7,7 +7,7 @@ use App\Http\Controllers\Admin\JobsController;
 use App\Http\Controllers\Admin\LimitController;
 use App\Http\Controllers\Admin\StatisticAdminController;
 use App\Http\Controllers\Admin\TraficController;
-use App\Http\Controllers\ResumeController;
+use App\Http\Controllers\Admin\ResumeController;
 use App\Http\Controllers\Admin\ResumeBallController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
