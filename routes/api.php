@@ -27,6 +27,7 @@ use App\Http\Controllers\ResumeBallsController;
 use App\Http\Controllers\ResumeController;
 use App\Http\Controllers\SocialStatusController;
 use App\Http\Controllers\TestUserController;
+use App\Http\Controllers\TraficController;
 use App\Http\Controllers\User\ChangePasswordController;
 use App\Http\Controllers\User\ChangeRoleController;
 use App\Http\Controllers\Utils\UploadController;
@@ -115,6 +116,11 @@ Route::prefix('/v1')->group(function () {
         Route::get('/get/{id}', [CandidatesController::class, 'get'])->name('get');
         Route::post('/respond', [CandidatesController::class, 'respond'])->middleware(['auth:sanctum', 'is_customer'])->name('respond');
         Route::post('/add-test', [CandidatesController::class, 'addTestResult'])->name('add-test-result');
+    });
+
+      // Candidates -----------------------------------------
+      Route::prefix('/trafics')->name('trafics.')->group(function () {
+        Route::get('/', [TraficController::class, 'all'])->name('all');
     });
 
     // Companies -----------------------------------------
