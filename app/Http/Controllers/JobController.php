@@ -254,7 +254,7 @@ class JobController extends Controller
             'work_type' => $params['work_type'],
             'experience' => $params['experience'],
             'location_id' => $params['location'],
-            'languages' => $params['languages'] ?? null,
+            'languages' => $params['languages'] ?? [],
             'education_level' => $params['education_level'] ?? null, // TODO: remove `null` value
             'sphere' => $params['sphere'],
             'category_id' => $params['category_id'],
