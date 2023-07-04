@@ -11,6 +11,7 @@ use App\Http\Controllers\Bots\ADSON\MainController;
 use App\Http\Controllers\CandidatesController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ChatsController;
+use App\Http\Controllers\CheckEmailController;
 use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\DeleteDataController;
@@ -221,6 +222,10 @@ Route::prefix('/v1')->group(function () {
 
     // Resume balls
     Route::get('resume-ball', [ResumeBallsController::class, 'getBall'])->name('resume-ball');
+    
+    // check email route
+
+    Route::post('email/check', [CheckEmailController::class, 'check']);
 
     Route::prefix('/utils')->name('utils.')->group(function () {
         Route::post('upload', [UploadController::class, 'upload'])->name('upload');
