@@ -94,6 +94,7 @@ Route::prefix('/v1')->group(function () {
     // Jobs -----------------------------------------
     Route::prefix('/jobs')->name('jobs.')->group(function () {
         Route::get('/', [JobController::class, 'all'])->name('all');
+        Route::get('/all_jobs', [JobController::class, 'all_jobs'])->name('all_jobs');
         Route::get('/similar_jobs', [JobController::class, 'similar_jobs'])->name('similar_jobs');
         Route::get('/customer_releted_jobs/{id}', [JobController::class, 'customer_releted_jobs'])->name('customer_releted_jobs');
         Route::get('/get/{slug}', [JobController::class, 'get'])->name('get');
@@ -222,7 +223,7 @@ Route::prefix('/v1')->group(function () {
 
     // Resume balls
     Route::get('resume-ball', [ResumeBallsController::class, 'getBall'])->name('resume-ball');
-    
+
     // check email route
 
     Route::post('email/check', [CheckEmailController::class, 'check']);
