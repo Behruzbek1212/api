@@ -205,4 +205,18 @@ class StatisticAdminController extends Controller
         ]);
         
     }
+
+    public function ResumeStatistic():JsonResponse
+    {
+        $visit = Resume::sum('visits');
+        $download = Resume::sum('downloads');
+        
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'visit' => intval($visit), 
+                'download' => intval($download)
+            ]
+        ]);
+    }
 }
