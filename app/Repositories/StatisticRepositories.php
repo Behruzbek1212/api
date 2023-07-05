@@ -14,6 +14,7 @@ class StatisticRepositories
             $query  = DB::table($dbtable)
             ->selectRaw('year(created_at) year,   monthname(created_at) as date, count(*) as total')
             ->whereBetween('created_at', [$start, $end])
+            ->where('deleted_at', null)
             ->groupBy('year',  'date')
             ->get();
 
@@ -22,6 +23,7 @@ class StatisticRepositories
         $query  = DB::table($dbtable)->where('active', '1')
         ->selectRaw('year(created_at) year,   monthname(created_at) as date, count(*) as total')
         ->whereBetween('created_at', [$start, $end])
+        ->where('deleted_at', null)
         ->groupBy('year',  'date')
         ->get();
         return $query;
@@ -33,6 +35,7 @@ class StatisticRepositories
             $query  = DB::table($dbtable)
             ->selectRaw('date(created_at) as date, count(*) as total')
             ->whereBetween('created_at', [$start, $end])
+            ->where('deleted_at', null)
             ->groupBy('date')
             ->get();
             return $query;
@@ -40,6 +43,7 @@ class StatisticRepositories
         $query  = DB::table($dbtable)->where('active', '1')
             ->selectRaw('date(created_at) as date, count(*) as total')
             ->whereBetween('created_at', [$start, $end])
+            ->where('deleted_at', null)
             ->groupBy('date')
             ->get();
             

@@ -23,18 +23,23 @@ class StatisticAdminController extends Controller
         $carbon = Carbon::createFromFormat('Y-m-d H:i:s', $currentDate->toDateTimeString());
         $carbon->subMonth();
 
-        $resumes = Resume::get();
+        $resumes = Resume::where('deleted_at', null)->get();
+        $visits = $resumes->sum('visits');
+        $download = $resumes->sum('downloads');
+        $chats = Chat::where('deleted_at', null)->get();
 
-        $chats = Chat::get();
-
-        $candidates = Candidate::where('active', '1')->get();
-        $customers = Customer::where('active', '1')->get();
+        $candidates = Candidate::where('active', '1')->where('deleted_at', null)->get();
+        $customers = Customer::where('active', '1')->where('deleted_at', null)->get();
         $vacancies = Job::get();
         
         $candidateLastMount = Candidate::where('active', '1')
-                     ->whereBetween('created_at',  [ $carbon->toDateTimeString(), $currentDate->toDateTimeString()])->get();
+                     ->whereBetween('created_at',  [ $carbon->toDateTimeString(), $currentDate->toDateTimeString()])
+                     ->where('deleted_at', null)
+                     ->get();
         $customerLastMount =  Customer::where('active', '1')
-                     ->whereBetween('created_at',  [ $carbon->toDateTimeString(), $currentDate->toDateTimeString()])->get();   
+                     ->whereBetween('created_at',  [ $carbon->toDateTimeString(), $currentDate->toDateTimeString()])
+                     ->where('deleted_at', null)
+                     ->get();   
        
         $allData = [
             'allCandidat' => $candidates->count(),
@@ -42,6 +47,8 @@ class StatisticAdminController extends Controller
             'allVacancies' => $vacancies->count(),
             'resume' => $resumes->count(),
             'chats' => $chats->count(),
+            'visit' => $visits,
+            'download' => $download
         ];
         $lastMonthData = [
             'candidate' => $candidateLastMount->count(),
@@ -204,19 +211,5 @@ class StatisticAdminController extends Controller
            'data' => $vacancies
         ]);
         
-    }
-
-    public function ResumeStatistic():JsonResponse
-    {
-        $visit = Resume::sum('visits');
-        $download = Resume::sum('downloads');
-        
-        return response()->json([
-            'status' => true,
-            'data' => [
-                'visit' => intval($visit), 
-                'download' => intval($download)
-            ]
-        ]);
     }
 }

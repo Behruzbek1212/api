@@ -345,4 +345,10 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
 
         return null;
     }
+
+
+    public function comment():HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
 }
