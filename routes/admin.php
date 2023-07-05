@@ -46,12 +46,12 @@ Route::prefix('/candidates')->name('candidates.')->group(function () {
 });
 
 Route::prefix('/companies')->name('candidates.')->group(function () {
-    Route::get('/', [CompaniesController::class, 'index']);
-    Route::get('/{id}', [CompaniesController::class, 'show']);
-    Route::post('/create', [CompaniesController::class, 'create']);
-    Route::post('/edit', [CompaniesController::class, 'edit']);
-    Route::post('/destroy', [CompaniesController::class, 'destroy']);
-    Route::post('/add-service', [CompaniesController::class, 'addServices']);
+    Route::get('/', [App\Http\Controllers\Admin\CompaniesController::class, 'index']);
+    Route::get('/{id}', [App\Http\Controllers\Admin\CompaniesController::class, 'show']);
+    Route::post('/create', [App\Http\Controllers\Admin\CompaniesController::class, 'create']);
+    Route::post('/edit', [App\Http\Controllers\Admin\CompaniesController::class, 'edit']);
+    Route::post('/destroy', [App\Http\Controllers\Admin\CompaniesController::class, 'destroy']);
+    Route::post('/add-service', [App\Http\Controllers\Admin\CompaniesController::class, 'addServices']);
 });
 
 Route::prefix('/users')->name('users.')->group(function () {

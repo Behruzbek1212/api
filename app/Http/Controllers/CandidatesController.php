@@ -67,11 +67,6 @@ class CandidatesController extends Controller
         return $this->successResponse(CandidateResource::collection(CandidateServices::getInstance()->list($request)));
     }
 
-
-
-
-
-
     /**
      * Find candidate with slug
      *

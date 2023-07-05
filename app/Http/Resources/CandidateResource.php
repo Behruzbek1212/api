@@ -30,12 +30,12 @@ class CandidateResource extends JsonResource
             "services" => $this->services ?? null,
             "test" => $this->test ?? null,
             "active" => $this->active ?? null,
-            '__comment' => $this->__comment ?? null,
-            '__conversation' => $this->__conversation ?? null,
-            "__conversation_date" => $this->__conversation_date ?? null,
-            "created_at" => formatDateTime($this->created_at) ?? null,
+            // '__comment' => $this->__comment ?? null,
+            // '__conversation' => $this->__conversation ?? null,
+            // "__conversation_date" => $this->__conversation_date ?? null,
+            // "created_at" => formatDateTime($this->created_at) ?? null,
             "category_id" => $this->category_id ?? null,
-            "slug" => $this->slug ?? null,
+            // "slug" => $this->slug ?? null,
             "status" => $this->status ?? null,
             "user" => $this->user() ?? []
         ];

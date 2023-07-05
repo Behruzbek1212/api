@@ -27,7 +27,7 @@ class CompaniesController extends Controller
             ->orderByDesc('updated_at');
 
         if ($request->has('title'))
-            $customers->where('name', 'like', '%'.$request->get('title').'%');
+            $customers->where('name', 'like', '%' . $request->get('title') . '%');
 
         return response()->json([
             'status' => true,
@@ -37,20 +37,20 @@ class CompaniesController extends Controller
 
     public function create(Request $request): JsonResponse
     {
+        // dd($request->all());
         $this->validateParams($request, []);
         $password = Random::generate();
 
         try {
             $user = User::query()->create(array_merge(
-                $request->only([ 'phone', 'email' ]),
+                $request->only(['phone', 'email']),
                 ['password' => Hash::make($password)],
                 ['role' => 'customer']
             ));
-
             $user->customer()->create(array_merge(
-                $request->only([ 'name', 'about', 'owned_date', 'location', 'address' ]),
+                $request->only(['name', 'about', 'owned_date', 'location', 'address', 'limit_id', 'limit_start_day', 'limit_end_day']),
                 ['avatar' => $request->get('avatar') ?? null],
-                ['active' => true]
+                ['active' => true],
             ));
         } catch (QueryException $exception) {
             return response()->json([
@@ -63,8 +63,8 @@ class CompaniesController extends Controller
         (new MobileService())->send(
             $request->get('phone'),
             "Sizning JOBO.uz ga kirish parolingiz: " . $password .
-            "\nQuyidagi link orqali tezkor kirishni amalga oshirishingiz mumkin: " .
-            vsprintf("https://jobo.uz/auth/verifier/%s/?p=%s", [$password, $request->get('phone')])
+                "\nQuyidagi link orqali tezkor kirishni amalga oshirishingiz mumkin: " .
+                vsprintf("https://jobo.uz/auth/verifier/%s/?p=%s", [$password, $request->get('phone')])
         );
 
         return response()->json([
@@ -104,12 +104,12 @@ class CompaniesController extends Controller
             ->findOrFail($request->get('id'));
 
         $customer->update(array_merge(
-            $request->only([ 'name', 'about', 'owned_date', 'location', 'address' ]),
+            $request->only(['name', 'about', 'owned_date', 'location', 'address', 'limit_id', 'limit_start_day', 'limit_end_day']),
             ['avatar' => $request->get('avatar') ?? null]
         ));
 
         $customer->user()->update(array_merge(
-            $request->only([ 'phone', 'email' ]),
+            $request->only(['phone', 'email']),
         ));
 
         return response()->json([
@@ -118,25 +118,25 @@ class CompaniesController extends Controller
         ]);
     }
 
-    public function addServices(Request $request):JsonResponse
+    public function addServices(Request $request): JsonResponse
     {
         $request->validate([
             'id' => ['integer', 'required'],
             'service' => ['array', 'required']
         ]);
-//        $this->validateParams($request, [
-//            'id' => ['integer', 'required'],
-////            'service' => ['json', 'required']
-//        ]);
+        //        $this->validateParams($request, [
+        //            'id' => ['integer', 'required'],
+        ////            'service' => ['json', 'required']
+        //        ]);
 
         $customer = Customer::query()
             ->withTrashed()
             ->findOrFail($request->get('id'));
 
-        if(!$customer){
+        if (!$customer) {
             return response()->json([
-                'status'=>false,
-                'message'=> 'Customer not found'
+                'status' => false,
+                'message' => 'Customer not found'
             ]);
         }
 
@@ -152,8 +152,8 @@ class CompaniesController extends Controller
         $customer->update($requestData);
 
         return response()->json([
-            'status'=> true,
-            'result'=> $customer->services
+            'status' => true,
+            'result' => $customer->services
         ]);
     }
 
@@ -167,7 +167,7 @@ class CompaniesController extends Controller
             ->withTrashed()
             ->findOrFail($params['id']);
 
-        if (! $customer->trashed())
+        if (!$customer->trashed())
             $customer->delete();
 
         return response()->json([
@@ -193,7 +193,10 @@ class CompaniesController extends Controller
             'location' => ['numeric', 'required'],
             'address' => ['string', 'required'],
             'phone' => ['numeric', 'unique:users,phone', 'required'],
-            'email' => ['email', 'unique:users,email', 'nullable']
+            'email' => ['email', 'unique:users,email', 'nullable'],
+            'limit_id' => ['numeric', 'required'],
+            'limit_start_day' => ['date', 'required'],
+            'limit_end_day' => ['date', 'required']
         ], $rule));
     }
 }
