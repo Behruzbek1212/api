@@ -17,4 +17,9 @@ class CandidateRepository
     {
         return $closure(Candidate::query())->get();
     }
+
+    public function one(Closure $closure)
+    {
+        return $closure(Candidate::query())->firstOrFail();
+    }
 }

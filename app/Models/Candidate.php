@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Filters\Filterable;
 use App\Models\Chat\Chat;
+use App\Traits\ApiLogActivity;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,6 +23,7 @@ class Candidate extends Model
     use Filterable;
     use HasFactory;
     use SoftDeletes;
+    use ApiLogActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -173,5 +175,10 @@ class Candidate extends Model
 
         $location = $this->belongsTo(Location::class, 'address')->first()['title'];
         return Attribute::get(fn () => __($location));
+    }
+
+     public function comments():HasMany
+    {
+        return $this->hasMany(Comment::class);
     }
 }

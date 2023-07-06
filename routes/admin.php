@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CandidatesController;
+use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\CompaniesController;
 use App\Http\Controllers\Admin\GuidesController;
 use App\Http\Controllers\Admin\JobsController;
@@ -75,7 +76,6 @@ Route::prefix('/statistic')->name('statistic.')->group(function () {
     Route::post('/customer', [StatisticAdminController::class, 'getCustomer'])->name('customer');
     Route::post('/candidate', [StatisticAdminController::class, 'getCandidates'])->name('candidate');
     Route::post('/vacancies', [StatisticAdminController::class, 'getVacancies'])->name('vacancies');
-    Route::get('/resume', [StatisticAdminController::class, 'ResumeStatistic']);
 });
 
 Route::prefix('/resume')->name('resume.')->group(function () {
@@ -91,4 +91,9 @@ Route::prefix('/resume-ball')->name('resume-ball.')->group(function () {
     Route::get('/show/{resumeBall}', [ResumeBallController::class, 'show']);
     Route::post('/edit', [ResumeBallController::class, 'update']);
     Route::delete('/destroy/{id}', [ResumeBallController::class, 'destroy']);
+});
+
+Route::prefix('/comment')->name('comment.')->group(function () {
+    Route::post('/store', [CommentController::class, 'store']);
+    Route::get('/show', [CommentController::class, 'getComment']);
 });

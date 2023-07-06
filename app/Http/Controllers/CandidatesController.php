@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CandidateOneResource;
 use App\Http\Resources\CandidateResource;
 use App\Models\Candidate;
 use App\Models\Job;
@@ -65,6 +66,11 @@ class CandidatesController extends Controller
     public function candidates(Request $request)
     {
         return $this->successResponse(CandidateResource::collection(CandidateServices::getInstance()->list($request)));
+    }
+
+    public function get_one_candidate($id)
+    {
+        return $this->successResponse(new CandidateOneResource(CandidateServices::getInstance()->one($id)));
     }
 
     /**

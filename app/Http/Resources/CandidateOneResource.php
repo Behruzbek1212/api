@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CandidateResource extends JsonResource
+class CandidateOneResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,7 +14,6 @@ class CandidateResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        // dd($this->user->resumes);
         return [
             'id' => $this->id ?? null,
             'avatar' => $this->avatar ?? null,
@@ -53,6 +52,7 @@ class CandidateResource extends JsonResource
                 'resume' => $this->resumes() ?? [],
             ];
         }
+
         return [];
     }
 
@@ -60,7 +60,7 @@ class CandidateResource extends JsonResource
     {
         // dd($this->user->id);
         foreach ($this->user->resumes as  $resume) {
-            return [    
+            return [
                 'id' => $resume->id ?? null,
                 'user_id' => $resume->user_id ?? null,
                 'downloads' => $resume->downloads ?? null,

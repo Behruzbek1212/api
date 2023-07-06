@@ -39,4 +39,17 @@ class CandidateServices
                 ->take($condidate_limit);
         });
     }
+
+    public function one($id)
+    {
+        return $this->repository->one(function (Builder $builder) use ($id) {
+            return $builder
+                ->with(['user:id,email,phone,verified', 'user.resumes'])
+                ->whereHas('user', function (Builder $query) {
+                    $query->where('role', 'candidate');
+                })
+                ->where('active', true)
+                ->where('id', $id);
+        });
+    }
 }
