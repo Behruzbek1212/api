@@ -424,7 +424,9 @@ class JobController extends Controller
             'customer_id', 'candidate_id',
             'created_at', 'updated_at',
             'customer', 'job'
-        ]);
+        ])->filter(function ($chat) {
+            return $chat->resume !== null;
+        });
 
         return response()->json([
             'status' => true,
