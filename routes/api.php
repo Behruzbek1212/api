@@ -157,7 +157,7 @@ Route::prefix('/v1')->group(function () {
         Route::prefix('/chats')->name('chats.')->group(function () {
             Route::post('/', [ChatsController::class, 'list'])->name('index');
             Route::post('/{id}', [ChatsController::class, 'get'])->name('get');
-
+            Route::get('/all' ,  [ChatsController::class, 'listAll']);
             Route::post('/{id}/send', [ChatsController::class, 'send'])->name('send');
         });
 

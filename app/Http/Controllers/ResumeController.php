@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Chat\Chat;
 use App\Models\Resume;
 use App\Models\User;
 use App\Services\AdminResumeService;
@@ -104,11 +105,19 @@ class ResumeController extends Controller
     {
         /** @var Authenticatable|User $user */
         $user = _auth()->user();
-
-        $user->resumes()
-            ->findOrFail($id)
-            ->delete();
-
+       
+        
+       
+         $resume = $user->resumes()->findOrFail($id);
+         $resume->delete();
+        $chats = Chat::query()->where('resume_id', $resume->id)->where('deleted_at', null)->get();
+        
+        if($chats !== null){
+             foreach($chats as $chat){
+                $chat->delete();
+             }
+        }
+       
         return response()->json([
             'status' => true,
             'message' => 'Ok'
