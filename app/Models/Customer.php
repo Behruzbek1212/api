@@ -124,10 +124,10 @@ class Customer extends Model
     public function chats(): HasMany
     {
         return $this->hasMany(Chat::class)
-            ->whereHas('resume', function (Builder $table) {
+            ->withWhereHas('resume', function (Builder $table) {
                 $table->whereNull('deleted_at');
             })
-            ->whereHas('candidate', function (Builder $table) {
+            ->withWhereHas('candidate', function (Builder $table) {
                 $table->where('active', '=', true);
                 $table->whereNull('deleted_at');
             })
