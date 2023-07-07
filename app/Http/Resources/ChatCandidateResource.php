@@ -32,8 +32,7 @@ class ChatCandidateResource extends JsonResource
             ],
             'resume' => [
                 'id'=> $this->resume->id,
-                'status' => $this->status,
-                'experience'=> $this->experience,
+                'experience'=> $this->resume->experience ?? null,
                 'data' => [
                     'position' => $this->resume->data['position'] ?? null,
                      'status' => $this->resume->data['status'] ?? null

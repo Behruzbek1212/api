@@ -40,11 +40,10 @@ class ChatsController extends Controller
             default => null
         };
         if($user->role == 'customer'){
-        
-            $data = ChatCustomerResource::collection($chats);
+            $data = ChatCandidateResource::collection($chats);
         }
         if($user->role == 'candidate') {
-            $data = ChatCandidateResource::collection($chats);
+            $data = ChatCustomerResource::collection($chats);
         }
         return response()->json([
             'status' => true,
@@ -79,11 +78,12 @@ class ChatsController extends Controller
 
       
         if($user->role == 'customer'){
-            $data = ChatCustomerResource::collection($chats);
+              $data = ChatCandidateResource::collection($chats);
         }
         
         if($user->role == 'candidate') {
-            $data = ChatCandidateResource::collection($chats);
+            $data = ChatCustomerResource::collection($chats);
+          
         }
        
         return $this->successPaginate($data);
