@@ -2,10 +2,7 @@
 
 namespace App\Traits;
 
-<<<<<<< HEAD
-=======
 use App\Models\User;
->>>>>>> 9dd938732b278c20f39123e23e16f1692d97e310
 use Illuminate\Support\Facades\Lang;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -16,7 +13,6 @@ trait ApiLogActivity
 
     public $logLocale = 'uz';
 
-<<<<<<< HEAD
     // public function getDescriptionForEvent(string $eventName): string
     // {
     //     $message = 'log_message.' . $this->getTable() . '.' . $eventName;
@@ -38,8 +34,6 @@ trait ApiLogActivity
     //     return __($message, $attribute, $this->logLocale);
     // }
 
-=======
->>>>>>> 9dd938732b278c20f39123e23e16f1692d97e310
     public function convertObject($array)
     {
         $model = $this;
@@ -68,27 +62,23 @@ trait ApiLogActivity
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
     }
-<<<<<<< HEAD
-}
-=======
 
     public function getDescriptionForEvent(string $eventName): string
-{
-     $user = _auth()->user()->role;
-  
-    switch ($eventName) {
-        case 'created':
-            return "$user" ;
-            break;
-        case 'updated':
-            return "$user";
-            break;
-        case 'deleted':
-            return "$user";
-            break;
-        default:
-            return '';
+    {
+        $user = _auth()->user()->role;
+
+        switch ($eventName) {
+            case 'created':
+                return "$user";
+                break;
+            case 'updated':
+                return "$user";
+                break;
+            case 'deleted':
+                return "$user";
+                break;
+            default:
+                return '';
+        }
     }
 }
-}
->>>>>>> 9dd938732b278c20f39123e23e16f1692d97e310
