@@ -26,7 +26,7 @@ class TraficResource extends JsonResource
             'vip_day' =>  $this->vip_day ?? null,
             'type' =>  $this->type ?? null,
             'status' =>  $this->status ?? null,
-            'created_at' => formatDateTime($this->created_at) ?? null,
+            'created_at' => $this->created_at ?? null,
         ];
     }
 }

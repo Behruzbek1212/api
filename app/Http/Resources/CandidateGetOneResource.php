@@ -25,7 +25,7 @@ class CandidateGetOneResource extends JsonResource
             "languages" => $this->languages ?? null,
             "experience" => $this->resume_experience() ?? null,
             "specialization" => $this->specialization ?? null,
-            "birthday" => formatDateTime($this->birthday) ?? null,
+            "birthday" => $this->birthday ?? null,
             "address" => $this->address ?? null,
             "services" => $this->services ?? null,
             "test" => $this->test ?? null,

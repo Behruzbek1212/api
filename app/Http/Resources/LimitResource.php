@@ -20,7 +20,7 @@ class LimitResource extends JsonResource
             'price'  =>  $this->price ?? null,
             'condidate_limit' => $this->condidate_limit ?? null,
             'code'  => $this->code ?? null,
-            'created_at' => formatDateTime($this->created_at) ?? null,
+            'created_at' => $this->created_at ?? null,
         ];
     }
 }
