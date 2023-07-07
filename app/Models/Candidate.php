@@ -23,7 +23,6 @@ class Candidate extends Model
     use Filterable;
     use HasFactory;
     use SoftDeletes;
-    use ApiLogActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -177,7 +176,7 @@ class Candidate extends Model
         return Attribute::get(fn () => __($location));
     }
 
-     public function comments():HasMany
+    public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
     }

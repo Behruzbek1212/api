@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CandidateOneResource extends JsonResource
+class CandidateGetOneResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -33,29 +33,23 @@ class CandidateOneResource extends JsonResource
             "category_id" => $this->category_id ?? null,
             "status" => $this->status ?? null,
             "user" => $this->user() ?? [],
-            "experience" => $this->resume_experience() ?? []
+            "experience" => $this->resume_experience() ?? null
         ];
     }
 
     public function user()
     {
-        $limit_start_day =  user()->customer->limit_start_day;
-        $limit_end_day =  user()->customer->limit_end_day;
-        if ($limit_start_day < date('Y-m-d H:i:s') && $limit_end_day > date('Y-m-d H:i:s')) {
-            return [
-                'id' => $this->user->id ?? null,
-                'email' => $this->user->email ?? null,
-                'phone' => $this->user->phone ?? null,
-                'resume' => $this->resumes() ?? [],
-            ];
-        }
-
-        return [];
+        return [
+            'id' => $this->user->id ?? null,
+            'email' => $this->user->email ?? null,
+            'phone' => $this->user->phone ?? null,
+            'resume' => $this->resumes() ?? [],
+        ];
     }
 
     public function resumes()
     {
-        foreach ($this->user->resumes as  $resume) {
+        foreach ($this->user->resumes ?? [] as  $resume) {
             return [
                 'id' => $resume->id ?? null,
                 'user_id' => $resume->user_id ?? null,
@@ -68,7 +62,7 @@ class CandidateOneResource extends JsonResource
 
     public function resume_experience()
     {
-        foreach ($this->user->resumes as  $resume) {
+        foreach ($this->user->resumes ?? [] as  $resume) {
             return $resume->calculate_experience($resume->data) ?? null;
         }
     }

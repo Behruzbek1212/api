@@ -52,4 +52,26 @@ class CandidateServices
                 ->where('id', $id);
         });
     }
+
+    public function get_one($request, $id)
+    {
+        // dd(_auth()->user()->customer->jobs->where('id', 15)->first());
+        return $this->repository->one(function (Builder $builder) use ($id) {
+            return $builder
+                ->with(['user:id,email,phone,verified', 'user.resumes'])
+                ->whereHas('user', function (Builder $query) {
+                    $query->where('role', 'customer');
+                })
+                ->where('active', true)
+                ->where('id', $id)
+                ->whereHas('user', function ($query) {
+                    $query->whereHas('customer', function ($query) {
+                        $query->where('id', request('customer_id'));
+                        $query->whereHas('jobs', function ($query) {
+                            $query->where('id', request('job_id'));
+                        });
+                    });
+                });
+        });
+    }
 }

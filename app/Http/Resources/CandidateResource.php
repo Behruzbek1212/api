@@ -25,17 +25,13 @@ class CandidateResource extends JsonResource
             'education_level' =>  $this->education_level ?? null,
             "languages" => $this->languages ?? null,
             "specialization" => $this->specialization ?? null,
+            "experence" => $this->resume_experence() ?? null,
             "birthday" => formatDateTime($this->birthday) ?? null,
             "address" => $this->address ?? null,
             "services" => $this->services ?? null,
             "test" => $this->test ?? null,
             "active" => $this->active ?? null,
-            // '__comment' => $this->__comment ?? null,
-            // '__conversation' => $this->__conversation ?? null,
-            // "__conversation_date" => $this->__conversation_date ?? null,
-            // "created_at" => formatDateTime($this->created_at) ?? null,
             "category_id" => $this->category_id ?? null,
-            // "slug" => $this->slug ?? null,
             "status" => $this->status ?? null,
             "user" => $this->user() ?? []
         ];
@@ -58,15 +54,21 @@ class CandidateResource extends JsonResource
 
     public function resumes()
     {
-        // dd($this->user->id);
         foreach ($this->user->resumes as  $resume) {
-            return [    
+            return [
                 'id' => $resume->id ?? null,
                 'user_id' => $resume->user_id ?? null,
                 'downloads' => $resume->downloads ?? null,
                 'visits' => $resume->visits ?? null,
                 'data' => $resume->data ?? null,
             ];
+        }
+    }
+
+    public function resume_experence()
+    {
+        foreach ($this->user->resumes as  $resume) {
+            return $resume->calculate_experience($resume->data) ?? null;
         }
     }
 }
