@@ -32,6 +32,7 @@ class ChatCustomerResource extends JsonResource
                 'id' => $this->job->id,
                 'title' => $this->job->title ?? null,
                 'slug' => $this->job->slug ?? null,
+                'status' => $this->job->status ?? null,
                 'work_hours' => $this->job->work_hours ?? null,
                 'work_type' => $this->job->work_type ?? null,
                 'location_id' => $this->job->location_id ?? null,
