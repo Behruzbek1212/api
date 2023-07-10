@@ -26,33 +26,33 @@ class StatisticAdminController extends Controller
         $resumes = Resume::where('deleted_at', null)->get();
         $visits = $resumes->sum('visits');
         $download = $resumes->sum('downloads');
-        $chats = Chat::where('deleted_at', null)->get();
+        $chats = Chat::where('deleted_at', null)->count();
 
-        $candidates = Candidate::where('active', '1')->where('deleted_at', null)->get();
-        $customers = Customer::where('active', '1')->where('deleted_at', null)->get();
-        $vacancies = Job::get();
+        $candidates = Candidate::where('active', '1')->where('deleted_at', null)->count();
+        $customers = Customer::where('active', '1')->where('deleted_at', null)->count();
+        $vacancies = Job::where('deleted_at', null)->count();
         
         $candidateLastMount = Candidate::where('active', '1')
                      ->whereBetween('created_at',  [ $carbon->toDateTimeString(), $currentDate->toDateTimeString()])
                      ->where('deleted_at', null)
-                     ->get();
+                     ->count();
         $customerLastMount =  Customer::where('active', '1')
                      ->whereBetween('created_at',  [ $carbon->toDateTimeString(), $currentDate->toDateTimeString()])
                      ->where('deleted_at', null)
-                     ->get();   
+                     ->count();   
        
         $allData = [
-            'allCandidat' => $candidates->count(),
-            'allCustomer' => $customers->count(),
-            'allVacancies' => $vacancies->count(),
+            'allCandidat' => $candidates,
+            'allCustomer' => $customers,
+            'allVacancies' => $vacancies,
             'resume' => $resumes->count(),
-            'chats' => $chats->count(),
+            'chats' => $chats,
             'visit' => $visits,
             'download' => $download
         ];
         $lastMonthData = [
-            'candidate' => $candidateLastMount->count(),
-            'customer' => $customerLastMount->count(),
+            'candidate' => $candidateLastMount,
+            'customer' => $customerLastMount,
         ];
         return response()->json([
             'status' => true,
