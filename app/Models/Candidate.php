@@ -52,7 +52,7 @@ class Candidate extends Model
     protected $hidden = [
         'user_id',
 
-       
+
     ];
 
     /**
@@ -167,12 +167,11 @@ class Candidate extends Model
      */
     public function location(): Attribute
     {
+
         if (empty($this->attributes['address']))
             return Attribute::get(fn () => '');
 
         $location = $this->belongsTo(Location::class, 'address')->first()['title'] ?? null;
-         
-       
 
         return Attribute::get(fn () => __($location));
     }

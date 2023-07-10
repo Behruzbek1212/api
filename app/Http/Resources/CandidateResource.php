@@ -25,7 +25,7 @@ class CandidateResource extends JsonResource
             'education_level' =>  $this->education_level ?? null,
             "languages" => $this->languages ?? null,
             "specialization" => $this->specialization ?? null,
-            "experence" => $this->resume_experence() ?? null,
+            "experience" => $this->resume_experence() ?? null,
             "birthday" => $this->birthday ?? null,
             "address" => $this->address ?? null,
             "services" => $this->services ?? null,

@@ -347,7 +347,7 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
     }
 
 
-    public function comment():HasMany
+    public function comment(): HasMany
     {
         return $this->hasMany(Comment::class);
     }
