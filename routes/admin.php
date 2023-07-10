@@ -30,11 +30,11 @@ Route::prefix('/trafics')->name('trafics.')->group(function () {
 });
 
 Route::prefix('/limits')->name('limits.')->group(function () {
-    Route::get('/', [App\Http\Controllers\Admin\LimitController::class, 'index']);
-    Route::get('/{slug}', [App\Http\Controllers\Admin\LimitController::class, 'show']);
-    Route::post('/create', [App\Http\Controllers\Admin\LimitController::class, 'create']);
-    Route::post('/edit', [App\Http\Controllers\Admin\LimitController::class, 'edit']);
-    Route::post('/destroy', [App\Http\Controllers\Admin\LimitController::class, 'destroy']);
+    Route::get('/', [LimitController::class, 'index']);
+    Route::get('/{slug}', [LimitController::class, 'show']);
+    Route::post('/create', [LimitController::class, 'create']);
+    Route::post('/edit', [LimitController::class, 'edit']);
+    Route::post('/destroy', [LimitController::class, 'destroy']);
 });
 
 Route::prefix('/candidates')->name('candidates.')->group(function () {
