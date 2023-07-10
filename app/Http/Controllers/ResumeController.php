@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreResumeRequest;
 use App\Models\Chat\Chat;
 use App\Models\Resume;
 use App\Models\User;
@@ -58,11 +59,12 @@ class ResumeController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function store(Request $request): JsonResponse
+    public function store(StoreResumeRequest $request): JsonResponse
     {
+        $request->validated();
         /** @var Authenticatable|User|null $user */
         $user = auth()->user();
-
+   
         $user->resumes()->updateOrCreate([
             'data' => $request->toArray()
         ]);
