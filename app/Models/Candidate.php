@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Models;
-
 use App\Filters\Filterable;
 use App\Models\Chat\Chat;
 use App\Traits\ApiLogActivity;
@@ -14,7 +13,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Kyslik\ColumnSortable\Sortable;
-
 /**
  * @property User $user
  */
@@ -29,7 +27,6 @@ class Candidate extends Model
      *
      * @var array<int, string>
      */
-
     protected $fillable = [
         'user_id',
         'avatar',
@@ -54,6 +51,7 @@ class Candidate extends Model
      */
     protected $hidden = [
         'user_id',
+
 
     ];
 
@@ -149,18 +147,18 @@ class Candidate extends Model
      * @see https://laravel.com/docs/9.x/eloquent-relationships#one-to-many
      */
 
-    public function chats(): HasMany
-    {
-        return $this->hasMany(Chat::class)
-            ->whereHas('resume', function (Builder $table) {
-                $table->whereNull('deleted_at');
-            })
-            ->whereHas('customer', function (Builder $table) {
-                $table->where('active', '=', true);
-                $table->whereNull('deleted_at');
-            })
-            ->whereNull('deleted_at');
-    }
+     public function chats(): HasMany
+     {
+         return $this->hasMany(Chat::class)
+             ->whereHas('resume', function (Builder $table) {
+                 $table->whereNull('deleted_at');
+             })
+             ->whereHas('customer', function (Builder $table) {
+                 $table->where('active', '=', true);
+                 $table->whereNull('deleted_at');
+             })
+             ->whereNull('deleted_at');
+     }
 
     /**
      * Get location name
@@ -174,6 +172,7 @@ class Candidate extends Model
             return Attribute::get(fn () => '');
 
         $location = $this->belongsTo(Location::class, 'address')->first()['title'] ?? null;
+
         return Attribute::get(fn () => __($location));
     }
 
