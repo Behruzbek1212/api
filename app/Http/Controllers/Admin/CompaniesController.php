@@ -94,9 +94,7 @@ class CompaniesController extends Controller
     public function edit(Request $request): JsonResponse
     {
         $this->validateParams($request, [
-            'id' => ['integer', 'required'],
-            'phone' => ['numeric', 'required'],
-            'email' => ['email', 'required']
+            'id' => ['integer', 'required']
         ]);
 
         $customer = Customer::query()
