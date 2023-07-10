@@ -170,13 +170,11 @@ class Candidate extends Model
         if (empty($this->attributes['address']))
             return Attribute::get(fn () => '');
 
-        $location = $this->belongsTo(Location::class, 'address')->first();
+        $location = $this->belongsTo(Location::class, 'address')->first()['title'] ?? null;
          
-        if ($location === null) {
-            return Attribute::get(fn () => '');
-        }
+       
 
-        return Attribute::get(fn () => __($location['title']));
+        return Attribute::get(fn () => __($location));
     }
 
     public function comments(): HasMany
