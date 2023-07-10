@@ -34,7 +34,6 @@ class LimitController extends Controller
             'condidate_limit' => $request->condidate_limit ?? null,
             'code' => $request->code ?? null,
         ]);
-
         return response()->json([
             'status' => true,
             'data' => []
