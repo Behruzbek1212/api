@@ -32,7 +32,7 @@ Route::prefix('/trafics')->name('trafics.')->group(function () {
 Route::prefix('/limits')->name('limits.')->group(function () {
     Route::get('/', [App\Http\Controllers\Admin\LimitController::class, 'index']);
     Route::get('/{slug}', [App\Http\Controllers\Admin\LimitController::class, 'show']);
-    Route::post('/create', dd(21), [App\Http\Controllers\Admin\LimitController::class, 'create']);
+    Route::post('/create', [App\Http\Controllers\Admin\LimitController::class, 'create']);
     Route::post('/edit', [App\Http\Controllers\Admin\LimitController::class, 'edit']);
     Route::post('/destroy', [App\Http\Controllers\Admin\LimitController::class, 'destroy']);
 });
