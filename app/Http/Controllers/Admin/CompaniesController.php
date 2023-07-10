@@ -48,7 +48,7 @@ class CompaniesController extends Controller
                 ['role' => 'customer']
             ));
             $user->customer()->create(array_merge(
-                $request->only(['name', 'about', 'owned_date', 'location', 'address', 'limit_id', 'limit_start_day', 'limit_end_day']),
+                $request->only(['name', 'about', 'owned_date', 'location', 'address']),
                 ['avatar' => $request->get('avatar') ?? null],
                 ['active' => true],
             ));
@@ -104,7 +104,7 @@ class CompaniesController extends Controller
             ->findOrFail($request->get('id'));
 
         $customer->update(array_merge(
-            $request->only(['name', 'about', 'owned_date', 'location', 'address', 'limit_id', 'limit_start_day', 'limit_end_day']),
+            $request->only(['name', 'about', 'owned_date', 'location', 'address']),
             ['avatar' => $request->get('avatar') ?? null]
         ));
 
@@ -194,9 +194,9 @@ class CompaniesController extends Controller
             'address' => ['string', 'required'],
             'phone' => ['numeric', 'unique:users,phone', 'required'],
             'email' => ['email', 'unique:users,email', 'nullable'],
-            'limit_id' => ['numeric', 'required'],
-            'limit_start_day' => ['date', 'required'],
-            'limit_end_day' => ['date', 'required']
+            // 'limit_id' => ['numeric', 'required'],
+            // 'limit_start_day' => ['date', 'required'],
+            // 'limit_end_day' => ['date', 'required']
         ], $rule));
     }
 }
