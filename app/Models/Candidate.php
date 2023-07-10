@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Models;
-
+use App\Filters\Filterable;
 use App\Models\Chat\Chat;
+use App\Traits\ApiLogActivity;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,12 +12,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
-
+use Kyslik\ColumnSortable\Sortable;
 /**
  * @property User $user
  */
 class Candidate extends Model
 {
+    use Filterable;
     use HasFactory;
     use SoftDeletes;
 
@@ -50,9 +52,7 @@ class Candidate extends Model
     protected $hidden = [
         'user_id',
 
-        '__comment',
-        '__conversation',
-        '__conversation_date'
+       
     ];
 
     /**
@@ -177,5 +177,10 @@ class Candidate extends Model
         }
 
         return Attribute::get(fn () => __($location['title']));
+    }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
     }
 }
