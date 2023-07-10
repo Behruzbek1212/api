@@ -10,6 +10,7 @@ class isCustomerMiddleware
     public function handle(Request $request, Closure $next)
     {
 
+        // dd($request->user()->customer);
         if (!in_array($request->user()->role, ['admin', 'customer', 'customer_hr', 'customer_recruiter'])) {
             return response()->json([
                 'status' => false,

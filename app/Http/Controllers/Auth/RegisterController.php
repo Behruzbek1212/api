@@ -193,7 +193,7 @@ class RegisterController extends Controller
      * @param User $user
      * @return JsonResponse
      */
-    public function registerCandidate(Request $request, User $user): JsonResponse
+    public function registerCandidate(Request $request, User $user)
     {
 
         $request->validate([
@@ -207,15 +207,16 @@ class RegisterController extends Controller
             'address' => ['required', 'string']
         ]);
 
+
         $candidate = $user->candidate()->create([
             'avatar' => $request->input('avatar') ?? null,
             'name' => $request->input('name'),
-            'surname' => $request->input('surname'),
-            'sex' => $request->input('sex') ?? 'male',
-            'spheres' => $request->input('spheres'),
+            'surname' => $request->input('surname') ?? null,
+            'sex' => $request->input('sex') ?? 'male' ?? null,
+            'spheres' => $request->input('spheres') ?? null,
             'education_level' => $request->input('education_level') ?? null,
-            'specialization' => $request->input('specialization'),
-            'languages' => $request->input('languages'),
+            'specialization' => $request->input('specialization') ?? null,
+            'languages' => $request->input('languages') ?? null,
             'birthday' => $request->input('birthday'),
             'address' => $request->input('address'),
             'test' => null,
