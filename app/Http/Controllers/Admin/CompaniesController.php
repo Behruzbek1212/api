@@ -98,19 +98,18 @@ class CompaniesController extends Controller
             'phone' => ['numeric', 'required'],
             'email' => ['email', 'required']
         ]);
-
-        $user = _auth()->user();
-
-        if ($user->email !== $request->email) {
-            $request->validate([
-                'email' => ['email', 'unique:users,email']
-            ]);
-        }
+        
+        
 
         $customer = Customer::query()
             ->withTrashed()
             ->findOrFail($request->get('id'));
-        if (!is_null($request->input('email')) && $request->input('email') != $user->email) {
+   
+         $user = User::find($customer->user_id);
+        
+         if($user->email !== $request->email){
+            $request->validate(['email' =>  [ 'email'  ,'unique:users,email']]);
+         }
             $customer->update(array_merge(
                 $request->only(['name', 'about', 'owned_date', 'location', 'address']),
                 ['avatar' => $request->get('avatar') ?? null]
@@ -119,7 +118,7 @@ class CompaniesController extends Controller
             $customer->user()->update(array_merge(
                 $request->only(['phone', 'email']),
             ));
-        }
+        
         return response()->json([
             'status' => true,
             'message' => []
@@ -201,7 +200,7 @@ class CompaniesController extends Controller
             'location' => ['numeric', 'required'],
             'address' => ['string', 'required'],
             'phone' => ['numeric', 'unique:users,phone', 'required'],
-            'email' => ['email', 'unique:users,email', 'nullable'],
+            'email' => ['email'  ,'unique:users,email','nullable'],
             // 'limit_id' => ['numeric', 'required'],
             // 'limit_start_day' => ['date', 'required'],
             // 'limit_end_day' => ['date', 'required']
