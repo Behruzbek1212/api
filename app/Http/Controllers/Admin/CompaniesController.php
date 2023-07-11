@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\JobResource;
 use App\Models\Customer;
+use App\Models\Job;
 use App\Models\User;
+use App\Services\JobServices;
 use App\Services\MobileService;
+use App\Traits\ApiResponse;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
@@ -15,6 +19,7 @@ use Nette\Utils\Random;
 
 class CompaniesController extends Controller
 {
+    use ApiResponse;
     public function index(Request $request): JsonResponse
     {
         $customers = Customer::query()
@@ -89,6 +94,15 @@ class CompaniesController extends Controller
             'status' => true,
             'data' => $customer
         ]);
+    }
+
+    public function companiesJobs(Request $request)
+    {
+        
+       $jobs =  JobServices::getInstance()->companiesJobs($request);
+
+        return $this->successResponse($jobs);
+
     }
 
     public function edit(Request $request): JsonResponse

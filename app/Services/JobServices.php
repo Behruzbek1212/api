@@ -55,4 +55,14 @@ class JobServices
                 ->filter($jobs);
         });
     }
+
+    public function companiesJobs($request)
+    {
+        $jobs = Job::query()
+            ->where('customer_id', $request->customer_id)
+            ->orderByDesc('updated_at')
+            ->paginate($request->limit ?? 8);
+            
+        return $jobs;
+    }
 }
