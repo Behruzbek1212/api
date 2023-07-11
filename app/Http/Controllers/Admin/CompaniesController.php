@@ -98,10 +98,7 @@ class CompaniesController extends Controller
             'phone' => ['numeric', 'required'],
             'email' => ['email', 'required']
         ]);
-        // dd($request->all());
-        // dd(_auth()->user()->phone == $request->phone);
-        // $ds = User::where('email', $request->email)->get();
-        // dd($ds);
+
         $user = _auth()->user();
 
         if ($user->email !== $request->email) {
