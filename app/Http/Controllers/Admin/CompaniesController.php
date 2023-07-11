@@ -94,22 +94,35 @@ class CompaniesController extends Controller
     public function edit(Request $request): JsonResponse
     {
         $this->validateParams($request, [
-            'id' => ['integer', 'required']
+            'id' => ['integer', 'required'],
+            'phone' => ['numeric', 'required'],
+            'email' => ['email', 'required']
         ]);
+        // dd($request->all());
+        // dd(_auth()->user()->phone == $request->phone);
+        // $ds = User::where('email', $request->email)->get();
+        // dd($ds);
+        $user = _auth()->user();
+
+        if ($user->email !== $request->email) {
+            $request->validate([
+                'email' => ['email', 'unique:users,email']
+            ]);
+        }
 
         $customer = Customer::query()
             ->withTrashed()
             ->findOrFail($request->get('id'));
+        if (!is_null($request->input('email')) && $request->input('email') != $user->email) {
+            $customer->update(array_merge(
+                $request->only(['name', 'about', 'owned_date', 'location', 'address']),
+                ['avatar' => $request->get('avatar') ?? null]
+            ));
 
-        $customer->update(array_merge(
-            $request->only(['name', 'about', 'owned_date', 'location', 'address']),
-            ['avatar' => $request->get('avatar') ?? null]
-        ));
-
-        $customer->user()->update(array_merge(
-            $request->only(['phone', 'email']),
-        ));
-
+            $customer->user()->update(array_merge(
+                $request->only(['phone', 'email']),
+            ));
+        }
         return response()->json([
             'status' => true,
             'message' => []
