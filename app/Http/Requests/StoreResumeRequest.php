@@ -23,8 +23,15 @@ class StoreResumeRequest extends FormRequest
     {
         return [
             'about' => 'nullable|string|min:10',
-            'links'=> 'array',
-            'salary' => 'required',
+            'links'=> 'required|array',
+            'links.other' => 'nullable|string',
+            'links.gitHub' => 'nullable|string',
+            'links.behance' => 'nullable|string',
+            'links.linkedin' => 'nullable|string',
+            'links.telegram' => 'nullable|string',
+            'links.whatsapp' => 'nullable|string',
+            'links.instagram' => 'nullable|string',
+            'salary' => 'required|array',
             'salary.amount' => 'string|min:3',
             'salary.currency' => 'string|min:1',
             'salary.agreement' => 'boolean',
@@ -78,9 +85,9 @@ class StoreResumeRequest extends FormRequest
             'additional_education.*.date.end' => 'required|array',
             'additional_education.*.date.end.year' => 'nullable|integer',
             'additional_education.*.date.end.month' => 'nullable|integer',
-            'additional_education.*.date.present' => 'boolean',
-            'additional_education.*.name' => 'required|string|min:3',
-            'additional_education.*.school' => 'required|string|min:3',
+            'additional_education.*.date.present' => 'nullable|boolean',
+            'additional_education.*.name' => 'nullable|string',
+            'additional_education.*.school' => 'nullable|string',
             'additional_education.*.description' => 'nullable|string',
         ];
     }
