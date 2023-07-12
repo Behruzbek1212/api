@@ -18,6 +18,7 @@ class JobsController extends Controller
             ->with(['customer' => function (BelongsTo $query) {
                 $query->where('active', '=', true);
             }])
+            ->where('deleted_at', null)
             ->whereNot('status', '=', 'closed')
             ->orderByDesc('updated_at');
 

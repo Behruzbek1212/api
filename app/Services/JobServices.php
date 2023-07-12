@@ -60,6 +60,7 @@ class JobServices
     {
         $jobs = Job::query()
             ->where('customer_id', $request->customer_id)
+            ->where('deleted_at', null)
             ->orderByDesc('updated_at')
             ->paginate($request->limit ?? 8);
             
