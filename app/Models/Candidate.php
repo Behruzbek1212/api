@@ -170,7 +170,7 @@ class Candidate extends Model
         if (empty($this->attributes['address']))
             return Attribute::get(fn () => '');
 
-        $location = $this->belongsTo(Location::class, 'address')->first()['title'];
+        $location = $this->belongsTo(Location::class, 'address')->first()['title'] ?? null;
         return Attribute::get(fn () => __($location));
     }
 }
