@@ -5,9 +5,6 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\RestoreController;
-use App\Http\Controllers\Bitrix\BitrixController;
-use App\Http\Controllers\Bots\ADSON\AdminController;
-use App\Http\Controllers\Bots\ADSON\MainController;
 use App\Http\Controllers\CandidatesController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ChatsController;
@@ -19,6 +16,7 @@ use App\Http\Controllers\EducationLevelController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\LimitController;
 use App\Http\Controllers\LanguageLevelsController;
 use App\Http\Controllers\LanguagesController;
 use App\Http\Controllers\LocationController;
@@ -32,6 +30,7 @@ use App\Http\Controllers\User\ChangePasswordController;
 use App\Http\Controllers\User\ChangeRoleController;
 use App\Http\Controllers\Utils\UploadController;
 use App\Http\Controllers\WishlistController;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -108,16 +107,29 @@ Route::prefix('/v1')->group(function () {
             Route::post('/acceptance', [JobController::class, 'acceptance'])->name('acceptance');
             Route::post('/{slug}/applications', [JobController::class, 'applications'])->name('applications');
         });
+
+        // limits ---------------------------------------
+
     });
 
     // Candidates -----------------------------------------
     Route::prefix('/candidates')->name('candidates.')->group(function () {
         Route::get('/', [CandidatesController::class, 'all'])->name('all');
+        // limit all candidate
+        Route::get('/candidates', [CandidatesController::class, 'candidates'])->name('candidates');
+
         Route::get('/get/{id}', [CandidatesController::class, 'get'])->name('get');
+        // onclick candidate
+        Route::get('/get_one/{id}', [CandidatesController::class, 'get_one'])->name('get_one');
+        //limit get one candidate
+        Route::get('/get_one_candidate/{id}', [CandidatesController::class, 'get_one_candidate'])->name('get_one_candidate');
         Route::post('/respond', [CandidatesController::class, 'respond'])->middleware(['auth:sanctum', 'is_customer'])->name('respond');
         Route::post('/add-test', [CandidatesController::class, 'addTestResult'])->name('add-test-result');
     });
 
+    Route::prefix('/limits')->name('limits.')->group(function () {
+        Route::get('/', [LimitController::class, 'all'])->name('limits');
+    });
     // Trafics -----------------------------------------
     Route::prefix('/trafics')->name('trafics.')->group(function () {
         Route::get('/', [TraficController::class, 'all'])->name('all');
@@ -237,7 +249,9 @@ Route::prefix('/v1')->group(function () {
     Route::prefix('/utils')->name('utils.')->group(function () {
         Route::post('upload', [UploadController::class, 'upload'])->name('upload');
     });
-    Route::post('delete/user', [DeleteDataController::class, 'delete'])->middleware('api_token');
-    // Bots ------------------------------
-    require_once __DIR__ . '/bots.php';
+
+    Route::prefix('/admin')->middleware('is_admin')->name('admin.')->group(function () {
+        require_once __DIR__ . '/admin.php';
+    });
 });
+

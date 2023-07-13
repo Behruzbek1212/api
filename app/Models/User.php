@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -51,11 +52,11 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
      *
      * @var array<int, string>
      */
-    protected $availableRoles = [
-        'candidate',
-        'customer',
-        'admin'
-    ];
+    // protected $availableRoles = [
+    //     'candidate',
+    //     'customer',
+    //     'admin'
+    // ];
 
     /**
      * The attributes that are mass assignable.
@@ -101,7 +102,7 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
      */
     public function name(): Attribute
     {
-//        dd($this->role);
+        //        dd($this->role);
         return Attribute::make(
             get: fn () => $this[$this->role]->name ?? null
         );
@@ -115,7 +116,7 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
      */
     public function changeRole(string $role): JsonResponse
     {
-        if (! in_array($role, $this->availableRoles))
+        if (!in_array($role, $this->availableRoles))
             return response()->json([
                 'status' => false,
                 'message' => 'Invalid role'
@@ -123,16 +124,16 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
 
         switch ($role) {
             case 'candidate':
-                $this->customer()->update([ 'active' => false ]);
-                $this->candidate()->update([ 'active' => true ]);
+                $this->customer()->update(['active' => false]);
+                $this->candidate()->update(['active' => true]);
                 break;
             case 'customer':
-                $this->customer()->update([ 'active' => true ]);
-                $this->candidate()->update([ 'active' => false ]);
+                $this->customer()->update(['active' => true]);
+                $this->candidate()->update(['active' => false]);
                 break;
             case 'admin':
-                $this->candidate()->update([ 'active' => false ]);
-                $this->customer()->update([ 'active' => false ]);
+                $this->candidate()->update(['active' => false]);
+                $this->customer()->update(['active' => false]);
                 break;
             default:
                 return response()->json([
@@ -181,7 +182,7 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
     {
         $role = $this->role;
 
-        if ( !is_null($request->input('email')) && $request->input('email') != $this->email ) {
+        if (!is_null($request->input('email')) && $request->input('email') != $this->email) {
             $this->update([
                 'email' => $request->input('email'),
                 'email_verified_at' => null
@@ -200,7 +201,7 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
     }
 
 
-        /**
+    /**
      * Update user data's
      *
      * @param Request $request
@@ -208,11 +209,11 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
      */
     public function updateCandidateServices(Request $request): JsonResponse
     {
-    //     resume: Boolean,
-    // conversation: Booelan
+        //     resume: Boolean,
+        // conversation: Booelan
         $data = $request->json()->all();
 
-       $this->candidate()->update(['services' => $data]);
+        $this->candidate()->update(['services' => $data]);
 
         return response()->json([
             'status' => true,
@@ -324,7 +325,7 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
      */
     public function resumes(): HasMany
     {
-        return $this->hasMany(Resume::class)->orderByDesc('id');
+        return $this->hasMany(Resume::class, 'user_id', 'id')->orderByDesc('id');
     }
 
     /**
@@ -343,5 +344,11 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
         }
 
         return null;
+    }
+
+
+    public function comment(): HasMany
+    {
+        return $this->hasMany(Comment::class);
     }
 }

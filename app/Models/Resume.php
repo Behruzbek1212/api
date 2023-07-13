@@ -86,19 +86,19 @@ class Resume extends Model
     {
         $employments = $data['employment'] ;
         $exp_time = 0;
-    
+
         $unique_employments = [];
 
         foreach ($employments as $employment) {
             $key = $employment["date"]["start"]["year"] . "-" . $employment["date"]["end"]["year"];
-        
+
             if (!array_key_exists($key, $unique_employments)) {
                 $unique_employments[$key] = $employment;
             }
         }
-       
+
         $output = [];
-        
+
         foreach ($unique_employments as $employment) {
             $output[] = [
                 "title" => $employment["title"],
@@ -107,24 +107,24 @@ class Resume extends Model
                 "date" => $employment["date"],
             ];
         }
-       
+
         for ($i = 0; $i < count($output); $i++) {
             $employment = $output[$i];
-          
+
             $start_year = $employment['date']['start']['year'] * 1;
             $start_month = $employment['date']['start']['month'] * 1;
-          
+
             $end_year = $employment['date']['end']['year'] * 1 ?? 0;
             $end_month = $employment['date']['end']['month'] * 1 ?? 0;
-          
+
             if (@$employment['date']['present'] === true) {
-              $end_year = date('Y');
-              $end_month = date('m');
+                $end_year = date('Y');
+                $end_month = date('m');
             }
-          
+
             $exp_time += ($end_year - $start_year) * 12;
             $exp_time += $end_month - $start_month;
-          }
+        }
 
         return $exp_time;
     }

@@ -2,7 +2,7 @@ name: Development
 
 on:
   push:
-    branches: [development]
+    branches: [admin-panel]
 
 jobs:
   exec-tests:

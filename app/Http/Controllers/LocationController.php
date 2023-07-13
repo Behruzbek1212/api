@@ -50,6 +50,8 @@ class LocationController extends Controller
             $districts[$key]['uz'] = $uz_district;
         }
 
+
+
         foreach ($ru_districts['addresses'] as $key => $ru_district) {
             $districts[$key]['ru'] = $ru_district;
         }

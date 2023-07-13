@@ -13,7 +13,7 @@ trait ApiResponse
      */
     protected function successResponse($data,  int $code = 200)
     {
-        return response()->json(['result' => $data, 'errors' => null], $code);
+        return response()->json(['status' => true, 'data' => $data], $code);
     }
 
     protected function success($data,  int $code = 200)
@@ -46,7 +46,7 @@ trait ApiResponse
             'current_page' => $result->currentPage(),
             'last_page' => $result->lastPage()
         ];
-        return ['status' => true,'jobs' => $result, 'pagination' => $pagination];
+        return ['status' => true, 'jobs' => $result, 'pagination' => $pagination];
     }
 
     protected function successPaginate($result, int $code = 200)
@@ -61,7 +61,4 @@ trait ApiResponse
         ];
         return ['result' => $result, 'pagination' => $pagination];
     }
-
-
-
 }

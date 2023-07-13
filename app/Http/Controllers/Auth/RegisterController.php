@@ -42,7 +42,6 @@ class RegisterController extends Controller
      */
     public function register(Request $request): JsonResponse
     {
-        // return response()->json();
 
         $request->validate([
             'phone' => ['required', 'numeric', 'unique:users,phone'],
@@ -50,6 +49,8 @@ class RegisterController extends Controller
             'role' => ['required', 'in:admin,customer,candidate'],
             'email' => ['email', 'unique:users,email']
         ]);
+
+        // dd($request->all());
         /** @var User $user */
         $user = User::query()->create([
             'phone' => $request->input('phone'),
@@ -129,7 +130,10 @@ class RegisterController extends Controller
             'owned_date' => ['required', 'date'],
             'location' => ['required', 'string'],
             'address' => ['required', 'string'],
-            'about' => ['string', 'nullable']
+            'about' => ['string', 'nullable'],
+            'limit_id' => ['integer', 'nullable'],
+            'limit_start_day' => ['date', 'nullable'],
+            'limit_end_day' => ['date', 'nullable']
         ]);
 
         $customer = $user->customer()->create([
@@ -139,7 +143,10 @@ class RegisterController extends Controller
             'owned_date' => $request->input('owned_date'),
             'location' => $request->input('location'),
             'address' => $request->input('address'),
-            'active' => true
+            'active' => true,
+            'limit_id' => $request->limit_id ?? null,
+            'limit_start_day' => $request->limit_start_day ?? null,
+            'limit_end_day' => $request->limit_end_day ?? null
         ]);
 
         $message = "🆕 <b>Yangi kompaniya</b>\n";
@@ -186,7 +193,7 @@ class RegisterController extends Controller
      * @param User $user
      * @return JsonResponse
      */
-    public function registerCandidate(Request $request, User $user): JsonResponse
+    public function registerCandidate(Request $request, User $user)
     {
 
         $request->validate([
@@ -200,15 +207,16 @@ class RegisterController extends Controller
             'address' => ['required', 'string']
         ]);
 
+
         $candidate = $user->candidate()->create([
             'avatar' => $request->input('avatar') ?? null,
             'name' => $request->input('name'),
-            'surname' => $request->input('surname'),
-            'sex' => $request->input('sex') ?? 'male',
-            'spheres' => $request->input('spheres'),
+            'surname' => $request->input('surname') ?? null,
+            'sex' => $request->input('sex') ?? 'male' ?? null,
+            'spheres' => $request->input('spheres') ?? null,
             'education_level' => $request->input('education_level') ?? null,
-            'specialization' => $request->input('specialization'),
-            'languages' => $request->input('languages'),
+            'specialization' => $request->input('specialization') ?? null,
+            'languages' => $request->input('languages') ?? null,
             'birthday' => $request->input('birthday'),
             'address' => $request->input('address'),
             'test' => null,

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Chat\Chat;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
 use Illuminate\Http\Request;
 
 /**
@@ -43,7 +45,10 @@ class Customer extends Model
         'location',
         'address',
         'services',
-        'active'
+        'active',
+        'limit_id',
+        'limit_start_day',
+        'limit_end_day'
     ];
 
     /**
@@ -145,7 +150,13 @@ class Customer extends Model
 
         return Attribute::make(
             set: fn ($value) =>
-                is_null($value) ? $default_avatar : $value
+            is_null($value) ? $default_avatar : $value
         );
+    }
+
+
+    public function limit_customer()
+    {
+        return $this->hasOne(LimitModel::class, 'id', 'limit_id');
     }
 }
