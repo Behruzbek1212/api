@@ -36,7 +36,7 @@ class CompaniesController extends Controller
 
         return response()->json([
             'status' => true,
-            'data' => $customers->paginate(20)
+            'data' => $customers->paginate($request->limit ?? 15)
         ]);
     }
 

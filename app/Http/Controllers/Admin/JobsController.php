@@ -27,7 +27,7 @@ class JobsController extends Controller
 
         return response()->json([
             'status' => true,
-            'data' => $jobs->paginate(20)
+            'data' => $jobs->paginate($request->limit ?? 15)
         ]);
     }
 
