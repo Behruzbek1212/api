@@ -129,6 +129,7 @@ Route::prefix('/v1')->group(function () {
 
     Route::prefix('/limits')->name('limits.')->group(function () {
         Route::get('/', [LimitController::class, 'all'])->name('limits');
+    });
     // Trafics -----------------------------------------
     Route::prefix('/trafics')->name('trafics.')->group(function () {
         Route::get('/', [TraficController::class, 'all'])->name('all');
@@ -253,3 +254,4 @@ Route::prefix('/v1')->group(function () {
         require_once __DIR__ . '/admin.php';
     });
 });
+
