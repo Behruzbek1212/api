@@ -63,23 +63,23 @@ trait ApiLogActivity
             ->dontSubmitEmptyLogs();
     }
 
-    public function getDescriptionForEvent(string $eventName): string
-    {
-        $user = _auth()->user()->role;
-
-        switch ($eventName) {
-            case 'created':
-                return "$user";
-                break;
-            case 'updated':
-                return "$user";
-                break;
-            case 'deleted':
-                return "$user";
-                break;
-            default:
-                return '';
-        }
-    }
+//    public function getDescriptionForEvent(string $eventName): string
+//    {
+//        $user = _auth()->user()->role;
+//
+//        switch ($eventName) {
+//            case 'created':
+//                return "$user";
+//                break;
+//            case 'updated':
+//                return "$user";
+//                break;
+//            case 'deleted':
+//                return "$user";
+//                break;
+//            default:
+//                return '';
+//        }
+//    }
 }
 

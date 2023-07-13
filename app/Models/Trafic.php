@@ -12,8 +12,8 @@ class Trafic extends Model
 {
     use HasFactory;
     // use SoftDeletes;
-    use LogsActivity;
-    use ApiLogActivity;
+//    use LogsActivity;
+//    use ApiLogActivity;
     const NOT_DROP_TYPE = [4];
 
     protected $table = 'trafics';

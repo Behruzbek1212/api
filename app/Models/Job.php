@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Filters\Filterable;
 use App\Models\Chat\Chat;
+use App\Traits\ApiLogActivity;
 use App\Traits\HasScopes;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Nette\Utils\Random;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * @property string title
@@ -34,7 +36,8 @@ class Job extends Model
     use HasFactory;
     use SoftDeletes;
     use HasScopes;
-
+//    use ApiLogActivity;
+//    use LogsActivity;
     /**
      * The primary key for the model.
      *
