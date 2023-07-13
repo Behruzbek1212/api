@@ -21,49 +21,55 @@
     // Blue colored generator
     // $qrcode = qrcode(50)->color(0, 121, 254)->generate($candidate_page . $candidate->id);
 
-    function calculateYearsAndMonths($months):string {
-      $years = floor($months / 12);
-      $remainingMonths = $months % 12;
+    if (! function_exists('calculateYearsAndMonths')) {
+        function calculateYearsAndMonths($months):string {
+          $years = floor($months / 12);
+          $remainingMonths = $months % 12;
 
-      if ($years > 0 && $remainingMonths > 0) {
-        return $years . " " . __('resume.dates.year')." " . $remainingMonths . " " . __('resume.dates.month');
-      } elseif ($years > 0) {
-        return $years . " year(s)";
-      } else {
-        return $remainingMonths . " " . __('resume.dates.month');
-      }
+          if ($years > 0 && $remainingMonths > 0) {
+            return $years . " " . __('resume.dates.year')." " . $remainingMonths . " " . __('resume.dates.month');
+          } elseif ($years > 0) {
+            return $years . " year(s)";
+          } else {
+            return $remainingMonths . " " . __('resume.dates.month');
+          }
+        }
     }
 
     $all_experience = calculateYearsAndMonths($experience);
 
-    function calculateEmployment($dates):int {
-      $exp_time = 0;
-      $employment = $dates;
+    if (! function_exists('calculateEmployment')) {
+        function calculateEmployment($dates):int {
+          $exp_time = 0;
+          $employment = $dates;
 
-      $start_year = $employment['date']['start']['year'] * 1;
-      $start_month = $employment['date']['start']['month'] * 1;
+          $start_year = $employment['date']['start']['year'] * 1;
+          $start_month = $employment['date']['start']['month'] * 1;
 
-      $end_year = $employment['date']['end']['year'] * 1 ?? 0;
-      $end_month = $employment['date']['end']['month'] * 1 ?? 0;
+          $end_year = $employment['date']['end']['year'] * 1 ?? 0;
+          $end_month = $employment['date']['end']['month'] * 1 ?? 0;
 
-      if (@$employment['date']['present'] === true) {
-        $end_year = date('Y');
-        $end_month = date('m');
-      }
+          if (@$employment['date']['present'] === true) {
+            $end_year = date('Y');
+            $end_month = date('m');
+          }
 
-      $exp_time += ($end_year - $start_year) * 12;
-      $exp_time += $end_month - $start_month;
+          $exp_time += ($end_year - $start_year) * 12;
+          $exp_time += $end_month - $start_month;
 
-      return $exp_time;
+          return $exp_time;
+        }
     }
 
-    function showEducationLevels($level):string {
-        if ($level !== 'higher' && $level !== 'secondary' && $level !== 'incomplete_higher') {
-            return $level;
+    if (! function_exists('showEducationLevels')) {
+        function showEducationLevels($level):string {
+            if ($level !== 'higher' && $level !== 'secondary' && $level !== 'incomplete_higher') {
+                return $level;
+            }
+            $temp = 'resume.education_levels.' . $level;
+            $str = __($temp);
+            return $str;
         }
-        $temp = 'resume.education_levels.' . $level;
-        $str = __($temp);
-        return $str;
     }
 
     // Dark colored generator
