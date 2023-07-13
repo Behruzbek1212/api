@@ -121,7 +121,7 @@ class Chat extends Model
      *
      * @return Resume|Model|BelongsTo
      */
-    public function getResumeAttribute(): BelongsTo|Model|Resume
+    public function getResumeAttribute(): BelongsTo|Model|Resume|null
     {
         return $this->resume()->first();
     }

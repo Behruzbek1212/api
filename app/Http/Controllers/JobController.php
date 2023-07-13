@@ -254,7 +254,7 @@ class JobController extends Controller
             'work_type' => $params['work_type'],
             'experience' => $params['experience'],
             'location_id' => $params['location'],
-            'languages' => $params['languages'] ?? null,
+            'languages' => $params['languages'] ?? [],
             'education_level' => $params['education_level'] ?? null, // TODO: remove `null` value
             'sphere' => $params['sphere'],
             'category_id' => $params['category_id'],
@@ -276,7 +276,7 @@ class JobController extends Controller
             $message .= $params['strengthening'] ? "- E'lonni kuchaytirish (реклама | усиление объявление о вакансии)\n" : '';
 
             Http::withoutVerifying()->post("https://api.telegram.org/bot5777417067:AAGvh21OUGVQ7nmSnLbIhzTiZxoyMQMIZKk/sendMessage", [
-                'chat_id' => '-844005009',
+                'chat_id' => '-1001989390870',
                 'text' => $message,
                 'parse_mode' => 'HTML',
                 'reply_markup' => json_encode([
@@ -331,7 +331,7 @@ class JobController extends Controller
             'work_type' => $params['work_type'],
             'experience' => $params['experience'],
             'location_id' => $params['location'],
-            'languages' => $params['languages'],
+            'languages' => $params['languages'] ?? [],
             'education_level' => $params['education_level'] ?? null, // TODO: remove `null` value
             'category_id' => $params['category_id'],
             'sphere' => $params['sphere'],
@@ -424,7 +424,9 @@ class JobController extends Controller
             'customer_id', 'candidate_id',
             'created_at', 'updated_at',
             'customer', 'job'
-        ]);
+        ])->filter(function ($chat) {
+            return $chat->resume !== null;
+        });
 
         return response()->json([
             'status' => true,

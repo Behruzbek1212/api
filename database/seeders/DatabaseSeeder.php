@@ -31,6 +31,10 @@ class DatabaseSeeder extends Seeder
             LocationSeeder::class,
             SpheresSeeder::class,
             ResumeBallSeeder::class
+            EducationLevelSeeder::class,
+            SocialStatusSeeder::class,
+            LanguagesSeeder::class,
+            LanguageLevelsSeeder::class,
         ]);
     }
 }

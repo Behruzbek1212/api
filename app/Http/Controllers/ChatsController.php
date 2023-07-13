@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ChatCandidateResource;
+use App\Http\Resources\ChatCustomerResource;
 use App\Models\Chat\Chat;
 use App\Models\User;
+use App\Traits\ApiResponse;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ChatsController extends Controller
 {
+    use ApiResponse;
     /**
      * Get chats list
      *
@@ -23,22 +27,70 @@ class ChatsController extends Controller
         $chats = match ($user->role) {
             'candidate' =>
                 $user->candidate->chats()
-                    ->withExists(['resume', 'customer'])
+                    ->with(['resume', 'customer'])
+                    ->orderBy('updated_at', 'desc')
                     ->get(),
 
             'customer' =>
                 $user->customer->chats()
-                    ->withExists(['resume', 'candidate'])
+                    ->with(['resume', 'candidate'])
+                    ->orderBy('updated_at', 'desc')
                     ->get(),
 
             default => null
         };
-
+        if($user->role == 'customer'){
+            $data = ChatCandidateResource::collection($chats);
+        }
+        if($user->role == 'candidate') {
+            $data = ChatCustomerResource::collection($chats);
+        }
         return response()->json([
             'status' => true,
-            'data' => $chats
+            'data' => $data
         ]);
     }
+    
+     
+
+
+    public function listAll()
+    {
+        /** @var Authenticatable|User $user */
+        $user = _auth()->user();
+
+        $chats = match ($user->role) {
+            'candidate' =>
+                $user->candidate->chats()
+                    ->with(['resume'])
+                    ->where('deleted_at', null)
+                    ->orderBy('updated_at', 'desc')
+                    ->paginate(request()->get('limit') ?? 10),
+
+            'customer' =>
+                $user->customer->chats()
+                    ->with(['job'])
+                    ->orderBy('updated_at', 'desc')
+                    ->paginate(request()->get('limit') ?? 10),
+
+            default => null
+        };
+
+      
+        if($user->role == 'customer'){
+              $data = ChatCandidateResource::collection($chats);
+        }
+        
+        if($user->role == 'candidate') {
+            $data = ChatCustomerResource::collection($chats);
+          
+        }
+       
+        return $this->successPaginate($data);
+    }
+
+
+
 
     /**
      * Get chat

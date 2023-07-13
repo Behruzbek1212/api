@@ -8,17 +8,24 @@ use App\Http\Controllers\Auth\RestoreController;
 use App\Http\Controllers\CandidatesController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ChatsController;
+use App\Http\Controllers\CheckEmailController;
 use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\DeleteDataController;
+use App\Http\Controllers\EducationLevelController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\LimitController;
+use App\Http\Controllers\LanguageLevelsController;
+use App\Http\Controllers\LanguagesController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ResumeBallsController;
 use App\Http\Controllers\ResumeController;
+use App\Http\Controllers\SocialStatusController;
 use App\Http\Controllers\TestUserController;
+use App\Http\Controllers\TraficController;
 use App\Http\Controllers\User\ChangePasswordController;
 use App\Http\Controllers\User\ChangeRoleController;
 use App\Http\Controllers\Utils\UploadController;
@@ -39,8 +46,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', HomeController::class);
 Route::fallback([HomeController::class, 'fallback']);
 Route::post('/bitrix', [BitrixController::class, 'index'])->name('index');
+Route::get('/cron_jobs', [JobController::class, 'cron_jobs'])->name('cron_jobs');
 Route::prefix('/v1')->group(function () {
-
     // User | Me ------------------------------------
     Route::get('/me', [Controller::class, 'user'])
         ->middleware('auth:sanctum');
@@ -122,6 +129,9 @@ Route::prefix('/v1')->group(function () {
 
     Route::prefix('/limits')->name('limits.')->group(function () {
         Route::get('/', [LimitController::class, 'all'])->name('limits');
+    // Trafics -----------------------------------------
+    Route::prefix('/trafics')->name('trafics.')->group(function () {
+        Route::get('/', [TraficController::class, 'all'])->name('all');
     });
 
     // Companies -----------------------------------------
@@ -158,7 +168,7 @@ Route::prefix('/v1')->group(function () {
         Route::prefix('/chats')->name('chats.')->group(function () {
             Route::post('/', [ChatsController::class, 'list'])->name('index');
             Route::post('/{id}', [ChatsController::class, 'get'])->name('get');
-
+            Route::get('/all' ,  [ChatsController::class, 'listAll']);
             Route::post('/{id}/send', [ChatsController::class, 'send'])->name('send');
         });
 
@@ -190,6 +200,9 @@ Route::prefix('/v1')->group(function () {
     // Resume Display|Download ---------------------------------------
     Route::get('resume/show/{id}', [ResumeController::class, 'show'])->name('resume.show');
     Route::get('resume/download/{id}', [ResumeController::class, 'download'])->name('resume.download');
+    Route::get('resume/admin/show/{id}', [ResumeController::class, 'showForAdmin'])->name('resume.show');
+    Route::get('resume/admin/download/{id}', [ResumeController::class, 'downloadForAdmin'])->name('resume.download');
+    Route::get('resume/admin/with-tests/download/{id}', [ResumeController::class, 'downloadForAdminWithTests']);
 
     Route::prefix('/test-user')->name('test-user.')->group(function () {
         Route::get('/', [TestUserController::class, 'index'])->name('index');
@@ -206,6 +219,31 @@ Route::prefix('/v1')->group(function () {
         //       Route::get('/me', [TestUserController::class, 'loginWithToken'])->name('login-with-token');
     });
 
+    Route::prefix('/education-level')->name('education-level.')->group(function () {
+        Route::get('/', [EducationLevelController::class, 'index'])->name('index');
+    });
+
+    Route::prefix('/social-status')->name('social-status.')->group(function () {
+        Route::get('/', [SocialStatusController::class, 'index'])->name('index');
+    });
+
+
+    Route::prefix('/language')->name('language.')->group(function () {
+        Route::get('/', [LanguagesController::class, 'index'])->name('index');
+    });
+
+
+    Route::prefix('/language-level')->name('language-level.')->group(function () {
+        Route::get('/', [LanguageLevelsController::class, 'index'])->name('index');
+    });
+
+
+    // Resume balls
+    Route::get('resume-ball', [ResumeBallsController::class, 'getBall'])->name('resume-ball');
+
+    // check email route
+
+    Route::post('email/check', [CheckEmailController::class, 'check']);
 
     Route::prefix('/utils')->name('utils.')->group(function () {
         Route::post('upload', [UploadController::class, 'upload'])->name('upload');
