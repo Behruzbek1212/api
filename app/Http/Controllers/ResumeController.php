@@ -10,7 +10,6 @@ use App\Models\User;
 use App\Services\AdminResumeService;
 use App\Services\AdminResumeWithTestsService;
 use App\Services\ResumeService;
-use App\Services\AdminResumeService;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -66,7 +65,7 @@ class ResumeController extends Controller
         $request->validated();
         /** @var Authenticatable|User|null $user */
         $user = auth()->user();
-   
+
         $user->resumes()->updateOrCreate([
             'data' => $request->toArray()
         ]);
@@ -110,19 +109,19 @@ class ResumeController extends Controller
     {
         /** @var Authenticatable|User $user */
         $user = _auth()->user();
-       
-        
-       
+
+
+
          $resume = $user->resumes()->findOrFail($id);
          $resume->delete();
         $chats = Chat::query()->where('resume_id', $resume->id)->where('deleted_at', null)->get();
-        
+
         if($chats !== null){
              foreach($chats as $chat){
                 $chat->delete();
              }
         }
-       
+
         return response()->json([
             'status' => true,
             'message' => 'Ok'
@@ -188,33 +187,6 @@ class ResumeController extends Controller
             ->stream($candidate->name . '.pdf');
     }
 
-    /**
-     * Display a resume for admin.
-     *
-     * @param string|int $id
-     *
-     * @return Response
-     * @throws JsonException
-     */
-    public function showForAdmin(string|int $id): Response
-    {
-        $resume = Resume::query()
-            ->with('user')
-            ->findOrFail($id);
-
-        $data = $resume->data;
-        $candidate = $resume->user
-            ->candidate;
-        $experience = $resume -> experience;
-
-        $resume_id = $id;
-
-        $resume->increment('visits');
-
-        return (new AdminResumeService)
-            ->load(compact('data', 'candidate', 'resume_id', 'experience'))
-            ->stream($candidate->name . '.pdf');
-    }
 
     /**
      * Download resume.
