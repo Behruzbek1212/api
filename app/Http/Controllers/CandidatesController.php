@@ -33,7 +33,7 @@ class CandidatesController extends Controller
 
         $candidates = Candidate::query()
 
-            // ->with(['user:id,email,phone,verified', 'user.resumes'])
+            ->with(['user:id,email,phone,verified', 'user.resumes'])
             ->orderByDesc('id')
             ->whereHas('user', function (Builder $query) {
                 $query->where('role', '=', 'candidate');
