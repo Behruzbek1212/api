@@ -14,6 +14,10 @@ class DeleteDataController extends Controller
 {
     public function delete(Request $request)
     {
+    
+        $request->validate([
+           'phone' => 'required|numeric'
+        ]);
          $user = User::where('phone', $request->phone)->first();
         
     

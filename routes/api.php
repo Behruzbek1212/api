@@ -245,7 +245,11 @@ Route::prefix('/v1')->group(function () {
     // check email route
 
     Route::post('email/check', [CheckEmailController::class, 'check']);
+    
+    // user delete route 
 
+    Route::post('delete/user',  [DeleteDataController::class, 'delete'])->middleware('api_token');
+   
     Route::prefix('/utils')->name('utils.')->group(function () {
         Route::post('upload', [UploadController::class, 'upload'])->name('upload');
     });
