@@ -2,34 +2,43 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\WishlistCandidateResource;
+use App\Http\Resources\WishlistCustomerResource;
 use App\Models\Candidate;
 use App\Models\Job;
+use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class WishlistController extends Controller
 {
+    use ApiResponse;
     /**
      * Display a listing of the resource.
      *
      * @param Request $request
      * @return JsonResponse
      */
-    public function index(Request $request): JsonResponse
+    public function index(Request $request)
     {
         $list = match ($request->user()->role) {
             'customer' => $request->user()->candidateWishlist()
-                ->with('user'),
+                ->with('user')
+                ->orderByDesc('id')
+                ->paginate($request->limit ?? 15),
 
             'candidate' => $request->user()->jobsWishlist()
-                ->with('customer'),
+                ->with('customer')
+                ->orderByDesc('id')
+                ->paginate($request->limit ?? 15),
         };
-
-        return response()->json([
-            'status' => true,
-            'list' => $list->orderByDesc('id')
-                ->paginate(15)
-        ]);
+        if($request->user()->role == 'candidate'){
+            $data = WishlistCandidateResource::collection($list);
+        } 
+        if($request->user()->role == 'customer'){
+            $data = WishlistCustomerResource::collection($list);
+        }
+        return  $this->successPaginate($data);
     }
 
     /**

@@ -52,7 +52,7 @@ class CompaniesController extends Controller
                 ['password' => Hash::make($password)],
                 ['role' => 'customer']
             ));
-            $user->customer()->create(array_merge(
+        $customer =   $user->customer()->create(array_merge(
                 $request->only(['name', 'about', 'owned_date', 'location', 'address']),
                 ['avatar' => $request->get('avatar') ?? null],
                 ['active' => true],
@@ -74,6 +74,7 @@ class CompaniesController extends Controller
 
         return response()->json([
             'status' => true,
+            'customer_id' => $customer->id,
             'password' => $password,
             'data' => []
         ]);

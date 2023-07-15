@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Candidate;
 use App\Models\User;
 use App\Services\MobileService;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\QueryException;
@@ -130,6 +131,10 @@ class CandidatesController extends Controller
             $request->except(['id', 'phone', 'email']),
             ['avatar' => $request->get('avatar') ?? null]
         ));
+
+        $candidate->__conversation = $request->get('__conversation');
+        $candidate->__conversation_date = $request->get('__conversation') ? Carbon::now() : null;
+        $candidate->save();
 
         $candidate->user()->update(array_merge(
             $request->only(['phone', 'email'])

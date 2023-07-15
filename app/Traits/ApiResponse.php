@@ -59,6 +59,6 @@ trait ApiResponse
             'current_page' => $result->currentPage(),
             'last_page' => $result->lastPage()
         ];
-        return ['result' => $result, 'pagination' => $pagination];
+        return ['status' => true,   'result' => $result, 'pagination' => $pagination];
     }
 }
