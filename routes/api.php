@@ -43,11 +43,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+
 Route::get('/', HomeController::class);
 Route::fallback([HomeController::class, 'fallback']);
 Route::post('/bitrix', [BitrixController::class, 'index'])->name('index');
 Route::get('/cron_jobs', [JobController::class, 'cron_jobs'])->name('cron_jobs');
 Route::prefix('/v1')->group(function () {
+
     // User | Me ------------------------------------
     Route::get('/me', [Controller::class, 'user'])
         ->middleware('auth:sanctum');
@@ -91,8 +94,17 @@ Route::prefix('/v1')->group(function () {
         });
     });
 
+     // payme -----------------------------------------
+
+    Route::prefix('/payme')->name('payme.')->group(function () {
+        Route::any('/handle/{paysys}', function ($paysys) {
+            return response()->json((new Goodoneuz\PayUz\PayUz)->driver($paysys)->handle());
+        });
+    });
+
     // Jobs -----------------------------------------
     Route::prefix('/jobs')->name('jobs.')->group(function () {
+
         Route::get('/', [JobController::class, 'all'])->name('all');
         Route::get('/all_jobs', [JobController::class, 'all_jobs'])->name('all_jobs');
         Route::get('/similar_jobs', [JobController::class, 'similar_jobs'])->name('similar_jobs');
@@ -169,7 +181,7 @@ Route::prefix('/v1')->group(function () {
         Route::prefix('/chats')->name('chats.')->group(function () {
             Route::post('/', [ChatsController::class, 'list'])->name('index');
             Route::post('/{id}', [ChatsController::class, 'get'])->name('get');
-            Route::get('/all' ,  [ChatsController::class, 'listAll']);
+            Route::get('/all',  [ChatsController::class, 'listAll']);
             Route::post('/{id}/send', [ChatsController::class, 'send'])->name('send');
         });
 
@@ -254,4 +266,3 @@ Route::prefix('/v1')->group(function () {
         require_once __DIR__ . '/admin.php';
     });
 });
-

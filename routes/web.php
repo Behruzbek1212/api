@@ -11,3 +11,14 @@
 |
 */
 
+use Illuminate\Support\Facades\Route;
+use PayzeIO\LaravelPayze\Facades\Payze;
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+
+Route::any('/handle/{paysys}', function ($paysys) {
+    return response()->json((new Goodoneuz\PayUz\PayUz)->driver($paysys)->handle());
+});
