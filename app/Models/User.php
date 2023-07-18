@@ -52,11 +52,11 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
      *
      * @var array<int, string>
      */
-    // protected $availableRoles = [
-    //     'candidate',
-    //     'customer',
-    //     'admin'
-    // ];
+    protected $availableRoles = [
+        'candidate',
+        'customer',
+        'admin'
+    ];
 
     /**
      * The attributes that are mass assignable.

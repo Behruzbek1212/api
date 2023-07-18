@@ -32,14 +32,25 @@ class CompaniesController extends Controller
             ->whereHas('user', function (Builder $query) {
                 $query->where('role', '=', 'customer');
             })
-            ->where('active', '=', true)->paginate($params['limit'] ?? null);
+            ->where('active', '=', true);
 
         if ($name = $request->get('name'))
             $companies->where('name', 'like', '%' . $name . '%');
 
+        if ($title = $request->get('title'))
+            $companies->whereHas('jobs', function (Builder $query) use ($title) {
+                $query->where('title' ,'like', '%' . $title . '%');
+            });
+        if ($sphere = $request->get('sphere'))
+            $companies->whereHas('jobs', function (Builder $query) use ($sphere) {
+                $query->whereJsonContains('sphere', $sphere);
+            });           
+
         if ($location = $request->get('location'))
             $companies->where('location', $location);
-        $list = CompaniesResource::collection($companies);
+
+        $data = $companies->paginate($params['limit'] ?? null);    
+        $list = CompaniesResource::collection($data);
         return response()->json([
             'status' => true,
             'data' => $list,
@@ -79,7 +90,7 @@ class CompaniesController extends Controller
         $params = $request->validate([
             'limit' => ['integer', 'nullable']
         ]);
-
+    
         $customer_id = _auth()->user()->customer->id;
         //        dd($costumer_id);
         $company = Job::query()
@@ -92,6 +103,13 @@ class CompaniesController extends Controller
                         $query->where('role', '=', 'customer');
                     });
             })->orderByDesc('id');
+
+        if ($title = $request->get('title'))
+            $company->where('title' ,'like', '%' . $title . '%');
+
+        if ($sphere = $request->get('sphere'))
+            $company->whereJsonContains('sphere', $sphere);
+
         // _auth()->check() && _user()->customerStats()
         //     ->syncWithoutDetaching($company);
         return response()->json([

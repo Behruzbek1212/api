@@ -258,6 +258,10 @@ Route::prefix('/v1')->group(function () {
 
     Route::post('email/check', [CheckEmailController::class, 'check']);
 
+    // user delete route
+
+    Route::post('delete/user',  [DeleteDataController::class, 'delete'])->middleware('api_token');
+
     Route::prefix('/utils')->name('utils.')->group(function () {
         Route::post('upload', [UploadController::class, 'upload'])->name('upload');
     });
@@ -266,3 +270,12 @@ Route::prefix('/v1')->group(function () {
         require_once __DIR__ . '/admin.php';
     });
 });
+
+
+Route::prefix('/v2')->group(function () {
+     // Locations -----------------------------------------
+     Route::prefix('/location')->group(function () {
+        Route::get('/region', [LocationController::class, 'regionNull']);
+    });
+});
+
