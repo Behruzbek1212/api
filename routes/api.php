@@ -259,3 +259,11 @@ Route::prefix('/v1')->group(function () {
     });
 });
 
+
+Route::prefix('/v2')->group(function () {
+     // Locations -----------------------------------------
+     Route::prefix('/location')->group(function () {
+        Route::get('/region', [LocationController::class, 'regionNull']);
+    });
+});
+
