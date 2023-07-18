@@ -146,7 +146,6 @@ Route::prefix('/v1')->group(function () {
         Route::get('/', [LocationController::class, 'all']);
         Route::get('/get/{id}', [LocationController::class, 'get']);
         Route::get('/region', [LocationController::class, 'region']);
-        Route::get('/v2/region', [LocationController::class, 'regionNull']);
         Route::get('/add', [LocationController::class, 'add']);
     });
     // Categories -----------------------------------------
@@ -253,6 +252,14 @@ Route::prefix('/v1')->group(function () {
 
     Route::prefix('/admin')->middleware('is_admin')->name('admin.')->group(function () {
         require_once __DIR__ . '/admin.php';
+    });
+});
+
+
+Route::prefix('/v2')->group(function () {
+     // Locations -----------------------------------------
+     Route::prefix('/location')->group(function () {
+        Route::get('/region', [LocationController::class, 'regionNull']);
     });
 });
 
