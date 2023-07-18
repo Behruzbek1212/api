@@ -146,6 +146,7 @@ Route::prefix('/v1')->group(function () {
         Route::get('/', [LocationController::class, 'all']);
         Route::get('/get/{id}', [LocationController::class, 'get']);
         Route::get('/region', [LocationController::class, 'region']);
+        Route::get('/v2/region', [LocationController::class, 'regionNull']);
         Route::get('/add', [LocationController::class, 'add']);
     });
     // Categories -----------------------------------------

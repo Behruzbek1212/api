@@ -38,6 +38,17 @@ class LocationController extends Controller
         ]);
     }
 
+    public function regionNull() 
+    {
+        $user = Location::where('parent_id' , null)
+            ->whereBetween('id',[100000,100100])
+            ->get();
+
+        return response()->json([
+                'status' => true,
+                'data' => $user,
+            ]);
+    }
 
     public function add(Request $request)
     {
