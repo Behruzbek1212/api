@@ -147,7 +147,7 @@ class Resume extends Model
         
         $candidateData =  [];
         $candidateData['name'] = $candidate['name'] ?? null;
-        $candidate['email'] = $user['email'] ?? null;
+        $candidateData['email'] = $user['email'] ?? null;
         $candidateData['surname'] = $candidate['surname'] ?? null;
         $candidateData['education_level'] = $candidate['education_level'] ?? null;
         $candidateData['languages'] = $candidate['languages'] ?? null;
@@ -161,8 +161,8 @@ class Resume extends Model
         $max_ball = 0;
 
         foreach($resumBalls as $resumBall){
-            $ball[$resumBall->name] = $resumBall->ball;
-            $max_ball += $resumBall->ball;
+            $ball[$resumBall->name] =  intval($resumBall->ball);
+            $max_ball += intval($resumBall->ball);
         }
        
 
