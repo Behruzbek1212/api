@@ -45,8 +45,8 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::get('/', HomeController::class);
-Route::fallback([HomeController::class, 'fallback']);
+// Route::get('/', HomeController::class);
+// Route::fallback([HomeController::class, 'fallback']);
 Route::post('/bitrix', [BitrixController::class, 'index'])->name('index');
 Route::get('/cron_jobs', [JobController::class, 'cron_jobs'])->name('cron_jobs');
 Route::prefix('/v1')->group(function () {
@@ -94,13 +94,12 @@ Route::prefix('/v1')->group(function () {
         });
     });
 
-     // payme -----------------------------------------
-
-    Route::prefix('/payme')->name('payme.')->group(function () {
-        Route::any('/handle/{paysys}', function ($paysys) {
-            return response()->json((new Goodoneuz\PayUz\PayUz)->driver($paysys)->handle());
-        });
-    });
+    // payme -----------------------------------------
+    // Route::prefix('/payme')->name('payme.')->group(function () {
+    //     Route::any('/handle/{paysys}', function ($paysys) {
+    //         return response()->json((new Goodoneuz\PayUz\PayUz)->driver($paysys)->handle());
+    //     });
+    // });
 
     // Jobs -----------------------------------------
     Route::prefix('/jobs')->name('jobs.')->group(function () {
@@ -273,9 +272,8 @@ Route::prefix('/v1')->group(function () {
 
 
 Route::prefix('/v2')->group(function () {
-     // Locations -----------------------------------------
-     Route::prefix('/location')->group(function () {
+    // Locations -----------------------------------------
+    Route::prefix('/location')->group(function () {
         Route::get('/region', [LocationController::class, 'regionNull']);
     });
 });
-

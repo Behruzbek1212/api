@@ -33,6 +33,9 @@ class RouteServiceProvider extends ServiceProvider
                 ->domain(config('app.domain.api'))
                 ->group(base_path('routes/api.php'));
 
+            Route::middleware('web')
+                ->domain(config('app.domain.web'))
+                ->group(base_path('routes/web.php'));
             Route::middleware('api')
                 ->domain(config('payment.domain'))
                 ->name('payment.')

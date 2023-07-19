@@ -1,2 +1,2 @@
 <?php 
-    return true;
+    return $amount > 4000000;
