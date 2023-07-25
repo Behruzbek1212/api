@@ -13,7 +13,7 @@ class CommentResource extends JsonResource
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
-    { 
+    {
 
 
         return [
@@ -21,6 +21,7 @@ class CommentResource extends JsonResource
              'role' => $this->user->role ?? null,
              'avatar' => $this->user->candidate->avatar ?? $this->user->customer->name ??  null,
              'body' => $this->body ?? null,
+             'created_at' => $this->created_at
         ];
     }
 
