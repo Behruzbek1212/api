@@ -76,7 +76,7 @@ class CandidatesController extends Controller
                 $request->except([ 'phone', 'email' ]),
                 ['__conversation_date' => $request->get('__conversation') ? date('Y-m-d') : null],
                 ['avatar' => $request->get('avatar') ?? null],
-                ['__comment' => $request->get('__comment') ?? null],
+//                ['__comment' => $request->get('__comment') ?? null],
                 ['active' => true]
             ));
         } catch (QueryException $exception) {
