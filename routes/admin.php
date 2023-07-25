@@ -50,7 +50,7 @@ Route::prefix('/companies')->name('candidates.')->group(function () {
     Route::get('/', [App\Http\Controllers\Admin\CompaniesController::class, 'index']);
     Route::get('/jobs', [App\Http\Controllers\Admin\CompaniesController::class, 'companiesJobs']);
     Route::get('/{id}', [App\Http\Controllers\Admin\CompaniesController::class, 'show']);
-   
+
     Route::post('/create', [App\Http\Controllers\Admin\CompaniesController::class, 'create']);
     Route::post('/edit', [App\Http\Controllers\Admin\CompaniesController::class, 'edit']);
     Route::post('/destroy', [App\Http\Controllers\Admin\CompaniesController::class, 'destroy']);
@@ -97,5 +97,5 @@ Route::prefix('/resume-ball')->name('resume-ball.')->group(function () {
 
 Route::prefix('/comment')->name('comment.')->group(function () {
     Route::post('/store', [CommentController::class, 'store']);
-    Route::get('/show', [CommentController::class, 'getComment']);
+    Route::post('/show', [CommentController::class, 'getComment']);
 });
