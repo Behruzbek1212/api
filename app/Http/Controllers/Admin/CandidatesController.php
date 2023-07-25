@@ -26,7 +26,7 @@ class CandidatesController extends Controller
             ->whereHas('user', fn (Builder $query) => $query->where('role', '=', 'candidate'))
             ->where('active', '=', true)
             ->with(['user', 'user.resumes']);
-            
+
 
         if ($request->has('title'))
             $candidates->where(function (Builder $query) use ($request) {
@@ -37,7 +37,7 @@ class CandidatesController extends Controller
                     $query->where('phone', 'like', '%' . $request->get('title') . '%');
                 });
             });
-            
+
         /** @see https://laravel.com/docs/9.x/queries#json-where-clauses */
         if ($sphere = $request->get('sphere'))
             $candidates->whereJsonContains('spheres', $sphere);
@@ -47,7 +47,7 @@ class CandidatesController extends Controller
         } else {
             $candidates->orderByDesc('created_at', 'updated_at');
         }
-        
+
         $candidates = $candidates->paginate($request->limit ?? 10);
         $_data = $candidates->makeVisible(['__comment', '__conversation', '__conversation_date']);
 
@@ -76,6 +76,7 @@ class CandidatesController extends Controller
                 $request->except([ 'phone', 'email' ]),
                 ['__conversation_date' => $request->get('__conversation') ? date('Y-m-d') : null],
                 ['avatar' => $request->get('avatar') ?? null],
+                ['__comment' => $request->get('__comment') ?? null],
                 ['active' => true]
             ));
         } catch (QueryException $exception) {
