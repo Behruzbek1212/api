@@ -79,6 +79,9 @@ class CandidatesController extends Controller
 //                ['__comment' => $request->get('__comment') ?? null],
                 ['active' => true]
             ));
+
+            $candidate->__comment = $request->get('__comment') ?? null;
+            $candidate->save();
         } catch (QueryException $exception) {
             return response()->json([
                 'status' => false,
