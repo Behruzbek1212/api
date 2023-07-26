@@ -194,7 +194,6 @@ class TestUserController extends Controller
         }
 
         $list = TestUser::where('company_id', $customer->id)->get();
-
         return response()->json([
             'status' => true,
             'result' => $list
