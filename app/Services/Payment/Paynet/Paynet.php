@@ -127,11 +127,11 @@ class Paynet extends PaymentClass
             'transactionable_id'    => $model->id
         ]);
 
-        $total_amount =  Transaction::where('transactionable_id', _auth()->user()->id)->sum('amount') ?? 0;
-        User::where('id', $transaction->transactionable_id)
-            ->update([
-                'balance' => $total_amount
-            ]);
+        // $total_amount =  Transaction::where('transactionable_id', _auth()->user()->id)->sum('amount') ?? 0;
+        // User::where('id', $transaction->transactionable_id)
+        //     ->update([
+        //         'balance' => $total_amount
+        //     ]);
 
         Payment::payListener('after-pay', $model, $transaction);
 
