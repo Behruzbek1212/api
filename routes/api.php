@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
@@ -276,4 +277,9 @@ Route::prefix('/v2')->group(function () {
     Route::prefix('/location')->group(function () {
         Route::get('/region', [LocationController::class, 'regionNull']);
     });
+ 
+    Route::prefix('/announcement')->name('announcement.')->group(function () {
+        Route::get('/', [AnnouncementController::class, 'all']);
+    });
+
 });

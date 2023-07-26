@@ -4,11 +4,14 @@ namespace App\Services;
 
 use App\Filters\JobFilter;
 use App\Models\Job;
+use App\Models\Location;
 use App\Models\Trafic;
 use App\Repository\JobRepository;
 use App\Traits\HasScopes;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class JobServices
 {
@@ -65,5 +68,100 @@ class JobServices
             ->paginate($request->limit ?? 8);
             
         return $jobs;
+    }
+
+
+    public function createJobBanner( $company, $title ,$salary , $address)
+    {
+        $randomFileName = uniqid() . '.jpg';
+        
+        $storagePath = storage_path('app/public/images/' . $randomFileName);
+        $text1 = $title;
+        $text2 = $company;
+        $text3 = Location::find($address)['name']['ru'];
+        
+        
+        
+        if($salary['agreement'] !== true){
+            $text4 = explode('-', $salary['amount']);
+            $formattedParts = array_map(function ($text4) {
+                return number_format(trim($text4), 0, '', ' ');
+            }, $text4);
+            // Join the formatted parts back with the '-' character
+            $prices = implode(' - ', $formattedParts);
+            
+            
+        } else {
+            $prices = 'На основе собеседования';
+        }
+        // Trim whitespace from each part and add a space as a thousands separator
+        
+        $rasmUrl = public_path('img/banner.jpg');
+        $font_file = 'Gilroy-ExtraBold.otf';
+        $font_path = public_path('fonts/' . $font_file);
+        
+        $font_path = realpath($font_path);
+        
+        $font_path = mb_convert_encoding($font_path, 'big5', 'utf-8');
+        $jpg_image = Image::make($rasmUrl);
+        
+        $green = [ 10, 180, 93];
+        
+        
+        
+        // Custom text generator to wrap the text based on the maximum width
+        $lines = wordwrap($text1, 42  , "\n", true);
+        
+        
+        $wordCount = str_word_count($text1);
+        
+        // If there are more than 5 words, trim the string and add three dots at the end
+        if ($wordCount > 1) {
+            $words = explode(' ', $lines);
+            $trimmedString = implode(' ', array_slice($words, 0, 5));
+            $trimmedString .= '...';
+           
+        } else {
+            $trimmedString = $lines;
+        }
+        
+        
+        
+        $jpg_image->text($trimmedString , 750 , 500, function ($font) use ($font_path, $green) {
+            $font->file($font_path);
+            $font->size(92);
+            $font->color($green);
+            $font->align('center');
+            $font->valign('middle');
+        });
+        
+        $jpg_image->text($text2, 330, 1080, function ($font) use ($font_path) {
+            $font->file($font_path);
+            $font->size(40);
+            $font->color('#7c7c7c');
+            $font->align('left');
+            $font->valign('middle');
+        });
+        
+        $jpg_image->text($text3, 1030, 1080, function ($font) use ($font_path) {
+            $font->file($font_path);
+            $font->size(40);
+            $font->color('#7c7c7c');
+            $font->align('left');
+            $font->valign('middle');
+        });
+        
+        $jpg_image->text($prices,  750, 920, function ($font) use ($font_path) {
+            $font->file($font_path);
+            $font->size(70);
+            $font->color('#0079fe');
+            $font->align('center');
+            $font->valign('middle');
+        });
+        $jpg_image->save($storagePath);
+        $relativeFilePath = str_replace(storage_path('app/public'), 'storage', $storagePath);
+        $imageUrl = asset($relativeFilePath);
+    
+        return $imageUrl;
     }
 }

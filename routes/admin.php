@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AnnouncementController;
 use App\Http\Controllers\Admin\CandidatesController;
 use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\CompaniesController;
@@ -93,6 +94,14 @@ Route::prefix('/resume-ball')->name('resume-ball.')->group(function () {
     Route::get('/show/{resumeBall}', [ResumeBallController::class, 'show']);
     Route::post('/edit', [ResumeBallController::class, 'update']);
     Route::delete('/destroy/{id}', [ResumeBallController::class, 'destroy']);
+});
+
+Route::prefix('/announcement')->name('announcement.')->group(function () {
+    Route::get('/', [AnnouncementController::class, 'index']);
+    Route::post('/store', [AnnouncementController::class, 'store']);
+    Route::get('/show/{id}', [AnnouncementController::class, 'show']);
+    Route::post('/edit', [AnnouncementController::class, 'update']);
+    Route::post('/destroy', [AnnouncementController::class, 'destroy']);
 });
 
 Route::prefix('/comment')->name('comment.')->group(function () {
