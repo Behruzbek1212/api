@@ -26,7 +26,7 @@ class CandidatesController extends Controller
             ->whereHas('user', fn (Builder $query) => $query->where('role', '=', 'candidate'))
             ->where('active', '=', true)
             ->with(['user', 'user.resumes']);
-            
+
 
         if ($request->has('title'))
             $candidates->where(function (Builder $query) use ($request) {
@@ -37,7 +37,7 @@ class CandidatesController extends Controller
                     $query->where('phone', 'like', '%' . $request->get('title') . '%');
                 });
             });
-            
+
         /** @see https://laravel.com/docs/9.x/queries#json-where-clauses */
         if ($sphere = $request->get('sphere'))
             $candidates->whereJsonContains('spheres', $sphere);
@@ -47,7 +47,7 @@ class CandidatesController extends Controller
         } else {
             $candidates->orderByDesc('created_at', 'updated_at');
         }
-        
+
         $candidates = $candidates->paginate($request->limit ?? 10);
         $_data = $candidates->makeVisible(['__comment', '__conversation', '__conversation_date']);
 
@@ -76,8 +76,12 @@ class CandidatesController extends Controller
                 $request->except([ 'phone', 'email' ]),
                 ['__conversation_date' => $request->get('__conversation') ? date('Y-m-d') : null],
                 ['avatar' => $request->get('avatar') ?? null],
+//                ['__comment' => $request->get('__comment') ?? null],
                 ['active' => true]
             ));
+
+            $candidate->__comment = $request->get('__comment') ?? null;
+            $candidate->save();
         } catch (QueryException $exception) {
             return response()->json([
                 'status' => false,
@@ -86,10 +90,12 @@ class CandidatesController extends Controller
             ]);
         }
 
-        // (new MobileService())->send(
-        //     $request->get('phone'),
-        //     'Sizning JOBO.uz ga kirish parolingiz: ' . $password
-        // );
+        (new MobileService())->send(
+            $request->get('phone'),
+            "Sizning JOBO.uz ga kirish parolingiz: " . $password .
+            "\nQuyidagi link orqali tezkor kirishni amalga oshirishingiz mumkin: " .
+            vsprintf("https://jobo.uz/auth/verifier/%s/?p=%s", [$password, $request->get('phone')])
+        );
 
         return response()->json([
             'status' => true,

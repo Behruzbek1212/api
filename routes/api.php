@@ -13,6 +13,7 @@ use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\DeleteDataController;
 use App\Http\Controllers\EducationLevelController;
+use App\Http\Controllers\GoldenNitController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobController;
@@ -280,4 +281,10 @@ Route::prefix('/v2')->group(function () {
     Route::prefix('/location')->group(function () {
         Route::get('/region', [LocationController::class, 'regionNull']);
     });
+    // Golden nit telegram bot api routes 
+    Route::prefix('/golden')->group(function () {
+        Route::get('/', [GoldenNitController::class, 'index']);
+        Route::post('/store', [GoldenNitController::class, 'store']);
+    });
+    
 });
