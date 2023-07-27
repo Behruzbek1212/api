@@ -22,9 +22,15 @@ class AnnouncementController extends Controller
                 'status' => false
             ]);
         });
-       
+
+        if(count($announcementData) !== 0){
+            return response()->json([
+               'status' => true,
+               'data' => $announcementData
+            ]);
+        }
         return response()->json([
-            'status' => true,
+            'status' => false,
             'data' => $announcementData
         ]);
      }
