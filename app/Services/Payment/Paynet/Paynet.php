@@ -3,7 +3,6 @@
 namespace App\Services\Payment\Paynet;
 
 use App\Models\Transaction;
-use App\Models\User;
 use App\Services\DataFormat;
 use App\Services\Payment;
 use App\Services\Payment\PaymentClass;
