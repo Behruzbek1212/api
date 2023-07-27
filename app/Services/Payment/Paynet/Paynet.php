@@ -129,13 +129,6 @@ class Paynet extends PaymentClass
 
         Payment::payListener('after-pay', $model, $transaction);
 
-        // $user_id = _auth()->user()->id;
-        // $total_amount =  Transaction::where('transactionable_id', _auth()->user()->id)->sum('amount') ?? 0;
-        // User::where('id', $user_id)
-        //     ->update([
-        //         'balance' => $total_amount
-        //     ]);
-
         return  "<ns2:PerformTransactionResult xmlns:ns2=\"http://uws.provider.com/\">" .
             "<errorMsg>Success</errorMsg>" .
             "<status>0</status>" .
