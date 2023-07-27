@@ -12,10 +12,10 @@ class AnnouncementController extends Controller
      {
         date_default_timezone_set('Asia/Tashkent');
         $currentDateTime = date('Y-m-d H:i:s');
-        
+      
         $announcementData = Announcement::where('deleted_at', null)
                         ->where('status', true)
-                        ->where('time', '=' , $currentDateTime)->get();
+                        ->where('time', '<=', $currentDateTime)->get();
     
         $updatedAnnouncements = $announcementData->map(function ($announcement) {
             return $announcement->update([
