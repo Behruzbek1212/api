@@ -24,6 +24,12 @@ class UpdateAnnouncementRequest extends FormRequest
         return [
             'announcement_id' => 'required|integer',
             'post' => 'array|required',
+            'post.company_name' => 'required|string',
+            'post.title' => 'required|string',
+            'post.salary' => 'array|required',
+            'post.salary.amount'=> 'required',
+            'post.salary.agreement' => 'required|boolean',
+            'post.address' => 'required|integer',
         ];
     }
 }
