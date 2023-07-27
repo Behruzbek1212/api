@@ -103,6 +103,12 @@ class JobServices
         $font_path = realpath($font_path);
         
         $font_path = mb_convert_encoding($font_path, 'big5', 'utf-8');
+
+        $gilroyLight = public_path('fonts/Gilroy-Light.otf');
+        $gilroyLight = realpath($gilroyLight);
+        
+        $gilroyLight = mb_convert_encoding($gilroyLight, 'big5', 'utf-8');
+
         $jpg_image = Image::make($rasmUrl);
         
         $green = [ 10, 180, 93];
@@ -135,16 +141,16 @@ class JobServices
             $font->valign('middle');
         });
         
-        $jpg_image->text($text2, 330, 1080, function ($font) use ($font_path) {
-            $font->file($font_path);
+        $jpg_image->text($text2, 330, 1080, function ($font) use ($gilroyLight) {
+            $font->file($gilroyLight);
             $font->size(40);
             $font->color('#7c7c7c');
             $font->align('left');
             $font->valign('middle');
         });
         
-        $jpg_image->text($text3, 1030, 1080, function ($font) use ($font_path) {
-            $font->file($font_path);
+        $jpg_image->text($text3, 1030, 1080, function ($font) use ($gilroyLight) {
+            $font->file($gilroyLight);
             $font->size(40);
             $font->color('#7c7c7c');
             $font->align('left');

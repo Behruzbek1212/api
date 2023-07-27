@@ -12,31 +12,22 @@ use App\Services\AnnouncementServices;
 use App\Services\JobServices;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
 
 class AnnouncementController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        date_default_timezone_set('Asia/Tashkent');
-        $currentDateTime = date('Y-m-d H:i:s');
         
         $announcementData = Announcement::where('deleted_at', null)
-                        ->where('status', true)
-                        ->where('time', '=' , $currentDateTime)->get();
-    
-        $updatedAnnouncements = $announcementData->map(function ($announcement) {
-            return $announcement->update([
-                'status' => false
-            ]);
-        });
-       
-    //     dd($announcementData);
+                            ->orderByDesc('updated_at');
+
         return response()->json([
             'status' => true,
-            'data' => $announcementData
+            'data' => $announcementData->paginate($request->limit ?? null)
         ]);
     }
 
@@ -72,13 +63,15 @@ class AnnouncementController extends Controller
     public function confirmation(Request $request) {
         
         $request->validate([
-            'announcement_id' => 'required|integer'
+            'announcement_id' => 'required|integer',
+            'announcement_time' => 'required|date'
         ]);
 
         $announcement = Announcement::find($request->announcement_id);
 
         $announcement->update([
            'status' => true,
+           'time' => $request->announcement_time
         ]);
 
         return response()->json([
@@ -107,8 +100,32 @@ class AnnouncementController extends Controller
     public function update(UpdateAnnouncementRequest $request)
     {
         $request->validated();
+        $data = Announcement::find($request->announcement_id);
+        $oldImage =  $data->post['image'];
+        $filePath = parse_url($oldImage, PHP_URL_PATH);
+        $filePath = ltrim($filePath, '/');
+        $str = str_replace('storage/', '', $filePath);
+        
+        if (Storage::disk('public')->exists($str)) {
+           
+            Storage::disk('public')->delete($str);
+           
+        } 
+        
+        $imageUrl =  JobServices::getInstance()->createJobBanner($request->post['company_name'], $request->post['title'], $request->post['salary'], $request->post['address'] );
+        
+        $post = $request->post;
 
-
+        $post['image'] = $imageUrl;
+       
+        $updateData = $data->update([
+            'post' => $post
+        ]);
+        $announcement = Announcement::find($request->announcement_id);
+        return response()->json([
+              'status' => true,
+              'data' => $announcement
+        ]);
     }
 
     /**
@@ -126,7 +143,7 @@ class AnnouncementController extends Controller
         
         return response()->json([
              'status' => true,
-             'data' => []
+             'message' => 'Successfully deleted announcement'
         ]);
     }
 }

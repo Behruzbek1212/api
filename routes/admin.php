@@ -99,6 +99,7 @@ Route::prefix('/resume-ball')->name('resume-ball.')->group(function () {
 Route::prefix('/announcement')->name('announcement.')->group(function () {
     Route::get('/', [AnnouncementController::class, 'index']);
     Route::post('/store', [AnnouncementController::class, 'store']);
+    Route::post('/confirmation', [AnnouncementController::class,'confirmation']);
     Route::get('/show/{id}', [AnnouncementController::class, 'show']);
     Route::post('/edit', [AnnouncementController::class, 'update']);
     Route::post('/destroy', [AnnouncementController::class, 'destroy']);

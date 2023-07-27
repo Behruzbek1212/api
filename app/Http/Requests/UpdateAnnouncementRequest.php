@@ -23,9 +23,7 @@ class UpdateAnnouncementRequest extends FormRequest
     {
         return [
             'announcement_id' => 'required|integer',
-            'post' => 'array|nullable',
-            'status' => 'boolean',
-            'time' => 'date'
+            'post' => 'array|required',
         ];
     }
 }

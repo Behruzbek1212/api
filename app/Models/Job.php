@@ -75,7 +75,6 @@ class Job extends Model
         'for_communication_phone',
         'trafic_id',
         'trafic_expired_at',
-        'image'
     ];
 
     /**

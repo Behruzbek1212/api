@@ -247,11 +247,9 @@ class JobController extends Controller
             'trafic_id' => ['integer', 'nullable'],
             'trafic_expired_at' => ['date', 'nullable'],
         ]);
-        $company_name = $request->user()->customer->name;
-        $imageUrl =  JobServices::getInstance()->createJobBanner($company_name, $params['position'], $params['salary'], $params['location'] );
+        
         $user = _auth()->user();
         
-       
         $job = $user->customer->jobs()->create([
             'title' => $params['position'],
             'salary' => $params['salary'],
@@ -270,33 +268,32 @@ class JobController extends Controller
             'for_communication_link' => $params['for_communication_link'] ?? null,
             'trafic_id' => $params['trafic_id'] ?? null,
             'trafic_expired_at' => $params['trafic_expired_at'] ?? null,
-            'image' => $imageUrl ?? null
         ]);
-         
+       
        
 
-        // if (@$params['recruitment'] || @$params['strengthening']) {
-        //     $message = "🆕 <b>" . $job->title . "</b>\n";
-        //     $message .= "🏢 Kompaniya: <b>" . $job->customer->name . "</b>\n";
-        //     $message .= "📞 Telefon raqam: " . $job->customer->user->phone . "\n\n";
-        //     $message .= "📄 Xizmatlar:\n";
-        //     $message .= $params['recruitment'] ? "- Xodim tanlash (подбор персонала)\n" : '';
-        //     $message .= $params['strengthening'] ? "- E'lonni kuchaytirish (реклама | усиление объявление о вакансии)\n" : '';
+        if (@$params['recruitment'] || @$params['strengthening']) {
+            $message = "🆕 <b>" . $job->title . "</b>\n";
+            $message .= "🏢 Kompaniya: <b>" . $job->customer->name . "</b>\n";
+            $message .= "📞 Telefon raqam: " . $job->customer->user->phone . "\n\n";
+            $message .= "📄 Xizmatlar:\n";
+            $message .= $params['recruitment'] ? "- Xodim tanlash (подбор персонала)\n" : '';
+            $message .= $params['strengthening'] ? "- E'lonni kuchaytirish (реклама | усиление объявление о вакансии)\n" : '';
 
-        //     Http::withoutVerifying()->post("https://api.telegram.org/bot5777417067:AAGvh21OUGVQ7nmSnLbIhzTiZxoyMQMIZKk/sendMessage", [
-        //         'chat_id' => '-1001989390870',
-        //         'text' => $message,
-        //         'parse_mode' => 'HTML',
-        //         'reply_markup' => json_encode([
-        //             'inline_keyboard' => [[
-        //                 [
-        //                     'text' => "↗️ Vakansiyani ko'rish",
-        //                     'url' => 'https://jobo.uz/jobs/' . $job->slug
-        //                 ]
-        //             ]]
-        //         ])
-        //     ]);
-        // }
+            Http::withoutVerifying()->post("https://api.telegram.org/bot5777417067:AAGvh21OUGVQ7nmSnLbIhzTiZxoyMQMIZKk/sendMessage", [
+                'chat_id' => '-1001989390870',
+                'text' => $message,
+                'parse_mode' => 'HTML',
+                'reply_markup' => json_encode([
+                    'inline_keyboard' => [[
+                        [
+                            'text' => "↗️ Vakansiyani ko'rish",
+                            'url' => 'https://jobo.uz/jobs/' . $job->slug
+                        ]
+                    ]]
+                ])
+            ]);
+        }
 
         return response()->json([
             'status' => true,
