@@ -1,2 +1,2 @@
 <?php
-    return $amount > 4000;
+    return $amount > 1000;
