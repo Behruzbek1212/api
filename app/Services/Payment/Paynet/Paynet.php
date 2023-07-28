@@ -125,7 +125,7 @@ class Paynet extends PaymentClass
             'transactionable_type'  => get_class($model),
             'transactionable_id'    => $model->id
         ]);
-
+                    
         Payment::payListener('after-pay', $model, $transaction);
 
         return  "<ns2:PerformTransactionResult xmlns:ns2=\"http://uws.provider.com/\">" .

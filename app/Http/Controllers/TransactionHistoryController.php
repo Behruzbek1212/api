@@ -49,7 +49,7 @@ class TransactionHistoryController extends Controller
 
         $total_amount = User::where('id', $user_id)->first()->balance ?? 0;
         $trafic_price =  Trafic::where('id', $request->trafic_id)->firstOrFail()->price;
-        if (!empty($trafic_price) && $total_amount > $trafic_price) {
+        if (!empty($trafic_price) && $total_amount >= $trafic_price) {
             $balance = $total_amount - $trafic_price;
             User::where('id', $user_id)
                 ->update([
