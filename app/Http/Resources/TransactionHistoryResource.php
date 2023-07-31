@@ -16,12 +16,14 @@ class TransactionHistoryResource extends JsonResource
     {
         return [
             'id' => $this->id ?? null,
-            'trafic_id' => $this->trafic->id ?? null,
             'user_id' => $this->user->id ?? null,
-            'name' => $this->user->name ?? null,
-            'trafic_name' => $this->trafic->name ?? null,
-            'used_balance' => $this->amount ?? null,
+            'service_id' => $this->service_id ?? null,
+            'service_sum' => $this->service_sum ?? null,
+            'service_name' => $this->service_name ?? null,
+            'started_at' => formatDateTime($this->started_at) ?? null,
+            'expire_at' => formatDateTime($this->expire_at) ?? null,
             'created_at' => formatDateTime($this->created_at) ?? null,
+            'key' => $this->key ?? null,
         ];
     }
 }

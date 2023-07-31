@@ -14,9 +14,12 @@ return new class extends Migration
         Schema::create('transaction_history', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned()->nullable();
-            $table->bigInteger('trafic_id')->unsigned()->nullable();
-            $table->integer('key')->nullable();
-            $table->float('amount')->default(0);
+            $table->bigInteger('service_id')->unsigned()->nullable()->comment('sotib olgan xizmat id si');
+            $table->double('service_sum', 15, 5)->default(0)->nullable()->comment('sotib olgan xizmat summasi');
+            $table->string('service_name')->nullable()->comment('sotib olgan xizmat nomi');
+            $table->dateTime('started_at')->nullable()->comment('xizmatni sotib olgan sana');
+            $table->dateTime('expire_at')->nullable()->comment('xizmatni amal qilish muddati');
+            $table->string('key')->nullable();
             $table->timestamps();
         });
     }

@@ -29,4 +29,9 @@ class TransactionHistory extends Model
     {
         return $this->hasOne(Trafic::class, 'id', 'trafic_id');
     }
+
+    public static function getTableName()
+    {
+        return self::getTable();
+    }
 }

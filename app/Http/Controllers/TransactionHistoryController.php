@@ -2,21 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\JobResource;
 use App\Http\Resources\TransactionHistoryResource;
-use App\Models\Job;
-use App\Models\Resume;
 use App\Models\Trafic;
-use App\Models\Transaction;
 use App\Models\TransactionHistory;
 use App\Models\User;
-use App\Notifications\RespondMessageNotification;
-use App\Services\JobServices;
 use App\Services\TransactionHistoryServices;
 use App\Traits\ApiResponse;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -44,22 +35,30 @@ class TransactionHistoryController extends Controller
     {
         $user_id = _auth()->user()->id;
         $request->validate([
-            'trafic_id' => ['numeric', 'required'],
+            'service_id' => ['integer', 'required'],
+            'service_sum' => ['numeric', 'required'],
+            'service_name' => ['string', 'required'],
+            'started_at' => ['date', 'required'],
+            'expire_at' => ['date', 'required'],
         ]);
 
         $total_amount = User::where('id', $user_id)->first()->balance ?? 0;
-        $trafic_price =  Trafic::where('id', $request->trafic_id)->firstOrFail()->price;
-        if (!empty($trafic_price) && $total_amount >= $trafic_price) {
-            $balance = $total_amount - $trafic_price;
+        $service_price = $request->service_sum;
+
+        if (!empty($service_price) && $total_amount >= $service_price) {
+            $balance = $total_amount - $service_price;
             User::where('id', $user_id)
                 ->update([
                     'balance' => $balance
                 ]);
             TransactionHistory::create([
                 'user_id' => $user_id,
-                'trafic_id' => $request->trafic_id,
+                'service_id' => $request->service_id,
+                'service_sum' => $service_price ?? 0,
+                'service_name' => $request->service_name,
+                'started_at' => $request->started_at,
+                'expire_at' => $request->expire_at,
                 'key' => $request->key ?? null,
-                'amount' => $trafic_price ?? 0,
             ]);
 
             return response()->json([
