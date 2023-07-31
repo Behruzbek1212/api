@@ -99,7 +99,6 @@ Route::prefix('/v1')->group(function () {
     //         return response()->json((new Goodoneuz\PayUz\PayUz)->driver($paysys)->handle());
     //     });
     // });
-
     // Jobs -----------------------------------------
     Route::prefix('/jobs')->name('jobs.')->group(function () {
 
@@ -281,10 +280,10 @@ Route::prefix('/v2')->group(function () {
     Route::prefix('/location')->group(function () {
         Route::get('/region', [LocationController::class, 'regionNull']);
     });
-    // Golden nit telegram bot api routes 
+    // Golden nit telegram bot api routes
     Route::prefix('/golden')->group(function () {
         Route::get('/', [GoldenNitController::class, 'index']);
         Route::post('/store', [GoldenNitController::class, 'store']);
     });
-    
+
 });

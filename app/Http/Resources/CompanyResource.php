@@ -28,18 +28,7 @@ class CompanyResource extends JsonResource
             'address'  =>  $this->address ?? null,
             'active' =>  $this->active ?? null,
             'jobs_count' =>  $this->jobs_count ?? null,
-            'total_balance' => $this->transation() ?? 0 // campaniya tuldirgan balansi
+            // 'total_balance' => $this->transation() ?? 0 // campaniya tuldirgan balansi
         ];
-    }
-
-    public function transation()
-    {
-        $amount = TransactionHistory::where('user_id', 340)->firstOrFail()->amount;
-        $total_amount =  Transaction::where('transactionable_id', 340)->sum('amount') ?? 0;
-
-        if (!empty($amount)) {
-            return $total_amount - $amount;
-        }
-        return $total_amount;
     }
 }
