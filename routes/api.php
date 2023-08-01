@@ -9,6 +9,7 @@ use App\Http\Controllers\CandidatesController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ChatsController;
 use App\Http\Controllers\CheckEmailController;
+use App\Http\Controllers\CheckPhoneController;
 use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\DeleteDataController;
@@ -285,5 +286,8 @@ Route::prefix('/v2')->group(function () {
         Route::get('/', [GoldenNitController::class, 'index']);
         Route::post('/store', [GoldenNitController::class, 'store']);
     });
+
+    // check phone number 
+    Route::post('phone/check',  [CheckPhoneController::class, 'check']);
 
 });
