@@ -154,7 +154,7 @@ class RegisterController extends Controller
         $message .= "📞 Telefon raqam: " . $user->phone . "\n\n";
 
         Http::withoutVerifying()->post("https://api.telegram.org/bot5777417067:AAGvh21OUGVQ7nmSnLbIhzTiZxoyMQMIZKk/sendMessage", [
-            'chat_id' => '-1001989390870',
+            'chat_id' => '-1001873253638',
             'text' => $message,
             'parse_mode' => 'HTML',
             'reply_markup' => json_encode([
