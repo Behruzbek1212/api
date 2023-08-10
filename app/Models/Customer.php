@@ -48,7 +48,7 @@ class Customer extends Model
         'active',
         'limit_id',
         'limit_start_day',
-        'limit_end_day'
+        'limit_end_day',
     ];
 
     /**
@@ -67,8 +67,10 @@ class Customer extends Model
      */
     protected $casts = [
         'owned_date' => 'datetime',
-        'services' => 'array'
+        'services' => 'array',
     ];
+
+
 
     /**
      * Update user data's
@@ -158,5 +160,15 @@ class Customer extends Model
     public function limit_customer()
     {
         return $this->hasOne(LimitModel::class, 'id', 'limit_id');
+    }
+
+    public function customerStatus():HasMany
+    {
+        return $this->hasMany(CustomerStatus::class);
+    }
+
+    public function chatComment(): HasMany
+    {
+        return $this->hasMany(CustomerChatComment::class);
     }
 }
