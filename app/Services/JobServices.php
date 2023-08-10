@@ -76,7 +76,7 @@ class JobServices
         $randomFileName = uniqid() . '.jpg';
         
         $storagePath = storage_path('app/public/images/' . $randomFileName);
-        $text1 = $title;
+        $text1 =  substr($title, strpos($title,'/')+strlen('/'));
         $text2 = $company;
         $text3 = Location::find($address)['name']['ru'];
         
@@ -119,28 +119,48 @@ class JobServices
         $lines = wordwrap($text1, 42  , "\n", true);
         
         
-        $wordCount = str_word_count($text1);
+       
+        $words = explode(' ', $text1); // Matnni so'zlarga bo'lib massivga ajratamiz
+        $wordCount = count($words);
         
         // If there are more than 5 words, trim the string and add three dots at the end
-        if ($wordCount > 1) {
+        if ($wordCount > 4) {
             $words = explode(' ', $lines);
-            $trimmedString = implode(' ', array_slice($words, 0, 5));
+            $trimmedString = implode(' ', array_slice($words, 0, 4));
             $trimmedString .= '...';
            
         } else {
             $trimmedString = $lines;
         }
         
+        $firstNewLinePos = strpos($trimmedString, "\n");
+
+        if ($firstNewLinePos !== false) {
+          $firstLine = substr($trimmedString, 0, $firstNewLinePos);
+          $remainingText = substr($trimmedString, $firstNewLinePos + 1);
+        } else {
+           $firstLine = $trimmedString;
+           $remainingText = "";
+        }
         
-        
-        $jpg_image->text($trimmedString , 750 , 500, function ($font) use ($font_path, $green) {
+        $jpg_image->text($firstLine , 750 , 450, function ($font) use ($font_path, $green) {
             $font->file($font_path);
             $font->size(92);
             $font->color($green);
             $font->align('center');
             $font->valign('middle');
         });
+        if($remainingText !== ""){
+            $jpg_image->text($remainingText, 750, 560, function ($font) use ($font_path, $green) {
+                $font->file($font_path);
+                $font->size(92);
+                $font->color($green);
+                $font->align('center');
+                $font->valign('middle');
+            });
+        }
         
+
         $jpg_image->text($text2, 330, 1080, function ($font) use ($gilroyLight) {
             $font->file($gilroyLight);
             $font->size(40);
