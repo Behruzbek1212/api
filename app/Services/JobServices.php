@@ -71,11 +71,12 @@ class JobServices
     }
 
 
-    public function createJobBanner( $company, $title ,$salary , $address)
+    public function createJobBanner( $company, $title ,$salary , $address, $post_number)
     {
         $randomFileName = uniqid() . '.jpg';
         $imagefileUrl = 'uploads/image/job-posts/' . $randomFileName;
         $storagePath = public_path($imagefileUrl);
+        $postNumber =  '№ ' . $post_number;
         $text1 = $title;
         $text2 = $company;
         $text3 = Location::find($address)['name']['ru'];
@@ -143,6 +144,14 @@ class JobServices
            $remainingText = "";
         }
         
+        $jpg_image->text($postNumber,  753 , 273, function ($font) use ($font_path) {
+            $font->file($font_path);
+            $font->size(50);
+            $font->color('#0079fe');
+            $font->align('center');
+            $font->valign('middle');
+        });
+
         $jpg_image->text($firstLine , 750 , 450, function ($font) use ($font_path, $green) {
             $font->file($font_path);
             $font->size(92);
