@@ -10,6 +10,7 @@ use App\Repository\JobRepository;
 use App\Traits\HasScopes;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
@@ -39,7 +40,10 @@ class JobServices
                 'trafic_id' => null,
                 'trafic_expired_at' => null,
             ]);
-
+        Http::withOptions(['verify' => false])->post('https://api.telegram.org/bot5777417067:AAGvh21OUGVQ7nmSnLbIhzTiZxoyMQMIZKk/sendMessage', [
+            'chat_id' => '-1001821241273',
+            'text' => "title: cron ishladi"
+        ]);
         return true;
     }
 
@@ -71,7 +75,7 @@ class JobServices
     }
 
 
-    public function createJobBanner( $company, $title ,$salary , $address, $post_number)
+    public function createJobBanner($company, $title, $salary, $address, $post_number)
     {
         $randomFileName = uniqid() . '.jpg';
         $imagefileUrl = 'uploads/image/job-posts/' . $randomFileName;
@@ -80,71 +84,68 @@ class JobServices
         $text1 = $title;
         $text2 = $company;
         $text3 = Location::find($address)['name']['ru'];
-        
-        
-        
-        if($salary['agreement'] !== true){
+
+
+
+        if ($salary['agreement'] !== true) {
             $text4 = explode('-', $salary['amount']);
             $formattedParts = array_map(function ($text4) {
                 return number_format(trim($text4), 0, '', ' ');
             }, $text4);
             // Join the formatted parts back with the '-' character
             $prices = implode(' - ', $formattedParts);
-            
-            
         } else {
             $prices = 'На основе собеседования';
         }
         // Trim whitespace from each part and add a space as a thousands separator
-        
+
         $rasmUrl = public_path('img/banner.jpg');
         $font_file = 'Gilroy-ExtraBold.otf';
         $font_path = public_path('fonts/' . $font_file);
-        
+
         $font_path = realpath($font_path);
-        
+
         $font_path = mb_convert_encoding($font_path, 'big5', 'utf-8');
 
         $gilroyLight = public_path('fonts/Gilroy-Light.otf');
         $gilroyLight = realpath($gilroyLight);
-        
+
         $gilroyLight = mb_convert_encoding($gilroyLight, 'big5', 'utf-8');
 
         $jpg_image = Image::make($rasmUrl);
-        
-        $green = [ 10, 180, 93];
-        
-        
-        
+
+        $green = [10, 180, 93];
+
+
+
         // Custom text generator to wrap the text based on the maximum width
-        $lines = wordwrap($text1, 42  , "\n", true);
-        
-        
-       
+        $lines = wordwrap($text1, 42, "\n", true);
+
+
+
         $words = explode(' ', $text1); // Matnni so'zlarga bo'lib massivga ajratamiz
         $wordCount = count($words);
-        
+
         // If there are more than 5 words, trim the string and add three dots at the end
         if ($wordCount > 4) {
             $words = explode(' ', $lines);
             $trimmedString = implode(' ', array_slice($words, 0, 4));
             $trimmedString .= '...';
-           
         } else {
             $trimmedString = $lines;
         }
-        
+
         $firstNewLinePos = strpos($trimmedString, "\n");
 
         if ($firstNewLinePos !== false) {
-          $firstLine = substr($trimmedString, 0, $firstNewLinePos);
-          $remainingText = substr($trimmedString, $firstNewLinePos + 1);
+            $firstLine = substr($trimmedString, 0, $firstNewLinePos);
+            $remainingText = substr($trimmedString, $firstNewLinePos + 1);
         } else {
-           $firstLine = $trimmedString;
-           $remainingText = "";
+            $firstLine = $trimmedString;
+            $remainingText = "";
         }
-        
-        $jpg_image->text($postNumber,  753 , 273, function ($font) use ($font_path) {
+
+        $jpg_image->text($postNumber,  753, 273, function ($font) use ($font_path) {
             $font->file($font_path);
             $font->size(50);
             $font->color('#0079fe');
@@ -152,14 +153,14 @@ class JobServices
             $font->valign('middle');
         });
 
-        $jpg_image->text($firstLine , 750 , 450, function ($font) use ($font_path, $green) {
+        $jpg_image->text($firstLine, 750, 450, function ($font) use ($font_path, $green) {
             $font->file($font_path);
             $font->size(92);
             $font->color($green);
             $font->align('center');
             $font->valign('middle');
         });
-        if($remainingText !== ""){
+        if ($remainingText !== "") {
             $jpg_image->text($remainingText, 750, 560, function ($font) use ($font_path, $green) {
                 $font->file($font_path);
                 $font->size(92);
@@ -168,7 +169,7 @@ class JobServices
                 $font->valign('middle');
             });
         }
-        
+
 
         $jpg_image->text($text2, 330, 1080, function ($font) use ($gilroyLight) {
             $font->file($gilroyLight);
@@ -177,7 +178,7 @@ class JobServices
             $font->align('left');
             $font->valign('middle');
         });
-        
+
         $jpg_image->text($text3, 1030, 1080, function ($font) use ($gilroyLight) {
             $font->file($gilroyLight);
             $font->size(40);
@@ -185,7 +186,7 @@ class JobServices
             $font->align('left');
             $font->valign('middle');
         });
-        
+
         $jpg_image->text($prices,  750, 920, function ($font) use ($font_path) {
             $font->file($font_path);
             $font->size(70);
@@ -194,8 +195,8 @@ class JobServices
             $font->valign('middle');
         });
         $jpg_image->save($storagePath);
-        
-    
+
+
         return 'https://static.jobo.uz/' .   $imagefileUrl;
     }
 }
