@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Http;
+use Psr\Log\LogLevel;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
@@ -12,7 +13,7 @@ class Handler extends ExceptionHandler
     /**
      * A list of exception types with their corresponding custom log levels.
      *
-     * @var array<class-string<\Throwable>, \Psr\Log\LogLevel::*>
+     * @var array<class-string<\Throwable>, LogLevel::*>
      */
     protected $levels = [
         //
@@ -43,14 +44,16 @@ class Handler extends ExceptionHandler
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->reportable(function (Throwable $e) {
             if (! config('app.debug'))
                 return;
 
             // https://t.me/uzcsbot
-            Http::withOptions(['verify' => false])->post('https://api.telegram.org/bot1627318447:AAEGOUreAjhByN7l2OUl9gp6q_tjZhRLaE4/sendMessage', [
+            // Http::withOptions(['verify' => false])->post('https://api.telegram.org/bot1627318447:AAEGOUreAjhByN7l2OUl9gp6q_tjZhRLaE4/sendMessage', [
+            // https://t.me/jobouz_bot
+            Http::withOptions(['verify' => false])->post('https://api.telegram.org/bot5777417067:AAGvh21OUGVQ7nmSnLbIhzTiZxoyMQMIZKk/sendMessage', [
                 'chat_id' => '-1001821241273',
                 'text' => "title: " . $e->getMessage() . "\n\nFile: " . $e->getFile() . "\nLine: " . $e->getLine()
             ]);
