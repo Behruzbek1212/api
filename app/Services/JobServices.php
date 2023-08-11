@@ -76,7 +76,7 @@ class JobServices
         $randomFileName = uniqid() . '.jpg';
         $imagefileUrl = 'uploads/image/job-posts/' . $randomFileName;
         $storagePath = public_path($imagefileUrl);
-        $text1 =  substr($title, strpos($title,'/')+strlen('/'));
+        $text1 = $title;
         $text2 = $company;
         $text3 = Location::find($address)['name']['ru'];
         
