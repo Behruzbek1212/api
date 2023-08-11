@@ -247,7 +247,10 @@ class JobController extends Controller
             'trafic_id' => ['integer', 'nullable'],
             'trafic_expired_at' => ['date', 'nullable'],
         ]);
-        $job = $request->user()->customer->jobs()->create([
+        
+        $user = _auth()->user();
+        
+        $job = $user->customer->jobs()->create([
             'title' => $params['position'],
             'salary' => $params['salary'],
             'about' => $params['about'],
@@ -264,8 +267,10 @@ class JobController extends Controller
             'for_communication_phone' => $params['for_communication_phone'] ?? null,
             'for_communication_link' => $params['for_communication_link'] ?? null,
             'trafic_id' => $params['trafic_id'] ?? null,
-            'trafic_expired_at' => $params['trafic_expired_at'] ?? null
+            'trafic_expired_at' => $params['trafic_expired_at'] ?? null,
         ]);
+       
+       
 
         if (@$params['recruitment'] || @$params['strengthening']) {
             $message = "🆕 <b>" . $job->title . "</b>\n";
