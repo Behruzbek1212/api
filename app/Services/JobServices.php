@@ -74,8 +74,8 @@ class JobServices
     public function createJobBanner( $company, $title ,$salary , $address)
     {
         $randomFileName = uniqid() . '.jpg';
-        
-        $storagePath = storage_path('app/public/images/' . $randomFileName);
+        $imagefileUrl = 'uploads/image/job-posts/' . $randomFileName;
+        $storagePath = public_path($imagefileUrl);
         $text1 =  substr($title, strpos($title,'/')+strlen('/'));
         $text2 = $company;
         $text3 = Location::find($address)['name']['ru'];
@@ -185,9 +185,8 @@ class JobServices
             $font->valign('middle');
         });
         $jpg_image->save($storagePath);
-        $relativeFilePath = str_replace(storage_path('app/public'), 'storage', $storagePath);
-        $imageUrl = asset($relativeFilePath);
+        
     
-        return $imageUrl;
+        return 'https://static.jobo.uz/' .   $imagefileUrl;
     }
 }

@@ -8,6 +8,8 @@ use App\Http\Requests\UpdateAnnouncementRequest;
 use App\Http\Resources\AnnouncementResource;
 use Illuminate\Http\Request;
 use App\Models\Job;
+use File;
+
 use App\Services\AnnouncementServices;
 use App\Services\JobServices;
 use Carbon\Carbon;
@@ -103,14 +105,13 @@ class AnnouncementController extends Controller
         $data = Announcement::find($request->announcement_id);
         $oldImage =  $data->post['image'];
         $filePath = parse_url($oldImage, PHP_URL_PATH);
-        $filePath = ltrim($filePath, '/');
-        $str = str_replace('storage/', '', $filePath);
         
-        if (Storage::disk('public')->exists($str)) {
-           
-            Storage::disk('public')->delete($str);
-           
-        } 
+        $filePath = ltrim($filePath, '/');
+       
+        if (File::exists(public_path($filePath))) {
+            File::delete(public_path($filePath));
+        }
+        
         
         $imageUrl =  JobServices::getInstance()->createJobBanner($request->post['company_name'], $request->post['title'], $request->post['salary'], $request->post['address'] );
         
