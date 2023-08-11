@@ -12,13 +12,14 @@ class UserController extends Controller
 {
     public function index(): JsonResponse
     {
-        $tarfics = User::query()
+        $users = User::query()
             ->orderByDesc('id')
+            ->withTrashed()
             ->paginate(request()->get('limit', 15));
         // $list = TraficResource::collection($tarfics);
         return response()->json([
             'status' => true,
-            'data' => $tarfics
+            'data' => $users
         ]);
     }
 
@@ -28,13 +29,18 @@ class UserController extends Controller
             'phone' => ['required', 'numeric', 'unique:users,phone'],
             'password' => ['required', 'min:8'],
             'role' => ['required', 'in:admin,customer,candidate'],
-            'email' => ['email', 'unique:users,email']
+            'email' => ['email', 'unique:users,email'],
+            'fio' => ['string'],
+            'subrole' => ['string'],
         ]);
+        // dd($request->all());
         User::create([
             'phone' => $request->input('phone'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
             'role' => $request->input('role'),
+            'fio' => $request->fio,
+            'subrole' => $request->subrole,
         ]);
 
         return response()->json([
@@ -45,11 +51,12 @@ class UserController extends Controller
 
     public function show(string $slug): JsonResponse
     {
-        $trafic = User::query()
+        $user = User::query()
+            ->withTrashed()
             ->findOrFail($slug);
         return response()->json([
             'status' => true,
-            'data' => $trafic
+            'data' => $user
         ]);
     }
 
@@ -62,13 +69,17 @@ class UserController extends Controller
             'phone' => ['required', 'numeric'],
             'password' => ['required', 'min:8'],
             'role' => ['required'],
-            'email' => ['email']
+            'email' => ['email'],
+            'fio' => ['string'],
+            'subrole' => ['string']
         ]);
         $user->update([
             'phone' => $request->input('phone'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
             'role' => $request->input('role'),
+            'fio' => $request->fio,
+            'subrole' => $request->subrole,
         ]);
 
         return response()->json([
@@ -79,8 +90,16 @@ class UserController extends Controller
 
     public function destroy(Request $request): JsonResponse
     {
-        User::query()
-            ->findOrFail($request->slug)->delete();
+        $params = $request->validate([
+            'slug' => ['string', 'required']
+        ]);
+
+        $user = User::query()
+            ->withTrashed()
+            ->findOrFail($params['slug']);
+
+        if (!$user->trashed())
+            $user->delete();
 
         return response()->json([
             'status' => true,

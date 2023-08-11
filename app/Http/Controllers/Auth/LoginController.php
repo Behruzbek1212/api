@@ -37,7 +37,6 @@ class LoginController extends Controller
         $token = $user->createToken(@$user->name ?? 'admin' . '-' . Hash::make($user->id))
             ->plainTextToken;
 
-            // dd($user);
         return response()->json([
             'status' => true,
             'message' => 'Your account has been successfully authenticated.',

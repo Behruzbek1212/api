@@ -46,6 +46,7 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
     use HasTransactions;
     use MustVerifyPhone;
     use Notifiable;
+    use SoftDeletes;
 
     /**
      * Available roles list
@@ -63,13 +64,15 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'phone',
-        'role',
-        'email',
-        'password',
-    ];
+    // protected $fillable = [
+    //     'name',
+    //     'phone',
+    //     'role',
+    //     'email',
+    //     'password',
+    // ];
+
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for serialization.
