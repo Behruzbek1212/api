@@ -17,6 +17,7 @@ class Controller extends BaseController
 
     public function user(Request $request)
     {
+
         $user = $request->user('sanctum');
 
         return response()->json([
