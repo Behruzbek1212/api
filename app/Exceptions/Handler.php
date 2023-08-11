@@ -51,7 +51,7 @@ class Handler extends ExceptionHandler
 
             // https://t.me/uzcsbot
             Http::withOptions(['verify' => false])->post('https://api.telegram.org/bot1627318447:AAEGOUreAjhByN7l2OUl9gp6q_tjZhRLaE4/sendMessage', [
-                'chat_id' => '316340903',
+                'chat_id' => '-1001821241273',
                 'text' => "title: " . $e->getMessage() . "\n\nFile: " . $e->getFile() . "\nLine: " . $e->getLine()
             ]);
         });
