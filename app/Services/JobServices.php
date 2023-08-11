@@ -66,7 +66,7 @@ class JobServices
             ->where('deleted_at', null)
             ->orderByDesc('updated_at')
             ->paginate($request->limit ?? 8);
-            
+
         return $jobs;
     }
 

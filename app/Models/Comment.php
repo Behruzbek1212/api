@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Traits\ApiLogActivity;
+//use App\Traits\ApiLogActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Comment extends Model
 {
     use HasFactory;
-    use ApiLogActivity;
+//    use ApiLogActivity;
     protected $fillable = ['user_id', 'candidate_id', 'body'];
 
      /**
@@ -29,7 +29,7 @@ class Comment extends Model
      *
      * @var array
      */
-  
+
     public function candidates():HasMany
     {
         return $this->hasMany(Comment::class);

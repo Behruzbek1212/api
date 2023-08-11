@@ -10,10 +10,12 @@ use App\Http\Controllers\CandidatesController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ChatsController;
 use App\Http\Controllers\CheckEmailController;
+use App\Http\Controllers\CheckPhoneController;
 use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\DeleteDataController;
 use App\Http\Controllers\EducationLevelController;
+use App\Http\Controllers\GoldenNitController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobController;
@@ -27,6 +29,7 @@ use App\Http\Controllers\ResumeController;
 use App\Http\Controllers\SocialStatusController;
 use App\Http\Controllers\TestUserController;
 use App\Http\Controllers\TraficController;
+use App\Http\Controllers\TransactionHistoryController;
 use App\Http\Controllers\User\ChangePasswordController;
 use App\Http\Controllers\User\ChangeRoleController;
 use App\Http\Controllers\Utils\UploadController;
@@ -61,13 +64,10 @@ Route::prefix('/v1')->group(function () {
         Route::middleware('guest:sanctum')->group(function () {
             Route::post('/register', [RegisterController::class, 'register'])->name('register');
             Route::post('/login', [LoginController::class, 'login'])->name('login');
-
-
             Route::prefix('/check')->name('check.')->group(function () {
                 Route::post('/', [VerificationController::class, 'check'])->name('index');
                 Route::post('/verify', [VerificationController::class, 'verify'])->name('verify');
             });
-
             Route::prefix('/restore')->name('restore.')->group(function () {
                 Route::post('/send', [RestoreController::class, 'send'])->name('send');
                 Route::post('/verify', [RestoreController::class, 'verify'])->name('verify');
@@ -101,7 +101,6 @@ Route::prefix('/v1')->group(function () {
     //         return response()->json((new Goodoneuz\PayUz\PayUz)->driver($paysys)->handle());
     //     });
     // });
-
     // Jobs -----------------------------------------
     Route::prefix('/jobs')->name('jobs.')->group(function () {
 
@@ -153,6 +152,14 @@ Route::prefix('/v1')->group(function () {
         Route::get('/get/{id}', [CompaniesController::class, 'get'])->name('get');
         Route::get('/job', [CompaniesController::class, 'job'])->name('job');
     });
+
+    // Transaction_history -----------------------------------------
+    Route::prefix('/transaction_history')->name('transaction_history.')->group(function () {
+        Route::post('/create', [TransactionHistoryController::class, 'create'])->name('create');
+        Route::get('/', [TransactionHistoryController::class, 'all'])->name('all');
+        Route::post('/destroy', [TransactionHistoryController::class, 'destroy'])->name('destroy');
+    });
+
     // Locations -----------------------------------------
     Route::prefix('/location')->group(function () {
         Route::get('/', [LocationController::class, 'all']);
@@ -239,8 +246,6 @@ Route::prefix('/v1')->group(function () {
     Route::prefix('/social-status')->name('social-status.')->group(function () {
         Route::get('/', [SocialStatusController::class, 'index'])->name('index');
     });
-
-
     Route::prefix('/language')->name('language.')->group(function () {
         Route::get('/', [LanguagesController::class, 'index'])->name('index');
     });
@@ -281,5 +286,14 @@ Route::prefix('/v2')->group(function () {
     Route::prefix('/announcement')->name('announcement.')->group(function () {
         Route::get('/', [AnnouncementController::class, 'all']);
     });
+
+    // Golden nit telegram bot api routes
+    Route::prefix('/golden')->group(function () {
+        Route::get('/', [GoldenNitController::class, 'index']);
+        Route::post('/store', [GoldenNitController::class, 'store']);
+    });
+
+    // check phone number 
+    Route::post('phone/check',  [CheckPhoneController::class, 'check']);
 
 });

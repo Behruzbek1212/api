@@ -2,6 +2,9 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Transaction;
+use App\Models\TransactionHistory;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,7 +19,8 @@ class CompanyResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'avatar' => $this->avatar?? null,
+            'user_id' => $this->user->id,
+            'avatar' => $this->avatar ?? null,
             'name'  => $this->name ?? null,
             'about' =>  $this->about ?? null,
             'balance' =>  $this->balance ?? null,
@@ -24,6 +28,7 @@ class CompanyResource extends JsonResource
             'address'  =>  $this->address ?? null,
             'active' =>  $this->active ?? null,
             'jobs_count' =>  $this->jobs_count ?? null,
+            // 'total_balance' => $this->transation() ?? 0 // campaniya tuldirgan balansi
         ];
     }
 }

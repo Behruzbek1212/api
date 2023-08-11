@@ -57,22 +57,22 @@ class Paynet extends PaymentClass
 
         $body = match ($method) {
             Request::METHOD_PerformTransaction =>
-                Response::makeResponse($this->PerformTransaction()),
+            Response::makeResponse($this->PerformTransaction()),
 
             Request::METHOD_CancelTransaction =>
-                Response::makeResponse($this->CancelTransaction()),
+            Response::makeResponse($this->CancelTransaction()),
 
             Request::METHOD_CheckTransaction =>
-                Response::makeResponse($this->CheckTransaction()),
+            Response::makeResponse($this->CheckTransaction()),
 
             Request::METHOD_GetInformation =>
-                Response::makeResponse($this->GetInformation()),
+            Response::makeResponse($this->GetInformation()),
 
             Request::METHOD_GetStatement =>
-                $this->GetStatement(),
+            $this->GetStatement(),
 
             default =>
-                $this->response->response($this->request, 'Method not found.', Response::ERROR_METHOD_NOT_FOUND)
+            $this->response->response($this->request, 'Method not found.', Response::ERROR_METHOD_NOT_FOUND)
         };
 
         $this->response->response($this->request, $body, Response::SUCCESS);
@@ -125,7 +125,7 @@ class Paynet extends PaymentClass
             'transactionable_type'  => get_class($model),
             'transactionable_id'    => $model->id
         ]);
-
+                    
         Payment::payListener('after-pay', $model, $transaction);
 
         return  "<ns2:PerformTransactionResult xmlns:ns2=\"http://uws.provider.com/\">" .
@@ -154,10 +154,10 @@ class Paynet extends PaymentClass
                 "</ns2:CancelTransactionResult>";
         }
 
+
         $transaction->state = Transaction::STATE_CANCELLED;
         $transaction->update();
         Payment::payListener('cancel-pay', null, $transaction);
-
         return  "<ns2:CancelTransactionResult xmlns:ns2=\"http://uws.provider.com/\">" .
             "<errorMsg>Success</errorMsg>" .
             "<status>0</status>" .
@@ -196,7 +196,7 @@ class Paynet extends PaymentClass
     {
         $model = Payment::convertKeyToModel($this->request->params['key']);
 
-        if ($model):
+        if ($model) :
             return  "<ns2:GetInformationResult xmlns:ns2=\"http://uws.provider.com/\">" .
                 "<errorMsg>Success</errorMsg>" .
                 "<status>0</status>" .
@@ -206,7 +206,7 @@ class Paynet extends PaymentClass
                 "<paramValue>" . $model->customer->name . "</paramValue>" .
                 "</parameters>" .
                 "</ns2:GetInformationResult>";
-        else:
+        else :
             return  "<ns2:GetInformationResult xmlns:ns2=\"http://uws.provider.com/\">" .
                 "<errorMsg>Not Found</errorMsg>" .
                 "<status>302</status>" .
@@ -229,7 +229,7 @@ class Paynet extends PaymentClass
             ->get();
         $statements = '';
 
-        foreach ($transactions as $transaction):
+        foreach ($transactions as $transaction) :
             $statements = $statements .
                 "<statements>" .
                 "<amount>" . $transaction->amount . "</amount>" .

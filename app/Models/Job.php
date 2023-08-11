@@ -73,6 +73,7 @@ class Job extends Model
         'status',
         'work_hours',
         'for_communication_phone',
+        'for_communication_link',
         'trafic_id',
         'trafic_expired_at',
     ];

@@ -21,7 +21,7 @@ if (!function_exists('_auth')) {
     }
 }
 
-function formatDateTime($date_string, $format = 'd.m.Y H:i')
+function formatDateTime($date_string, $format = 'd-m-Y H:i')
 {
     if ($date_string == null || $date_string == '') {
         return '';

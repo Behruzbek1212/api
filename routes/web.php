@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,7 +21,7 @@ Route::any('/handle/{paysys}', function ($paysys) {
 });
 
 
-//redirect to payment system or payment form
+// redirect to payment system or payment form
 Route::any('/pay/{paysys}/{key}/{amount}', function ($paysys, $key, $amount) {
     $model = Goodoneuz\PayUz\Services\PaymentService::convertKeyToModel($key);
     $url = request('redirect_url', '/'); // redirect url after payment completed

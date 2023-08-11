@@ -39,17 +39,17 @@ class CompaniesController extends Controller
 
         if ($title = $request->get('title'))
             $companies->whereHas('jobs', function (Builder $query) use ($title) {
-                $query->where('title' ,'like', '%' . $title . '%');
+                $query->where('title', 'like', '%' . $title . '%');
             });
         if ($sphere = $request->get('sphere'))
             $companies->whereHas('jobs', function (Builder $query) use ($sphere) {
                 $query->whereJsonContains('sphere', $sphere);
-            });           
+            });
 
         if ($location = $request->get('location'))
             $companies->where('location', $location);
 
-        $data = $companies->paginate($params['limit'] ?? null);    
+        $data = $companies->paginate($params['limit'] ?? null);
         $list = CompaniesResource::collection($data);
         return response()->json([
             'status' => true,
@@ -65,7 +65,6 @@ class CompaniesController extends Controller
      */
     public function get(int $id): JsonResponse
     {
-
         $company = Customer::query()
             // ->with(['user:id,email,phone,verified'])
             ->whereHas('user', function (Builder $query) {
@@ -90,7 +89,7 @@ class CompaniesController extends Controller
         $params = $request->validate([
             'limit' => ['integer', 'nullable']
         ]);
-    
+
         $customer_id = _auth()->user()->customer->id;
         //        dd($costumer_id);
         $company = Job::query()
@@ -105,7 +104,7 @@ class CompaniesController extends Controller
             })->orderByDesc('id');
 
         if ($title = $request->get('title'))
-            $company->where('title' ,'like', '%' . $title . '%');
+            $company->where('title', 'like', '%' . $title . '%');
 
         if ($sphere = $request->get('sphere'))
             $company->whereJsonContains('sphere', $sphere);
