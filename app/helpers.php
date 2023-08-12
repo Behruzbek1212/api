@@ -21,13 +21,13 @@ if (!function_exists('_auth')) {
     }
 }
 
-function formatDateTime($date_string, $format = 'd-m-Y H:i')
-{
-    if ($date_string == null || $date_string == '') {
-        return '';
-    }
-    return date($format, strtotime($date_string));
-}
+// function formatDateTime($date_string, $format = 'd-m-Y H:i')
+// {
+//     if ($date_string == null || $date_string == '') {
+//         return '';
+//     }
+//     return date($format, strtotime($date_string));
+// }
 
 if (!function_exists('_user')) {
     /**
