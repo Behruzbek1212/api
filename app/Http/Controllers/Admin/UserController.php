@@ -31,7 +31,7 @@ class UserController extends Controller
             'role' => ['required', 'in:admin,customer,candidate'],
             'email' => ['email', 'unique:users,email'],
             'fio' => ['string'],
-            'subrole' => ['string'],
+            'subrole' => ['array'],
         ]);
         // dd($request->all());
         User::create([
@@ -71,7 +71,7 @@ class UserController extends Controller
             'role' => ['required'],
             'email' => ['email'],
             'fio' => ['string'],
-            'subrole' => ['string']
+            'subrole' => ['array']
         ]);
         $user->update([
             'phone' => $request->input('phone'),
