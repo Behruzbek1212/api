@@ -10,16 +10,22 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
+        $params = $request->validate([
+            'limit' => ['integer', 'nullable']
+        ]);
         $users = User::query()
             ->orderByDesc('id')
-            ->withTrashed()
-            ->paginate(request()->get('limit', 15));
+            ->withTrashed();
+            // ->paginate(request()->get('limit', 15));
         // $list = TraficResource::collection($tarfics);
+
+        if ($type = request('role'))
+            $users->where('role', $type);
         return response()->json([
             'status' => true,
-            'data' => $users
+            'jobs' => $users->paginate($params['limit'] ?? null)
         ]);
     }
 

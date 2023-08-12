@@ -54,6 +54,8 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
      *
      * @var array<int, string>
      */
+
+
     protected $availableRoles = [
         'candidate',
         'customer',
@@ -97,6 +99,7 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
         'phone_verified_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'subrole' => 'array',
     ];
 
     /**
