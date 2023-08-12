@@ -31,15 +31,17 @@ class JobServices
 
     public function dropTrafic()
     {
+
         Job::whereNotNull('trafic_id')
-            ->whereHas('trafic', function ($query) {
-                $query->whereIn('type', Trafic::NOT_DROP_TYPE);
-            })
+            // ->whereHas('trafic', function ($query) {
+            //     $query->whereIn('type', Trafic::NOT_DROP_TYPE);
+            // })
             ->where('trafic_expired_at', '<=', date('Y-m-d H:i:s'))
             ->update([
                 'trafic_id' => null,
                 'trafic_expired_at' => null,
             ]);
+
         Http::withOptions(['verify' => false])->post('https://api.telegram.org/bot5777417067:AAGvh21OUGVQ7nmSnLbIhzTiZxoyMQMIZKk/sendMessage', [
             'chat_id' => '-1001821241273',
             'text' => "title: cron ishladi"

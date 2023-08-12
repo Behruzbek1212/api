@@ -282,7 +282,7 @@ Route::prefix('/v2')->group(function () {
     Route::prefix('/location')->group(function () {
         Route::get('/region', [LocationController::class, 'regionNull']);
     });
- 
+
     Route::prefix('/announcement')->name('announcement.')->group(function () {
         Route::get('/', [AnnouncementController::class, 'all']);
     });
@@ -293,7 +293,6 @@ Route::prefix('/v2')->group(function () {
         Route::post('/store', [GoldenNitController::class, 'store']);
     });
 
-    // check phone number 
+    // check phone number
     Route::post('phone/check',  [CheckPhoneController::class, 'check']);
-
 });
