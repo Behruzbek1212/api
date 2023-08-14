@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\ApiLogActivity;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -23,6 +24,7 @@ class Resume extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use ApiLogActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -131,7 +133,7 @@ class Resume extends Model
 
 
     /**
-     * Calculate percentage 
+     * Calculate percentage
      *
      * @param array $data
      * @return int
@@ -144,7 +146,7 @@ class Resume extends Model
         $candidate = Candidate::where('user_id', $resume['user_id'])->first();
         $user =  User::where('id', $resume['user_id'])->first();
         $resumBalls = DB::table('resume_balls')->get();
-        
+
         $candidateData =  [];
         $candidateData['name'] = $candidate['name'] ?? null;
         $candidateData['email'] = $user['email'] ?? null;
@@ -164,15 +166,15 @@ class Resume extends Model
             $ball[$resumBall->name] =  intval($resumBall->ball);
             $max_ball += intval($resumBall->ball);
         }
-       
+
 
         foreach ($candidateData as $key => $value) {
-            
+
             if ($value !== null && $value !== '' && $value !== [] ) {
                 $filled_fields += $ball[$key];
-            } 
+            }
         }
-        
+
         // dd($resumeData);
         foreach ($resumeData as $key => $value) {
             if($value !== '' && $value !== null && $value !== []) {
@@ -183,38 +185,38 @@ class Resume extends Model
                         } else {
                             $filled_fields += 5;
                         }
-                    break; 
-                case 'position' : 
+                    break;
+                case 'position' :
                         $filled_fields += $ball[$key];
                     break;
-                case 'employment' : 
+                case 'employment' :
                         $filled_fields += $ball[$key];
                     break;
-                case 'sphere' : 
+                case 'sphere' :
                         $filled_fields += $ball[$key];
                     break;
-                case 'salary' : 
-                        $filled_fields += $ball[$key];
-                    break; 
-                case 'location' : 
-                        $filled_fields += $ball[$key];
-                    break; 
-                case 'work_type' : 
+                case 'salary' :
                         $filled_fields += $ball[$key];
                     break;
-                case 'computer_skills' : 
-                        $filled_fields += $ball[$key];
-                    break;      
-                case 'additional_education' : 
+                case 'location' :
                         $filled_fields += $ball[$key];
                     break;
-                case 'education' : 
+                case 'work_type' :
                         $filled_fields += $ball[$key];
-                    break; 
-                case 'skills' : 
+                    break;
+                case 'computer_skills' :
+                        $filled_fields += $ball[$key];
+                    break;
+                case 'additional_education' :
+                        $filled_fields += $ball[$key];
+                    break;
+                case 'education' :
+                        $filled_fields += $ball[$key];
+                    break;
+                case 'skills' :
                        $filled_fields += $ball[$key];
                     break;
-                case 'links': 
+                case 'links':
                      if($resumeData[$key]['other'] !== null || $resumeData[$key]['gitHub'] !== null ||
                       $resumeData[$key]['behance'] !== null || $resumeData[$key]['linkedin'] !== null ||
                       $resumeData[$key]['telegram'] !== null || $resumeData[$key]['whatsapp'] !== null ||  $resumeData[$key]['instagram'] !== null  )
@@ -223,7 +225,7 @@ class Resume extends Model
                      }
                     break;
                 case 'driving_experience':
-                   
+
                        if($resumeData[$key]['availability_of_a_car'] !== false){
                             $filled_fields += $ball['availability_of_a_car'];
                        }
@@ -232,22 +234,22 @@ class Resume extends Model
                          $resumeData[$key]['categories_of_driving']['B'] == true ||
                          $resumeData[$key]['categories_of_driving']['C'] == true ||
                          $resumeData[$key]['categories_of_driving']['D'] == true || $resumeData[$key]['categories_of_driving']['BE'] == true ||
-                         $resumeData[$key]['categories_of_driving']['CE'] == true || $resumeData[$key]['categories_of_driving']['DE'] == true 
+                         $resumeData[$key]['categories_of_driving']['CE'] == true || $resumeData[$key]['categories_of_driving']['DE'] == true
                           )
                         {
                          $filled_fields += $ball['categories_of_driving'];
                         }
-                    
+
                         break;
                 }
                }
             }
-          
+
             $percentage = ($filled_fields * 100) / $max_ball;
-            
+
             return $percentage;
          }
-               
+
 
 
 

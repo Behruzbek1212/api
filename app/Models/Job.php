@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Nette\Utils\Random;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * @property string title
@@ -37,7 +36,7 @@ class Job extends Model
     use SoftDeletes;
     use HasScopes;
     use ApiLogActivity;
-    //    use LogsActivity;
+    // use LogsActivity;
     /**
      * The primary key for the model.
      *
