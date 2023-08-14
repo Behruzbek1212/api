@@ -3,8 +3,8 @@
 namespace App\Traits;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Lang;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 trait ApiLogActivity
@@ -53,6 +53,19 @@ trait ApiLogActivity
         return $defaultExcept;
     }
 
+    public static function bootApiLogActivity()
+    {
+        Activity::saving(function (Activity $activity) {
+            $activity->properties = $activity->properties->put('user_data', [
+                'user_id' =>  _user()->id,
+                'user_role' =>  _user()->role ?? null,
+                'user_subrole' =>  _user()->subrole ?? null,
+                'user_fio' =>  _user()->fio ?? null,
+            ]);
+        });
+    }
+
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -63,13 +76,13 @@ trait ApiLogActivity
             ->dontSubmitEmptyLogs();
     }
 
+
     public function getDescriptionForEvent(string $eventName): string
     {
-        $user = 'admin';
-
+        $user = _user()->role ?? 'admin';
         switch ($eventName) {
             case 'created':
-                return "$user";
+                return  $user;
                 break;
             case 'updated':
                 return "$user";

@@ -18,7 +18,7 @@ class UserController extends Controller
         $users = User::query()
             ->orderByDesc('id')
             ->withTrashed();
-            // ->paginate(request()->get('limit', 15));
+        // ->paginate(request()->get('limit', 15));
         // $list = TraficResource::collection($tarfics);
 
         if ($type = request('role'))
@@ -39,7 +39,6 @@ class UserController extends Controller
             'fio' => ['string'],
             'subrole' => ['array'],
         ]);
-        // dd($request->all());
         User::create([
             'phone' => $request->input('phone'),
             'email' => $request->input('email'),
@@ -99,14 +98,11 @@ class UserController extends Controller
         $params = $request->validate([
             'slug' => ['string', 'required']
         ]);
-
         $user = User::query()
             ->withTrashed()
             ->findOrFail($params['slug']);
-
         if (!$user->trashed())
             $user->delete();
-
         return response()->json([
             'status' => true,
             'data' => []

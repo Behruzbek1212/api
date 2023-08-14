@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Chat\Chat;
+use App\Traits\ApiLogActivity;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -29,6 +30,7 @@ class Customer extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use ApiLogActivity;
 
     /**
      * The attributes that are mass assignable.
