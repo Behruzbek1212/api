@@ -36,8 +36,8 @@ class Job extends Model
     use HasFactory;
     use SoftDeletes;
     use HasScopes;
-//    use ApiLogActivity;
-//    use LogsActivity;
+    use ApiLogActivity;
+    //    use LogsActivity;
     /**
      * The primary key for the model.
      *
@@ -168,7 +168,7 @@ class Job extends Model
      */
     public function GetRespondedAttribute()
     {
-        if ((! _auth()->check()) || (@_auth()->user()->role == 'admin')) {
+        if ((!_auth()->check()) || (@_auth()->user()->role == 'admin')) {
 
             return false;
         }

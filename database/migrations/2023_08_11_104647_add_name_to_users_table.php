@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('fio')->nullable()->after('role');
-            $table->string('subrole')->nullable()->after('balance');
+            $table->json('subrole')->nullable()->after('balance');
             $table->softDeletes();
         });
     }
