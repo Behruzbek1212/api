@@ -32,14 +32,16 @@ class Guide extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'title',
-        'background',
-        'button',
-        'content',
-        'role',
-        'slug'
-    ];
+//    protected $fillable = [
+//        'title_uz',
+//        'background',
+//        'button',
+//        'content',
+//        'role',
+//        'slug'
+//    ];
+
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -93,8 +95,7 @@ class Guide extends Model
         $locale = 'title_' . app()->getLocale();
 
         return Attribute::make(
-            get: fn ($value, $attr) =>
-                $attr[$locale]
+            get: fn($value, $attr) => $attr[$locale]
         );
     }
 
@@ -108,7 +109,7 @@ class Guide extends Model
         $locale = 'content_' . app()->getLocale();
 
         return Attribute::get(
-            fn ($value, $attr) => $attr[$locale]
+            fn($value, $attr) => $attr[$locale]
         );
     }
 
@@ -122,8 +123,7 @@ class Guide extends Model
         $locale = 'content_' . app()->getLocale();
 
         return Attribute::get(
-            fn ($value, $attr) =>
-                Str::limit(strip_tags($attr[$locale]), 106, '...')
+            fn($value, $attr) => Str::limit(strip_tags($attr[$locale]), 106, '...')
         );
     }
 }
