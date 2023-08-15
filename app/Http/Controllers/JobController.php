@@ -14,7 +14,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-
+use App\Traits\ApiLogActivity;
 class JobController extends Controller
 {
     use ApiResponse;
@@ -329,6 +329,8 @@ class JobController extends Controller
         ]);
 
         $job = $request->user()->customer->jobs()->findOrFail($slug);
+        ApiLogActivity::logActivitySubjectId($job->id);
+
         $job->update([
             'title' => $params['position'],
             'salary' => $params['salary'],
@@ -364,8 +366,10 @@ class JobController extends Controller
     public function destroy(Request $request, string $slug): JsonResponse
     {
         $job = $request->user()->customer->jobs()->findOrFail($slug);
+        
+        ApiLogActivity::logActivitySubjectId($job->id);
         $job->delete();
-
+         
         return response()->json([
             'status' => true,
             'message' => 'Successfully deleted'

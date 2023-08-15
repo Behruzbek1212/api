@@ -64,7 +64,12 @@ trait ApiLogActivity
             ]);
         });
     }
-
+    public static function logActivitySubjectId($id)
+    {
+        Activity::saving(function (Activity $activity) use ($id) {
+            $activity->subject_id  = $id;
+        });
+    }
 
     public function getActivitylogOptions(): LogOptions
     {
