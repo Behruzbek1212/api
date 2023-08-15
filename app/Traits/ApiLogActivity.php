@@ -11,6 +11,7 @@ trait ApiLogActivity
 {
     use LogsActivity;
 
+
     public $logLocale = 'uz';
 
     // public function getDescriptionForEvent(string $eventName): string
@@ -46,7 +47,7 @@ trait ApiLogActivity
     // modelning ba'zi attributlari o'zgarishiga e'tibor bermaslik
     public function getLogExcept()
     {
-        $defaultExcept = ['updated_at', 'image'];
+        $defaultExcept = ['updated_at', 'image', 'deleted_at'];
         if ($this->logExcept) {
             return array_merge($defaultExcept, $this->logExcept);
         }

@@ -42,7 +42,7 @@ class Job extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'slug';
+    protected $primaryKey = 'id';
 
     /**
      * The "type" of the primary key ID.

@@ -247,9 +247,9 @@ class JobController extends Controller
             'trafic_id' => ['integer', 'nullable'],
             'trafic_expired_at' => ['date', 'nullable'],
         ]);
-        
+
         $user = _auth()->user();
-        
+
         $job = $user->customer->jobs()->create([
             'title' => $params['position'],
             'salary' => $params['salary'],
@@ -269,8 +269,8 @@ class JobController extends Controller
             'trafic_id' => $params['trafic_id'] ?? null,
             'trafic_expired_at' => $params['trafic_expired_at'] ?? null,
         ]);
-       
-       
+
+
 
         if (@$params['recruitment'] || @$params['strengthening']) {
             $message = "🆕 <b>" . $job->title . "</b>\n";
