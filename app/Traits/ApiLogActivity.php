@@ -57,7 +57,7 @@ trait ApiLogActivity
     {
         Activity::saving(function (Activity $activity) {
             $activity->properties = $activity->properties->put('user_data', [
-                'user_id' =>  _user()->id,
+                'user_id' =>  _user()->id ?? null,
                 'user_role' =>  _user()->role ?? null,
                 'user_subrole' =>  _user()->subrole ?? null,
                 'user_fio' =>  _user()->fio ?? null,

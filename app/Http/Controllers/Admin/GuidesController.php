@@ -107,7 +107,7 @@ class GuidesController extends Controller
     private function validateParams(Request $request, array $rule): void
     {
         $request->validate(array_merge([
-            'background' => ['json', 'required'],
+            'background' => ['array', 'required'],
             'role' => ['in:all,customer,candidate', 'required'],
 
             // Content
