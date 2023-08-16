@@ -13,6 +13,8 @@ use App\Http\Controllers\CheckEmailController;
 use App\Http\Controllers\CheckPhoneController;
 use App\Http\Controllers\CompaniesController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\CustomerChatCommentController;
+use App\Http\Controllers\CustomerStatusController;
 use App\Http\Controllers\DeleteDataController;
 use App\Http\Controllers\EducationLevelController;
 use App\Http\Controllers\GoldenNitController;
@@ -295,4 +297,22 @@ Route::prefix('/v2')->group(function () {
 
     // check phone number
     Route::post('phone/check',  [CheckPhoneController::class, 'check']);
+
+    // customer status columns api routes
+    Route::prefix('customer-status')->name('customerStatus.')->middleware(['auth:sanctum', 'is_customer'])->group(function () {
+       
+        // Route::post('/create',[CustomerStatusController::class, 'create'])->name('create');
+        Route::post('/update-status', [CustomerStatusController::class, 'updatedCandidateStatus'])->name('update-status');
+        
+    });
+
+    // These routes are for commenting on customer chat
+
+    Route::prefix('customer-comment')->name('customerComment.')->middleware(['auth:sanctum', 'is_customer'])->group(function () {
+        Route::post('/create',[CustomerChatCommentController::class, 'create'])->name('create');
+        Route::get('/show/{id}',[CustomerChatCommentController::class, 'show'])->name('show');
+        Route::post('/edit',[CustomerChatCommentController::class, 'update'])->name('edit');
+        Route::post('/destroy', [CustomerChatCommentController::class, 'destroy'])->name('destroy');
+    });
+
 });

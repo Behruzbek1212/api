@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\TraficController;
 use App\Http\Controllers\Admin\ResumeController;
 use App\Http\Controllers\Admin\ResumeBallController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\CustomerStatusAdminController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/jobs')->name('jobs.')->group(function () {
@@ -108,4 +109,13 @@ Route::prefix('/announcement')->name('announcement.')->group(function () {
 Route::prefix('/comment')->name('comment.')->group(function () {
     Route::post('/store', [CommentController::class, 'store']);
     Route::post('/show', [CommentController::class, 'getComment']);
+});
+
+
+Route::prefix('/customer-status')->name('customer-status.')->group(function () {
+    Route::post('/create', [CustomerStatusAdminController::class, 'create'])->name('create');
+    Route::get('/status/{id}',[CustomerStatusAdminController::class, 'getCustomerStatus'])->name('customerStatus');
+    Route::get('/show', [CustomerStatusAdminController::class, 'show'])->name('show');
+    Route::post('/edit', [CustomerStatusAdminController::class, 'update'])->name('edit');
+    Route::post('/destroy', [CustomerStatusAdminController::class, 'destroy'])->name('destroy');
 });
