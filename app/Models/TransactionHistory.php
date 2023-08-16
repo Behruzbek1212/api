@@ -15,7 +15,7 @@ class TransactionHistory extends Model
     use Filterable;
     // use SoftDeletes;
     //    use LogsActivity;
-    //    use ApiLogActivity;
+       use ApiLogActivity;
 
     protected $table = 'transaction_history';
     protected $guarded = [];

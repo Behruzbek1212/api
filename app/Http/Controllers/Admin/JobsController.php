@@ -8,7 +8,7 @@ use App\Models\Job;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-
+use App\Traits\ApiLogActivity;
 class JobsController extends Controller
 {
     public function index(Request $request): JsonResponse
@@ -76,7 +76,7 @@ class JobsController extends Controller
         $job = Job::query()
             ->withTrashed()
             ->findOrFail($request->get('slug'));
-
+        ApiLogActivity::logActivitySubjectId($job->id);
         $job->update( $request->except( ['slug'] ) );
 
         return response()->json([
@@ -94,7 +94,7 @@ class JobsController extends Controller
         $job = Job::query()
             ->withTrashed()
             ->findOrFail($params['slug']);
-
+        ApiLogActivity::logActivitySubjectId($job->id);
         if (! $job->trashed())
             $job->delete();
 

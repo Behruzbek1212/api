@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Interfaces\MustVerifyPhone as ContractsMustVerifyPhone;
+use App\Traits\ApiLogActivity;
 use App\Traits\HasStatistics;
 use App\Traits\MustVerifyPhone;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -46,12 +47,15 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
     use HasTransactions;
     use MustVerifyPhone;
     use Notifiable;
-
+    use SoftDeletes;
+    use ApiLogActivity;
     /**
      * Available roles list
      *
      * @var array<int, string>
      */
+
+
     protected $availableRoles = [
         'candidate',
         'customer',
@@ -63,13 +67,15 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'phone',
-        'role',
-        'email',
-        'password',
-    ];
+    // protected $fillable = [
+    //     'name',
+    //     'phone',
+    //     'role',
+    //     'email',
+    //     'password',
+    // ];
+
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -93,6 +99,7 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
         'phone_verified_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'subrole' => 'array',
     ];
 
     /**

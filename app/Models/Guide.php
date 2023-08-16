@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Guide extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     /**
      * The primary key for the model.
@@ -30,14 +32,16 @@ class Guide extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'title',
-        'background',
-        'button',
-        'content',
-        'role',
-        'slug'
-    ];
+//    protected $fillable = [
+//        'title_uz',
+//        'background',
+//        'button',
+//        'content',
+//        'role',
+//        'slug'
+//    ];
+
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -78,6 +82,7 @@ class Guide extends Model
         'blank' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'deleted_at' => 'datetime'
     ];
 
     /**
@@ -90,8 +95,7 @@ class Guide extends Model
         $locale = 'title_' . app()->getLocale();
 
         return Attribute::make(
-            get: fn ($value, $attr) =>
-                $attr[$locale]
+            get: fn($value, $attr) => $attr[$locale]
         );
     }
 
@@ -105,10 +109,10 @@ class Guide extends Model
         $locale = 'content_' . app()->getLocale();
 
         return Attribute::get(
-            fn ($value, $attr) => $attr[$locale]
+            fn($value, $attr) => $attr[$locale]
         );
     }
-    
+
     /**
      *
      *
@@ -119,8 +123,7 @@ class Guide extends Model
         $locale = 'content_' . app()->getLocale();
 
         return Attribute::get(
-            fn ($value, $attr) =>
-                Str::limit(strip_tags($attr[$locale]), 106, '...')
+            fn($value, $attr) => Str::limit(strip_tags($attr[$locale]), 106, '...')
         );
     }
 }

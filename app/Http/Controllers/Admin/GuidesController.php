@@ -14,8 +14,7 @@ class GuidesController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $guides = Guide::query()
-            ->withTrashed();
+        $guides = Guide::withTrashed();
 
         if ($request->has('title'))
             $guides->where(function (Builder $query) use ($request) {
@@ -32,8 +31,7 @@ class GuidesController extends Controller
 
     public function show(string $slug): JsonResponse
     {
-        $guide = Guide::query()
-            ->withTrashed()
+        $guide = Guide::withTrashed()
             ->findOrFail($slug);
 
         return response()->json([
@@ -109,7 +107,7 @@ class GuidesController extends Controller
     private function validateParams(Request $request, array $rule): void
     {
         $request->validate(array_merge([
-            'background' => ['json', 'required'],
+            'background' => ['array', 'required'],
             'role' => ['in:all,customer,candidate', 'required'],
 
             // Content

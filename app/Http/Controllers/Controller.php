@@ -18,6 +18,7 @@ class Controller extends BaseController
 
     public function user(Request $request)
     {
+
         $user = $request->user('sanctum');
         $data = User::query()->with('candidate', 'customer')->find($user->id);
         $list = new  UserResource($data);

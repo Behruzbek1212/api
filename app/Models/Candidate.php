@@ -21,7 +21,7 @@ class Candidate extends Model
     use Filterable;
     use HasFactory;
     use SoftDeletes;
-
+    use ApiLogActivity;
     /**
      * The attributes that are mass assignable.
      *

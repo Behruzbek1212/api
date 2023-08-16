@@ -3,6 +3,8 @@
 namespace App\Models;
 
 //use Illuminate\Auth\Authenticatable;
+
+use App\Traits\ApiLogActivity;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,6 +14,7 @@ use Laravel\Sanctum\HasApiTokens;
 class TestUser extends Authenticatable
 {
     use HasFactory, HasApiTokens;
+    use ApiLogActivity;
 
     protected $fillable = [
         'name',

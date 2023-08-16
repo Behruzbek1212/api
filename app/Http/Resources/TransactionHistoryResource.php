@@ -20,9 +20,9 @@ class TransactionHistoryResource extends JsonResource
             'service_id' => $this->service_id ?? null,
             'service_sum' => $this->service_sum ?? null,
             'service_name' => $this->service_name ?? null,
-            'started_at' => formatDateTime($this->started_at) ?? null,
-            'expire_at' => formatDateTime($this->expire_at) ?? null,
-            'created_at' => formatDateTime($this->created_at) ?? null,
+            'started_at' => $this->started_at ?? null,
+            'expire_at' => $this->expire_at ?? null,
+            'created_at' => $this->created_at ?? null,
             'key' => $this->key ?? null,
         ];
     }

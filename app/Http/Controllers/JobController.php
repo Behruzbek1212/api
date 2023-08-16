@@ -14,7 +14,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-
+use App\Traits\ApiLogActivity;
 class JobController extends Controller
 {
     use ApiResponse;
@@ -236,7 +236,7 @@ class JobController extends Controller
             'category_id' => ['numeric', 'required'],
             'languages' => ['nullable'],
             'education_level' => ['string', 'nullable'],
-            'salary' => ['array:amount,currency,agreement', 'required'],
+            'salary' => ['array', 'required'],
             'work_type' => ['string', 'required', 'in:fulltime,remote,partial,hybrid'],
             'about' => ['string', 'required'],
             'work_hours' => ['string', 'nullable'],
@@ -247,7 +247,10 @@ class JobController extends Controller
             'trafic_id' => ['integer', 'nullable'],
             'trafic_expired_at' => ['date', 'nullable'],
         ]);
-        $job = $request->user()->customer->jobs()->create([
+
+        $user = _auth()->user();
+
+        $job = $user->customer->jobs()->create([
             'title' => $params['position'],
             'salary' => $params['salary'],
             'about' => $params['about'],
@@ -264,8 +267,10 @@ class JobController extends Controller
             'for_communication_phone' => $params['for_communication_phone'] ?? null,
             'for_communication_link' => $params['for_communication_link'] ?? null,
             'trafic_id' => $params['trafic_id'] ?? null,
-            'trafic_expired_at' => $params['trafic_expired_at'] ?? null
+            'trafic_expired_at' => $params['trafic_expired_at'] ?? null,
         ]);
+
+
 
         if (@$params['recruitment'] || @$params['strengthening']) {
             $message = "🆕 <b>" . $job->title . "</b>\n";
@@ -313,7 +318,7 @@ class JobController extends Controller
             'category_id' => ['numeric', 'required'],
             'languages' => ['nullable'],
             'education_level' => ['string', 'nullable'],
-            'salary' => ['array:amount,currency,agreement', 'required'],
+            'salary' => ['array', 'required'],
             'work_type' => ['string', 'required', 'in:fulltime,remote,partial,hybrid'],
             'about' => ['string', 'required'],
             'work_hours' => ['string', 'nullable'],
@@ -324,6 +329,8 @@ class JobController extends Controller
         ]);
 
         $job = $request->user()->customer->jobs()->findOrFail($slug);
+        ApiLogActivity::logActivitySubjectId($job->id);
+
         $job->update([
             'title' => $params['position'],
             'salary' => $params['salary'],
@@ -359,8 +366,10 @@ class JobController extends Controller
     public function destroy(Request $request, string $slug): JsonResponse
     {
         $job = $request->user()->customer->jobs()->findOrFail($slug);
+        
+        ApiLogActivity::logActivitySubjectId($job->id);
         $job->delete();
-
+         
         return response()->json([
             'status' => true,
             'message' => 'Successfully deleted'

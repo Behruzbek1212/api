@@ -21,13 +21,13 @@ if (!function_exists('_auth')) {
     }
 }
 
-function formatDateTime($date_string, $format = 'd-m-Y H:i')
-{
-    if ($date_string == null || $date_string == '') {
-        return '';
-    }
-    return date($format, strtotime($date_string));
-}
+// function formatDateTime($date_string, $format = 'd-m-Y H:i')
+// {
+//     if ($date_string == null || $date_string == '') {
+//         return '';
+//     }
+//     return date($format, strtotime($date_string));
+// }
 
 if (!function_exists('_user')) {
     /**
@@ -52,51 +52,63 @@ if (!function_exists('qrcode')) {
         return QrCode::size($size);
     }
 }
-
-function getRequest($request = null)
+if(!function_exists('getRequest'))
 {
+    function getRequest($request = null)
+    {
     return $request ?? request();
+    }
 }
 
-function requestOrder(): array
-{
+if(!function_exists('requestOrder')){
+    function requestOrder(): array
+    {
     $order = request()->get('order', '-id');
     if ($order[0] == '-') {
-        $result = [
-            'key' => substr($order, 1),
-            'value' => 'desc',
-        ];
-    } else {
-        $result = [
-            'key' => $order,
-            'value' => 'asc',
-        ];
+            $result = [
+                'key' => substr($order, 1),
+                'value' => 'desc',
+            ];
+        } else {
+            $result = [
+                'key' => $order,
+                'value' => 'asc',
+            ];
+        }
+     return $result;
     }
-    return $result;
 }
 
 
-function uploadFile($file, $path, $old = null): ?string
-{
-
+if(!function_exists('uploadFile')) {
+    function uploadFile($file, $path, $old = null): ?string
+    {
     $result = null;
     deleteFile($old);
     if ($file != null) {
         $model = $file->getClientOriginalName();
         $file->storeAs("public/$path", $model);
         $result = "/storage/$path/" . $model;
-    }
-    return $result;
-}
-
-function deleteFile($path): void
-{
-    if ($path != null && file_exists(public_path() . $path)) {
-        unlink(public_path() . $path);
+     }
+        return $result;
     }
 }
 
-function user()
+if(!function_exists('deleteFile')) 
 {
-    return _auth()->user();
+    function deleteFile($path): void
+    {
+        if ($path != null && file_exists(public_path() . $path)) {
+            unlink(public_path() . $path);
+        }
+    }
 }
+
+if(!function_exists('user')) 
+{
+    function user()
+    {
+        return _auth()->user();
+    }
+}
+

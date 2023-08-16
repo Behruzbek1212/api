@@ -10,15 +10,22 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $tarfics = User::query()
+        $params = $request->validate([
+            'limit' => ['integer', 'nullable']
+        ]);
+        $users = User::query()
             ->orderByDesc('id')
-            ->paginate(request()->get('limit', 15));
+            ->withTrashed();
+        // ->paginate(request()->get('limit', 15));
         // $list = TraficResource::collection($tarfics);
+
+        if ($type = request('role'))
+            $users->where('role', $type);
         return response()->json([
             'status' => true,
-            'data' => $tarfics
+            'jobs' => $users->paginate($params['limit'] ?? null)
         ]);
     }
 
@@ -28,13 +35,20 @@ class UserController extends Controller
             'phone' => ['required', 'numeric', 'unique:users,phone'],
             'password' => ['required', 'min:8'],
             'role' => ['required', 'in:admin,customer,candidate'],
-            'email' => ['email', 'unique:users,email']
+            'email' => ['email', 'unique:users,email'],
+            'fio' => ['string'],
+            'subrole' => ['array'],
+            'customer_id' => ['number'],
         ]);
+        // dd($request->header('customer_id'));
         User::create([
             'phone' => $request->input('phone'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
             'role' => $request->input('role'),
+            'fio' => $request->fio,
+            'subrole' => $request->subrole,
+            'customer_id' => $request->header('customer_id') ?? null
         ]);
 
         return response()->json([
@@ -45,11 +59,12 @@ class UserController extends Controller
 
     public function show(string $slug): JsonResponse
     {
-        $trafic = User::query()
+        $user = User::query()
+            ->withTrashed()
             ->findOrFail($slug);
         return response()->json([
             'status' => true,
-            'data' => $trafic
+            'data' => $user
         ]);
     }
 
@@ -62,13 +77,19 @@ class UserController extends Controller
             'phone' => ['required', 'numeric'],
             'password' => ['required', 'min:8'],
             'role' => ['required'],
-            'email' => ['email']
+            'email' => ['email'],
+            'fio' => ['string'],
+            'subrole' => ['array'],
+            'customer_id' => ['number'],
         ]);
         $user->update([
             'phone' => $request->input('phone'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
             'role' => $request->input('role'),
+            'fio' => $request->fio,
+            'subrole' => $request->subrole,
+            'customer_id' => $request->header('customer_id') ?? null
         ]);
 
         return response()->json([
@@ -79,9 +100,14 @@ class UserController extends Controller
 
     public function destroy(Request $request): JsonResponse
     {
-        User::query()
-            ->findOrFail($request->slug)->delete();
-
+        $params = $request->validate([
+            'slug' => ['string', 'required']
+        ]);
+        $user = User::query()
+            ->withTrashed()
+            ->findOrFail($params['slug']);
+        if (!$user->trashed())
+            $user->delete();
         return response()->json([
             'status' => true,
             'data' => []
