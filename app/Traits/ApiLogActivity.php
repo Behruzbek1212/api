@@ -11,28 +11,8 @@ trait ApiLogActivity
 {
     use LogsActivity;
 
+
     public $logLocale = 'uz';
-
-    // public function getDescriptionForEvent(string $eventName): string
-    // {
-    //     $message = 'log_message.' . $this->getTable() . '.' . $eventName;
-    //     $messageAttributes = 'message_attributes.' . $this->getTable();
-
-    //     if (!(Lang::has($message, $this->logLocale) && Lang::has($messageAttributes, $this->logLocale))) {
-    //         return ('log_message.default.' . $eventName, [
-    //             'first_attribute' => $this->id,
-    //             'second_attribute' => null
-    //         ], $this->logLocale);
-    //     }
-
-    //     $attribute = [];
-
-    //     foreach (($messageAttributes, [], $this->logLocale) as $key => $value) {
-    //         $attribute[$key] = $this->convertObject($value);
-    //     }
-
-    //     return __($message, $attribute, $this->logLocale);
-    // }
 
     public function convertObject($array)
     {
@@ -46,7 +26,7 @@ trait ApiLogActivity
     // modelning ba'zi attributlari o'zgarishiga e'tibor bermaslik
     public function getLogExcept()
     {
-        $defaultExcept = ['updated_at', 'image'];
+        $defaultExcept = ['updated_at', 'image', 'deleted_at'];
         if ($this->logExcept) {
             return array_merge($defaultExcept, $this->logExcept);
         }
