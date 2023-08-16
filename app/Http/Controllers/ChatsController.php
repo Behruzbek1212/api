@@ -113,7 +113,7 @@ class ChatsController extends Controller
             'customer' =>
                 $user->customer->chats()
                     ->withExists(['resume', 'candidate'])
-                    ->with('messages')
+                    ->with('messages', 'candidate.user')
                     ->findOrFail($id),
 
             default => null
