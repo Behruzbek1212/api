@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CandidatesController;
 use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\CompaniesController;
 use App\Http\Controllers\Admin\GuidesController;
+use App\Http\Controllers\Admin\HistoryAdminController;
 use App\Http\Controllers\Admin\JobsController;
 use App\Http\Controllers\Admin\LimitController;
 use App\Http\Controllers\Admin\StatisticAdminController;
@@ -108,4 +109,9 @@ Route::prefix('/announcement')->name('announcement.')->group(function () {
 Route::prefix('/comment')->name('comment.')->group(function () {
     Route::post('/store', [CommentController::class, 'store']);
     Route::post('/show', [CommentController::class, 'getComment']);
+});
+
+
+Route::prefix('/history')->name('history.')->group(function() {
+    Route::get('/hr', [HistoryAdminController::class, 'getHistoryHr']);
 });
