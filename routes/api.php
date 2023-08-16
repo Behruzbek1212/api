@@ -137,7 +137,7 @@ Route::prefix('/v1')->group(function () {
         Route::post('/respond', [CandidatesController::class, 'respond'])->middleware(['auth:sanctum', 'is_customer'])->name('respond');
         Route::post('/add-test', [CandidatesController::class, 'addTestResult'])->name('add-test-result');
     });
-    
+
     Route::prefix('/limits')->name('limits.')->group(function () {
         Route::get('/', [LimitController::class, 'all'])->name('limits');
     });

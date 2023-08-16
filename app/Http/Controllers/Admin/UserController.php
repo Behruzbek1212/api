@@ -38,7 +38,9 @@ class UserController extends Controller
             'email' => ['email', 'unique:users,email'],
             'fio' => ['string'],
             'subrole' => ['array'],
+            'customer_id' => ['number'],
         ]);
+        // dd($request->header('customer_id'));
         User::create([
             'phone' => $request->input('phone'),
             'email' => $request->input('email'),
@@ -46,6 +48,7 @@ class UserController extends Controller
             'role' => $request->input('role'),
             'fio' => $request->fio,
             'subrole' => $request->subrole,
+            'customer_id' => $request->header('customer_id') ?? null
         ]);
 
         return response()->json([
@@ -76,7 +79,8 @@ class UserController extends Controller
             'role' => ['required'],
             'email' => ['email'],
             'fio' => ['string'],
-            'subrole' => ['array']
+            'subrole' => ['array'],
+            'customer_id' => ['number'],
         ]);
         $user->update([
             'phone' => $request->input('phone'),
@@ -85,6 +89,7 @@ class UserController extends Controller
             'role' => $request->input('role'),
             'fio' => $request->fio,
             'subrole' => $request->subrole,
+            'customer_id' => $request->header('customer_id') ?? null
         ]);
 
         return response()->json([
