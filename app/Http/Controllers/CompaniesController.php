@@ -90,8 +90,8 @@ class CompaniesController extends Controller
             'limit' => ['integer', 'nullable']
         ]);
 
-        $customer_id = _auth()->user()->customer->id;
-        //        dd($costumer_id);
+        $customer_id = _auth()->user()->customer->id ?? null;
+        // dd($customer_id);
         $company = Job::query()
             ->with('customer')
             ->WhereHas('customer', function ($query) use ($customer_id) {

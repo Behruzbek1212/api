@@ -14,27 +14,6 @@ trait ApiLogActivity
 
     public $logLocale = 'uz';
 
-    // public function getDescriptionForEvent(string $eventName): string
-    // {
-    //     $message = 'log_message.' . $this->getTable() . '.' . $eventName;
-    //     $messageAttributes = 'message_attributes.' . $this->getTable();
-
-    //     if (!(Lang::has($message, $this->logLocale) && Lang::has($messageAttributes, $this->logLocale))) {
-    //         return ('log_message.default.' . $eventName, [
-    //             'first_attribute' => $this->id,
-    //             'second_attribute' => null
-    //         ], $this->logLocale);
-    //     }
-
-    //     $attribute = [];
-
-    //     foreach (($messageAttributes, [], $this->logLocale) as $key => $value) {
-    //         $attribute[$key] = $this->convertObject($value);
-    //     }
-
-    //     return __($message, $attribute, $this->logLocale);
-    // }
-
     public function convertObject($array)
     {
         $model = $this;
@@ -65,7 +44,12 @@ trait ApiLogActivity
             ]);
         });
     }
-
+    public static function logActivitySubjectId($id)
+    {
+        Activity::saving(function (Activity $activity) use ($id) {
+            $activity->subject_id  = $id;
+        });
+    }
 
     public function getActivitylogOptions(): LogOptions
     {
