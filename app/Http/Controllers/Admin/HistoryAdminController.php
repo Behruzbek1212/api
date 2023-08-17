@@ -10,12 +10,17 @@ class HistoryAdminController extends Controller
     public function getHistoryHr(Request $request) 
     {
         $data =  Activity::where(function ($query) {
-            $query->where('description', 'admin')
+            $query->where('properties->user_data->user_subrole[0]', 'hr')
                   ->where('log_name', 'candidates')
-                  ->where('event', 'created');
+                  ->where(function ($query) {
+                    $query->where('event', 'created');
+                   })
+                  ->orWhere(function ($query) {
+                     $query->where('event', 'updated');
+                  });
             })
             ->orWhere(function ($query) {
-            $query->where('description', 'admin')
+            $query->where('properties->user_data->user_subrole[0]', 'hr')
                   ->where('log_name', 'comments')
                   ->where('event', 'created');
             })
