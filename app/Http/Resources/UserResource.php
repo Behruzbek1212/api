@@ -30,6 +30,9 @@ class UserResource extends JsonResource
             "created_at"=> $this->created_at ?? null,
             "updated_at"=>$this->updated_at ?? null,
             "candidate" => $this->candidate ?? null,
+            "subrole" => $this->subrole ?? null,
+            "fio" => $this->fio ?? null,
+            "customer_id" => $this->customer_id ?? null,
             "customer" => [
                 "id" => $this->customer->id ?? null,
                 "avatar" => $this->customer->avatar ?? null,
@@ -53,7 +56,7 @@ class UserResource extends JsonResource
         if($id !== null ){
             $status = CustomerStatus::where('customer_id', $id)->orWhere('customer_id', null)->get();
             return $status;
-        } 
+        }
         return [];
     }
 
