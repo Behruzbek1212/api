@@ -277,6 +277,9 @@ Route::prefix('/v1')->group(function () {
     Route::prefix('/admin')->middleware('is_admin')->name('admin.')->group(function () {
         require_once __DIR__ . '/admin.php';
     });
+
+    // Bots ------------------------------
+    require_once __DIR__ . '/bots.php';
 });
 
 
@@ -301,10 +304,10 @@ Route::prefix('/v2')->group(function () {
 
     // customer status columns api routes
     Route::prefix('customer-status')->name('customerStatus.')->middleware(['auth:sanctum', 'is_customer'])->group(function () {
-       
+
         // Route::post('/create',[CustomerStatusController::class, 'create'])->name('create');
         Route::post('/update-status', [CustomerStatusController::class, 'updatedCandidateStatus'])->name('update-status');
-        
+
     });
 
     // These routes are for commenting on customer chat
@@ -316,5 +319,4 @@ Route::prefix('/v2')->group(function () {
         Route::post('/edit',[CustomerChatCommentController::class, 'update'])->name('edit');
         Route::post('/destroy', [CustomerChatCommentController::class, 'destroy'])->name('destroy');
     });
-
 });
