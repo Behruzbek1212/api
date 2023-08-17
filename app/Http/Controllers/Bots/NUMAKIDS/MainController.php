@@ -1,59 +1,88 @@
 <?php
 
-namespace App\Http\Controllers\Bots\ADSON;
+namespace App\Http\Controllers\Bots\NUMAKIDS;
 
 use App\Http\Controllers\Controller;
-use App\Models\Bot\Adson;
-use App\Models\Bot\AdsonCrater;
+use App\Models\Bot\Numakids;
 use Illuminate\Http\Request;
 
-class AdminController extends Controller
+class MainController extends Controller
 {
-    public function addLinks(Request $request)
+    public function store(Request $request)
+    {
+        $credentials = $request->validate([
+            'uuid' => ['uuid', 'required'],
+            'identification' => ['string', 'required'],
+            'info' => ['array', 'required']
+        ]);
+
+        $data = Numakids::query()->firstOrCreate([
+            'uuid' => $credentials['uuid']
+        ], $credentials)->get(['uuid', 'identification', 'info']);
+
+        return response()->json([
+            'status' => true,
+            'data' => $data
+        ]);
+    }
+
+    public function check(Request $request)
     {
         $credentials = $request->validate([
             'identification' => ['string', 'required'],
-            'url' => ['string', 'required'],
-            'image' => ['string', 'required']
+            'telegram_id' => ['numeric', 'required']
         ]);
 
-        AdsonCrater::query()->updateOrCreate([
-            'identification' => $credentials['identification']
-        ], $credentials);
+        $model = Numakids::query()->where('uuid', '=', $credentials['identification']);
+        $model->update(['telegram_id' => $credentials['telegram_id']]);
+
+        $data = $model->first(['uuid', 'identification', 'info']);
 
         return response()->json([
             'status' => true,
+            'data' => $data
         ]);
     }
 
-    public function getUsers()
-    {
-        $list = Adson::query()->distinct('telegram_id')->get(['telegram_id']);
-
-        return response()->json([
-            'status' => true,
-            'data' => $list
-        ]);
-    }
-
-    public function getUser(Request $request)
+    public function getUrl(Request $request)
     {
         $credentials = $request->validate([
-            'uuid' => ['string', 'required']
+            'identification' => ['string', 'required']
         ]);
 
-        $user = Adson::query()->where($credentials)
-            ->first(['telegram_id']);
+        $data = Numakids::query()->where('uuid', '=', $credentials['identification'])
+            ->first(['info']);
 
-        if ( $user == null ) {
+        $crate = Numakids::query()->where('uuid', '=', $credentials['identification'])
+            ->first()->link;
+
+        return response()->json([
+            'status' => true,
+            'data' => $data['info'],
+            'url' => $crate['url'],
+            'image' => $crate['image']
+        ]);
+    }
+
+    public function getInfo(Request $request)
+    {
+        $credentials = $request->validate([
+            'telegram_id' => ['numeric', 'required']
+        ]);
+
+        $data = Numakids::query()->where('telegram_id', '=', $credentials['telegram_id'])
+            ->first(['info']);
+
+        if ( $data == null ) {
             return response()->json([
-                'status' => false
+                'status' => true,
+                'data' => null
             ]);
         }
 
         return response()->json([
             'status' => true,
-            'data' => $user['telegram_id']
+            'data' => $data['info']
         ]);
     }
 }

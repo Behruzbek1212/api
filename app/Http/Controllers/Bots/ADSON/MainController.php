@@ -7,7 +7,7 @@ use App\Models\Bot\Adson;
 use App\Models\Bot\AdsonCrater;
 use Illuminate\Http\Request;
 
-class AdminController extends Controller
+class AdsonController extends Controller
 {
     public function addLinks(Request $request)
     {

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Bots\ADSON;
+namespace App\Http\Controllers\Bots\NUMAKIDS;
 
 use App\Http\Controllers\Controller;
-use App\Models\Bot\Adson;
-use App\Models\Bot\AdsonCrater;
+use App\Models\Bot\Numakids;
+use App\Models\Bot\NumakidsCrater;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -17,7 +17,7 @@ class AdminController extends Controller
             'image' => ['string', 'required']
         ]);
 
-        AdsonCrater::query()->updateOrCreate([
+        NumakidsCrater::query()->updateOrCreate([
             'identification' => $credentials['identification']
         ], $credentials);
 
@@ -28,7 +28,7 @@ class AdminController extends Controller
 
     public function getUsers()
     {
-        $list = Adson::query()->distinct('telegram_id')->get(['telegram_id']);
+        $list = Numakids::query()->distinct('telegram_id')->get(['telegram_id']);
 
         return response()->json([
             'status' => true,
@@ -42,7 +42,7 @@ class AdminController extends Controller
             'uuid' => ['string', 'required']
         ]);
 
-        $user = Adson::query()->where($credentials)
+        $user = Numakids::query()->where($credentials)
             ->first(['telegram_id']);
 
         if ( $user == null ) {
