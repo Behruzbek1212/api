@@ -189,6 +189,7 @@ Route::prefix('/v1')->group(function () {
         // Chat -----------------------------------------
         Route::prefix('/chats')->name('chats.')->group(function () {
             Route::post('/', [ChatsController::class, 'list'])->name('index');
+            Route::get('/messages/{id}', [ChatsController::class, 'getMessage'])->name('getMessage');
             Route::post('/{id}', [ChatsController::class, 'get'])->name('get');
             Route::get('/all',  [ChatsController::class, 'listAll']);
             Route::post('/{id}/send', [ChatsController::class, 'send'])->name('send');
@@ -309,6 +310,7 @@ Route::prefix('/v2')->group(function () {
     // These routes are for commenting on customer chat
 
     Route::prefix('customer-comment')->name('customerComment.')->middleware(['auth:sanctum', 'is_customer'])->group(function () {
+        Route::get('/chat/{id}', [CustomerChatCommentController::class, 'getComment'])->name('all');
         Route::post('/create',[CustomerChatCommentController::class, 'create'])->name('create');
         Route::get('/show/{id}',[CustomerChatCommentController::class, 'show'])->name('show');
         Route::post('/edit',[CustomerChatCommentController::class, 'update'])->name('edit');

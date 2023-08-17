@@ -16,6 +16,17 @@ class CustomerChatCommentController extends Controller
     {
         $this->customerChatCommentService =  $customerChatCommentService;
     }
+    
+    public function getComment($id):JsonResponse 
+    {   
+        
+        $comment = _auth()->user()->customer->chatComment()->where('chat_id', $id)->orderByDesc('created_at')->get();
+
+        return response()->json([
+             'status' => true,
+             'comment' => $comment
+         ]);
+    }
 
     public function create(CreateCustomerChatCommentRequest $request):JsonResponse
     {
