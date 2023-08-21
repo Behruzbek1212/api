@@ -55,7 +55,7 @@ class CalledInterviewController extends Controller
     public function editStatus(Request $request)
     {
         $request->validate([
-            'status' => 'required|in:camed,notCome',
+            'status' => 'required|in:camed,notCome,marked',
             'interview_id' => 'required|integer'
         ]);
         $interview =  CalledInterview::query()->where('id', $request->interview_id)
