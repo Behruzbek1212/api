@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ChatCandidateResource;
 use App\Http\Resources\ChatCustomerResource;
 use App\Models\Chat\Chat;
+use App\Models\Chat\Messages;
 use App\Models\User;
 use App\Traits\ApiResponse;
 use Illuminate\Auth\Authenticatable;
@@ -113,7 +114,7 @@ class ChatsController extends Controller
             'customer' =>
                 $user->customer->chats()
                     ->withExists(['resume', 'candidate'])
-                    ->with('messages')
+                    ->with('messages', 'candidate.user')
                     ->findOrFail($id),
 
             default => null
@@ -144,6 +145,16 @@ class ChatsController extends Controller
 
         return response()->json([
             'status' => true
+        ]);
+    }
+
+    public function getMessage($id):JsonResponse
+    {
+        $message =  Messages::where('chat_id', $id)->get();
+        
+        return response()->json([
+            'status' => true,
+            'message' => $message
         ]);
     }
 }

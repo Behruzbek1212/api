@@ -30,11 +30,12 @@ class DatabaseSeeder extends Seeder
             WishlistSeeder::class,
             LocationSeeder::class,
             SpheresSeeder::class,
-            ResumeBallSeeder::class
+            ResumeBallSeeder::class,
             EducationLevelSeeder::class,
             SocialStatusSeeder::class,
             LanguagesSeeder::class,
             LanguageLevelsSeeder::class,
+            CustomerStatusSeeder::class,
         ]);
     }
 }

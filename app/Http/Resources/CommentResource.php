@@ -19,7 +19,7 @@ class CommentResource extends JsonResource
         return [
              'name' =>$this->user->candidate->name ?? $this->user->customer->name ??   $this->user->phone ??  null,
              'role' => $this->user->role ?? null,
-             'avatar' => $this->user->candidate->avatar ?? $this->user->customer->name ??  null,
+             'avatar' => $this->user->candidate->avatar ?? $this->user->customer->avatar ??  null,
              'body' => $this->body ?? null,
              'created_at' => $this->created_at
         ];
