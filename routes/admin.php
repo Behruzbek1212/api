@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\Admin\AnnouncementController;
+use App\Http\Controllers\Admin\CalledInterviewController;
 use App\Http\Controllers\Admin\CandidatesController;
 use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\CompaniesController;
 use App\Http\Controllers\Admin\GuidesController;
+use App\Http\Controllers\Admin\HistoryAdminController;
 use App\Http\Controllers\Admin\JobsController;
 use App\Http\Controllers\Admin\LimitController;
 use App\Http\Controllers\Admin\StatisticAdminController;
@@ -111,6 +113,18 @@ Route::prefix('/comment')->name('comment.')->group(function () {
     Route::post('/show', [CommentController::class, 'getComment']);
 });
 
+
+Route::prefix('interview')->name('interview')->group(function () {
+    Route::get('/', [CalledInterviewController::class,'index'])->name('all');
+    Route::post('/create', [CalledInterviewController::class,'store'])->name('create');
+    Route::post('/edit/status', [CalledInterviewController::class, 'editStatus'])->name('editStatus');
+});
+
+
+Route::prefix('/history')->name('history.')->group(function() {
+    Route::get('/all', [HistoryAdminController::class,'allHr']);
+    Route::get('/hr', [HistoryAdminController::class, 'getOneHr']);
+});
 
 Route::prefix('/customer-status')->name('customer-status.')->group(function () {
     Route::post('/create', [CustomerStatusAdminController::class, 'create'])->name('create');
