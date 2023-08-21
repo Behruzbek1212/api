@@ -51,7 +51,10 @@ class AllAdminService
                     'comments',
                     'interviews'
                 ])
-                ->where('event', 'created');
+                ->where('event', 'created')
+                ->when($start && $end, function ($query) use ($start, $end){
+                    $query->whereBetween('created_at', [$start, $end]);
+                });
                      
         if($sortType !== null)
         { 
