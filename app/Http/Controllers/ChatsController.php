@@ -59,7 +59,10 @@ class ChatsController extends Controller
     {
         /** @var Authenticatable|User $user */
         $user = _auth()->user();
-
+        request()->validate([
+            'start' => 'date',
+            'end' => 'date'
+        ]);
         $chats = match ($user->role) {
             'candidate' =>
                 $user->candidate->chats()
@@ -71,7 +74,17 @@ class ChatsController extends Controller
             'customer' =>
                 $user->customer->chats()
                     ->with(['job'])
+                    ->where('deleted_at', null)
                     ->orderBy('updated_at', 'desc')
+                    ->when(request()->has('start') && request()->has('end'), function ($query) {
+                        $query->whereBetween('created_at', [request()->input('start'), request()->input('end')]);
+                    })
+                    ->when(request()->has('slug'), function ($query) {
+                        $query->where('job_slug', request()->input('slug'));    
+                    })
+                    ->when(request()->has('status'), function ($query) {
+                        $query->where('status', request()->input('status'));
+                    })
                     ->paginate(request()->get('limit') ?? 10),
 
             default => null
