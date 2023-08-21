@@ -11,7 +11,7 @@ class StoreCalledInterviewRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class StoreCalledInterviewRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'candidate_id' =>  'required|integer',
+            'date' => 'required|date'
         ];
     }
 }

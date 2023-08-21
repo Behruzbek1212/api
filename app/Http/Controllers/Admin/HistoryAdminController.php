@@ -2,35 +2,47 @@
 
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\HrDoneWorkedResource;
+use App\Services\AllAdminService;
 use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;
 
 class HistoryAdminController extends Controller
 {
-    public function getHistoryHr(Request $request) 
-    {
-        $data =  Activity::where(function ($query) {
-            $query->where('properties->user_data->user_subrole[0]', 'hr')
-                  ->where('log_name', 'candidates')
-                  ->where(function ($query) {
-                    $query->where('event', 'created');
-                   })
-                  ->orWhere(function ($query) {
-                     $query->where('event', 'updated');
-                  });
-            })
-            ->orWhere(function ($query) {
-            $query->where('properties->user_data->user_subrole[0]', 'hr')
-                  ->where('log_name', 'comments')
-                  ->where('event', 'created');
-            })
-            ->orderByDesc('created_at')
-            ->get();
+
+   public function allHr(Request $request)
+   {  
+      $request->validate([
+         'start' => 'date',
+         'end' => 'date'
+      ]);
+      $start = $request->start ?? null;
+      $end = $request->end ?? null;
+      $data = AllAdminService::getAllHr($start, $end, $request->limit);
+
+      return response()->json([
+          'data' => $data
+      ]);
+   }
+
+   public function  getOneHr  (Request $request) 
+    { 
+     
+      $user_id = $request->hr_id;
+      $start = $request->start ?? null;
+      $end = $request->end ?? null;
+     
+      $sortType = $request->sortType ??  null;
+     
+      $data =HrDoneWorkedResource::collection(AllAdminService::getOneHr($start, $end, $user_id, $request->limit,   $sortType)); 
 
 
-         return response()->json([
+       return response()->json([
             'status' => true,
             'data' => $data
-         ]);
+       ]);
     }
+
+
+
 }

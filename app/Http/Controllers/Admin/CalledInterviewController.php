@@ -5,31 +5,68 @@ use App\Http\Controllers\Controller;
 use App\Models\CalledInterview;
 use App\Http\Requests\StoreCalledInterviewRequest;
 use App\Http\Requests\UpdateCalledInterviewRequest;
+use App\Http\Resources\CalledInterviewResource;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use App\Traits\ApiResponse;
 
 class CalledInterviewController extends Controller
 {
+    use ApiResponse;
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $interview  = CalledInterview::with('candidate', 'user')
+                    ->where('deleted_at', null)
+                    ->orderByDesc('created_at')
+                    ->paginate($request->limit ?? 15);
+
+        $data = CalledInterviewResource::collection($interview);
+        
+        return $this->successPaginationResponse($data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+    
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCalledInterviewRequest $request)
+    public function store(StoreCalledInterviewRequest $request):JsonResponse
     {
-        //
+        $request->validated();
+        $user = _auth()->user();
+        $interview = $user->interview()->create([
+           'candidate_id' =>$request->candidate_id,
+           'date' => $request->date,
+           'status' => 'marked'
+        ]);
+
+        return response()->json([
+             'status' => true,
+             'message' => 'Successfully created'
+        ]);
+    }
+
+
+
+    public function editStatus(Request $request)
+    {
+        $request->validate([
+            'status' => 'required|in:camed,notCome',
+            'interview_id' => 'required|integer'
+        ]);
+        $interview =  CalledInterview::query()->where('id', $request->interview_id)
+                      ->update([
+                         'status' => $request->status
+                      ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Successfully updated status'
+        ]);              
     }
 
     /**
@@ -40,13 +77,7 @@ class CalledInterviewController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(CalledInterview $calledInterview)
-    {
-        //
-    }
+    
 
     /**
      * Update the specified resource in storage.

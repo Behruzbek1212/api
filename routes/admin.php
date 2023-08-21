@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AnnouncementController;
+use App\Http\Controllers\Admin\CalledInterviewController;
 use App\Http\Controllers\Admin\CandidatesController;
 use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\CompaniesController;
@@ -112,6 +113,18 @@ Route::prefix('/comment')->name('comment.')->group(function () {
 });
 
 
-Route::prefix('/history')->name('history.')->group(function() {
-    Route::get('/hr', [HistoryAdminController::class, 'getHistoryHr']);
+Route::prefix('interview')->name('interview')->group(function () {
+    Route::get('/', [CalledInterviewController::class,'index'])->name('all');
+    Route::post('/create', [CalledInterviewController::class,'store'])->name('create');
+    Route::post('/edit/status', [CalledInterviewController::class, 'editStatus'])->name('editStatus');
 });
+
+
+Route::prefix('/history')->name('history.')->group(function() {
+    Route::get('/all', [HistoryAdminController::class,'allHr']);
+    Route::get('/hr', [HistoryAdminController::class, 'getOneHr']);
+});
+
+
+
+

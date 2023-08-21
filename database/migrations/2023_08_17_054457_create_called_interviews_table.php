@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('called_interviews', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('candidate_id')->nullable();
-            $table->bigInteger('user_id')->nullable();
-            $table->date('date');
-            $table->boolean('status')->default(false);
+            $table->bigInteger('candidate_id')->unsigned()->nullable();
+            $table->bigInteger('user_id')->unsigned()->nullable();
+            $table->dateTime('date')->nullable();
+            $table->string('status')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
