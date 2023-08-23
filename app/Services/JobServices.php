@@ -56,7 +56,7 @@ class JobServices
             return $builder
                 ->with('trafic')
                 ->join('trafics', 'jobs.trafic_id', '=', 'trafics.id', 'left')
-                // ->where('trafics.key', Trafic::KEY_FOR_SITE)
+                ->where('trafics.key', Trafic::KEY_FOR_SITE)
                 ->orderBy('trafics.type', 'DESC')
                 ->orderBy('trafics.vip_day', 'DESC')
                 ->orderBy('trafics.count_rise', 'DESC')
