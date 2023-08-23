@@ -180,4 +180,9 @@ class Candidate extends Model
     {
         return $this->hasMany(Comment::class);
     }
+
+    public function interview(): HasMany
+    {
+        return $this->hasMany(CalledInterview::class);
+    }
 }

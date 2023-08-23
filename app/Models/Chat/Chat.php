@@ -4,6 +4,7 @@ namespace App\Models\Chat;
 
 use App\Models\Candidate;
 use App\Models\Customer;
+use App\Models\CustomerChatComment;
 use App\Models\Job;
 use App\Models\Resume;
 use Illuminate\Database\Eloquent\Model;
@@ -37,7 +38,8 @@ class Chat extends Model
         'customer',
         'candidate',
         'resume',
-        'job'
+        'job',
+        'chatComment'
     ];
 
     /**
@@ -146,4 +148,17 @@ class Chat extends Model
     {
         return $this->job()->first();
     }
+
+
+    public function chatComment(): HasMany
+    {
+        return $this->hasMany(CustomerChatComment::class);
+    }
+
+    public function getChatCommentAttribute()
+    {
+       return $this->chatComment()->whereNull('deleted_at')
+                ->orderBy('created_at', 'desc')->get();
+    }
+    
 }

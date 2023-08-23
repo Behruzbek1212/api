@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -19,12 +20,11 @@ class Controller extends BaseController
     {
 
         $user = $request->user('sanctum');
-
+        $data = User::query()->with('candidate', 'customer')->find($user->id);
+        $list = new  UserResource($data);
         return response()->json([
             'status' => true,
-            'user' => User::query()
-                ->with('candidate', 'customer')
-                ->find($user->id)
+            'user' => $list
         ]);
     }
 }
