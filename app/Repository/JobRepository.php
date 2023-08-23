@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Models\Job;
+use App\Models\Trafic;
 use Closure;
 
 class JobRepository

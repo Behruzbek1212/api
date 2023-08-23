@@ -25,12 +25,18 @@ class TraficController extends Controller
 
     public function create(TraficRequest $request): JsonResponse
     {
+        $request->validate([
+            'trafic_price_id' => ['numeric'],
+            'name' => ['string'],
+            'key' => ['string', 'required'],
+        ]);
 
         if ($image = $request->file('image')) {
             $trafic_image = uploadFile($image, 'trafics');
         }
 
         Trafic::create([
+            'trafic_price_id' => $request->trafic_price_id ?? null,
             'image' => $trafic_image ?? null,
             'name' => $request->name ?? null,
             'price' => $request->price ?? null,
@@ -40,6 +46,7 @@ class TraficController extends Controller
             'count_rise' => $request->count_rise ?? null,
             'vip_day' => $request->vip_day ?? null,
             'type' => $request->type ?? null,
+            'key' => $request->key ?? null,
             'status' => $request->status ?? null,
         ]);
 
@@ -62,6 +69,13 @@ class TraficController extends Controller
 
     public function edit(TraficRequest $request): JsonResponse
     {
+
+        $request->validate([
+            'trafic_price_id' => ['numeric'],
+            'name' => ['string'],
+            'key' => ['string', 'required'],
+        ]);
+
         $trafic = Trafic::query()
             // ->withTrashed()
             ->findOrFail($request->get('slug'));
@@ -70,6 +84,7 @@ class TraficController extends Controller
             $trafic_image = uploadFile($image, 'trafics');
         }
         $trafic->update([
+            'trafic_price_id' => $request->trafic_price_id ?? null,
             'image' => $trafic_image ?? null,
             'name' => $request->name ?? null,
             'price' => $request->price ?? null,
@@ -79,6 +94,7 @@ class TraficController extends Controller
             'count_rise' => $request->count_rise ?? null,
             'vip_day' => $request->vip_day ?? null,
             'type' => $request->type ?? null,
+            'key' => $request->key ?? null,
             'status' => $request->status ?? null,
         ]);
 
@@ -99,7 +115,7 @@ class TraficController extends Controller
             ->findOrFail($request->slug);
 
         // if (!$trafic->trashed())
-            $trafic->delete();
+        $trafic->delete();
 
         return response()->json([
             'status' => true,

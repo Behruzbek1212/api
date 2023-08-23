@@ -8,9 +8,19 @@ use Illuminate\Http\Request;
 
 class TraficController extends Controller
 {
-    public function all(Request $request)
+    public function allSite(Request $request)
     {
-        $trafics = Trafic::get();
+        $trafics = Trafic::where('key', Trafic::KEY_FOR_SITE)->get();
+        $list = TraficResource::collection($trafics);
+        return response()->json([
+            'status' => true,
+            'result' => $list
+        ]);
+    }
+
+    public function allTelegram(Request $request)
+    {
+        $trafics = Trafic::where('key',Trafic::KEY_FOR_TELEGRAM)->get();
         $list = TraficResource::collection($trafics);
         return response()->json([
             'status' => true,

@@ -16,10 +16,12 @@ class TraficResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'trafic_price_id' => $this->trafic_price_id,
             'image' =>  $this->image ?? null,
             'name' =>  $this->name ?? null,
             'price'  =>  $this->price ?? null,
             'title' => $this->title ?? null,
+            'key' => $this->key ?? null,
             'description'  => $this->description ?? null,
             'top_day' =>  $this->top_day ?? null,
             'count_rise' =>  $this->count_rise ?? null,

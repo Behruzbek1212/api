@@ -36,14 +36,22 @@ class TransactionHistoryController extends Controller
         $user_id = _auth()->user()->id;
         $request->validate([
             'service_id' => ['integer', 'required'],
-            'service_sum' => ['numeric', 'required'],
-            'service_name' => ['string', 'required'],
-            'started_at' => ['date', 'required'],
-            'expire_at' => ['date', 'required'],
+            'service_trafic_price_id' => ['integer', 'required'],
+            // 'service_sum' => ['numeric', 'required'],
+            // 'service_name' => ['string', 'required'],
+            // 'started_at' => ['date', 'required'],
+            // 'expire_at' => ['date', 'required'],
         ]);
 
+        Trafic::where('id', $request->service_id)->firstOrFail()->update(['trafic_price_id' => $request->service_trafic_price_id]);
+        $trafic = Trafic::where('id', $request->service_id)->firstOrFail();
+
         $total_amount = User::where('id', $user_id)->first()->balance ?? 0;
-        $service_price = $request->service_sum;
+        $service_price = $trafic->trafic_price->price;
+        $service_count = $trafic->trafic_price->count;
+        if (empty($service_count) && $service_count <= 0) {
+            return $this->errorResponse(__('message.service_count is null'), 403);
+        }
 
         if (!empty($service_price) && $total_amount >= $service_price) {
             $balance = $total_amount - $service_price;
@@ -54,11 +62,12 @@ class TransactionHistoryController extends Controller
             TransactionHistory::create([
                 'user_id' => $user_id,
                 'service_id' => $request->service_id,
+                'service_count' => $service_count ?? 0,
                 'service_sum' => $service_price ?? 0,
-                'service_name' => $request->service_name,
-                'started_at' => $request->started_at,
-                'expire_at' => $request->expire_at,
-                'key' => $request->key ?? null,
+                'service_name' => $trafic->name,
+                'started_at' => $request->started_at ?? null,
+                'expire_at' => $request->expire_at ?? null,
+                'key' => $trafic->key ?? null,
             ]);
 
             return response()->json([

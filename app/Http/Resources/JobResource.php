@@ -17,6 +17,7 @@ class JobResource extends JsonResource
         return [
             'id' => $this->id ?? null,
             'trafic_id' => $this->trafic->id ?? null,
+            'trafic_key' => $this->trafic->key ?? null,
             'trafic_name' => $this->trafic->name ?? null,
             'trafic_top_day' => $this->trafic->top_day ?? null,
             'trafic_count_rise' => $this->trafic->count_rise ?? null,
