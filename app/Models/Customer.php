@@ -173,4 +173,10 @@ class Customer extends Model
     {
         return $this->hasMany(CustomerChatComment::class);
     }
+
+
+    public function announcement():HasMany
+    {
+        return $this->hasMany(Announcement::class);
+    }
 }
