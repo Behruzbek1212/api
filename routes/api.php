@@ -29,6 +29,7 @@ use App\Http\Controllers\ResumeController;
 use App\Http\Controllers\SocialStatusController;
 use App\Http\Controllers\TestUserController;
 use App\Http\Controllers\TraficController;
+use App\Http\Controllers\TraficPriceController;
 use App\Http\Controllers\TransactionHistoryController;
 use App\Http\Controllers\User\ChangePasswordController;
 use App\Http\Controllers\User\ChangeRoleController;
@@ -143,7 +144,13 @@ Route::prefix('/v1')->group(function () {
     });
     // Trafics -----------------------------------------
     Route::prefix('/trafics')->name('trafics.')->group(function () {
-        Route::get('/', [TraficController::class, 'all'])->name('all');
+        Route::get('/site', [TraficController::class, 'allSite'])->name('allSite');
+        Route::get('/telegram', [TraficController::class, 'allTelegram'])->name('allTelegram');
+    });
+
+    // trafic_price -----------------------------------------
+    Route::prefix('/trafic_price')->name('trafic_price.')->group(function () {
+        Route::get('/', [TraficPriceController::class, 'all'])->name('all');
     });
 
     // Companies -----------------------------------------

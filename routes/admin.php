@@ -30,6 +30,14 @@ Route::prefix('/trafics')->name('trafics.')->group(function () {
     Route::post('/destroy', [App\Http\Controllers\Admin\TraficController::class, 'destroy']);
 });
 
+Route::prefix('/trafic_price')->name('trafic_price.')->group(function () {
+    Route::get('/', [App\Http\Controllers\Admin\TraficPriceController::class, 'index']);
+    Route::get('/{slug}', [App\Http\Controllers\Admin\TraficPriceController::class, 'show']);
+    Route::post('/create', [App\Http\Controllers\Admin\TraficPriceController::class, 'create']);
+    Route::post('/edit', [App\Http\Controllers\Admin\TraficPriceController::class, 'edit']);
+    Route::post('/destroy', [App\Http\Controllers\Admin\TraficPriceController::class, 'destroy']);
+});
+
 Route::prefix('/limits')->name('limits.')->group(function () {
     Route::get('/', [LimitController::class, 'index']);
     Route::get('/{slug}', [LimitController::class, 'show']);

@@ -56,6 +56,7 @@ class JobServices
             return $builder
                 ->with('trafic')
                 ->join('trafics', 'jobs.trafic_id', '=', 'trafics.id', 'left')
+                ->where('trafics.key', Trafic::KEY_FOR_SITE)
                 ->orderBy('trafics.type', 'DESC')
                 ->orderBy('trafics.vip_day', 'DESC')
                 ->orderBy('trafics.count_rise', 'DESC')
@@ -65,6 +66,7 @@ class JobServices
         });
     }
 
+
     public function companiesJobs($request)
     {
         $jobs = Job::query()
@@ -72,7 +74,6 @@ class JobServices
             ->where('deleted_at', null)
             ->orderByDesc('updated_at')
             ->paginate($request->limit ?? 8);
-
         return $jobs;
     }
 
@@ -111,20 +112,11 @@ class JobServices
 
         $gilroyLight = public_path('fonts/Gilroy-Light.otf');
         $gilroyLight = realpath($gilroyLight);
-
         $gilroyLight = mb_convert_encoding($gilroyLight, 'big5', 'utf-8');
-
         $jpg_image = Image::make($rasmUrl);
-
         $green = [10, 180, 93];
-
-
-
         // Custom text generator to wrap the text based on the maximum width
         $lines = wordwrap($text1, 42, "\n", true);
-
-
-
         $words = explode(' ', $text1); // Matnni so'zlarga bo'lib massivga ajratamiz
         $wordCount = count($words);
 
