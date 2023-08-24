@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Bots\ADSON\AdsonAdminController;
-use App\Http\Controllers\Bots\ADSON\AdsonController;
+use App\Http\Controllers\Bots\ADSON\AdminController as AdsonAdminController;
+use App\Http\Controllers\Bots\ADSON\MainController as AdsonController;
 use App\Http\Controllers\Bots\NUMAKIDS\AdminController as NumakidsAdminController;
 use App\Http\Controllers\Bots\NUMAKIDS\MainController as NumakidsController;
 use Illuminate\Support\Facades\Route;
