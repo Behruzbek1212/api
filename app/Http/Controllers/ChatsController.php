@@ -59,10 +59,10 @@ class ChatsController extends Controller
     {
         /** @var Authenticatable|User $user */
         $user = _auth()->user();
-        request()->validate([
-            'start' => 'date',
-            'end' => 'date'
-        ]);
+        $start = request()->input('start') ?? null;
+        $end = request()->input('end') ??  null;
+        $slug =  request()->input('slug') ?? null;
+        $status = request()->input('status') ?? null;
         $chats = match ($user->role) {
             'candidate' =>
                 $user->candidate->chats()
@@ -76,14 +76,20 @@ class ChatsController extends Controller
                     ->with(['job'])
                     ->where('deleted_at', null)
                     ->orderBy('updated_at', 'desc')
-                    ->when(request()->has('start') && request()->has('end'), function ($query) {
-                        $query->whereBetween('created_at', [request()->input('start'), request()->input('end')]);
+                    ->when($start && $end, function ($query) use ($start, $end){
+                        if($start !== null && $end !== null){
+                            $query->whereBetween('created_at', [request()->input('start'), request()->input('end')]);
+                        }  
                     })
-                    ->when(request()->has('slug'), function ($query) {
-                        $query->where('job_slug', request()->input('slug'));    
+                    ->when($slug, function ($query) use ($slug) {
+                        if($slug !== null){
+                            $query->where('job_slug', request()->input('slug')); 
+                        }  
                     })
-                    ->when(request()->has('status'), function ($query) {
-                        $query->where('status', request()->input('status'));
+                    ->when($status, function ($query) use ($status) {
+                        if($status !== null){
+                            $query->where('status', request()->input('status'));
+                        }
                     })
                     ->paginate(request()->get('limit') ?? 10),
 
