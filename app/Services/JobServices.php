@@ -9,6 +9,7 @@ use App\Models\Trafic;
 use App\Repository\JobRepository;
 use App\Traits\HasScopes;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -83,18 +84,36 @@ class JobServices
         $randomFileName = uniqid() . '.jpg';
         $imagefileUrl = 'uploads/image/job-posts/' . $randomFileName;
         $storagePath = public_path($imagefileUrl);
-        $postNumber =  '№ ' . $post_number;
+        $postNumber =  '№ ' . $post_number ?? 0;
         $text1 = $title;
         $text2 = $company;
-        $text3 = Location::find($address)['name']['ru'];
+        $text3 = Location::find($address)['name']['ru'] ?? "";
 
-        if ($salary['agreement'] !== true) {
-            $text4 = explode('-', $salary['amount']);
-            $formattedParts = array_map(function ($text4) {
-                return number_format(trim($text4), 0, '', ' ');
-            }, $text4);
-            // Join the formatted parts back with the '-' character
-            $prices = implode(' - ', $formattedParts);
+
+        if (isset($salary['agreement']) && $salary['agreement'] !== true) {
+            try{
+                if (isset($salary['amount']) && $salary['amount'] !== null) {
+                    $text4 = explode('-', $salary['amount']);
+                } elseif (isset($salary['min_salary']) && $salary['min_salary'] !== null  && isset($salary['max_salary']) && $salary['max_salary'] !== null) {
+                    $text4 = explode('-', $salary['min_salary'] . '-' . $salary['max_salary']);
+                } elseif(isset($salary['min_salary']) &&  $salary['min_salary'] !== null) {
+                    $text4 = explode('-', $salary['min_salary']);
+                }elseif(isset($salary['max_salary']) && $salary['max_salary'] !== null){
+                    $text4= explode('-',  $salary['max_salary']);
+                }
+                try{
+                    $formattedParts = array_map(function ($text) {
+                        return number_format(trim($text), 0, '', ' ');
+                    }, $text4);
+                }  catch(Exception $e){
+                    $formattedParts = $text4;
+                }
+
+                // Join the formatted parts back with the '-' character
+                $prices = implode(' - ', $formattedParts);
+            } catch (Exception $e){
+                $prices = $text4;
+            }
         } else {
             $prices = 'На основе собеседования';
         }

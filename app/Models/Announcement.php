@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\ApiLogActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Announcement extends Model
@@ -15,14 +16,16 @@ class Announcement extends Model
 
     public $table = 'announcements';
 
-    protected $fillable =
-    [
-       'post',
-       'status',
-       'time'
-    ];
+    protected $guarded = [];
+   
 
     protected $casts = [
         'post' => 'array',
     ];
+
+
+    public function customer():BelongsTo
+    {
+        return $this->belongsTo(Customer::class);
+    }
 }
