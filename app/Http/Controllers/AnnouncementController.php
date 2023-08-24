@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Announcement;
+use App\Models\Trafic;
+use App\Models\TransactionHistory;
 use App\Services\AnnouncementServices;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -44,14 +46,30 @@ class AnnouncementController extends Controller
             $request->validate([
                 'job_id' => 'required|integer'
             ]);
+            $user = _auth()->user();
+            $transactionHistory = TransactionHistory::query()->where('user_id', $user->id)->where('key', Trafic::KEY_FOR_TELEGRAM)->latest()->firstOrFail();
+          
+            if($transactionHistory !== null && $transactionHistory !== []){
+             
+                if($transactionHistory->service_count > 0){
+                
+                    $data =  AnnouncementServices::create($request, $transactionHistory);
             
-            $data =  AnnouncementServices::create($request);
-            
+                    return response()->json([
+                        'status' => true,
+                        'message' => 'Announcement was created successfully',
+                        'data' => $data
+                    ]);
+                }
+                return response()->json([
+                    'status' =>  false,
+                    'message' => 'You should  buy a new  service',
+                ]);
+            }
             return response()->json([
-                'status' => true,
-                'message' => 'Announcement was created successfully',
-                'data' => $data
-            ]);
+                'status' =>  false,
+                'message' => 'You should buy a new service',
+            ]); 
         }
         catch(Exception $e) {
             return response()->json([

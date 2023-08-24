@@ -6,6 +6,7 @@ use App\Models\Location;
 use App\Services\JobServices;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Nette\Utils\Random;
 
 class AnnouncementResource extends JsonResource
 {
@@ -36,7 +37,8 @@ class AnnouncementResource extends JsonResource
     public function image($company_name, $title, $salary, $location_id)
     {
             if($company_name !== null && $title !== null && $salary !== null && $location_id !==null){
-                $imageUrl =  JobServices::getInstance()->createJobBanner($company_name, $title, $salary,  $location_id , 1);
+                $postNumber = Random::generate('4', '0-9');
+                $imageUrl =  JobServices::getInstance()->createJobBanner($company_name, $title, $salary,  $location_id , $postNumber);
 
                 return $imageUrl;
             }
