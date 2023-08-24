@@ -300,6 +300,7 @@ Route::prefix('/v2')->group(function () {
         Route::get('/', [AnnouncementController::class, 'all']);
         Route::post('/create', [AnnouncementController::class, 'create']);
         Route::post('/confirmation', [AnnouncementController::class, 'storeConfirmation']);
+        Route::post('/edit', [AnnouncementController::class, 'update']);
     });
 
     // Golden nit telegram bot api routes

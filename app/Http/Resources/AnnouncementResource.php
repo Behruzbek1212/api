@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Location;
+use App\Services\AnnouncementServices;
 use App\Services\JobServices;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -19,7 +20,6 @@ class AnnouncementResource extends JsonResource
     {   
        
         return [
-            'job_id' => $this->id ?? null,
             'title' => $this->title ?? null,
             'salary' => $this->salary ?? null,
             'work_hours' => $this->work_hours ?? null,
@@ -48,22 +48,9 @@ class AnnouncementResource extends JsonResource
 
     public function getHashTab($title, $address)
     {
-        if($title !== null && $address !==null){
-            $textlovercase = strtolower($title);
-            $textpreg = '#'. preg_replace('/\s+/', '', $textlovercase); 
-            $location = Location::find($address)['name']['uz'];
-            $patterns = array('t.', 'sh.', 'vil.');
+        $data = AnnouncementServices::getHashTab($title, $address);
 
-            foreach($patterns as $pattern) {
-                $location = str_replace($pattern,'', $location);
-            }
-            $textLoc = '#'. preg_replace('/\s+/', '', strtolower(trim($location))) ;
-            
-            
-            return [$textpreg . ' ' .$textLoc];
-        }
-
-        return [];
+        return $data;
     }
 
     public function getForConnection($customer_phone, $for_connection)

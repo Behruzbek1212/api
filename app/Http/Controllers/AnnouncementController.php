@@ -106,4 +106,28 @@ class AnnouncementController extends Controller
         }
        
     }
+
+
+    public function update(Request $request)
+    {
+        $request->validate([
+            'announcement_id' => 'required|integer',
+            'data' => 'required|array'
+        ]);
+        try {
+            $announcement = AnnouncementServices::update($request);
+
+            return response()->json([
+                'status' => true,
+                'message' => "Successfully updated announcement",
+                'data' => $announcement
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' =>  $e->getMessage(),
+                'data' => []
+            ]);
+        }
+    }
 }

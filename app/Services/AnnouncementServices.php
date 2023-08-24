@@ -3,8 +3,10 @@
 namespace App\Services;
 
 use App\Http\Resources\AnnouncementResource;
+use App\Models\Announcement;
+use App\Models\Location;
 use App\Traits\HasScopes;
-
+use File;
 
 class AnnouncementServices
 {
@@ -46,7 +48,57 @@ class AnnouncementServices
     }
 
 
- 
 
+    public static function update($request)
+    {
+        $user = _auth()->user();
+        $data = $user->customer->announcement()->findOrFail($request->announcement_id);
+        $oldImage =  $data->post['image'];
+       
+        $filePath = parse_url($oldImage, PHP_URL_PATH);
+        
+        $filePath = ltrim($filePath, '/');
+       
+        if (File::exists(public_path($filePath))) {
+            File::delete(public_path($filePath));
+        }
+        
+        
+        $imageUrl =  JobServices::getInstance()->createJobBanner($request->data['company_name'], $request->data['title'], $request->data['salary'], $request->data['address'] , $request->data['post_number']);
+        
+        $post = $request->data;
+        
+        $post['image'] = $imageUrl;
+        $post['hash_tag'] = self::getHashTab($request->data['title'], $request->data['address']);
+     
+        $updateData = $data->update([
+            'post' => $post
+        ]);
+        
+        $announcement = Announcement::find($request->announcement_id);
+        return $announcement;
+    }
+
+
+ 
+    public static function getHashTab($title, $address)
+    {
+        if($title !== null && $address !==null){
+            $textlovercase = strtolower($title);
+            $textpreg = '#'. preg_replace('/\s+/', '', $textlovercase); 
+            $location = Location::find($address)['name']['uz'];
+            $patterns = array('t.', 'sh.', 'vil.');
+
+            foreach($patterns as $pattern) {
+                $location = str_replace($pattern,'', $location);
+            }
+            $textLoc = '#'. preg_replace('/\s+/', '', strtolower(trim($location))) ;
+            
+            
+            return [$textpreg . ' ' .$textLoc];
+        }
+
+        return [];
+    }
     
 }
