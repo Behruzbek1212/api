@@ -88,8 +88,6 @@ class JobServices
         $text2 = $company;
         $text3 = Location::find($address)['name']['ru'];
 
-
-
         if ($salary['agreement'] !== true) {
             $text4 = explode('-', $salary['amount']);
             $formattedParts = array_map(function ($text4) {

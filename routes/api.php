@@ -146,7 +146,7 @@ Route::prefix('/v1')->group(function () {
     });
     // Trafics -----------------------------------------
     Route::prefix('/trafics')->name('trafics.')->group(function () {
-        Route::get('/site', [TraficController::class, 'allSite'])->name('allSite');
+        Route::get('/', [TraficController::class, 'allSite'])->name('allSite');
         Route::get('/telegram', [TraficController::class, 'allTelegram'])->name('allTelegram');
     });
 

@@ -15,7 +15,7 @@ class MobileService extends MobileServiceConst
     protected string $originator;
 
     /**
-     * PlayMobile service constructor
+     * PlayMobile service co    nstructor
      *
      * @return MobileService
      */

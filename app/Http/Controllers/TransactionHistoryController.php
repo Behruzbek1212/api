@@ -67,7 +67,7 @@ class TransactionHistoryController extends Controller
                 'service_name' => $trafic->name,
                 'started_at' => $request->started_at ?? null,
                 'expire_at' => $request->expire_at ?? null,
-                'key' => $trafic->key ?? null,
+                'key' => $trafic->key ?? null
             ]);
 
             return response()->json([
@@ -77,6 +77,7 @@ class TransactionHistoryController extends Controller
         }
         return $this->errorResponse(__('message.balance'), 403);
     }
+    
 
     /**
      * Destroy vacancy
