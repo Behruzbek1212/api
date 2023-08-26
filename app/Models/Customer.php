@@ -164,19 +164,51 @@ class Customer extends Model
         return $this->hasOne(LimitModel::class, 'id', 'limit_id');
     }
 
+    /**
+     * Display the customer status
+     *
+     * @return HasMany
+     * @see https://laravel.com/docs/10.x/eloquent-relationships#one-to-many
+     */
+
     public function customerStatus():HasMany
     {
         return $this->hasMany(CustomerStatus::class);
     }
+    
+    /**
+     * Display the chat comment
+     *
+     * @return HasMany
+     * @see https://laravel.com/docs/10.x/eloquent-relationships#one-to-many
+     */
 
     public function chatComment(): HasMany
     {
         return $this->hasMany(CustomerChatComment::class);
     }
-
+ 
+    /**
+     * Display the announcement
+     *
+     * @return HasMany
+     * @see https://laravel.com/docs/10.x/eloquent-relationships#one-to-many
+     */
 
     public function announcement():HasMany
     {
         return $this->hasMany(Announcement::class);
+    }
+
+    /**
+     * Display the test result
+     *
+     * @return HasMany
+     * @see https://laravel.com/docs/10.x/eloquent-relationships#one-to-many
+     */
+    
+    public function testResult():HasMany
+    {
+       return $this->hasMany(TestResult::class);
     }
 }
