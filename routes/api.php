@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\RestoreController;
+use App\Http\Controllers\BackupController;
 use App\Http\Controllers\CandidatesController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ChatsController;
@@ -59,6 +60,7 @@ use PHPUnit\Logging\TestDox\TestResultCollector;
 // Route::fallback([HomeController::class, 'fallback']);
 Route::post('/bitrix', [BitrixController::class, 'index'])->name('index');
 Route::get('/cron_jobs', [JobController::class, 'cron_jobs'])->name('cron_jobs');
+Route::get('/cron_backup', [BackupController::class, 'backup'])->name('cron_backup');
 Route::prefix('/v1')->group(function () {
 
     // User | Me ------------------------------------
