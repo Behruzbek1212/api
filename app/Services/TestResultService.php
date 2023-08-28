@@ -29,4 +29,12 @@ class TestResultService
 
         return $result;
     }
+
+    public function getCandidateTest($request)
+    {
+      $result  = $this->testResultRepository->getCandidateTest($request);
+
+      return $result;
+          
+    }
 }

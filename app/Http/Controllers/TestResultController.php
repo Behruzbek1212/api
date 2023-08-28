@@ -77,6 +77,34 @@ class TestResultController extends Controller
         
     }
 
+
+    public function getCandidateTestResult(Request  $request) 
+    {
+        $request->validate([
+            'customer_id' => 'integer|nullable'
+        ]);
+
+        try
+        {
+            $result  = $this->testResultService->getCandidateTest($request);
+            return response()->json([
+                'status' => true,
+                'message' => 'Get candidate test',
+                'data' => $result,
+            ]);
+        }
+        catch (Exception $e) 
+        {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => [],
+            ]);
+        }
+      
+
+    }
+
     /**
      * Display the specified resource.
      */
