@@ -64,12 +64,12 @@ class TestResultRepository
         $customer_id = $request->customer_id ?? null;
 
         if($customer_id !== null){
-            $result = $this->user->candidate->testResult()->where('deleted_at', null)->where('customer_id', $customer_id)->get();
+            $result = $this->user->candidate->testResult()->where('deleted_at', null)->where('customer_id', $customer_id)->firstOrFail();
 
             return $result;
         }
         
-        $result = $this->user->candidate->testResult()->where('deleted_at', null)->where('customer_id', null)->get();
+        $result = $this->user->candidate->testResult()->where('deleted_at', null)->where('customer_id', null)->firstOrFail();
 
         return $result;
     }
