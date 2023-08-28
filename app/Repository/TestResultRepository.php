@@ -73,4 +73,11 @@ class TestResultRepository
 
         return $result;
     }
+
+    public function show($request)
+    {
+        $result = $this->user->customer->testResult()->with('candidate')->where('deleted_at', null)->where('id', $request->test_id)->firstOrFail();
+
+        return $result;
+    }
 }

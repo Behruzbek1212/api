@@ -108,9 +108,30 @@ class TestResultController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(TestResult $testResult)
+    public function show(Request $request)
     {
-        //
+        $request->validate([
+           'test_id' => 'required|integer'
+        ]);
+
+        try 
+        {
+            $result  = $this->testResultService->show($request);
+          
+            return response()->json([
+                'status' => true,
+                'message' => 'Get one candidate test',
+                'data' => $result,
+            ]); 
+        }
+        catch (Exception $e) 
+        {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => [],
+            ]);
+        }
     }
 
     /**

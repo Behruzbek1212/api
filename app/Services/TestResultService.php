@@ -37,4 +37,11 @@ class TestResultService
       return $result;
           
     }
+
+    public  function show($request)
+    {
+      $result  = $this->testResultRepository->show($request);
+
+      return $result;
+    }
 }

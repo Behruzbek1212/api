@@ -19,6 +19,7 @@ class ChatCandidateResource extends JsonResource
             'job_slug' => $this->job_slug,
             'candidate_id' => $this->candidate_id,
             'status' => $this->status, 
+            'job_title' => $this->job->title,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,        
             'candidate' => [
