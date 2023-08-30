@@ -168,6 +168,25 @@ class JobController extends Controller
 
     public function get(string $slug): JsonResponse
     {
+        $user = _auth()->user();
+        
+        if($user !== null &&  $user->role === 'customer' )
+        {
+            $job = $user->customer->jobs()->with('customer')
+            ->whereHas('customer', function (Builder $query) {
+                $query->where('active', '=', true);
+            })
+            ->where('status', '=', 'approved')
+            ->findOrFail($slug);
+
+            _auth()->check() && _user()->jobStats()
+               ->syncWithoutDetaching($job);
+
+            return response()->json([
+                'status' => true,
+                'job' => $job
+            ]);
+        }
         $job = Job::query()->with('customer')
             ->whereHas('customer', function (Builder $query) {
                 $query->where('active', '=', true);

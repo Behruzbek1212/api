@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\RestoreController;
+use App\Http\Controllers\BackupController;
 use App\Http\Controllers\CandidatesController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ChatsController;
@@ -29,6 +30,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ResumeBallsController;
 use App\Http\Controllers\ResumeController;
 use App\Http\Controllers\SocialStatusController;
+use App\Http\Controllers\TestResultController;
 use App\Http\Controllers\TestUserController;
 use App\Http\Controllers\TraficController;
 use App\Http\Controllers\TraficPriceController;
@@ -39,6 +41,8 @@ use App\Http\Controllers\Utils\UploadController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Route;
+use PHPUnit\Logging\TestDox\TestResultCollector;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -56,7 +60,9 @@ use Illuminate\Support\Facades\Route;
 // Route::fallback([HomeController::class, 'fallback']);
 Route::post('/bitrix', [BitrixController::class, 'index'])->name('index');
 Route::get('/cron_jobs', [JobController::class, 'cron_jobs'])->name('cron_jobs');
+Route::get('/cron_backup', [BackupController::class, 'backup'])->name('cron_backup');
 Route::prefix('/v1')->group(function () {
+
 
     // User | Me ------------------------------------
     Route::get('/me', [Controller::class, 'user'])
@@ -124,6 +130,16 @@ Route::prefix('/v1')->group(function () {
 
         // limits ---------------------------------------
 
+    });
+
+    // Route::prefix('customer')->name('customer.')->middleware(['auth:sanctum', 'is_customer'])->group(function () {
+
+    //     // Route::post('/create',[CustomerStatusController::class, 'create'])->name('create');
+    //     Route::post('/update-status', [CustomerStatusController::class, 'updatedCandidateStatus'])->name('update-status');
+    // });
+
+    Route::prefix('customer')->name('customer.')->middleware(['auth:sanctum', 'is_customer'])->group(function () {
+        Route::post('/update', [CustomerStatusController::class, 'updatedCandidateStatus'])->name('customer');
     });
 
     // Candidates -----------------------------------------
@@ -300,6 +316,7 @@ Route::prefix('/v2')->group(function () {
         Route::get('/', [AnnouncementController::class, 'all']);
         Route::post('/create', [AnnouncementController::class, 'create']);
         Route::post('/confirmation', [AnnouncementController::class, 'storeConfirmation']);
+        Route::post('/edit', [AnnouncementController::class, 'update']);
     });
 
     // Golden nit telegram bot api routes
@@ -312,20 +329,22 @@ Route::prefix('/v2')->group(function () {
     Route::post('phone/check',  [CheckPhoneController::class, 'check']);
 
     // customer status columns api routes
-    Route::prefix('customer-status')->name('customerStatus.')->middleware(['auth:sanctum', 'is_customer'])->group(function () {
 
-        // Route::post('/create',[CustomerStatusController::class, 'create'])->name('create');
-        Route::post('/update-status', [CustomerStatusController::class, 'updatedCandidateStatus'])->name('update-status');
-
-    });
 
     // These routes are for commenting on customer chat
 
     Route::prefix('customer-comment')->name('customerComment.')->middleware(['auth:sanctum', 'is_customer'])->group(function () {
         Route::get('/chat/{id}', [CustomerChatCommentController::class, 'getComment'])->name('all');
-        Route::post('/create',[CustomerChatCommentController::class, 'create'])->name('create');
-        Route::get('/show/{id}',[CustomerChatCommentController::class, 'show'])->name('show');
-        Route::post('/edit',[CustomerChatCommentController::class, 'update'])->name('edit');
+        Route::post('/create', [CustomerChatCommentController::class, 'create'])->name('create');
+        Route::get('/show/{id}', [CustomerChatCommentController::class, 'show'])->name('show');
+        Route::post('/edit', [CustomerChatCommentController::class, 'update'])->name('edit');
         Route::post('/destroy', [CustomerChatCommentController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('test-result')->name('test-result.')->group(function () {
+        Route::get('/all', [TestResultController::class,  'getAll'])->middleware(['auth:sanctum', 'is_customer'])->name('all');
+        Route::post('/store', [TestResultController::class, 'store'])->name('create');
+        Route::get('/candidate', [TestResultController::class, 'getCandidateTestResult']);
+        Route::get('/show', [TestResultController::class, 'show']);
     });
 });

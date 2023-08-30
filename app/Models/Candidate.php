@@ -176,13 +176,40 @@ class Candidate extends Model
         return Attribute::get(fn () => __($location));
     }
 
+     /**
+     * Display the commets
+     *
+     * @return HasMany
+     * @see https://laravel.com/docs/10.x/eloquent-relationships#one-to-many
+     */
+
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
     }
+    
+    /**
+     * Display the interview
+     *
+     * @return HasMany
+     * @see https://laravel.com/docs/10.x/eloquent-relationships#one-to-many
+     */
 
     public function interview(): HasMany
     {
         return $this->hasMany(CalledInterview::class);
     }
+
+
+    /**
+     * Display the test result
+     *
+     * @return HasMany
+     * @see https://laravel.com/docs/10.x/eloquent-relationships#one-to-many
+     */
+    
+     public function testResult():HasMany
+     {
+        return $this->hasMany(TestResult::class);
+     }
 }
