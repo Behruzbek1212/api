@@ -138,8 +138,8 @@ Route::prefix('/v1')->group(function () {
     //     Route::post('/update-status', [CustomerStatusController::class, 'updatedCandidateStatus'])->name('update-status');
     // });
 
-    Route::prefix('customer')->name('customer.')->middleware(['auth:sanctum', 'is_customer'])->group(function () {
-        Route::post('/update', [CustomerStatusController::class, 'updatedCandidateStatus'])->name('customer');
+    Route::prefix('customer-status')->name('customer-status.')->middleware(['auth:sanctum', 'is_customer'])->group(function () {
+        Route::post('/update-status', [CustomerStatusController::class, 'updatedCandidateStatus'])->name('customer-status');
     });
 
     // Candidates -----------------------------------------
