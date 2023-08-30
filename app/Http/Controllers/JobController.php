@@ -164,6 +164,8 @@ class JobController extends Controller
      * @param string $slug
      * @return JsonResponse
      */
+
+
     public function get(string $slug): JsonResponse
     {
         $job = Job::query()->with('customer')
@@ -366,10 +368,10 @@ class JobController extends Controller
     public function destroy(Request $request, string $slug): JsonResponse
     {
         $job = $request->user()->customer->jobs()->findOrFail($slug);
-        
+
         ApiLogActivity::logActivitySubjectId($job->id);
         $job->delete();
-         
+
         return response()->json([
             'status' => true,
             'message' => 'Successfully deleted'

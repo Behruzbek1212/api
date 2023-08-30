@@ -221,7 +221,6 @@ class CandidatesController extends Controller
             'email' => ['email', 'unique:users,email', 'required'],
             'services' => ['json', 'nullable'],
             'test' => ['array', 'nullable'],
-
             '__comment' => ['string', 'nullable'],
             '__conversation' => ['boolean', 'required'],
             '__conversation_date' => ['date', 'nullable']

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\TransactionHistoryResource;
 use App\Models\Trafic;
+use App\Models\TraficPrice;
 use App\Models\TransactionHistory;
 use App\Models\User;
 use App\Services\TransactionHistoryServices;
@@ -33,6 +34,7 @@ class TransactionHistoryController extends Controller
      */
     public function create(Request $request)
     {
+
         $user_id = _auth()->user()->id;
         $request->validate([
             'service_id' => ['integer', 'required'],
@@ -43,12 +45,14 @@ class TransactionHistoryController extends Controller
             // 'expire_at' => ['date', 'required'],
         ]);
 
-        Trafic::where('id', $request->service_id)->firstOrFail()->update(['trafic_price_id' => $request->service_trafic_price_id]);
+        // Trafic::where('id', $request->service_id)->firstOrFail()->update(['trafic_price_id' => $request->service_trafic_price_id]);
+
+        $trafic_price = TraficPrice::where('id', $request->service_trafic_price_id)->firstOrFail();
         $trafic = Trafic::where('id', $request->service_id)->firstOrFail();
 
         $total_amount = User::where('id', $user_id)->first()->balance ?? 0;
-        $service_price = $trafic->trafic_price->price;
-        $service_count = $trafic->trafic_price->count;
+        $service_price = $trafic_price->price;
+        $service_count = $trafic_price->count;
         if (empty($service_count) && $service_count <= 0) {
             return $this->errorResponse(__('message.service_count is null'), 403);
         }
@@ -77,7 +81,7 @@ class TransactionHistoryController extends Controller
         }
         return $this->errorResponse(__('message.balance'), 403);
     }
-    
+
 
     /**
      * Destroy vacancy
