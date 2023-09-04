@@ -133,15 +133,16 @@ class Customer extends Model
     public function chats(): HasMany
     {
         return $this->hasMany(Chat::class)
-            ->withWhereHas('resume', function (Builder $table) {
+            ->withWhereHas('resume', function ($table) {
                 $table->whereNull('deleted_at');
             })
-            ->withWhereHas('candidate', function (Builder $table) {
+            ->withWhereHas('candidate', function ($table) {
                 $table->where('active', '=', true);
                 $table->whereNull('deleted_at');
             })
             ->whereNull('deleted_at');
     }
+
 
     /**
      * Set user avatar mutation
@@ -171,11 +172,11 @@ class Customer extends Model
      * @see https://laravel.com/docs/10.x/eloquent-relationships#one-to-many
      */
 
-    public function customerStatus():HasMany
+    public function customerStatus(): HasMany
     {
         return $this->hasMany(CustomerStatus::class);
     }
-    
+
     /**
      * Display the chat comment
      *
@@ -187,7 +188,7 @@ class Customer extends Model
     {
         return $this->hasMany(CustomerChatComment::class);
     }
- 
+
     /**
      * Display the announcement
      *
@@ -195,7 +196,7 @@ class Customer extends Model
      * @see https://laravel.com/docs/10.x/eloquent-relationships#one-to-many
      */
 
-    public function announcement():HasMany
+    public function announcement(): HasMany
     {
         return $this->hasMany(Announcement::class);
     }
@@ -206,9 +207,9 @@ class Customer extends Model
      * @return HasMany
      * @see https://laravel.com/docs/10.x/eloquent-relationships#one-to-many
      */
-    
-    public function testResult():HasMany
+
+    public function testResult(): HasMany
     {
-       return $this->hasMany(TestResult::class);
+        return $this->hasMany(TestResult::class);
     }
 }
