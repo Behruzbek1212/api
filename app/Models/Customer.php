@@ -51,6 +51,7 @@ class Customer extends Model
         'limit_id',
         'limit_start_day',
         'limit_end_day',
+        'telegram_id'
     ];
 
     /**
@@ -81,12 +82,14 @@ class Customer extends Model
      */
     public function updateData(Request $request): void
     {
+      
         $this->update([
             'name' => $request->get('customer')['name'],
             'about' => $request->get('customer')['about'],
             'location' => $request->get('customer')['location'],
             'address' => $request->get('customer')['address'],
             'owned_date' => $request->get('customer')['owned_date'],
+            'telegram_id' => $request->get('customer')['telegram_id'] ?? null
         ]);
     }
 
