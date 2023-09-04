@@ -116,4 +116,34 @@ class CompaniesController extends Controller
             'data' => $company->paginate($params['limit'] ?? null)
         ]);
     }
+
+    public function createTelegram(Request $request)
+    {
+        $request->validate([
+          'chat_id' => 'integer|required'
+        ]);
+
+        $user = _auth()->user();
+        $customer = $user->customer()->firstOrFail();
+        if($customer->telegram_id == null) {
+            $customer->telegram_id = [$request->chat_id];
+            $customer->save();
+            return response()->json([
+                'status' => true,
+                'message' => 'success'
+            ]);
+        }
+        
+        if (!in_array($request->chat_id, $customer->telegram_id)) {
+            $data =   $customer->telegram_id;
+            $data[] = $request->chat_id;
+            $customer->telegram_id = $data;
+            $customer->save();
+        }
+        
+        return response()->json([
+            'status' => true,
+            'message' => 'success'
+        ]);
+    }
 }

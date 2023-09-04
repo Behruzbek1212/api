@@ -69,8 +69,10 @@ class Customer extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'telegram_id' => 'array',
         'owned_date' => 'datetime',
         'services' => 'array',
+        
     ];
 
 
@@ -89,7 +91,6 @@ class Customer extends Model
             'location' => $request->get('customer')['location'],
             'address' => $request->get('customer')['address'],
             'owned_date' => $request->get('customer')['owned_date'],
-            'telegram_id' => $request->get('customer')['telegram_id'] ?? null
         ]);
     }
 
