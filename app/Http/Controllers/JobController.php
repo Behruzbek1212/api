@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\JobResource;
+use App\Models\Customer;
 use App\Models\Job;
 use App\Models\Resume;
+use App\Models\SelectedQuestion;
 use App\Models\User;
 use App\Notifications\RespondMessageNotification;
 use App\Services\JobServices;
@@ -15,6 +17,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Traits\ApiLogActivity;
+
 class JobController extends Controller
 {
     use ApiResponse;
@@ -169,18 +172,17 @@ class JobController extends Controller
     public function get(string $slug): JsonResponse
     {
         $user = _auth()->user();
-        
-        if($user !== null &&  $user->role === 'customer' )
-        {
+
+        if ($user !== null &&  $user->role === 'customer') {
             $job = $user->customer->jobs()->with('customer')
-            ->whereHas('customer', function (Builder $query) {
-                $query->where('active', '=', true);
-            })
-            ->where('status', '=', 'approved')
-            ->findOrFail($slug);
+                ->whereHas('customer', function (Builder $query) {
+                    $query->where('active', '=', true);
+                })
+                ->where('status', '=', 'approved')
+                ->findOrFail($slug);
 
             _auth()->check() && _user()->jobStats()
-               ->syncWithoutDetaching($job);
+                ->syncWithoutDetaching($job);
 
             return response()->json([
                 'status' => true,
@@ -241,6 +243,8 @@ class JobController extends Controller
         ]);
     }
 
+
+
     /**
      * Create vacancy
      *
@@ -267,6 +271,8 @@ class JobController extends Controller
             'strengthening' => ['boolean', 'nullable'],
             'trafic_id' => ['integer', 'nullable'],
             'trafic_expired_at' => ['date', 'nullable'],
+            'required_question' => ['boolean', 'nullable'],
+            'questions' => ['array', 'nullable'],
         ]);
 
         $user = _auth()->user();
@@ -284,6 +290,7 @@ class JobController extends Controller
             'category_id' => $params['category_id'],
             'slug' => null,
             'status' => 'approved',
+            'required_question' => $params['required_question'] ?? null,
             'work_hours' => $params['work_hours'] ?? null,
             'for_communication_phone' => $params['for_communication_phone'] ?? null,
             'for_communication_link' => $params['for_communication_link'] ?? null,
@@ -291,7 +298,15 @@ class JobController extends Controller
             'trafic_expired_at' => $params['trafic_expired_at'] ?? null,
         ]);
 
+        $required_question =  Job::where('id', $job->slug)->firstOrFail()->required_question;
 
+        if ($required_question == true) {
+            SelectedQuestion::create([
+                'job_slug' => Job::where('id', $job->slug)->firstOrFail()->slug ?? null,
+                'created_by' => $user->id,
+                'questions' => $request->questions,
+            ]);
+        }
 
         if (@$params['recruitment'] || @$params['strengthening']) {
             $message = "🆕 <b>" . $job->title . "</b>\n";
