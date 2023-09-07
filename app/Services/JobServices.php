@@ -200,7 +200,7 @@ class JobServices
 
         $jpg_image->text($prices,  750, 920, function ($font) use ($font_path) {
             $font->file($font_path);
-            $font->size(70);
+            $font->size(80);
             $font->color('#63CC52');
             $font->align('center');
             $font->valign('middle');
