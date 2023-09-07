@@ -21,6 +21,7 @@ class Announcement extends Model
 
     protected $casts = [
         'post' => 'array',
+        'status'=> 'boolean'
     ];
 
 
