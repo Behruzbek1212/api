@@ -3,8 +3,10 @@
 namespace App\Notifications;
 
 use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class RespondMessageNotification extends Notification
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+class RespondMessageNotification extends Notification  implements ShouldBroadcast
 {
     protected array $from;
     protected array $job;
@@ -17,7 +19,7 @@ class RespondMessageNotification extends Notification
 
     public function via($notifiable): array
     {
-        return ['database'];
+        return ['database','broadcast'];
     }
 
     public function toArray($notifiable): array
@@ -27,5 +29,19 @@ class RespondMessageNotification extends Notification
             'job' => $this->job,
             'from' => $this->from
         ];
+    }
+
+    public function toBroadcast($notifiable){
+        $notification = [
+            "data" => [
+                'type' => 'notification',
+                'job' => $this->job,
+                'from' => $this->from
+            ]
+        ];
+
+        return new BroadcastMessage([
+            'notification' => $notification
+        ]);
     }
 }
