@@ -33,6 +33,14 @@ Route::prefix('/trafics')->name('trafics.')->group(function () {
     Route::post('/destroy', [App\Http\Controllers\Admin\TraficController::class, 'destroy']);
 });
 
+Route::prefix('/questions')->name('questions.')->group(function () {
+    Route::get('/', [App\Http\Controllers\Admin\QuestionController::class, 'all']);
+    Route::get('/{slug}', [App\Http\Controllers\Admin\QuestionController::class, 'show']);
+    Route::post('/create', [App\Http\Controllers\Admin\QuestionController::class, 'create']);
+    Route::post('/edit', [App\Http\Controllers\Admin\QuestionController::class, 'edit']);
+    Route::post('/destroy', [App\Http\Controllers\Admin\QuestionController::class, 'destroy']);
+});
+
 Route::prefix('/trafic_price')->name('trafic_price.')->group(function () {
     Route::get('/', [App\Http\Controllers\Admin\TraficPriceController::class, 'index']);
     Route::get('/{slug}', [App\Http\Controllers\Admin\TraficPriceController::class, 'show']);
@@ -110,7 +118,7 @@ Route::prefix('/resume-ball')->name('resume-ball.')->group(function () {
 Route::prefix('/announcement')->name('announcement.')->group(function () {
     Route::get('/', [AnnouncementController::class, 'index']);
     Route::post('/store', [AnnouncementController::class, 'store']);
-    Route::post('/confirmation', [AnnouncementController::class,'confirmation']);
+    Route::post('/confirmation', [AnnouncementController::class, 'confirmation']);
     Route::get('/show/{id}', [AnnouncementController::class, 'show']);
     Route::post('/edit', [AnnouncementController::class, 'update']);
     Route::post('/destroy', [AnnouncementController::class, 'destroy']);
@@ -123,20 +131,20 @@ Route::prefix('/comment')->name('comment.')->group(function () {
 
 
 Route::prefix('interview')->name('interview')->group(function () {
-    Route::get('/', [CalledInterviewController::class,'index'])->name('all');
-    Route::post('/create', [CalledInterviewController::class,'store'])->name('create');
+    Route::get('/', [CalledInterviewController::class, 'index'])->name('all');
+    Route::post('/create', [CalledInterviewController::class, 'store'])->name('create');
     Route::post('/edit/status', [CalledInterviewController::class, 'editStatus'])->name('editStatus');
 });
 
 
-Route::prefix('/history')->name('history.')->group(function() {
-    Route::get('/all', [HistoryAdminController::class,'allHr']);
+Route::prefix('/history')->name('history.')->group(function () {
+    Route::get('/all', [HistoryAdminController::class, 'allHr']);
     Route::get('/hr', [HistoryAdminController::class, 'getOneHr']);
 });
 
 Route::prefix('/customer-status')->name('customer-status.')->group(function () {
     Route::post('/create', [CustomerStatusAdminController::class, 'create'])->name('create');
-    Route::get('/status/{id}',[CustomerStatusAdminController::class, 'getCustomerStatus'])->name('customerStatus');
+    Route::get('/status/{id}', [CustomerStatusAdminController::class, 'getCustomerStatus'])->name('customerStatus');
     Route::get('/show', [CustomerStatusAdminController::class, 'show'])->name('show');
     Route::post('/edit', [CustomerStatusAdminController::class, 'update'])->name('edit');
     Route::post('/destroy', [CustomerStatusAdminController::class, 'destroy'])->name('destroy');

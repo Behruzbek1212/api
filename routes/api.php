@@ -27,8 +27,10 @@ use App\Http\Controllers\LanguageLevelsController;
 use App\Http\Controllers\LanguagesController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ResumeBallsController;
 use App\Http\Controllers\ResumeController;
+use App\Http\Controllers\SelectedQuestionController;
 use App\Http\Controllers\SocialStatusController;
 use App\Http\Controllers\TestResultController;
 use App\Http\Controllers\TestUserController;
@@ -128,6 +130,14 @@ Route::prefix('/v1')->group(function () {
             Route::post('/{slug}/applications', [JobController::class, 'applications'])->name('applications');
         });
 
+        //questions
+        Route::middleware(['auth:sanctum', 'is_customer'])->group(function () {
+            Route::get('/questions', [QuestionController::class, 'all'])->name('all');
+            Route::post('/question_create', [QuestionController::class, 'create'])->name('create');
+            Route::post('/edit/{slug}', [JobController::class, 'edit'])->name('edit');
+            Route::post('/destroy/{slug}', [JobController::class, 'destroy'])->name('destroy');
+        });
+
         // limits ---------------------------------------
 
     });
@@ -184,6 +194,13 @@ Route::prefix('/v1')->group(function () {
         Route::post('/create', [TransactionHistoryController::class, 'create'])->name('create');
         Route::get('/', [TransactionHistoryController::class, 'all'])->name('all');
         Route::post('/destroy', [TransactionHistoryController::class, 'destroy'])->name('destroy');
+    });
+
+    // questions_for_job -----------------------------------------
+    Route::prefix('/job_questions')->name('job_questions.')->group(function () {
+        Route::get('/get/{slug}', [SelectedQuestionController::class, 'all'])->name('all');
+        Route::post('/create', [SelectedQuestionController::class, 'create'])->name('create');
+        Route::get('/job_answer/{slug}', [SelectedQuestionController::class, 'job_answer'])->name('job_answer');
     });
 
     // Locations -----------------------------------------

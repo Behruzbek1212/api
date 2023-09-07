@@ -70,6 +70,7 @@ class Job extends Model
         'category_id',
         'slug',
         'status',
+        'required_question',
         'work_hours',
         'for_communication_phone',
         'for_communication_link',

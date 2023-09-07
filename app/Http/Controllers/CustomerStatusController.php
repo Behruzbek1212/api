@@ -40,7 +40,6 @@ class CustomerStatusController extends Controller
             'status' => 'required|string',
             'chat_id' => 'required|integer'
         ]);
-
         $user = _auth()->user();
         $chat = $user->customer->chats()->where(function ($query) use ($request) {
             $query->where('id', '=', $request->chat_id);
