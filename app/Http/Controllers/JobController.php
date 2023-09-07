@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\TelegramSendNotification;
 use App\Http\Resources\JobResource;
 use App\Models\Customer;
 use App\Models\Job;
@@ -226,11 +227,16 @@ class JobController extends Controller
             'candidate_id' => $user->candidate->id,
             'status' => 'review'
         ]);
-
+        
         @$params['message'] && $job->chats()->find($chat->id)->messages()->create([
             'message' => $params['message'],
             'role' => $user->role
         ]);
+        $message =   $params['message'] ??  null;
+        $resumeData = $resume ?? null;
+        if($job->customer()->first()->telegram_id !== null && $job->customer()->first()->telegram_id !== []){
+            event(new TelegramSendNotification($job, $user->candidate()->first(),   $resumeData, $chat->id, $message , $job->customer()->first()));
+        }
 
         $job->customer->user->notify(new RespondMessageNotification([
             'candidate' => $user->toArray(),

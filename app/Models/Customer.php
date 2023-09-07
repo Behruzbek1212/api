@@ -51,6 +51,7 @@ class Customer extends Model
         'limit_id',
         'limit_start_day',
         'limit_end_day',
+        'telegram_id'
     ];
 
     /**
@@ -68,8 +69,10 @@ class Customer extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'telegram_id' => 'array',
         'owned_date' => 'datetime',
         'services' => 'array',
+        
     ];
 
 
@@ -81,6 +84,7 @@ class Customer extends Model
      */
     public function updateData(Request $request): void
     {
+      
         $this->update([
             'name' => $request->get('customer')['name'],
             'about' => $request->get('customer')['about'],
