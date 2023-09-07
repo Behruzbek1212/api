@@ -17,4 +17,9 @@ class Answer extends Model
     {
         return $this->hasOne(Question::class, 'id', 'question_id');
     }
+
+    public function candidate()
+    {
+        return $this->hasOne(Candidate::class, 'id', 'candidate_id');
+    }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AnswerResource;
+use App\Http\Resources\JobResource;
 use App\Models\Answer;
 use App\Models\Candidate;
 use App\Models\Question;
@@ -59,12 +61,15 @@ class SelectedQuestionController extends Controller
 
     public function job_answer($slug): JsonResponse
     {
+
         $answers = Answer::query()
             ->where('job_slug', $slug)->get();
 
+        $jobAnswers = AnswerResource::collection($answers);
+
         return response()->json([
             'status' => true,
-            'answers' => $answers
+            'answers' => $jobAnswers
         ]);
     }
 }
