@@ -18,26 +18,26 @@ class AnnouncementResource extends JsonResource
      */
     public function toArray($request): array
     {   
-       
+        $postNumber = Random::generate('4', '0-9');
         return [
             'title' => $this->title ?? null,
             'salary' => $this->salary ?? null,
             'work_hours' => $this->work_hours ?? null,
             'job-slug' => $this->slug ?? null,
-            'image' =>  $this->image($this->customer->user->phone, $this->title, $this->salary, $this->location_id )?? null,
+            'image' =>  $this->image($this->customer->user->phone, $this->title, $this->salary, $this->location_id, $postNumber )?? null,
             "address" => $this->location_id ?? null,
             'links' => $this->for_connection_link ?? null,
             'for_connection' => $this->getForConnection($this->customer->user->phone, $this->for_connection_phone ) ?? null,
-            'post_number' => null,
+            'post_number' => $postNumber,
             'company_name' =>  $this->customer->name ?? null,
             'hash_tag' => $this->getHashTab($this->title, $this->location_id) ?? null
         ];
     }
 
-    public function image($company_name, $title, $salary, $location_id)
+    public function image($company_name, $title, $salary, $location_id, $postNumber)
     {
             if($company_name !== null && $title !== null && $salary !== null && $location_id !==null){
-                $postNumber = Random::generate('4', '0-9');
+            
                 $imageUrl =  JobServices::getInstance()->createJobBanner($company_name, $title, $salary,  $location_id , $postNumber);
 
                 return $imageUrl;

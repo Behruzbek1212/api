@@ -131,7 +131,7 @@ class JobServices
         $gilroyLight = realpath($gilroyLight);
         $gilroyLight = mb_convert_encoding($gilroyLight, 'big5', 'utf-8');
         $jpg_image = Image::make($rasmUrl);
-        $green = [10, 180, 93];
+        $green = '#F0922E';
         // Custom text generator to wrap the text based on the maximum width
         $lines = wordwrap($text1, 42, "\n", true);
         $words = explode(' ', $text1); // Matnni so'zlarga bo'lib massivga ajratamiz
@@ -201,7 +201,7 @@ class JobServices
         $jpg_image->text($prices,  750, 920, function ($font) use ($font_path) {
             $font->file($font_path);
             $font->size(70);
-            $font->color('#0079fe');
+            $font->color('#63CC52');
             $font->align('center');
             $font->valign('middle');
         });
