@@ -93,6 +93,8 @@ class Job extends Model
         'for_communication_phone' => 'array',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'required_question' => 'boolean',
+        'resume_required' => 'boolean'
     ];
 
     /**
