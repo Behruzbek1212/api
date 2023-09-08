@@ -24,7 +24,7 @@ class SelectedQuestionController extends Controller
     public function all($slug): JsonResponse
     {
         $questions = SelectedQuestion::query()
-            ->where('job_slug', $slug)->get();
+            ->where('job_slug', $slug)->firstOrFail();
 
         return response()->json([
             'status' => true,
