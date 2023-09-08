@@ -25,9 +25,6 @@ class StoreAnnouncementRequest extends FormRequest
             'data' => 'required|array',
             'data.company_name' => 'required|string',
             'data.title' => 'required|string',
-            'data.salary' => 'array|required',
-            'data.salary.amount'=> 'required',
-            'data.salary.agreement' => 'required|boolean',
             'data.address' => 'required|integer',
         ];
     }
