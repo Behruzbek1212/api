@@ -87,7 +87,7 @@ class JobServices
         $postNumber =  '№ ' . $post_number ?? 0;
         $text1 = $title;
         $text2 = $company;
-        $text3 = Location::find($address)['name']['ru'] ?? "";
+        $text3 = Location::find($address)['name']['uz'] ?? "";
 
 
         if (isset($salary['agreement']) && $salary['agreement'] !== true) {
