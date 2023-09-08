@@ -51,32 +51,14 @@ class Job extends Model
      */
     protected $keyType = 'string';
 
+    protected $guarded = [];
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'customer_id',
-        'title',
-        'salary',
-        'languages',
-        'education_level',
-        'sphere',
-        'about',
-        'work_type',
-        'experience',
-        'location_id',
-        'category_id',
-        'slug',
-        'status',
-        'required_question',
-        'work_hours',
-        'for_communication_phone',
-        'for_communication_link',
-        'trafic_id',
-        'trafic_expired_at',
-    ];
+
 
     /**
      * The accessors to append to the model's array form.

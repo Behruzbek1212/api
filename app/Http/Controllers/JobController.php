@@ -227,15 +227,15 @@ class JobController extends Controller
             'candidate_id' => $user->candidate->id,
             'status' => 'review'
         ]);
-        
+
         @$params['message'] && $job->chats()->find($chat->id)->messages()->create([
             'message' => $params['message'],
             'role' => $user->role
         ]);
         $message =   $params['message'] ??  null;
         $resumeData = $resume ?? null;
-        if($job->customer()->first()->telegram_id !== null && $job->customer()->first()->telegram_id !== []){
-            event(new TelegramSendNotification($job, $user->candidate()->first(),   $resumeData, $chat->id, $message , $job->customer()->first()));
+        if ($job->customer()->first()->telegram_id !== null && $job->customer()->first()->telegram_id !== []) {
+            event(new TelegramSendNotification($job, $user->candidate()->first(),   $resumeData, $chat->id, $message, $job->customer()->first()));
         }
 
         $job->customer->user->notify(new RespondMessageNotification([
@@ -278,6 +278,7 @@ class JobController extends Controller
             'trafic_id' => ['integer', 'nullable'],
             'trafic_expired_at' => ['date', 'nullable'],
             'required_question' => ['boolean', 'nullable'],
+            'resume_required' => ['boolean', 'nullable'],
             'questions' => ['array', 'nullable'],
         ]);
 
@@ -297,6 +298,7 @@ class JobController extends Controller
             'slug' => null,
             'status' => 'approved',
             'required_question' => $params['required_question'] ?? null,
+            'resume_required' => $params['resume_required'] ?? null,
             'work_hours' => $params['work_hours'] ?? null,
             'for_communication_phone' => $params['for_communication_phone'] ?? null,
             'for_communication_link' => $params['for_communication_link'] ?? null,
