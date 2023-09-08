@@ -335,6 +335,11 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
         return $this->hasMany(Resume::class, 'user_id', 'id')->orderByDesc('id');
     }
 
+    public function transaction_histories(): HasMany
+    {
+        return $this->hasMany(TransactionHistory::class, 'user_id', 'id');
+    }
+
     /**
      * Display resume information
      *
