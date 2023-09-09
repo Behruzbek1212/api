@@ -368,4 +368,6 @@ class User extends Authenticatable implements MustVerifyEmail, ContractsMustVeri
     {
         return $this->hasMany(CalledInterview::class);
     }
+
+    public function receivesBroadcastNotificationsOn() { return 'users.'.$this->id; }
 }

@@ -221,10 +221,10 @@ Route::prefix('/v1')->group(function () {
             Route::get('/', [NotificationController::class, 'index'])->name('get');
             // Read as mark
             Route::post('/read/all', [NotificationController::class, 'read_all'])->name('read.all');
-            Route::post('/read/{id}', [NotificationController::class, 'read'])->name('read');
+            Route::post('/read', [NotificationController::class, 'read'])->name('read');
             // Destroy
             Route::post('/destroy/all', [NotificationController::class, 'destroy_all'])->name('destroy.all');
-            Route::post('/destroy/{id}', [NotificationController::class, 'destroy'])->name('destroy');
+            Route::post('/destroy', [NotificationController::class, 'destroy'])->name('destroy');
         });
 
         // Chat -----------------------------------------

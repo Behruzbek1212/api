@@ -238,9 +238,12 @@ class JobController extends Controller
         }
 
         $job->customer->user->notify(new RespondMessageNotification([
-            'candidate' => $user->toArray(),
+            'from' => $user->toArray(),
+            'role' => $job->customer->user()->first()['role'],
             'resume' => $resume ?? [],
-            'job' => $job->toArray()
+            'job' => $job ?? [],
+            'chat' => $chat ?? [],
+            'message' => $message
         ]));
 
         return response()->json([
@@ -450,9 +453,11 @@ class JobController extends Controller
         ]);
 
         $chat->candidate->user->notify(new RespondMessageNotification([
-            'candidate' => $chat->candidate->toArray(),
-            'customer' => $user->customer->toArray(),
-            'job' => $chat->job->toArray(),
+            'from' => $user->toArray(),
+            'role' => $chat->candidate->user()->first()['role'],
+            'chat' => $chat,
+            'job' => $chat->job,
+            'resume'=> $chat->resume ?? null,
             'message' => $params['message'] ?? null
         ]));
 
