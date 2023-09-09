@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('jobs', function (Blueprint $table) {
-            $table->boolean('resume_required')->default(false)->after('required_question');
+            $table->boolean('resume_required')->default(true)->after('required_question');
         });
     }
 
