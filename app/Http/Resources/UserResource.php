@@ -20,15 +20,15 @@ class UserResource extends JsonResource
 
         return [
             'id' => $this->id ?? null,
-            "phone"=> $this->phone ?? null,
-            "phone_verified_at"=> $this->phone_verified_at ?? null,
-            "email"=> $this->email ?? null,
-            "email_verified_at"=>$this->email_verified_at ?? null ,
-            "role"=> $this->role ?? null,
-            "balance"=> $this->balance ?? null,
-            "verified"=> $this->verified ?? null,
-            "created_at"=> $this->created_at ?? null,
-            "updated_at"=>$this->updated_at ?? null,
+            "phone" => $this->phone ?? null,
+            "phone_verified_at" => $this->phone_verified_at ?? null,
+            "email" => $this->email ?? null,
+            "email_verified_at" => $this->email_verified_at ?? null,
+            "role" => $this->role ?? null,
+            "balance" => $this->balance ?? null,
+            "verified" => $this->verified ?? null,
+            "created_at" => $this->created_at ?? null,
+            "updated_at" => $this->updated_at ?? null,
             "candidate" => $this->candidate ?? null,
             "subrole" => $this->subrole ?? null,
             "fio" => $this->fio ?? null,
@@ -39,7 +39,7 @@ class UserResource extends JsonResource
                 "name" => $this->customer->name ?? null,
                 "about" => $this->customer->about ?? null,
                 "services" => $this->customer->services ?? null,
-                "balance" => $this->customer->balance ?? 0 ,
+                "balance" => $this->customer->balance ?? 0,
                 "owned_date" => $this->customer->owned_date ?? null,
                 "location" => $this->customer->location ?? null,
                 "address" => $this->customer->address ?? null,
@@ -48,12 +48,14 @@ class UserResource extends JsonResource
                 "updated_at" => $this->customer->updated_at ?? null,
                 "deleted_at" => $this->customer->deleted_at ?? null,
                 "status" => $this->getStatus($this->customer->id ?? null) ?? null,
-            ]
+            ],
+            "trafics" => $this->getTrafics() ?? null
         ];
     }
 
-    public function getStatus($id) {
-        if($id !== null ){
+    public function getStatus($id)
+    {
+        if ($id !== null) {
             $status = CustomerStatus::where('customer_id', $id)->orWhere('customer_id', null)->get();
             return $status;
         }
@@ -62,4 +64,21 @@ class UserResource extends JsonResource
 
 
 
+    public function getTrafics()
+    {
+        $list = [];
+        foreach ($this->transaction_histories ?? [] as $receiver) {
+            $list[] = [
+                'id' => $receiver->id,
+                'service_id' => $receiver->service_id,
+                'service_count' => $receiver->service_count,
+                'service_sum' => $receiver->service_sum,
+                'service_name' => $receiver->service_name,
+                'started_at' => $receiver->started_at,
+                'expire_at' => $receiver->expire_at,
+                'key' => $receiver->key,
+            ];
+        }
+        return  $list;
+    }
 }

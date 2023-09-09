@@ -36,7 +36,7 @@ class QuestionController extends Controller
     {
         $params = $request->validate([
             'question' => ['string', 'required'],
-            'position' => ['numeric', 'nullable'],
+            // 'position' => ['numeric', 'nullable'],
         ]);
 
         $user = _auth()->user();
@@ -44,7 +44,7 @@ class QuestionController extends Controller
         Question::create([
             'created_by' => $user->id,
             'question' => $params['question'],
-            'position' => $params['position'],
+            'position' => $request->position ?? null,
         ]);
 
         return response()->json([

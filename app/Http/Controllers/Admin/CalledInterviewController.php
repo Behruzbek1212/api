@@ -72,9 +72,22 @@ class CalledInterviewController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(CalledInterview $calledInterview)
+    public function show(Request $request)
     {
-        //
+        $interview  = CalledInterview::with('candidate', 'user')
+                    ->where('candidate_id', $request->candidate_id)
+                    ->where('deleted_at', null)
+                    ->firstOrFail();
+        if($interview !== null){
+            return response()->json([
+                'status' => true,
+                'data' => $interview
+             ]);  
+        }
+        return response()->json([
+            'status' => false,
+            'data' => []
+        ]);         
     }
 
     

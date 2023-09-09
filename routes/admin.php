@@ -134,6 +134,7 @@ Route::prefix('interview')->name('interview')->group(function () {
     Route::get('/', [CalledInterviewController::class, 'index'])->name('all');
     Route::post('/create', [CalledInterviewController::class, 'store'])->name('create');
     Route::post('/edit/status', [CalledInterviewController::class, 'editStatus'])->name('editStatus');
+    Route::get('/show', [CalledInterviewController::class, 'show'])->name('show-candidate');
 });
 
 

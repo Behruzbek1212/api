@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -36,13 +37,12 @@ class LoginController extends Controller
         $user = auth('web')->user();
         $token = $user->createToken(@$user->name ?? 'admin' . '-' . Hash::make($user->id))
             ->plainTextToken;
-
+        $data = User::query()->with('candidate', 'customer')->find($user->id);
+        $list = new  UserResource($data);
         return response()->json([
             'status' => true,
             'message' => 'Your account has been successfully authenticated.',
-            'user' => User::query()
-                ->with('candidate', 'customer')
-                ->find($user->id),
+            'user' => $list,
             'token' => $token,
         ]);
     }

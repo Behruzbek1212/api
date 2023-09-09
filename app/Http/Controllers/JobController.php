@@ -209,33 +209,32 @@ class JobController extends Controller
     public function respond(Request $request): JsonResponse
     {
         $params = $request->validate([
-            'resume_id' => ['required', 'numeric'],
+            'resume_id' => ['nullable', 'numeric'],
             'job_slug' => ['required', 'string'],
             'message' => ['nullable', 'string']
         ]);
 
         /** @var Authenticatable|User $user */
         $user = _auth()->user();
-
-        $resume = Resume::query()->findOrFail($request->input('resume_id'));
+        $resume = Resume::query()->find($request->input('resume_id')) ?? null;
         $job = Job::query()->findOrFail($request->input('job_slug'));
 
         $chat = $job->chats()->create([
             'job_slug' => $params['job_slug'],
-            'resume_id' => $params['resume_id'],
+            'resume_id' => $params['resume_id'] ?? null,
             'customer_id' => $job->customer->id,
             'candidate_id' => $user->candidate->id,
             'status' => 'review'
         ]);
-        
+
         @$params['message'] && $job->chats()->find($chat->id)->messages()->create([
             'message' => $params['message'],
             'role' => $user->role
         ]);
         $message =   $params['message'] ??  null;
         $resumeData = $resume ?? null;
-        if($job->customer()->first()->telegram_id !== null && $job->customer()->first()->telegram_id !== []){
-            event(new TelegramSendNotification($job, $user->candidate()->first(),   $resumeData, $chat->id, $message , $job->customer()->first()));
+        if ($job->customer()->first()->telegram_id !== null && $job->customer()->first()->telegram_id !== []) {
+            event(new TelegramSendNotification($job, $user->candidate()->first(),   $resumeData, $chat->id, $message, $job->customer()->first()));
         }
 
         $job->customer->user->notify(new RespondMessageNotification([
@@ -281,6 +280,7 @@ class JobController extends Controller
             'trafic_id' => ['integer', 'nullable'],
             'trafic_expired_at' => ['date', 'nullable'],
             'required_question' => ['boolean', 'nullable'],
+            'resume_required' => ['boolean', 'nullable'],
             'questions' => ['array', 'nullable'],
         ]);
 
@@ -300,6 +300,7 @@ class JobController extends Controller
             'slug' => null,
             'status' => 'approved',
             'required_question' => $params['required_question'] ?? null,
+            'resume_required' => $params['resume_required'] ?? null,
             'work_hours' => $params['work_hours'] ?? null,
             'for_communication_phone' => $params['for_communication_phone'] ?? null,
             'for_communication_link' => $params['for_communication_link'] ?? null,
