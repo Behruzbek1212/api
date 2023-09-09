@@ -144,7 +144,7 @@ class Chat extends Model
      *
      * @return Job|Model|BelongsTo
      */
-    public function getJobAttribute(): BelongsTo|Model|Job
+    public function getJobAttribute(): BelongsTo|Model|Job|null
     {
         return $this->job()->first();
     }

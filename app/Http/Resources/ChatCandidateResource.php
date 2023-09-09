@@ -31,14 +31,14 @@ class ChatCandidateResource extends JsonResource
                 'specialization' => $this->candidate->specialization ?? null,
 
             ],
-            'resume' => [
+            'resume' => $this->resume ?  [
                 'id'=> $this->resume->id,
                 'experience'=> $this->resume->experience ?? null,
                 'data' => [
                     'position' => $this->resume->data['position'] ?? null,
                      'status' => $this->resume->data['status'] ?? null
                 ]
-            ],
+            ] : null,
         
         ];
     }
