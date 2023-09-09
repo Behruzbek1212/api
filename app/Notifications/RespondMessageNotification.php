@@ -35,7 +35,7 @@ class RespondMessageNotification extends Notification
         return [
             'type' => 'respond',
             'role' => $this->role,
-            'from' => $this->arrFrom($this->from) ?? null,
+            'from' => $this->from ?? null,
             'job' => [
                 'id' => $this->job['id'],
                 'title' => $this->job['title'],
