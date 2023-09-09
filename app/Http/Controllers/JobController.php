@@ -239,7 +239,7 @@ class JobController extends Controller
 
         $job->customer->user->notify(new RespondMessageNotification([
             'candidate' => $user->toArray(),
-            'resume' => $resume->toArray() ?? [],
+            'resume' => $resume ?? [],
             'job' => $job->toArray()
         ]));
 
