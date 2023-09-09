@@ -115,7 +115,7 @@ class JobServices
                 $prices = $text4;
             }
         } else {
-            $prices = 'Intervyu asosida';
+            $prices = 'Suhbat asosida';
         }
         // Trim whitespace from each part and add a space as a thousands separator
 
