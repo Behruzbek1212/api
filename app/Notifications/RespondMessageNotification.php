@@ -57,6 +57,7 @@ class RespondMessageNotification extends Notification  implements ShouldBroadcas
     public function toBroadcast($notifiable)
     {
         $notification = [
+            
                 'type' => 'respond',
                 'role' => $this->role,
                 'from' => $this->arrFrom($this->from) ?? null,
