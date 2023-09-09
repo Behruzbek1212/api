@@ -209,20 +209,19 @@ class JobController extends Controller
     public function respond(Request $request): JsonResponse
     {
         $params = $request->validate([
-            'resume_id' => ['required', 'numeric'],
+            'resume_id' => ['nullable', 'numeric'],
             'job_slug' => ['required', 'string'],
             'message' => ['nullable', 'string']
         ]);
 
         /** @var Authenticatable|User $user */
         $user = _auth()->user();
-
-        $resume = Resume::query()->findOrFail($request->input('resume_id'));
+        $resume = Resume::query()->find($request->input('resume_id')) ?? null;
         $job = Job::query()->findOrFail($request->input('job_slug'));
 
         $chat = $job->chats()->create([
             'job_slug' => $params['job_slug'],
-            'resume_id' => $params['resume_id'],
+            'resume_id' => $params['resume_id'] ?? null,
             'customer_id' => $job->customer->id,
             'candidate_id' => $user->candidate->id,
             'status' => 'review'
@@ -240,7 +239,7 @@ class JobController extends Controller
 
         $job->customer->user->notify(new RespondMessageNotification([
             'candidate' => $user->toArray(),
-            'resume' => $resume->toArray(),
+            'resume' => $resume->toArray() ?? [],
             'job' => $job->toArray()
         ]));
 
