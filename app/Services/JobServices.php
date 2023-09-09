@@ -166,7 +166,7 @@ class JobServices
 
         $jpg_image->text($firstLine, 750, 450, function ($font) use ($font_path, $green) {
             $font->file($font_path);
-            $font->size(92);
+            $font->size(115);
             $font->color($green);
             $font->align('center');
             $font->valign('middle');
@@ -174,7 +174,7 @@ class JobServices
         if ($remainingText !== "") {
             $jpg_image->text($remainingText, 750, 560, function ($font) use ($font_path, $green) {
                 $font->file($font_path);
-                $font->size(92);
+                $font->size(100);
                 $font->color($green);
                 $font->align('center');
                 $font->valign('middle');
@@ -200,7 +200,7 @@ class JobServices
 
         $jpg_image->text($prices,  750, 920, function ($font) use ($font_path) {
             $font->file($font_path);
-            $font->size(80);
+            $font->size(115);
             $font->color('#63CC52');
             $font->align('center');
             $font->valign('middle');
