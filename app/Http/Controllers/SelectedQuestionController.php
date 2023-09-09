@@ -36,21 +36,25 @@ class SelectedQuestionController extends Controller
     public function create(Request $request): JsonResponse
     {
 
-        $params = $request->validate([
+        // dd($request->answers);
+        $user = _auth()->user();
+        $request->validate([
             'job_slug' => ['string', 'required'],
-            'question_id' => ['numeric', 'required'],
-            'answer' => ['string'],
+            // 'question_id' => ['numeric', 'required'],
+            // 'answer' => ['string'],
         ]);
 
-        $user = _auth()->user();
         // dd($user->id);
         $candidate_id = Candidate::where('user_id', $user->id)->firstOrFail()->id;
-        Answer::create([
-            'job_slug' => $params['job_slug'],
-            'question_id' => $params['question_id'],
-            'candidate_id' => $candidate_id,
-            'answer' => $request->answer,
-        ]);
+
+        foreach ($request->answers as $value) {
+            Answer::create([
+                'job_slug' => $request->job_slug,
+                'question_id' => $value['question_id'] ?? null,
+                'candidate_id' => $candidate_id,
+                'answer' =>  $value['answer'] ?? null,
+            ]);
+        }
 
         return response()->json([
             'status' => true,
