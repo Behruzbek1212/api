@@ -414,7 +414,11 @@ class JobController extends Controller
         $job = $request->user()->customer->jobs()->findOrFail($slug);
 
         ApiLogActivity::logActivitySubjectId($job->id);
+      
+        $chat =  $job->chats()->delete();
+
         $job->delete();
+        
 
         return response()->json([
             'status' => true,
