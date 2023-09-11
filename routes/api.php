@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\RestoreController;
 use App\Http\Controllers\BackupController;
+use App\Http\Controllers\CalledInterviewCustomerController;
 use App\Http\Controllers\CandidatesController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ChatsController;
@@ -283,6 +284,17 @@ Route::prefix('/v1')->group(function () {
         //       Route::get('/me', [TestUserController::class, 'loginWithToken'])->name('login-with-token');
     });
 
+
+    Route::prefix('interview')->name('interview')->middleware(['auth:sanctum', 'is_customer'])->group(function () {
+        Route::get('/', [CalledInterviewCustomerController::class, 'index'])->name('all');
+        Route::post('/create', [CalledInterviewCustomerController::class, 'store'])->name('create');
+        Route::post('/edit/status', [CalledInterviewCustomerController::class, 'editStatus'])->name('editStatus');
+        Route::get('/show', [CalledInterviewCustomerController::class, 'show'])->name('show-candidate');
+        Route::post('/update-date', [CalledInterviewCustomerController::class, 'update'])->name('update-date');
+        Route::post('/destroy', [CalledInterviewCustomerController::class, 'destroy'])->name('destroy');
+    });
+
+
     Route::prefix('/education-level')->name('education-level.')->group(function () {
         Route::get('/', [EducationLevelController::class, 'index'])->name('index');
     });
@@ -332,9 +344,9 @@ Route::prefix('/v2')->group(function () {
 
     Route::prefix('/announcement')->name('announcement.')->group(function () {
         Route::get('/', [AnnouncementController::class, 'all']);
-        Route::post('/create', [AnnouncementController::class, 'create']);
-        Route::post('/confirmation', [AnnouncementController::class, 'storeConfirmation']);
-        Route::post('/edit', [AnnouncementController::class, 'update']);
+        Route::post('/create', [AnnouncementController::class, 'create'])->middleware('is_customer');
+        Route::post('/confirmation', [AnnouncementController::class, 'storeConfirmation'])->middleware('is_customer');
+        Route::post('/edit', [AnnouncementController::class, 'update'])->middleware('is_customer');
     });
 
     // Golden nit telegram bot api routes

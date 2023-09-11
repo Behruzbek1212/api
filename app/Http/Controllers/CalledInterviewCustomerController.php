@@ -1,48 +1,46 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
-use App\Http\Controllers\Controller;
-use App\Models\CalledInterview;
+namespace App\Http\Controllers;
+
 use App\Http\Requests\StoreCalledInterviewRequest;
 use App\Http\Requests\UpdateCalledInterviewRequest;
 use App\Http\Resources\CalledInterviewResource;
+use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Traits\ApiResponse;
 
-class CalledInterviewController extends Controller
+class CalledInterviewCustomerController extends Controller
 {
     use ApiResponse;
+    protected $user;
+    
+    public function __construct()
+    {
+        $this->user = _auth()->user();
+    }
+    
 
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $interview  = CalledInterview::with('candidate', 'user')
-                    ->whereHas('user', function ($query){
-                        $query->where('role', 'admin')
-                              ->orWhereJsonContains('subrole', 'hr');
-                    })
+        $interview  =  $this->user->interview()->with('candidate', 'user.customer')
                     ->where('deleted_at', null)
                     ->orderByDesc('created_at')
                     ->paginate($request->limit ?? 15);
 
-        $data = CalledInterviewResource::collection($interview);
         
-        return $this->successPaginationResponse($data);
+        
+        return $this->successPaginationResponse($interview);
     }
 
-    
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreCalledInterviewRequest $request):JsonResponse
     {
         $request->validated();
-        $user = _auth()->user();
-        $interview = $user->interview()->create([
+        
+        $interview = $this->user->interview()->create([
            'candidate_id' =>$request->candidate_id,
            'date' => $request->date,
            'status' => 'marked'
@@ -56,13 +54,13 @@ class CalledInterviewController extends Controller
 
 
 
-    public function editStatus(Request $request)
+    public function editStatus(Request $request):JsonResponse
     {
         $request->validate([
             'status' => 'required|in:camed,notCome,marked',
             'interview_id' => 'required|integer'
         ]);
-        $interview =  CalledInterview::query()->where('id', $request->interview_id)
+        $interview =   $this->user->interview()->where('id', $request->interview_id)
                       ->update([
                          'status' => $request->status
                       ]);
@@ -76,9 +74,9 @@ class CalledInterviewController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request)
+    public function show(Request $request):JsonResponse
     {
-        $interview  = CalledInterview::with('candidate', 'user')
+        $interview  = $this->user->interview()->with('candidate', 'user.customer')
                     ->where('candidate_id', $request->candidate_id)
                     ->where('deleted_at', null)
                     ->orderByDesc('created_at')
@@ -100,10 +98,10 @@ class CalledInterviewController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCalledInterviewRequest $request)
+    public function update(UpdateCalledInterviewRequest $request):JsonResponse
     {
-        $request->validated();
-        $interview =  CalledInterview::query()->where('id', $request->interview_id)
+      
+        $interview =  $this->user->interview()->where('id', $request->interview_id)
                       ->update([
                          'date' => $request->date
                       ]);
@@ -117,12 +115,9 @@ class CalledInterviewController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request):JsonResponse
     {
-        $request->validate([
-            'interview_id' => 'required|integer'
-        ]);
-        $interview =  CalledInterview::query()->where('id', $request->interview_id)
+        $interview =  $this->user->interview()->where('id', $request->interview_id)
                       ->delete();
 
         return response()->json([

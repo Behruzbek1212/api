@@ -11,7 +11,7 @@ class UpdateCalledInterviewRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class UpdateCalledInterviewRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'interview_id' => 'required|integer',
+            'date' => 'required|date',
         ];
     }
 }
