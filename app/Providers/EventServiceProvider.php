@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Events\Registered;
+use App\Events\SendMessage;
 use App\Events\TelegramSendNotification;
+use App\Listeners\SendMessageListener;
 use App\Listeners\SendPhoneVerification;
 use App\Listeners\TelegramSendNotificationListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -22,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
         TelegramSendNotification::class => [
             TelegramSendNotificationListener::class,
         ],
+        SendMessage::class => [
+            SendMessageListener::class,
+        ]
     ];
 
     /**

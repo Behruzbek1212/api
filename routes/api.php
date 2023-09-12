@@ -166,6 +166,7 @@ Route::prefix('/v1')->group(function () {
         Route::get('/get_one_candidate/{id}', [CandidatesController::class, 'get_one_candidate'])->name('get_one_candidate');
         Route::post('/respond', [CandidatesController::class, 'respond'])->middleware(['auth:sanctum', 'is_customer'])->name('respond');
         Route::post('/add-test', [CandidatesController::class, 'addTestResult'])->name('add-test-result');
+        Route::post('/telegram-id', [CandidatesController::class, 'createTelegram']);
     });
 
     Route::prefix('/limits')->name('limits.')->group(function () {

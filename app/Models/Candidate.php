@@ -41,7 +41,8 @@ class Candidate extends Model
         'education_level',
         'services',
         'test',
-        'active'
+        'active',
+        'telegram_id'
     ];
 
     /**
@@ -61,6 +62,7 @@ class Candidate extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'telegram_id' => 'array',
         'spheres' => 'array',
         'test' => 'array',
         'services' => 'array',
