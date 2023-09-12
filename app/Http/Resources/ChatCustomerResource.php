@@ -29,7 +29,7 @@ class ChatCustomerResource extends JsonResource
                 'address'=> $this->customer->address ?? null,
             ],
             'job'=> [
-                'id' => $this->job->id,
+                'id' => $this->job->id ?? null,
                 'title' => $this->job->title ?? null,
                 'slug' => $this->job->slug ?? null,
                 'status' => $this->job->status ?? null,

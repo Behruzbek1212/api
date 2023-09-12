@@ -70,6 +70,9 @@ class ChatsController extends Controller
                     ->with(['resume'])
                     ->where('deleted_at', null)
                     ->orderBy('updated_at', 'desc')
+                    ->whereHas('job', function ($query) {
+                        return $query->where('deleted_at', null);
+                    })
                     ->paginate(request()->get('limit') ?? 10),
 
             'customer' =>
@@ -77,6 +80,9 @@ class ChatsController extends Controller
                     ->with(['job'])
                     ->where('deleted_at', null)
                     ->orderBy('updated_at', 'desc')
+                    ->whereHas('job', function ($query) {
+                        return $query->where('deleted_at', null);
+                    })
                     ->when($start && $end, function ($query) use ($start, $end){
                         if($start !== null && $end !== null){
                             $query->whereBetween('created_at', [request()->input('start'), request()->input('end')]);
@@ -129,6 +135,7 @@ class ChatsController extends Controller
                 $user->candidate->chats()
                     ->withExists(['resume', 'customer'])
                     ->with('messages')
+                    
                     ->findOrFail($id),
 
             'customer' =>
