@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SendMessage;
 use App\Http\Resources\ChatCandidateResource;
 use App\Http\Resources\ChatCustomerResource;
 use App\Models\Chat\Chat;
@@ -157,11 +158,16 @@ class ChatsController extends Controller
         ]);
 
         $chat = Chat::query()->findOrFail($id);
-        $chat->messages()->create([
+        $message = $chat->messages()->create([
             'message' => $params['message'],
             'role' => $request->user()->role
         ]);
-
+        $resume = $chat->resume()->first() ?? null;
+        
+        if($request->user()->role  == 'customer'){
+            event(new SendMessage($message, $chat->customer()->first(), $chat->candidate()->first(), $resume,  $chat, $request->user()->role , $chat->job()->first()));
+        }
+       
         return response()->json([
             'status' => true
         ]);
