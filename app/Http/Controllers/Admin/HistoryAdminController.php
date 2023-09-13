@@ -21,7 +21,7 @@ class HistoryAdminController extends Controller
       $data = AllAdminService::getAllHr($start, $end, $request->limit);
 
       return response()->json([
-          $data
+          'data' => $data
       ]);
    }
 
