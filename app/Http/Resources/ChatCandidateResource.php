@@ -19,7 +19,7 @@ class ChatCandidateResource extends JsonResource
             'job_slug' => $this->job_slug,
             'candidate_id' => $this->candidate_id,
             'status' => $this->status, 
-            'job_title' => $this->job->title,
+            'job_title' => $this->job->title ?? null,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,        
             'candidate' => [
@@ -31,14 +31,14 @@ class ChatCandidateResource extends JsonResource
                 'specialization' => $this->candidate->specialization ?? null,
 
             ],
-            'resume' => [
+            'resume' => $this->resume ?  [
                 'id'=> $this->resume->id,
                 'experience'=> $this->resume->experience ?? null,
                 'data' => [
                     'position' => $this->resume->data['position'] ?? null,
                      'status' => $this->resume->data['status'] ?? null
                 ]
-            ],
+            ] : null,
         
         ];
     }

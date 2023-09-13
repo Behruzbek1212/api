@@ -198,4 +198,43 @@ class CandidatesController extends Controller
             'status' => true
         ]);
     }
+
+
+    public function createTelegram(Request $request)
+    {
+        $request->validate([
+          'chat_id' => 'integer|required'
+        ]);
+
+        $user = _auth()->user();
+        if($user !== null){
+        $candidate = $user->candidate()->firstOrFail();
+       
+       
+            if($candidate->telegram_id == null) {
+                $candidate->telegram_id = [$request->chat_id];
+                $candidate->save();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'success'
+                ]);
+            }
+            
+            if (!in_array($request->chat_id, $candidate->telegram_id)) {
+                $data =   $candidate->telegram_id;
+                $data[] = $request->chat_id;
+                $candidate->telegram_id = $data;
+                $candidate->save();
+            }
+            
+            return response()->json([
+                'status' => true,
+                'message' => 'success'
+            ]);
+        }
+        return response()->json([
+            'status' => false,
+            'message' => 'not user '
+        ]);
+    }
 }

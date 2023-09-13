@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SendMessage;
 use App\Http\Resources\ChatCandidateResource;
 use App\Http\Resources\ChatCustomerResource;
 use App\Models\Chat\Chat;
@@ -69,6 +70,9 @@ class ChatsController extends Controller
                     ->with(['resume'])
                     ->where('deleted_at', null)
                     ->orderBy('updated_at', 'desc')
+                    ->whereHas('job', function ($query) {
+                        return $query->where('deleted_at', null);
+                    })
                     ->paginate(request()->get('limit') ?? 10),
 
             'customer' =>
@@ -76,6 +80,9 @@ class ChatsController extends Controller
                     ->with(['job'])
                     ->where('deleted_at', null)
                     ->orderBy('updated_at', 'desc')
+                    ->whereHas('job', function ($query) {
+                        return $query->where('deleted_at', null);
+                    })
                     ->when($start && $end, function ($query) use ($start, $end){
                         if($start !== null && $end !== null){
                             $query->whereBetween('created_at', [request()->input('start'), request()->input('end')]);
@@ -128,6 +135,7 @@ class ChatsController extends Controller
                 $user->candidate->chats()
                     ->withExists(['resume', 'customer'])
                     ->with('messages')
+                    
                     ->findOrFail($id),
 
             'customer' =>
@@ -157,11 +165,16 @@ class ChatsController extends Controller
         ]);
 
         $chat = Chat::query()->findOrFail($id);
-        $chat->messages()->create([
+        $message = $chat->messages()->create([
             'message' => $params['message'],
             'role' => $request->user()->role
         ]);
-
+        $resume = $chat->resume()->first() ?? null;
+        
+        if($request->user()->role  == 'customer'){
+            event(new SendMessage($message, $chat->customer()->first(), $chat->candidate()->first(), $resume,  $chat, $request->user()->role , $chat->job()->first()));
+        }
+       
         return response()->json([
             'status' => true
         ]);

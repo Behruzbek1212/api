@@ -49,7 +49,7 @@ class AllAdminService
                 ->whereIn('log_name', [
                     'candidates',
                     'comments',
-                    'interviews'
+                    'called_interviews'
                 ])
                 ->where('event', 'created')
                 ->when($start && $end, function ($query) use ($start, $end){
@@ -80,7 +80,7 @@ class AllAdminService
         $activites = [
             'candidates',
             'comments',
-            'interviews'
+            'called_interviews'
         ];
         $hrData = ['hr' => $user];
 

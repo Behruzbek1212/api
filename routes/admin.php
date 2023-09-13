@@ -135,6 +135,8 @@ Route::prefix('interview')->name('interview')->group(function () {
     Route::post('/create', [CalledInterviewController::class, 'store'])->name('create');
     Route::post('/edit/status', [CalledInterviewController::class, 'editStatus'])->name('editStatus');
     Route::get('/show', [CalledInterviewController::class, 'show'])->name('show-candidate');
+    Route::post('/update-date', [CalledInterviewController::class, 'update'])->name('update-date');
+    Route::post('/destroy', [CalledInterviewController::class, 'destroy'])->name('destroy');
 });
 
 

@@ -124,26 +124,33 @@ class CompaniesController extends Controller
         ]);
 
         $user = _auth()->user();
+        if($user !== null){
         $customer = $user->customer()->firstOrFail();
-        if($customer->telegram_id == null) {
-            $customer->telegram_id = [$request->chat_id];
-            $customer->save();
+        
+            if($customer->telegram_id == null) {
+                $customer->telegram_id = [$request->chat_id];
+                $customer->save();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'success'
+                ]);
+            }
+            
+            if (!in_array($request->chat_id, $customer->telegram_id)) {
+                $data =   $customer->telegram_id;
+                $data[] = $request->chat_id;
+                $customer->telegram_id = $data;
+                $customer->save();
+            }
+            
             return response()->json([
                 'status' => true,
                 'message' => 'success'
             ]);
         }
-        
-        if (!in_array($request->chat_id, $customer->telegram_id)) {
-            $data =   $customer->telegram_id;
-            $data[] = $request->chat_id;
-            $customer->telegram_id = $data;
-            $customer->save();
-        }
-        
         return response()->json([
-            'status' => true,
-            'message' => 'success'
+            'status' => false,
+            'message' => 'not user'
         ]);
     }
 }
