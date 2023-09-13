@@ -33,6 +33,8 @@ class SelectedQuestionController extends Controller
     }
 
 
+
+
     public function create(Request $request): JsonResponse
     {
 
@@ -74,6 +76,16 @@ class SelectedQuestionController extends Controller
         return response()->json([
             'status' => true,
             'answers' => $jobAnswers
+        ]);
+    }
+
+
+    public function destroy(string $slug): JsonResponse
+    {
+        SelectedQuestion::where('job_slug', $slug)->firstOrFail()->delete();
+        return response()->json([
+            'status' => true,
+            'message' => 'Successfully deleted'
         ]);
     }
 }

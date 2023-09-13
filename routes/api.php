@@ -56,8 +56,6 @@ use PHPUnit\Logging\TestDox\TestResultCollector;
 |
 */
 
-
-
 // Route::get('/', HomeController::class);
 // Route::fallback([HomeController::class, 'fallback']);
 Route::post('/bitrix', [BitrixController::class, 'index'])->name('index');
@@ -199,6 +197,7 @@ Route::prefix('/v1')->group(function () {
     // questions_for_job -----------------------------------------
     Route::prefix('/job_questions')->name('job_questions.')->group(function () {
         Route::get('/get/{slug}', [SelectedQuestionController::class, 'all'])->name('all');
+        Route::post('/destroy/{slug}', [SelectedQuestionController::class, 'destroy'])->name('destroy');
         Route::post('/create', [SelectedQuestionController::class, 'create'])->name('create');
         Route::get('/job_answer/{slug}', [SelectedQuestionController::class, 'job_answer'])->name('job_answer');
     });
