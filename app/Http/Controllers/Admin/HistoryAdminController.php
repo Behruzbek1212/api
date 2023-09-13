@@ -11,7 +11,7 @@ class HistoryAdminController extends Controller
 {
 
    public function allHr(Request $request)
-   {  
+   {
       $request->validate([
          'start' => 'date',
          'end' => 'date'
@@ -21,12 +21,12 @@ class HistoryAdminController extends Controller
       $data = AllAdminService::getAllHr($start, $end, $request->limit);
 
       return response()->json([
-          'data' => $data
+          $data
       ]);
    }
 
-   public function  getOneHr  (Request $request) 
-    { 
+   public function  getOneHr  (Request $request)
+    {
       $request->validate([
          'start' => 'date',
          'end' => 'date',
@@ -36,10 +36,10 @@ class HistoryAdminController extends Controller
       $user_id = $request->hr_id;
       $start = $request->start ?? null;
       $end = $request->end ?? null;
-     
+
       $sortType = $request->sortType ??  null;
-     
-      $data = HrDoneWorkedResource::collection(AllAdminService::getOneHr($start, $end, $user_id, $request->limit,   $sortType)); 
+
+      $data = HrDoneWorkedResource::collection(AllAdminService::getOneHr($start, $end, $user_id, $request->limit,   $sortType));
 
 
        return response()->json([
