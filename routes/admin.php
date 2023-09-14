@@ -98,6 +98,8 @@ Route::prefix('/statistic')->name('statistic.')->group(function () {
     Route::post('/customer', [StatisticAdminController::class, 'getCustomer'])->name('customer');
     Route::post('/candidate', [StatisticAdminController::class, 'getCandidates'])->name('candidate');
     Route::post('/vacancies', [StatisticAdminController::class, 'getVacancies'])->name('vacancies');
+    Route::get('/candidate-hr', [StatisticAdminController::class, 'getHrCreateCandidate']);
+    Route::get('/called-hr', [StatisticAdminController::class, 'getHrCreateCalled']);
 });
 
 Route::prefix('/resume')->name('resume.')->group(function () {

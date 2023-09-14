@@ -5,6 +5,7 @@ namespace App\Repositories;
 
 
 use Illuminate\Support\Facades\DB;
+use Spatie\Activitylog\Models\Activity;
 
 class StatisticRepositories
 {
@@ -46,6 +47,36 @@ class StatisticRepositories
             ->where('deleted_at', null)
             ->groupBy('date')
             ->get();
+            
+        return $query;
+
+    }
+
+
+    public function getChartHrMonth( $dbtable ,$start,  $end)
+    {
+       
+        $query  = Activity::whereJsonContains('properties->user_data->user_role', 'admin')
+            ->whereJsonContains('properties->user_data->user_subrole', 'hr')
+            ->where('log_name', $dbtable)
+            ->where('event', 'created')
+            ->selectRaw('year(created_at) year,   monthname(created_at) as date, count(*) as total')
+            ->whereBetween('created_at', [$start, $end])
+            ->groupBy('year',  'date')
+            ->get();
+        return $query;
+    }
+    
+    public function getChartHrDate( $dbtable ,$start,  $end)
+    {
+        $query  = Activity::whereJsonContains('properties->user_data->user_role', 'admin')
+                ->whereJsonContains('properties->user_data->user_subrole', 'hr')
+                ->where('log_name', $dbtable)
+                ->where('event', 'created')
+                ->selectRaw('date(created_at) as date, count(*) as total')
+                ->whereBetween('created_at', [$start, $end])
+                ->groupBy('date')
+                ->get();
             
         return $query;
 
