@@ -78,7 +78,7 @@ class CalledInterviewCustomerController extends Controller
     public function show(Request $request):JsonResponse
     {   
         
-        $interview  = $this->user->interview()->with('candidate', 'user.customer')
+        $interview  = $this->user->interview()
                     ->where('chat_id', $request->chat_id)
                     ->where('deleted_at', null)
                     ->orderByDesc('created_at')
