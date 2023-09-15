@@ -43,7 +43,8 @@ class CalledInterviewCustomerController extends Controller
         $interview = $this->user->interview()->create([
            'candidate_id' =>$request->candidate_id,
            'date' => $request->date,
-           'status' => 'marked'
+           'status' => 'marked',
+           'chat_id'=> $request->chat_id ?? null
         ]);
 
         return response()->json([
@@ -75,9 +76,10 @@ class CalledInterviewCustomerController extends Controller
      * Display the specified resource.
      */
     public function show(Request $request):JsonResponse
-    {
+    {   
+        
         $interview  = $this->user->interview()->with('candidate', 'user.customer')
-                    ->where('candidate_id', $request->candidate_id)
+                    ->where('chat_id', $request->chat_id)
                     ->where('deleted_at', null)
                     ->orderByDesc('created_at')
                     ->get();
