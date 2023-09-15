@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Http\Resources\HrDoneWorkedResource;
+use App\Models\Candidate;
+use App\Models\Resume;
 use App\Models\User;
 use App\Traits\HasScopes;
 use Carbon\Carbon;
@@ -82,6 +84,7 @@ class AllAdminService
             'comments',
             'called_interviews'
         ];
+        
         $hrData = ['hr' => $user];
 
         foreach($activites as $activit){
@@ -91,8 +94,25 @@ class AllAdminService
             if($start !== null && $end !== null){
                 $count->whereBetween('created_at', [$start, $end]);
             }  
+            if($activit == 'candidates'){
+                $candidateIds = $count
+                    ->pluck('subject_id')
+                    ->toArray();
+                  
+                $candidate = Candidate::whereIn('id', $candidateIds)->pluck('user_id')->toArray();
+               
+                $resume = Resume::whereIn('user_id', $candidate)->pluck('user_id')->toArray();
+                $uniqueId = array_unique($resume);
+                $resumeCreatId = User::whereIn('id', $uniqueId)->count();
+                $hrData['resume'] = $resumeCreatId;
+            }
+
             $hrData[$activit] = $count->count(); 
-        }   
+        } 
+       
+        
+      
+       
 
         return $hrData;
     }
