@@ -10,18 +10,29 @@
 |
 */
 
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return 'welcome';
 });
 
+
+// redirect to payment system or payment form
+
+// Route::middleware('guest:sanctum')->group(function () {
+//     Route::post('/register', [RegisterController::class, 'register'])->name('register');
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/authenticated', [AuthController::class, 'authenticated'])->name('authenticated');
+// });
+
+// Route::middleware(['auth:sanctum', 'is_customer'])->group(function () {
 Route::any('/handle/{paysys}', function ($paysys) {
     (new Goodoneuz\PayUz\PayUz)->driver($paysys)->handle();
 });
 
 
-// redirect to payment system or payment form
 Route::any('/pay/{paysys}/{key}/{amount}', function ($paysys, $key, $amount) {
     $model = Goodoneuz\PayUz\Services\PaymentService::convertKeyToModel($key);
     $url = request('redirect_url', '/'); // redirect url after payment completed
@@ -30,3 +41,5 @@ Route::any('/pay/{paysys}/{key}/{amount}', function ($paysys, $key, $amount) {
         ->driver($paysys)
         ->redirect($model, $amount, 860, $url);
 });
+
+// });
