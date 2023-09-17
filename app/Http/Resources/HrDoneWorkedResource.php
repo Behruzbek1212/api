@@ -26,6 +26,7 @@ class HrDoneWorkedResource extends JsonResource
                 'candidate' => $this->resource['statis']['candidates'] ?? null,
                 'comment' => $this->resource['statis']['comments'] ?? null,
                 'interviews' => $this->resource['statis']['called_interviews'] ?? null,
+                'resume' => $this->resource['statis']['resume'] ?? null,
                 ],
             'hrHistory' => [
                  'data' => HistoryResource::collection($this->resource['history']),

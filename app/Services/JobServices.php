@@ -102,8 +102,12 @@ class JobServices
                     $text4= explode('-',  $salary['max_salary']);
                 }
                 try{
-                    $formattedParts = array_map(function ($text) {
-                        return number_format(trim($text), 0, '', ' ');
+                    $formattedParts = array_map(function ($text) use ($salary) {
+                        if($salary['currency'] == 'USD'){
+                            return  number_format(trim($text), 0, '', ' ') . "$";
+                        } else {
+                            return number_format(trim($text), 0, '', ' ');
+                        }
                     }, $text4);
                 }  catch(Exception $e){
                     $formattedParts = $text4;
