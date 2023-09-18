@@ -96,6 +96,18 @@ class CalledInterviewCustomerController extends Controller
     }
 
     
+   
+    public function showInter(Request $request):JsonResponse
+    {
+      
+        $interview =  $this->user->interview()->where('id', $request->interview_id)->first();
+                      
+
+        return response()->json([
+            'status' => true,
+            'data' => $interview
+        ]);  
+    }
 
     /**
      * Update the specified resource in storage.

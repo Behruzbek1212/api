@@ -53,10 +53,10 @@ class Handler extends ExceptionHandler
             // https://t.me/uzcsbot
             // Http::withOptions(['verify' => false])->post('https://api.telegram.org/bot1627318447:AAEGOUreAjhByN7l2OUl9gp6q_tjZhRLaE4/sendMessage', [
             // https://t.me/jobouz_bot
-            Http::withOptions(['verify' => false])->post('https://api.telegram.org/bot5777417067:AAGvh21OUGVQ7nmSnLbIhzTiZxoyMQMIZKk/sendMessage', [
-                'chat_id' => '-1001821241273',
-                'text' => "title: " . $e->getMessage() . "\n\nFile: " . $e->getFile() . "\nLine: " . $e->getLine()
-            ]);
+            // Http::withOptions(['verify' => false])->post('https://api.telegram.org/bot5777417067:AAGvh21OUGVQ7nmSnLbIhzTiZxoyMQMIZKk/sendMessage', [
+            //     'chat_id' => '-1001821241273',
+            //     'text' => "title: " . $e->getMessage() . "\n\nFile: " . $e->getFile() . "\nLine: " . $e->getLine()
+            // ]);
         });
 
         $this->renderable(function (NotFoundHttpException $e) {

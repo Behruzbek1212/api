@@ -290,6 +290,7 @@ Route::prefix('/v1')->group(function () {
         Route::post('/create', [CalledInterviewCustomerController::class, 'store'])->name('create');
         Route::post('/edit/status', [CalledInterviewCustomerController::class, 'editStatus'])->name('editStatus');
         Route::get('/show', [CalledInterviewCustomerController::class, 'show'])->name('show-candidate');
+        Route::get('/show/interview', [CalledInterviewCustomerController::class, 'showInter'])->name('show-inter');
         Route::post('/update-date', [CalledInterviewCustomerController::class, 'update'])->name('update-date');
         Route::post('/destroy', [CalledInterviewCustomerController::class, 'destroy'])->name('destroy');
     });
