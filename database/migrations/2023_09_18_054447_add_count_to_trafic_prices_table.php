@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('trafic_prices', function (Blueprint $table) {
-            $table->string('count')->after('id')->comment('elonlar soni')->nullable()->change();
+            $table->integer('count')->after('id')->comment('elonlar soni')->nullable();
         });
     }
 

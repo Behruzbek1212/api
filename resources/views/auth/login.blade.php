@@ -145,7 +145,7 @@
                     <div class="panel-body p-3">
                         <form action="{{ route('authenticated') }}" method="post">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                            {{-- @csrf --}}
+                            @csrf
                             {{-- {{ csrf_field() }} --}}
                             <div class="form-group py-2">
                                 <div class="input-field"> <span class="far fa-user p-2"></span>
