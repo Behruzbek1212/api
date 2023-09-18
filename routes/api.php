@@ -345,9 +345,9 @@ Route::prefix('/v2')->group(function () {
 
     Route::prefix('/announcement')->name('announcement.')->group(function () {
         Route::get('/', [AnnouncementController::class, 'all']);
-        Route::post('/create', [AnnouncementController::class, 'create'])->middleware('is_customer');
-        Route::post('/confirmation', [AnnouncementController::class, 'storeConfirmation'])->middleware('is_customer');
-        Route::post('/edit', [AnnouncementController::class, 'update'])->middleware('is_customer');
+        Route::post('/create', [AnnouncementController::class, 'create'])->middleware(['auth:sanctum', 'is_customer']);
+        Route::post('/confirmation', [AnnouncementController::class, 'storeConfirmation'])->middleware(['auth:sanctum', 'is_customer']);
+        Route::post('/edit', [AnnouncementController::class, 'update'])->middleware(['auth:sanctum', 'is_customer']);
     });
 
     // Golden nit telegram bot api routes
