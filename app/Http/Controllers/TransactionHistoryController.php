@@ -39,8 +39,8 @@ class TransactionHistoryController extends Controller
         $request->validate([
             'service_id' => ['integer', 'required'],
             'service_trafic_price_id' => ['integer', 'required'],
-            'started_at' => ['date', 'required'],
-            'expire_at' => ['date', 'required'],
+            'started_at' => ['date', 'nullable'],
+            'expire_at' => ['date', 'nullable'],
         ]);
 
         // Trafic::where('id', $request->service_id)->firstOrFail()->update(['trafic_price_id' => $request->service_trafic_price_id]);
