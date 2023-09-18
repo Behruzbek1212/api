@@ -8,6 +8,8 @@ use App\Models\Customer;
 use App\Models\Job;
 use App\Models\Resume;
 use App\Models\SelectedQuestion;
+use App\Models\Trafic;
+use App\Models\TransactionHistory;
 use App\Models\User;
 use App\Notifications\RespondMessageNotification;
 use App\Services\JobServices;
@@ -308,6 +310,35 @@ class JobController extends Controller
             'trafic_expired_at' => $params['trafic_expired_at'] ?? null,
         ]);
 
+        $trafic = Trafic::where('id', $request->trafic_id)->first();
+
+        if (!empty($trafic)) {
+            $total_amount = User::where('id', $user->id)->first()->balance ?? 0;
+            $service_price = $trafic->price;
+            // if (empty($total_amount)) {
+            //     return $this->errorResponse(__('message.service_count is null'), 403);
+            // }
+
+            if (empty($service_price) && $total_amount <= $service_price) {
+                return $this->errorResponse(__('message.balance'), 403);
+            }
+            $balance = $total_amount - $service_price;
+            User::where('id', $user->id)
+                ->update([
+                    'balance' => $balance
+                ]);
+            TransactionHistory::create([
+                'user_id' => $user->id,
+                'service_id' => $request->trafic_id,
+                'service_count' => 0,
+                'service_sum' => $service_price ?? 0,
+                'service_name' => $trafic->name,
+                'started_at' => $request->started_at ?? null,
+                'expire_at' => $request->expire_at ?? null,
+                'key' => $trafic->key ?? null
+            ]);
+        }
+
         $required_question =  Job::where('id', $job->slug)->firstOrFail()->required_question;
 
         if ($required_question == true) {
@@ -462,7 +493,7 @@ class JobController extends Controller
             'role' => $chat->candidate->user()->first()['role'],
             'chat' => $chat,
             'job' => $chat->job,
-            'resume'=> $chat->resume ?? null,
+            'resume' => $chat->resume ?? null,
             'message' => $params['message'] ?? null
         ]));
 
