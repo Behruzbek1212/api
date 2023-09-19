@@ -36,6 +36,16 @@ class PartyAdminController extends Controller
         ]);
     }
 
+    public function getAllUsers()
+    {
+        $list = PartyHr::query()->get();
+
+        return response()->json([
+            'status' => true,
+            'data' => $list
+        ]);
+    }
+
     public function getUser(Request $request)
     {
         $credentials = $request->validate([
