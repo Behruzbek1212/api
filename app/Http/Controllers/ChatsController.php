@@ -160,13 +160,18 @@ class ChatsController extends Controller
             }
             
             if($min_year !== null || $max_year !== null){
-                if(strpos($min_year, '0.') !== false || strpos($max_year, '0.')){
-                    $min_years =  str_replace('0.','', $min_year);
-                    $max_years = str_replace('0.','', $max_year);
+
+                if (strpos($min_year, '0.') !== false) {
+                    $min_years = intval(str_replace('0.', '', $min_year));
                 } else {
                     $min_years =  intval($min_year * 12)  ?? null;
+                }
+                if (strpos($max_year, '0.') !== false) {
+                    $max_years = intval(str_replace('0.', '', $max_year));
+                } else {
                     $max_years = intval($max_year * 12)  ?? null;
                 }
+                  
                 $datas =   $chats->get()->filter(function ($chat) use ($min_years, $max_years) {
                     $experience = optional($chat->resume)->experience;
                     if($max_years == 0){
