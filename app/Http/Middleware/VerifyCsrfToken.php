@@ -15,6 +15,7 @@ class VerifyCsrfToken extends Middleware
         '/v1/*',
         'handle/*',
         // '*'
-        '/payment/*'
+        // '/payment/*',
+        '/authenticated'
     ];
 }

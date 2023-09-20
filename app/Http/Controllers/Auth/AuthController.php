@@ -13,20 +13,20 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
+
     public function authenticated(Request $request)
     {
 
-        dd(21);
+        // dd($request->all());
         $credentials = $request->validate([
             'phone' => ['required', 'numeric'],
             'password' => ['required', 'string', 'min:8'],
         ]);
-        dd($credentials);
+        // dd($credentials);
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-
-            return redirect()->intended('payment.dashboard');
+            return redirect()->intended('payment/dashboard');
         }
 
         return back()->withErrors([

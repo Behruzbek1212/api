@@ -388,6 +388,7 @@ class JobController extends Controller
      */
     public function edit(Request $request, string $slug): JsonResponse
     {
+        $user = _auth()->user();
         $params = $request->validate([
             'position' => ['string', 'required'],
             'location' => ['numeric', 'required'],
@@ -427,6 +428,16 @@ class JobController extends Controller
             'trafic_id' => $params['trafic_id'] ?? null,
             'trafic_expired_at' => $params['trafic_expired_at'] ?? null
         ]);
+
+        // $required_question =  Job::where('id', $slug)->firstOrFail()->required_question;
+        $selectedQuestion = SelectedQuestion::where('job_slug', $slug)->first();
+        if (!empty($selectedQuestion)) {
+            $selectedQuestion->update([
+                'job_slug' => $slug ?? null,
+                'created_by' => $user->id,
+                'questions' => $request->questions,
+            ]);
+        }
 
         return response()->json([
             'status' => true,
