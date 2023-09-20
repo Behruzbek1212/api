@@ -38,11 +38,11 @@ class AnnouncementServices
     public static function confirmation($request) 
     {
         $user = _auth()->user();
-        $announcement = $user->customer->announcement()->where('id', $request->announcement_id)
-                    ->update([
-                        'status' => true,
-                        'time' => $request->announcement_time
-                    ]);
+        $announcement = $user->customer->announcement()->find($request->announcement_id);
+        $announcement->update([
+                    'status' => true,
+                    'time' => $request->announcement_time
+                ]);
         
         return true;
     }
