@@ -43,8 +43,8 @@ return [
                 'port'   => env('PUSHER_PORT'),
                 'scheme' => 'https',
                 'curl_options' => [
-                    CURLOPT_SSL_VERIFYHOST => 0,
-                    CURLOPT_SSL_VERIFYPEER => 0,
+                    CURLOPT_SSL_VERIFYHOST => 2,
+                    CURLOPT_SSL_VERIFYPEER => 1,
                 ]
         
             ],
