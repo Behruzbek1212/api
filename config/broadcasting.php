@@ -37,16 +37,10 @@ return [
             'app_id' => env('PUSHER_APP_ID'),
             'options' => [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
-                'useTLS' => false,
-                // 'encrypted' => true,
-                'host'   => 'api.jobo.uz',
+                'encrypted' => true,
+                'host'   => env('APP_URL'),
                 'port'   => env('PUSHER_PORT'),
                 'scheme' => 'https',
-                'curl_options' => [
-                    CURLOPT_SSL_VERIFYHOST => 2,
-                    CURLOPT_SSL_VERIFYPEER => 1,
-                ]
-        
             ],
             'client_options' => [
                 // Guzzle client options: https://docs.guzzlephp.org/en/stable/request-options.html
