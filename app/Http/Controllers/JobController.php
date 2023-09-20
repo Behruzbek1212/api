@@ -404,6 +404,8 @@ class JobController extends Controller
             'for_communication_phone' => ['array', 'nullable'],
             'for_communication_link' => ['array', 'nullable'],
             'trafic_id' => ['integer', 'nullable'],
+            'required_question' => ['boolean', 'nullable'],
+            'resume_required' => ['boolean', 'nullable'],
             'trafic_expired_at' => ['date', 'nullable']
         ]);
 
@@ -422,6 +424,8 @@ class JobController extends Controller
             'category_id' => $params['category_id'],
             'sphere' => $params['sphere'],
             'status' => 'approved',
+            'required_question' => $params['required_question'] ?? null,
+            'resume_required' => $params['resume_required'] ?? null,
             'work_hours' => $params['work_hours'] ?? null,
             'for_communication_phone' => $params['for_communication_phone'] ?? null,
             'for_communication_link' => $params['for_communication_link'] ?? null,

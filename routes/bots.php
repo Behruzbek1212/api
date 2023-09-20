@@ -44,6 +44,7 @@ Route::prefix('/_utils/_bots/_party-hr')->name('bots.')->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('add-links', [PartyAdminController::class, 'addLinks'])->name('add-links');
         Route::post('get-users', [PartyAdminController::class, 'getUsers'])->name('get-users');
+        Route::get('get-all-users', [PartyAdminController::class, 'getAllUsers'])->name('getAllUsers');
         Route::post('get-user', [PartyAdminController::class, 'getUser'])->name('get-user');
     });
 });
