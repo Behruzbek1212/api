@@ -107,9 +107,9 @@ class ChatsController extends Controller
                     ->when($min_age || $max_age, function ($query) use ($min_age, $max_age){
                         $query->whereHas('candidate', function ($query) use ($min_age, $max_age){
                             if($max_age == null){
-                                $query->whereRaw("YEAR(birthday) = YEAR(NOW()) - ?", [$min_age]);
+                                $query->whereRaw("YEAR(birthday) <= YEAR(NOW()) - ?", [$min_age]);
                             }elseif ($min_age == null){
-                                $query->whereRaw("YEAR(birthday) = YEAR(NOW()) - ?", [$max_age]);
+                                $query->whereRaw("YEAR(birthday) >= YEAR(NOW()) - ?", [$max_age]);
                             } else {
                                 $min_year = date('Y') - $min_age;
                                 $max_year = date('Y') - $max_age;
@@ -160,7 +160,7 @@ class ChatsController extends Controller
             }
             
             if($min_year !== null || $max_year !== null){
-
+                 
                 if (strpos($min_year, '0.') !== false) {
                     $min_years = intval(str_replace('0.', '', $min_year));
                 } else {
@@ -171,13 +171,17 @@ class ChatsController extends Controller
                 } else {
                     $max_years = intval($max_year * 12)  ?? null;
                 }
-                  
-                $datas =   $chats->get()->filter(function ($chat) use ($min_years, $max_years) {
+                
+                $datas =   $chats->get()->filter(function ($chat) use ($min_years, $max_years, $min_year, $max_year) {
                     $experience = optional($chat->resume)->experience;
-                    if($max_years == 0){
-                        return $experience  == $min_years;
+                    if($min_year == 0 && $max_years == 0){
+                        return $experience  >= 0;
+                    } elseif($min_year == 0 && $max_years !== 0 ){
+                        return $experience >= $min_years && $experience   <= $max_years;
+                    }  elseif($max_years == 0){
+                        return $experience  >= $min_years;
                     } elseif($min_years == 0){
-                        return $experience  == $max_years;
+                        return $experience  <= $max_years;
                     }else {
                         return $experience >= $min_years && $experience   <= $max_years;
                     }

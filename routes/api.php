@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\RestoreController;
 use App\Http\Controllers\BackupController;
+use App\Http\Controllers\BotLoginController;
 use App\Http\Controllers\CalledInterviewCustomerController;
 use App\Http\Controllers\CandidateExamController;
 use App\Http\Controllers\CandidatesController;
@@ -314,6 +315,12 @@ Route::prefix('/v1')->group(function () {
         Route::get('/show/interview', [CalledInterviewCustomerController::class, 'showInter'])->name('show-inter');
         Route::post('/update-date', [CalledInterviewCustomerController::class, 'update'])->name('update-date');
         Route::post('/destroy', [CalledInterviewCustomerController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('bot-login')->name('bot-login')->group(function () {
+        Route::post('/create', [BotLoginController::class, 'store'])->name('create');
+        Route::post('/check', [BotLoginController::class, 'check'])->name('check');
+        Route::post('/destroy', [BotLoginController::class, 'destroy'])->name('destroy');
     });
 
 
