@@ -107,9 +107,9 @@ class ChatsController extends Controller
                     ->when($min_age || $max_age, function ($query) use ($min_age, $max_age){
                         $query->whereHas('candidate', function ($query) use ($min_age, $max_age){
                             if($max_age == null){
-                                $query->whereRaw("YEAR(birthday) = YEAR(NOW()) - ?", [$min_age]);
+                                $query->whereRaw("YEAR(birthday) <= YEAR(NOW()) - ?", [$min_age]);
                             }elseif ($min_age == null){
-                                $query->whereRaw("YEAR(birthday) = YEAR(NOW()) - ?", [$max_age]);
+                                $query->whereRaw("YEAR(birthday) >= YEAR(NOW()) - ?", [$max_age]);
                             } else {
                                 $min_year = date('Y') - $min_age;
                                 $max_year = date('Y') - $max_age;
