@@ -73,7 +73,7 @@ class ChatsController extends Controller
         $max_year = request()->input('max_year') ?? null;
         $orderBy = request()->input('orderBy') ?? null;
         $orderType = request()->input('orderType') ?? null;
-        $languages =  request()->input('languages') ?? null;
+        $languages =  json_decode(request()->input('languages'), true) ?? null;
         
 
         $address = request()->input('address') ?? null;
