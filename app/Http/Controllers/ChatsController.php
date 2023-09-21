@@ -74,6 +74,7 @@ class ChatsController extends Controller
         $orderBy = request()->input('orderBy') ?? null;
         $orderType = request()->input('orderType') ?? null;
         $languages = request()->input('languages') ?? null;
+        $address = request()->input('address') ?? null;
         $chats = match ($user->role) {
             'candidate' =>
                 $user->candidate->chats()
@@ -140,6 +141,11 @@ class ChatsController extends Controller
                                     ]);
                                 }
                           
+                        });
+                    })
+                    ->when($address, function($query) use ($address){
+                        $query->whereHas('candidate', function ($querys) use ($address) {
+                                $querys->where('address', $address);
                         });
                     })
                     ,

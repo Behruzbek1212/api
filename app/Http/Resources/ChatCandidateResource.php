@@ -28,6 +28,7 @@ class ChatCandidateResource extends JsonResource
                 'avatar'=> $this->candidate->avatar ?? null,
                 'birthday'=> $this->candidate->birthday ?? null,
                 'active' => $this->candidate->active ?? null,
+                'address' => $this->candidate->address ?? null,
                 'specialization' => $this->candidate->specialization ?? null,
 
             ],
