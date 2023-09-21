@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\RestoreController;
 use App\Http\Controllers\BackupController;
 use App\Http\Controllers\CalledInterviewCustomerController;
+use App\Http\Controllers\CandidateExamController;
 use App\Http\Controllers\CandidatesController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ChatsController;
@@ -19,6 +20,7 @@ use App\Http\Controllers\CustomerChatCommentController;
 use App\Http\Controllers\CustomerStatusController;
 use App\Http\Controllers\DeleteDataController;
 use App\Http\Controllers\EducationLevelController;
+use App\Http\Controllers\ExamController;
 use App\Http\Controllers\GoldenNitController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\HomeController;
@@ -42,6 +44,7 @@ use App\Http\Controllers\User\ChangePasswordController;
 use App\Http\Controllers\User\ChangeRoleController;
 use App\Http\Controllers\Utils\UploadController;
 use App\Http\Controllers\WishlistController;
+use App\Models\CandidateExam;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Route;
 use PHPUnit\Logging\TestDox\TestResultCollector;
@@ -179,6 +182,24 @@ Route::prefix('/v1')->group(function () {
     // trafic_price -----------------------------------------
     Route::prefix('/trafic_price')->name('trafic_price.')->group(function () {
         Route::get('/', [TraficPriceController::class, 'all'])->name('all');
+    });
+
+    // exams -----------------------------------------
+    Route::prefix('/exams')->name('exams.')->group(function () {
+        Route::get('/', [ExamController::class, 'all'])->name('all');
+    });
+
+
+    // exams  for candidate -----------------------------------------
+    Route::prefix('/candidate_exams')->name('exams.')->group(function () {
+        Route::get('/', [CandidateExamController::class, 'list'])->name('all');
+    });
+
+    // exams for customer -----------------------------------------
+    Route::middleware(['auth:sanctum', 'is_customer'])->group(function () {
+        Route::prefix('/exams')->group(function () {
+            Route::post('/create', [CandidateExamController::class, 'create'])->name('create');
+        });
     });
 
     // Companies -----------------------------------------

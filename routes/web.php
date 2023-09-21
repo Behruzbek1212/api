@@ -18,13 +18,9 @@ Route::get('/', function () {
     return 'welcome';
 });
 
-
 // redirect to payment system or payment form
 
-Route::middleware('guest:sanctum')->group(function () {
-    //     Route::post('/register', [RegisterController::class, 'register'])->name('register');
-    Route::get('/login', [AuthController::class, 'login'])->name('login');
-});
+Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/authenticated', [AuthController::class, 'authenticated'])->name('authenticated');
 
 // Route::middleware(['auth:sanctum', 'is_customer'])->group(function () {
