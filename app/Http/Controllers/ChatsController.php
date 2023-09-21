@@ -175,13 +175,13 @@ class ChatsController extends Controller
                 $datas =   $chats->get()->filter(function ($chat) use ($min_years, $max_years, $min_year, $max_year) {
                     $experience = optional($chat->resume)->experience;
                     if($min_year == 0 && $max_years == 0){
-                        return $experience  == 0;
+                        return $experience  >= 0;
                     } elseif($min_year == 0 && $max_years !== 0 ){
                         return $experience >= $min_years && $experience   <= $max_years;
                     }  elseif($max_years == 0){
-                        return $experience  == $min_years;
+                        return $experience  >= $min_years;
                     } elseif($min_years == 0){
-                        return $experience  == $max_years;
+                        return $experience  <= $max_years;
                     }else {
                         return $experience >= $min_years && $experience   <= $max_years;
                     }
