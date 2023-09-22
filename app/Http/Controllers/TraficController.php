@@ -20,7 +20,7 @@ class TraficController extends Controller
 
     public function allTelegram(Request $request)
     {
-        $trafics = Trafic::where('key',Trafic::KEY_FOR_TELEGRAM)->get();
+        $trafics = Trafic::where('key', Trafic::KEY_FOR_TELEGRAM)->get();
         $list = TraficResource::collection($trafics);
         return response()->json([
             'status' => true,
