@@ -54,8 +54,8 @@ class ChatsController extends Controller
             'data' => $data
         ]);
     }
-    
-     
+
+
 
 
     public function listAll()
@@ -73,8 +73,9 @@ class ChatsController extends Controller
         $max_year = request()->input('max_year') ?? null;
         $orderBy = request()->input('orderBy') ?? null;
         $orderType = request()->input('orderType') ?? null;
+
         $languages =  json_decode(request()->input('languages'), true) ?? null;
-        
+
 
         $address = request()->input('address') ?? null;
         $chats = match ($user->role) {
@@ -92,20 +93,20 @@ class ChatsController extends Controller
                 $user->customer->chats()
                     ->with(['job','resume'])
                     ->where('deleted_at', null)
-                  
+
                     ->whereHas('job', function ($query) {
                         return $query->where('deleted_at', null);
                     })
                     ->when($sex, function ($query) use ($sex){
                         $query->whereHas('candidate', function ($query) use ($sex){
                             $query->where('sex', $sex);
-                        });  
+                        });
                     })
-                    
+
                     ->when(request()->input('educ_level'), function($query) {
                         $query->whereHas('candidate', function ($query) {
                             $query->where('education_level', request()->input('educ_level'));
-                        }); 
+                        });
                     })
                     ->when($min_age || $max_age, function ($query) use ($min_age, $max_age){
                         $query->whereHas('candidate', function ($query) use ($min_age, $max_age){
@@ -117,19 +118,19 @@ class ChatsController extends Controller
                                 $min_year = date('Y') - $min_age;
                                 $max_year = date('Y') - $max_age;
                                 $query->whereBetween(DB::raw('YEAR(birthday)'), [$max_year, $min_year]);
-                            } 
-                        }); 
+                            }
+                        });
                     })
                     ->when($start && $end, function ($query) use ($start, $end){
                         if($start !== null && $end !== null){
                             $query->whereBetween('created_at', [request()->input('start'), request()->input('end')]);
-                        }  
+                        }
                     })
-                    
+
                     ->when($slug, function ($query) use ($slug) {
                         if($slug !== null){
-                            $query->where('job_slug', request()->input('slug')); 
-                        }  
+                            $query->where('job_slug', request()->input('slug'));
+                        }
                     })
                     ->when($status, function ($query) use ($status) {
                         if($status !== null){
@@ -142,7 +143,7 @@ class ChatsController extends Controller
                                         ['language' => $language['language'], 'rate' => $language['rate']]
                                     ]);
                                 }
-                          
+
                         });
                     })
                     ->when($address, function($query) use ($address){
@@ -151,24 +152,24 @@ class ChatsController extends Controller
                         });
                     })
                     ,
-                 
+
             default => null
         };
 
-      
+
         if($user->role == 'customer'){
-            
+
             $perPage = request()->get('limit') ?? 10;
             if($orderBy !== null && $orderType !== null){
                 $chats->whereHas('candidate', function ($query) use ($orderBy,$orderType){
                     $query->orderBy($orderBy, $orderType);
-                });  
+                });
             } else {
                 $chats->orderBy('updated_at', 'desc');
             }
-            
+
             if($min_year !== null || $max_year !== null){
-                 
+
                 if (strpos($min_year, '0.') !== false) {
                     $min_years = intval(str_replace('0.', '', $min_year));
                 } else {
@@ -179,7 +180,7 @@ class ChatsController extends Controller
                 } else {
                     $max_years = intval($max_year * 12)  ?? null;
                 }
-                
+
                 $datas =   $chats->get()->filter(function ($chat) use ($min_years, $max_years, $min_year, $max_year) {
                     $experience = optional($chat->resume)->experience;
                     if($min_year == 0 && $max_years == 0){
@@ -209,12 +210,12 @@ class ChatsController extends Controller
 
             $data = ChatCandidateResource::collection($chatsPaginated);
         }
-        
+
         if($user->role == 'candidate') {
             $data = ChatCustomerResource::collection($chats);
-          
+
         }
-       
+
         return $this->successPaginate($data);
     }
 
@@ -237,7 +238,7 @@ class ChatsController extends Controller
                 $user->candidate->chats()
                     ->withExists(['resume', 'customer'])
                     ->with('messages')
-                    
+
                     ->findOrFail($id),
 
             'customer' =>
@@ -272,11 +273,11 @@ class ChatsController extends Controller
             'role' => $request->user()->role
         ]);
         $resume = $chat->resume()->first() ?? null;
-        
+
         if($request->user()->role  == 'customer'){
             event(new SendMessage($message, $chat->customer()->first(), $chat->candidate()->first(), $resume,  $chat, $request->user()->role , $chat->job()->first()));
         }
-       
+
         return response()->json([
             'status' => true
         ]);
@@ -285,7 +286,7 @@ class ChatsController extends Controller
     public function getMessage($id):JsonResponse
     {
         $message =  Messages::where('chat_id', $id)->get();
-        
+
         return response()->json([
             'status' => true,
             'message' => $message
