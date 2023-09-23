@@ -8,6 +8,7 @@ use App\Http\Resources\ChatCustomerResource;
 use App\Models\Chat\Chat;
 use App\Models\Chat\Messages;
 use App\Models\User;
+use App\Services\ChatsServices;
 use App\Traits\ApiResponse;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Http\JsonResponse;
@@ -62,160 +63,18 @@ class ChatsController extends Controller
     {
         /** @var Authenticatable|User $user */
         $user = _auth()->user();
-        $start = request()->input('start') ?? null;
-        $end = request()->input('end') ??  null;
-        $slug =  request()->input('slug') ?? null;
-        $status = request()->input('status') ?? null;
-        $sex =  request()->input('sex') ?? null;
-        $min_age = request()->input('min_age') ?? null;
-        $max_age = request()->input('max_age') ?? null;
-        $min_year = request()->input('min_year') ?? null;
-        $max_year = request()->input('max_year') ?? null;
-        $orderBy = request()->input('orderBy') ?? null;
-        $orderType = request()->input('orderType') ?? null;
-        $languages =  json_decode(request()->input('languages'), true) ?? null;
         
-
-        $address = request()->input('address') ?? null;
         $chats = match ($user->role) {
             'candidate' =>
-                $user->candidate->chats()
-                    ->with(['resume'])
-                    ->where('deleted_at', null)
-                    ->orderBy('updated_at', 'desc')
-                    ->whereHas('job', function ($query) {
-                        return $query->where('deleted_at', null);
-                    })
-                    ->paginate(request()->get('limit') ?? 10),
+                ChatCustomerResource::collection(ChatsServices::getInstance()->listCandidate()),
 
             'customer' =>
-                $user->customer->chats()
-                    ->with(['job','resume'])
-                    ->where('deleted_at', null)
-                  
-                    ->whereHas('job', function ($query) {
-                        return $query->where('deleted_at', null);
-                    })
-                    ->when($sex, function ($query) use ($sex){
-                        $query->whereHas('candidate', function ($query) use ($sex){
-                            $query->where('sex', $sex);
-                        });  
-                    })
-                    
-                    ->when(request()->input('educ_level'), function($query) {
-                        $query->whereHas('candidate', function ($query) {
-                            $query->where('education_level', request()->input('educ_level'));
-                        }); 
-                    })
-                    ->when($min_age || $max_age, function ($query) use ($min_age, $max_age){
-                        $query->whereHas('candidate', function ($query) use ($min_age, $max_age){
-                            if($max_age == null){
-                                $query->whereRaw("YEAR(birthday) <= YEAR(NOW()) - ?", [$min_age]);
-                            }elseif ($min_age == null){
-                                $query->whereRaw("YEAR(birthday) >= YEAR(NOW()) - ?", [$max_age]);
-                            } else {
-                                $min_year = date('Y') - $min_age;
-                                $max_year = date('Y') - $max_age;
-                                $query->whereBetween(DB::raw('YEAR(birthday)'), [$max_year, $min_year]);
-                            } 
-                        }); 
-                    })
-                    ->when($start && $end, function ($query) use ($start, $end){
-                        if($start !== null && $end !== null){
-                            $query->whereBetween('created_at', [request()->input('start'), request()->input('end')]);
-                        }  
-                    })
-                    
-                    ->when($slug, function ($query) use ($slug) {
-                        if($slug !== null){
-                            $query->where('job_slug', request()->input('slug')); 
-                        }  
-                    })
-                    ->when($status, function ($query) use ($status) {
-                        if($status !== null){
-                            $query->where('status', request()->input('status'));
-                        }
-                    })->when($languages, function($query) use ($languages){
-                        $query->whereHas('candidate', function ($querys) use ($languages) {
-                                foreach ($languages as $language) {
-                                    $querys->whereJsonContains('languages', [
-                                        ['language' => $language['language'], 'rate' => $language['rate']]
-                                    ]);
-                                }
-                          
-                        });
-                    })
-                    ->when($address, function($query) use ($address){
-                        $query->whereHas('candidate', function ($querys) use ($address) {
-                                $querys->where('address', $address);
-                        });
-                    })
-                    ,
+                ChatCandidateResource::collection(ChatsServices::getInstance()->list()),
                  
             default => null
         };
 
-      
-        if($user->role == 'customer'){
-            
-            $perPage = request()->get('limit') ?? 10;
-            if($orderBy !== null && $orderType !== null){
-                $chats->whereHas('candidate', function ($query) use ($orderBy,$orderType){
-                    $query->orderBy($orderBy, $orderType);
-                });  
-            } else {
-                $chats->orderBy('updated_at', 'desc');
-            }
-            
-            if($min_year !== null || $max_year !== null){
-                 
-                if (strpos($min_year, '0.') !== false) {
-                    $min_years = intval(str_replace('0.', '', $min_year));
-                } else {
-                    $min_years =  intval($min_year * 12)  ?? null;
-                }
-                if (strpos($max_year, '0.') !== false) {
-                    $max_years = intval(str_replace('0.', '', $max_year));
-                } else {
-                    $max_years = intval($max_year * 12)  ?? null;
-                }
-                
-                $datas =   $chats->get()->filter(function ($chat) use ($min_years, $max_years, $min_year, $max_year) {
-                    $experience = optional($chat->resume)->experience;
-                    if($min_year == 0 && $max_years == 0){
-                        return $experience  >= 0;
-                    } elseif($min_year == 0 && $max_years !== 0 ){
-                        return $experience >= $min_years && $experience   <= $max_years;
-                    }  elseif($max_years == 0){
-                        return $experience  >= $min_years;
-                    } elseif($min_years == 0){
-                        return $experience  <= $max_years;
-                    }else {
-                        return $experience >= $min_years && $experience   <= $max_years;
-                    }
-                });
-            } else {
-                $datas = $chats->get();
-            }
-
-            $page = LengthAwarePaginator::resolveCurrentPage();
-            $chatsPaginated = new LengthAwarePaginator(
-                $datas->forPage($page, $perPage),
-                $datas->count(),
-                $perPage,
-                $page,
-                ['path' => LengthAwarePaginator::resolveCurrentPath()]
-            );
-
-            $data = ChatCandidateResource::collection($chatsPaginated);
-        }
-        
-        if($user->role == 'candidate') {
-            $data = ChatCustomerResource::collection($chats);
-          
-        }
-       
-        return $this->successPaginate($data);
+        return $this->successPaginate($chats);
     }
 
 

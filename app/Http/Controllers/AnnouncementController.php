@@ -42,10 +42,11 @@ class AnnouncementController extends Controller
 
     public function create(Request $request):JsonResponse
     {
-        try {
+      
             $request->validate([
                 'job_id' => 'required|integer'
             ]);
+        try {
             $user = _auth()->user();
             $transactionHistory = TransactionHistory::query()->where('user_id', $user->id)->where('key', Trafic::KEY_FOR_TELEGRAM)->latest()->firstOrFail();
           
