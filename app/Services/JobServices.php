@@ -137,7 +137,7 @@ class JobServices
         $jpg_image = Image::make($rasmUrl);
         $green = '#F0922E';
         // Custom text generator to wrap the text based on the maximum width
-        $lines = wordwrap($text1, 42, "\n", true);
+        $lines = wordwrap($text1, 38, "\n", true);
         $words = explode(' ', $text1); // Matnni so'zlarga bo'lib massivga ajratamiz
         $wordCount = count($words);
 
