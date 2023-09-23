@@ -26,7 +26,7 @@ class AnnouncementResource extends JsonResource
             'job-slug' => $this->slug ?? null,
             'image' =>  $this->image($this->customer->user->phone, $this->title, $this->salary, $this->location_id, $postNumber )?? null,
             "address" => $this->location_id ?? null,
-            'links' => $this->for_connection_link ?? null,
+            'links' => $this->for_connection_link ? $this->for_connection_link : [],
             'for_connection' => $this->getForConnection($this->customer->user->phone, $this->for_connection_phone ) ?? null,
             'post_number' => $postNumber,
             'company_name' =>  $this->customer->name ?? null,
