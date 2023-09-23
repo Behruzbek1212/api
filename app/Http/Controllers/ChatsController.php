@@ -55,26 +55,30 @@ class ChatsController extends Controller
             'data' => $data
         ]);
     }
-    
-     
+
+
 
 
     public function listAll()
     {
         /** @var Authenticatable|User $user */
         $user = _auth()->user();
+
         
+
         $chats = match ($user->role) {
             'candidate' =>
                 ChatCustomerResource::collection(ChatsServices::getInstance()->listCandidate()),
 
             'customer' =>
+
                 ChatCandidateResource::collection(ChatsServices::getInstance()->list()),
                  
             default => null
         };
 
         return $this->successPaginate($chats);
+
     }
 
 
@@ -96,7 +100,7 @@ class ChatsController extends Controller
                 $user->candidate->chats()
                     ->withExists(['resume', 'customer'])
                     ->with('messages')
-                    
+
                     ->findOrFail($id),
 
             'customer' =>
@@ -131,11 +135,11 @@ class ChatsController extends Controller
             'role' => $request->user()->role
         ]);
         $resume = $chat->resume()->first() ?? null;
-        
+
         if($request->user()->role  == 'customer'){
             event(new SendMessage($message, $chat->customer()->first(), $chat->candidate()->first(), $resume,  $chat, $request->user()->role , $chat->job()->first()));
         }
-       
+
         return response()->json([
             'status' => true
         ]);
@@ -144,7 +148,7 @@ class ChatsController extends Controller
     public function getMessage($id):JsonResponse
     {
         $message =  Messages::where('chat_id', $id)->get();
-        
+
         return response()->json([
             'status' => true,
             'message' => $message

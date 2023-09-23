@@ -17,8 +17,8 @@ class ApiToken
     {
         if ($request->api_token != 'p2lbgWkFrykA4QyUmpHihzmc5BNzIABq') {
             return response()->json('Unauthorized', 401);
-        } 
-    
+        }
+
         return $next($request);
     }
 }

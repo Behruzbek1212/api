@@ -118,6 +118,8 @@ class JobController extends Controller
     public function similar_jobs(Request $request)
     {
 
+        // dd(request('title'));
+
         $params = $request->validate([
             'limit' => ['integer', 'nullable']
         ]);
@@ -126,7 +128,8 @@ class JobController extends Controller
             // Check if customer status is active
             ->with('customer')
             ->when(request('title'), function ($query) {
-                $query->whereRaw('`title` like ?', ['%' . request('title') . '%']);
+                // $query->whereRaw('`title` like ?', ['%' . request('title') . '%']);
+                $query->where('title', 'like', '%' . request('title') . '%');
             })
             ->when(request('work_type'), function ($query) {
                 $query->where('work_type', '=', request('work_type'));
