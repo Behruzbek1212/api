@@ -23,7 +23,7 @@ class AnnouncementResource extends JsonResource
             'title' => $this->title ?? null,
             'salary' => $this->salary ?? null,
             'work_hours' => $this->work_hours ?? null,
-            'job-slug' => $this->slug ?? null,
+            'job_slug' => $this->slug ?? null,
             'image' =>  $this->image($this->customer->user->phone, $this->title, $this->salary, $this->location_id, $postNumber )?? null,
             "address" => $this->location_id ?? null,
             'links' => $this->for_connection_link ? $this->for_connection_link : [],
