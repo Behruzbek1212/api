@@ -6,6 +6,7 @@ use App\Models\Announcement;
 use App\Models\Trafic;
 use App\Models\TransactionHistory;
 use App\Services\AnnouncementServices;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -37,6 +38,39 @@ class AnnouncementController extends Controller
             'status' => false,
             'data' => $announcementData
         ]);
+    }
+
+
+    public function dateCheck(Request $request):JsonResponse
+    {
+        $request->validate([
+           'announ_date' => 'required|date_format:Y-m-d'
+        ]);
+        $carbon =  Carbon::now()->format('Y-m-d');
+        try{
+            if( $request->announ_date >=  $carbon ){
+
+                $availableTimes = AnnouncementServices::checkDate($request, $carbon);
+    
+                return response()->json([
+                    'status' => true,
+                    'data' => $availableTimes
+                ]);
+            }
+
+            return response()->json([
+                'status' => false,
+                'data' => []
+            ]);
+
+        } catch(Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' =>  $e->getMessage(),
+                'data' => []
+            ]);
+        }
+        
     }
 
 
@@ -90,13 +124,22 @@ class AnnouncementController extends Controller
                 'announcement_id' => 'required|integer',
                 'announcement_time' => 'required|date'
             ]);
+            $carbon =  Carbon::now()->format('Y-m-d H:i:s');
+            
+            if($request->announcement_time >= $carbon){
+                $data = AnnouncementServices::confirmation($request);
     
-            $data = AnnouncementServices::confirmation($request);
-    
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Successfully confirmation'
+                ]);
+            }
+
             return response()->json([
-                'status' => true,
-                'message' => 'Successfully confirmation'
+                'status' => false,
+                'message' => 'error date'
             ]);
+           
         } 
         catch (Exception $e)
         {

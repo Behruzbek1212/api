@@ -68,19 +68,26 @@ class AnnouncementController extends Controller
             'announcement_id' => 'required|integer',
             'announcement_time' => 'required|date'
         ]);
+        $carbon =  Carbon::now()->format('Y-m-d H:i:s');
+        if($request->announcement_time >= $carbon){
+            $announcement = Announcement::find($request->announcement_id);
 
-        $announcement = Announcement::find($request->announcement_id);
+            $announcement->update([
+               'status' => true,
+               'time' => $request->announcement_time
+            ]);
 
-        $announcement->update([
-           'status' => true,
-           'time' => $request->announcement_time
-        ]);
+            return response()->json([
+                'status' => true,
+                'message' => 'Successfully confirmation'
+            ]);
+        }
 
         return response()->json([
-            'status' => true,
-            'message' => 'Successfully confirmation'
+            'status' => false,
+            'message' => 'error date'
         ]);
-
+        
     }
 
     /**

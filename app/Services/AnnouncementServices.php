@@ -6,6 +6,7 @@ use App\Http\Resources\AnnouncementResource;
 use App\Models\Announcement;
 use App\Models\Location;
 use App\Traits\HasScopes;
+use Carbon\Carbon;
 use File;
 
 class AnnouncementServices
@@ -33,7 +34,35 @@ class AnnouncementServices
         return $data;
 
     }
+    
+    public static function checkDate($request, $carbon)
+    {
+        $announcement = Announcement::where('deleted_at', null)->whereDate('time', $request->announ_date)->pluck('time')->map(function ($time) {
+            return Carbon::parse($time)->format('H:i');
+        })->toArray();
 
+        $date = Carbon::parse($request->announ_date);
+
+        $times = [];
+        for ($i = 0; $i < 24; $i++) {
+            for ($j = 0; $j < 60; $j += 30) {
+                $time = $date->setTime($i, $j);
+                $times[] = $time->format('H:i');
+            }
+        }
+
+        $availableTimes = array_diff($times, $announcement);
+
+        if ($request->announ_date ==  $carbon) {
+            $currentHour = Carbon::now('Asia/Tashkent')->format('H:i');
+            
+            $availableTimes = array_filter($availableTimes, function ($time) use ($currentHour) {
+                return $time >= $currentHour;
+            });
+        }
+
+        return array_values($availableTimes);
+    }
 
     public static function confirmation($request) 
     {
