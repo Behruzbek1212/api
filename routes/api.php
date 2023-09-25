@@ -319,6 +319,7 @@ Route::prefix('/v1')->group(function () {
 
     Route::prefix('bot-login')->name('bot-login')->group(function () {
         Route::post('/create', [BotLoginController::class, 'store'])->name('create');
+        Route::post('/update-lang', [BotLoginController::class, 'languageUpdate'])->name('update-lang');
         Route::post('/check', [BotLoginController::class, 'check'])->name('check');
         Route::post('/destroy', [BotLoginController::class, 'destroy'])->name('destroy');
     });

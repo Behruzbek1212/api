@@ -22,7 +22,7 @@ class BotLoginController extends Controller
             'telegram_id' => 'required|integer'
         ]);
         
-        $bot = BotLogin::where('telegram_id', $request->telegram_id)->where('deleted_at', null)->first();
+        $bot = BotLogin::where('telegram_id', $request->telegram_id)->where('deleted_at', null)->latest()->firstOrFail();
 
         if($bot !== null){
             return response()->json([
@@ -63,7 +63,26 @@ class BotLoginController extends Controller
         
     }
 
-    
+    public function languageUpdate(Request $request):JsonResponse
+    {
+        $request->validate([
+            'telegram_id' => 'required|integer',
+            'token' => 'required|string',
+            'language' => 'required|string|max:15',
+        ]);
+
+        $bot = BotLogin::where('telegram_id', $request->telegram_id)
+                       ->where('token', $request->token) 
+                       ->where('deleted_at', null)->latest()->firstOrFail();
+        $bot->update([
+           'language' => $request->language
+        ]);            
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Successfully update',
+        ]);
+    }
 
     
 
