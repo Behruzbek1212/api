@@ -21,7 +21,7 @@ class CandidateExamController extends Controller
 
         $candidate_id = Candidate::where('user_id', $user->id)->first()->id;
         $candidate_exams = CandidateExam::with('exams')
-            ->where('candidate_id', $candidate_id)
+            ->where('id', $request->candidate_exam_id)
             ->where('customer_id', $request->customer_id)->first();
         // $list = CandidateExamResource::collection($candidate_exams);
         return response()->json([
@@ -35,7 +35,7 @@ class CandidateExamController extends Controller
     {
 
         $params = $request->validate([
-            'candidate_id' => ['numeric', 'required'],
+            'candidate_id' => ['numeric', 'nullable'],
             'customer_id' => ['numeric', 'required'],
             'exams' => ['array', 'required'],
         ]);
@@ -50,7 +50,7 @@ class CandidateExamController extends Controller
         }
         return response()->json([
             'status' => true,
-            'message' => 'CandidateExam successfully created',
+            'candidate_exam_id' => $candidate_exams->id ?? []
         ]);
     }
 }

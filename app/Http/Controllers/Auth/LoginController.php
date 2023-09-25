@@ -11,13 +11,19 @@ use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
+
+
+    public function login()
+    {
+        return view('auth.login');
+    }
     /**
      * Login existing user with phone and password.
      *
      * @param  Request  $request
      * @return JsonResponse
      */
-    public function login(Request $request): JsonResponse
+    public function logins(Request $request): JsonResponse
     {
         $request->validate([
             'phone' => ['required', 'numeric'],
