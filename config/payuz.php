@@ -9,7 +9,7 @@ return [
     'control_panel' => [
         //middleware value types: array, string, null
         //'web' is optional if middleware is empty or null it will be added automatically
-        'middleware' => 'auth:sanctum',
+        'middleware' => null,
     ],
     'multi_transaction' => true,
 ];

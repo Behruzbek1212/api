@@ -19,11 +19,11 @@ Route::get('/', function () {
 });
 
 // redirect to payment system or payment form
-
+// Route::middleware('guest:sanctum')->group(function () {
 Route::get('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/authenticated', [AuthController::class, 'authenticated'])->name('authenticated');
-
-// Route::middleware(['auth:sanctum', 'is_customer'])->group(function () {
+//     // Route::post('/login', [LoginController::class, 'login'])->name('login');
+    Route::post('/authenticated', [AuthController::class, 'authenticated'])->name('authenticated');
+// });
 Route::any('/handle/{paysys}', function ($paysys) {
     (new Goodoneuz\PayUz\PayUz)->driver($paysys)->handle();
 });
@@ -37,5 +37,3 @@ Route::any('/pay/{paysys}/{key}/{amount}', function ($paysys, $key, $amount) {
         ->driver($paysys)
         ->redirect($model, $amount, 860, $url);
 });
-
-// });
