@@ -12,11 +12,6 @@ use Illuminate\Support\Facades\Hash;
 class LoginController extends Controller
 {
 
-
-    // public function login()
-    // {
-    //     return view('auth.login');
-    // }
     /**
      * Login existing user with phone and password.
      *

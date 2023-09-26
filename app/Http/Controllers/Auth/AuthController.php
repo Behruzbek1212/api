@@ -17,26 +17,24 @@ class AuthController extends Controller
     }
 
 
-    // public function authenticated(Request $request)
-    // {
+    public function authenticated(Request $request)
+    {
 
-    //     // dd($request->all());
-    //     $credentials = $request->validate([
-    //         'phone' => ['required', 'numeric'],
-    //         'password' => ['required', 'string', 'min:8'],
-    //     ]);
-    //     // dd($credentials);
+        $credentials = $request->validate([
+            'phone' => ['required', 'numeric'],
+            'password' => ['required', 'string', 'min:8'],
+        ]);
 
-    //     if (Auth::attempt($credentials)) {
-    //       $das =  $request->session()->regenerate();
-    //       dd($das);
-    //         return redirect()->intended('payment/projects');
-    //     }
 
-    //     return back()->withErrors([
-    //         'email' => 'The provided credentials do not match our records.',
-    //     ])->onlyInput('email');
-    // }
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended('payment/projects');
+        }
+
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ])->onlyInput('email');
+    }
 
     // public function authenticated(Request $request)
     // {
