@@ -12,6 +12,7 @@ use App\Services\MobileService;
 use App\Traits\ApiResponse;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\QueryException;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -32,7 +33,13 @@ class CompaniesController extends Controller
             ->orderByDesc('updated_at');
 
         if ($request->has('title'))
-            $customers->where('name', 'like', '%' . $request->get('title') . '%');
+            $customers->where(function (Builder $query) use ($request) {
+                $query->where('name', 'like', '%' . $request->get('title') . '%');
+                $query->orWhereHas('user', function ($query) use ($request) {
+                    $query->where('phone', 'like', '%' . $request->get('title') . '%');
+                });
+            });
+           
 
         return response()->json([
             'status' => true,
