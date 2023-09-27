@@ -122,7 +122,7 @@ class JobsController extends Controller
             'work_type' => ['string', 'in:fulltime,remote,partial,hybrid', 'required'],
             'sphere' => ['array', 'required'],
             'languages' => ['array', 'nullable'],
-            'salary' => ['array:amount,currency,agreement', 'required'],
+            'salary' => ['array:amount,currency,agreement,min_salary,max_salary', 'required'],
         ], $rule));
     }
 }
