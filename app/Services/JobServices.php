@@ -90,7 +90,7 @@ class JobServices
         $text3 = Location::find($address)['name']['uz'] ?? "";
 
 
-        if (isset($salary['agreement']) && $salary['agreement'] !== false) {
+        if (isset($salary['agreement']) && $salary['agreement'] !== true) {
             try{
                 if (isset($salary['amount']) && $salary['amount'] !== null) {
                     $text4 = explode('-', $salary['amount']);
