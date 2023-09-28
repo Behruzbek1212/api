@@ -20,9 +20,12 @@ Route::get('/', function () {
 
 // redirect to payment system or payment form
 // Route::middleware('guest:sanctum')->group(function () {
-Route::get('/login', [AuthController::class, 'login'])->name('login');
-//     // Route::post('/login', [LoginController::class, 'login'])->name('login');
-    Route::post('/authenticated', [AuthController::class, 'authenticated'])->name('authenticated');
+// Route::get('/login', [AuthController::class, 'login'])->name('login');
+// Route::post('/login', [LoginController::class, 'login'])->name('login');
+
+// Route::post('/authenticated', [AuthController::class, 'authenticated'])->name('authenticated');
+
+
 // });
 Route::any('/handle/{paysys}', function ($paysys) {
     (new Goodoneuz\PayUz\PayUz)->driver($paysys)->handle();

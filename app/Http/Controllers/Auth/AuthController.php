@@ -26,7 +26,7 @@ class AuthController extends Controller
         ]);
 
 
-        if (Auth::attempt($credentials)) {
+        if (auth('web')->attempt($credentials)) {
             $request->session()->regenerate();
             return redirect()->intended('payment/projects');
         }
