@@ -66,8 +66,18 @@ use PHPUnit\Logging\TestDox\TestResultCollector;
 Route::post('/bitrix', [BitrixController::class, 'index'])->name('index');
 Route::get('/cron_jobs', [JobController::class, 'cron_jobs'])->name('cron_jobs');
 Route::get('/cron_backup', [BackupController::class, 'backup'])->name('cron_backup');
-Route::prefix('/v1')->group(function () {
 
+Route::prefix('/v1')->group(function () {
+     Route::get('/block-number', function () {
+        $data = ["refresh"=> 0, "items"=> [
+            ["number"=> "001", "name"=> "Name 1", "firstname"=> "", "lastname"=> "", "phone"=> "947980058", "mobile"=> "", "email"=> "", "address"=> "", "city"=> "", "state"=> "", "zip"=> "", "comment"=> "", "presence"=> 0, "starred"=> 0, "info"=> ""],
+            ["number"=> "002", "name"=> "Name 2", "firstname"=> "", "lastname"=> "", "phone"=> "+9989947980058", "mobile"=> "", "email"=> "", "address"=> "", "city"=> "", "state"=> "", "zip"=> "", "comment"=> "", "presence"=> 0, "starred"=> 0, "info"=> ""],
+            ["number"=> "002", "name"=> "Name 2", "firstname"=> "", "lastname"=> "", "phone"=> "+998993960990", "mobile"=> "", "email"=> "", "address"=> "", "city"=> "", "state"=> "", "zip"=> "", "comment"=> "", "presence"=> 0, "starred"=> 0, "info"=> ""],
+            ["number"=> "002", "name"=> "Name 2", "firstname"=> "", "lastname"=> "", "phone"=> "993960990", "mobile"=> "", "email"=> "", "address"=> "", "city"=> "", "state"=> "", "zip"=> "", "comment"=> "", "presence"=> 0, "starred"=> 0, "info"=> ""],
+        ]];
+
+        return  response()->json($data);
+     });
 
     // User | Me ------------------------------------
     Route::get('/me', [Controller::class, 'user'])
