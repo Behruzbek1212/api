@@ -15,10 +15,15 @@ class JobsController extends Controller
     {
         $jobs = Job::query()
             ->withTrashed()
-            ->with(['customer' => function (BelongsTo $query) {
+            ->with('customer')
+            ->whereHas('customer', function ( $query) {
                 $query->where('active', '=', true);
-            }])
-            ->where('deleted_at', null)
+            })
+            ->whereHas('customer.user', function ($query)
+            {
+                $query->where('role', 'customer');
+            })
+            
             ->whereNot('status', '=', 'closed')
             ->orderByDesc('updated_at');
 
