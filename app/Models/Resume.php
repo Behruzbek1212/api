@@ -156,7 +156,7 @@ class Resume extends Model
         $candidateData['specialization'] = $candidate['specialization'] ?? null;
         $candidateData['birthday'] = $candidate['birthday'] ?? null;
         $candidateData['address'] = $candidate['address'] ?? null;
-        $candidateData['test'] = $candidate['test'] ?? null;
+       
 
         $filled_fields = 0;
         $ball = [];
@@ -224,23 +224,7 @@ class Resume extends Model
                         $filled_fields += $ball[$key];
                      }
                     break;
-                case 'driving_experience':
-
-                       if($resumeData[$key]['availability_of_a_car'] !== false){
-                            $filled_fields += $ball['availability_of_a_car'];
-                       }
-                       if(
-                        $resumeData[$key]['categories_of_driving']['A'] == true ||
-                         $resumeData[$key]['categories_of_driving']['B'] == true ||
-                         $resumeData[$key]['categories_of_driving']['C'] == true ||
-                         $resumeData[$key]['categories_of_driving']['D'] == true || $resumeData[$key]['categories_of_driving']['BE'] == true ||
-                         $resumeData[$key]['categories_of_driving']['CE'] == true || $resumeData[$key]['categories_of_driving']['DE'] == true
-                          )
-                        {
-                         $filled_fields += $ball['categories_of_driving'];
-                        }
-
-                        break;
+        
                 }
                }
             }
