@@ -16,6 +16,7 @@ class TestResultController extends Controller
 {
     protected $testResultService;
     use ApiResponse;
+
     public function __construct(TestResultService $testResultService)
     {
         $this->testResultService = $testResultService;
@@ -25,12 +26,12 @@ class TestResultController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function getAll(Request $request)
+    public function getAll(Request $request):JsonResponse
     {
         try
         {
             $data = TestResultResource::collection($this->testResultService->getAll($request));
-            return $this->successPaginate($data);
+            return  response()->json(['status' => true,   'result' => $data]);
         }
         catch(Exception $e)
         {
@@ -47,7 +48,7 @@ class TestResultController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTestResultRequest $request)
+    public function store(StoreTestResultRequest $request):JsonResponse
     {
         $request->validated();
         try 
@@ -78,7 +79,7 @@ class TestResultController extends Controller
     }
 
 
-    public function getCandidateTestResult(Request  $request) 
+    public function getCandidateTestResult(Request  $request):JsonResponse
     {
         $request->validate([
             'customer_id' => 'integer|nullable'
@@ -108,7 +109,7 @@ class TestResultController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request)
+    public function show(Request $request):JsonResponse
     {
         $request->validate([
            'test_id' => 'required|integer'

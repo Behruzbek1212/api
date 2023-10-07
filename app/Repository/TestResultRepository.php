@@ -18,7 +18,7 @@ class TestResultRepository
         $data = $this->user->customer->testResult()
                 ->with('candidate')
                 ->where('deleted_at', null)
-                ->paginate($request->limit ?? 15);
+                ->get();
         return $data;        
     }
     public function store($request) 
