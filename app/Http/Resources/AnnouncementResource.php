@@ -56,13 +56,13 @@ class AnnouncementResource extends JsonResource
     public function getForConnection($customer_phone, $for_connection)
     {
 
-        $num = [$customer_phone]  ?? [];
+        $num = [];
         if($for_connection !== null && $for_connection !== []){
-             $data = array_merge($num , $for_connection);
+             $data =  $for_connection;
              return $data;
         }
 
-        return $num ;
+        return $num;
     }
 
     

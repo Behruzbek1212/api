@@ -167,8 +167,10 @@ class JobServices
             $font->align('center');
             $font->valign('middle');
         });
-
-        $jpg_image->text($firstLine, 750, 450, function ($font) use ($font_path, $green) {
+        
+        $remainingText !== "" ?  $position_y = 450 : $position_y =  560;
+        
+        $jpg_image->text($firstLine, 750, $position_y, function ($font) use ($font_path, $green) {
             $font->file($font_path);
             $font->size(106);
             $font->color($green);
