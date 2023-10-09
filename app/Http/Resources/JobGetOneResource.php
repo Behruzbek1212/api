@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class JobResource extends JsonResource
+class JobGetOneResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -13,7 +13,8 @@ class JobResource extends JsonResource
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
-    {
+    {  
+        
         return [
             'id' => $this->id ?? null,
             'title' =>  $this->title ?? null,
@@ -33,13 +34,19 @@ class JobResource extends JsonResource
             "status" => $this->status ?? null,
             'liked' => $this->liked ?? null,
             'responded' => $this->responded ?? null,
+            'required_question' => $this->required_question ?? null,
+            'resume_required' => $this->resume_required ?? null,
+            'trafic_id' => $this->trafic_id ?? null,
+            'trafic_expired_at' => $this->trafic_expired_at ?? null,
             "created_at" => $this->created_at ?? null,
             "updated_at" => $this->updated_at ?? null,
             'customer' => [
+                'id' => $this->customer->id ?? null,
                 'name' => $this->customer->name ?? null,
                 'avatar' => $this->customer->avatar ?? null,
+                'location' => $this->customer->location ?? null,
+                'active' => $this->customer->active ?? null,
             ],
-
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\TelegramSendNotification;
+use App\Http\Resources\JobGetOneResource;
 use App\Http\Resources\JobResource;
 use App\Models\Customer;
 use App\Models\Job;
@@ -189,10 +190,10 @@ class JobController extends Controller
 
             _auth()->check() && _user()->jobStats()
                 ->syncWithoutDetaching($job);
-
+            $data = new JobGetOneResource($job);
             return response()->json([
                 'status' => true,
-                'job' => $job
+                'job' => $data
             ]);
         }
         $job = Job::query()->with('customer')
@@ -205,9 +206,10 @@ class JobController extends Controller
         _auth()->check() && _user()->jobStats()
             ->syncWithoutDetaching($job);
 
+        $data = new JobGetOneResource($job);
         return response()->json([
-            'status' => true,
-            'job' => $job
+                'status' => true,
+                'job' => $data
         ]);
     }
 
