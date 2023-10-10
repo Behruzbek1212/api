@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateBotLoginRequest;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 
 class BotLoginController extends Controller
 {
@@ -107,7 +108,7 @@ class BotLoginController extends Controller
             $token = $user->currentAccessToken();
             $token->delete();
 
-            $bot->delete();
+            DB::table('bot_logins')->where('id', $bot->id)->delete();
 
             return response()->json([
                 'status' => true,
