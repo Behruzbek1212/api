@@ -23,7 +23,7 @@ class StoreBotLoginRequest extends FormRequest
     {
         return [
             'telegram_id'=> 'required|integer',
-            'token' => 'required|string',
+            'token' => 'required|string|unique:bot_logins,token',
             'language' => 'string',
         ];
     }

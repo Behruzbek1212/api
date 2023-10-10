@@ -94,16 +94,30 @@ class BotLoginController extends Controller
         $request->validate([
             'telegram_id' => 'required|integer',
             'token' => 'required|string'
-        ]);
-
+        ]); 
+        
         $bot = BotLogin::where('telegram_id', $request->telegram_id)
                        ->where('token', $request->token) 
-                       ->where('deleted_at', null)->delete();
+                       ->where('deleted_at', null)->first();
+       
+        if($bot !== null){
+            $user = _auth()->user();
 
+            /** @var HasAbilities|Builder $token */
+            $token = $user->currentAccessToken();
+            $token->delete();
+
+            $bot->delete();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Successfully deleted',
+            ]);
+        }
+        
         return response()->json([
-            'status' => true,
-            'message' => 'Successfully deleted',
+            'status' => false,
+            'message' => 'Not found',
         ]);
-
     }
 }
