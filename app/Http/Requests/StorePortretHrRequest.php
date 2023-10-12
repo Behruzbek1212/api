@@ -22,7 +22,7 @@ class StorePortretHrRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'message_id' => 'required|string',
+            'message_id' => 'required',
             'token' => 'required|string',
             'data' => 'required|array'
         ];
