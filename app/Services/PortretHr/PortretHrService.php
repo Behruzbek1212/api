@@ -27,7 +27,7 @@ class PortretHrService
 
     public function storeFile($request)
     {
-        $imageName = time() . '-' .  Random::generate(5, 'a-z'). '-' . $request->file('file')->extension();
+        $imageName = time() . '-' .  Random::generate(5, 'a-z'). '.' . $request->file('file')->extension();
         $imagefileUrl = 'portretHrFile/' . $imageName;
         $storagePath = public_path($imagefileUrl);
         $request->file('file')->move(public_path('portretHrFile'), $imageName);
