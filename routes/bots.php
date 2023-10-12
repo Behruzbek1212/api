@@ -6,6 +6,8 @@ use App\Http\Controllers\Bots\NUMAKIDS\AdminController as NumakidsAdminControlle
 use App\Http\Controllers\Bots\NUMAKIDS\MainController as NumakidsController;
 use App\Http\Controllers\Bots\PartyHr\PartyAdminController;
 use App\Http\Controllers\Bots\PartyHr\PartyHrController;
+use App\Http\Controllers\Bots\PORTRETHR\PortretHrController;
+use App\Http\Controllers\Bots\PORTRETHR\PortretUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/_utils/_bots/_adson-crater')->name('bots.')->group(function () {
@@ -47,4 +49,15 @@ Route::prefix('/_utils/_bots/_party-hr')->name('bots.')->group(function () {
         Route::get('get-all-users', [PartyAdminController::class, 'getAllUsers'])->name('getAllUsers');
         Route::post('get-user', [PartyAdminController::class, 'getUser'])->name('get-user');
     });
+});
+
+
+Route::prefix('/_utils/portret-hr')->name('portret-hr.')->group(function () {
+    Route::post('store-data' , [PortretHrController::class, 'store'])->name('data-store');
+    Route::post('store-file' , [PortretHrController::class, 'createFile'])->name('data-file');
+    Route::get('data/{token}', [PortretHrController::class, 'showData'])->name('show-data');
+    Route::post('user/store', [PortretUserController::class, 'store'])->name('user-store');
+    Route::get('user/get/{token}', [PortretUserController::class, 'showData'])->name('show-user');
+    Route::get('user/all', [PortretUserController::class, 'index'])->name('show-All');
+    Route::get('user/count', [PortretUserController::class, 'userCount'])->name('user-count');
 });
