@@ -27,7 +27,7 @@ class PortretHrUserService
 
     public function showData(string $token)
     {
-        $data =   PortretUser::where('token', $token)->firstOrFail();
+        $data =   PortretUser::where('token', $token)->first();
         
         return $data;
     }
