@@ -71,7 +71,7 @@ class PortretUserController extends Controller
                 'status' => true,
                 'error' => false,
                 'message' => 'Successfully',
-                'user_id' => $data['user_id'],
+                'user_id' => (int)$data['user_id'],
             ]);
         }catch(Exception $e)
         {

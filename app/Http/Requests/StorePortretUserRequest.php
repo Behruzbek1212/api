@@ -22,7 +22,7 @@ class StorePortretUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'required|string',
+            'user_id' => 'required|integer',
             'token' => 'required|string'
         ];
     }

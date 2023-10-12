@@ -90,7 +90,7 @@ class PortretHrController extends Controller
                 'error' => false,
                 'message' => 'Successfully',
                 'data' => $data['data'],
-                'message_id' => $data['message_id']
+                'message_id' => (int)$data['message_id']
             ]);
         }catch(Exception $e)
         {
