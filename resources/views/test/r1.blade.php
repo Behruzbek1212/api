@@ -158,7 +158,7 @@
                         </div>
                         <div class="progress" >
                      
-                          <p class="progress-text" id="progressText">{{$value['resultCount']}} / {{$value['questCount']}}</p>
+                          <p class="progress-text" id="progressText">{{$value['resultCount']}} / {{$value['maxBall']}}</p>
                         </div>
                       </td>
                       <td>
