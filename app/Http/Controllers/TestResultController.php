@@ -135,27 +135,40 @@ class TestResultController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(TestResult $testResult)
-    {
-        //
-    }
+    // /**
+    //  * Show the form for editing the specified resource.
+    //  */
+    // public function edit(TestResult $testResult)
+    // {
+    //     //
+    // }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateTestResultRequest $request, TestResult $testResult)
-    {
-        //
-    }
+    // /**
+    //  * Update the specified resource in storage.
+    //  */
+    // public function update(UpdateTestResultRequest $request, TestResult $testResult)
+    // {
+    //     //
+    // }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(TestResult $testResult)
+    // /**
+    //  * Remove the specified resource from storage.
+    //  */
+    // public function destroy(TestResult $testResult)
+    // {
+    //     //
+    // }
+
+    public function downloadTestResult(string|int $id)
     {
-        //
+        $data = TestResult::with('candidate')->where('candidate_id', $id)->first();
+
+        $candidate = $data->candidate;
+      
+        return $this->testResultService
+                ->loadOne(compact('data', 'candidate'))
+                ->download($candidate->name . '.pdf');
+                // ->loadOne(compact('data', 'candidate', 'resume_id', 'experience'))
+                // ->download($candidate->name . '.pdf');
     }
 }
