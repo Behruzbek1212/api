@@ -62,7 +62,7 @@ class TestResultService
         $this->pdf = Pdf::loadView('test.r2', $data, $mergeData, $encode)
             ->setPaper('legal', 'landscape')
             ->setOptions([
-              'dpi' => 126, 
+              'dpi' => 126.6, 
             ])
             ->setWarnings(true);
         return $this;

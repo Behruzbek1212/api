@@ -15,7 +15,7 @@
             'value' => 'iq',
         ],
         [
-            'label' => 'Qimor oʻyinlari',
+            'label' => 'Qimor o`yinlari',
             'value' => 'bookmaker',
         ],
         [
@@ -27,7 +27,7 @@
             'value' => 'leader',
         ],
         [
-            'label' => 'Masʼuliyat',
+            'label' => 'Mas`uliyat',
             'value' => 'responsibility',
         ],
         [
@@ -89,21 +89,21 @@
             font-family: 'Roboto';
             font-style: normal;
             font-weight: 400;
-            src: url({{ storage_path('fonts/Roboto-Regular.ttf') }}) format("truetype");
+            src:'/var/www/jobo.uz/_api/storage/fonts/Roboto-Regular.ttf' format("truetype");
         }
 
         @font-face {
             font-family: 'Roboto';
             font-style: normal;
             font-weight: 600;
-            src: url({{ storage_path('fonts/Roboto-Medium.ttf') }}) format("truetype");
+            src: '/var/www/jobo.uz/_api/storage/fonts/Roboto-Regular.ttf' format("truetype");
         }
 
         @font-face {
             font-family: 'Roboto';
             font-style: normal;
             font-weight: 700;
-            src: url({{ storage_path('fonts/Gilroy-Bold.ttf') }}) format("truetype");
+            src: '/var/www/jobo.uz/_api/storage/fonts/Roboto-Regular.ttf' format("truetype");
         }
     </style>
 
@@ -118,6 +118,7 @@
         #wrapper {
             /* max-width: 900px; */
             width: 100%;
+            padding: 10px;
         }
 
         table {
