@@ -51,10 +51,19 @@ class TestResultService
 
     public function loadOne(array $data, array $mergeData = [], string $encode = 'utf-8')
     {
-        // return view('resume.v2', compact('data','mergeData','encode'));
-        
+      
         $this->pdf = Pdf::loadView('test.r1', $data, $mergeData, $encode)
             ->setPaper('A4', 'horizontal')
+            ->setWarnings(true);
+        return $this;
+    }
+    public function loadCustomer(array $data, array $mergeData = [], string $encode = 'utf-8')
+    {
+        $this->pdf = Pdf::loadView('test.r2', $data, $mergeData, $encode)
+            ->setPaper('legal', 'landscape')
+            ->setOptions([
+              'dpi' => 126, 
+            ])
             ->setWarnings(true);
         return $this;
     }

@@ -171,4 +171,27 @@ class TestResultController extends Controller
                 // ->loadOne(compact('data', 'candidate', 'resume_id', 'experience'))
                 // ->download($candidate->name . '.pdf');
     }
+
+    public function downloadTestCustomer($id)
+    {
+        
+        $data = TestResult::with('candidate', 'customer')
+                           ->where('customer_id', $id)
+                           ->where('deleted_at', null)
+                           ->get();
+
+        $customer = $data[0]['customer']['name'];
+      
+        if($data !== []){
+            return $this->testResultService
+                ->loadCustomer(compact('data'))
+                ->download($customer . '.pdf');
+        } 
+         
+        return response()->json([
+            'status' => false,
+            'message' => 'Not Fount'
+        ]);
+
+    }
 }

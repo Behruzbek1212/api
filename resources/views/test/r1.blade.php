@@ -89,12 +89,23 @@
   position: relative;
   background-color: #f4f6f9;
 }
-
+.more-tests
+{
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem ;
+  padding-left: 20px /* 40px */;
+  padding-right: 20px /* 40px */;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  position: relative;
+  width: 100%;
+  background-color: #f4f6f9;
+}
 
 
 .job-desc-title {
   margin-bottom: 10px;
-  width: 80%;
+
   font-size: 1rem;
 }
 
@@ -137,7 +148,7 @@
               </div>
             </div>
             @foreach ($data->result as  $value)
-            <table class="more-test">
+            <table class="more-tests">
              
                 <tr>
                    <td style="width: 100%">
