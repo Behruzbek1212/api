@@ -198,7 +198,8 @@
                         <td class="table-items underline !text-blue cursor-pointer fixed-column">
                             {{ $value['candidate'] == null ? '' : $value['candidate']['name'] }}
                         </td>
-                        <td class="table-items">{{ $value['candidate'] == null ??  $value['candidate']['specialization']}}</td>
+                       
+                        <td class="table-items">{{ $value['candidate'] == null ?  '' : $value['candidate']['specialization']}}</td>
                         @foreach ( $jayParsedAry as $val )
                        @php
                            $data =  getTestResult($value['result'], $val['value']);
