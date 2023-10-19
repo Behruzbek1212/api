@@ -284,16 +284,15 @@ class ResumeController extends Controller
             ->download($candidate->name . '.pdf');
     }
 
-    public function downloadtestCus(string|int $id)
+    public function downloadtestCus(string|int $id,int $customer_id)
     {
-        $user = _auth()->user();
-       
+        
         $candidate = Candidate::with('user' , 'testResult')
-                   ->whereHas('testResult', function ($query) use ($user) {
-                        $query->where('customer_id', $user->customer->id)
+                   ->whereHas('testResult', function ($query) use ($customer_id) {
+                        $query->where('customer_id', $customer_id)
                             ->where('deleted_at', null);
                    })->findOrFail($id);
-                   
+
         $testResult =  $candidate->testResult ?? [];          
         
         $resume = Resume::where('user_id', $candidate->user->id)

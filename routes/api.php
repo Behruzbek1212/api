@@ -298,7 +298,7 @@ Route::prefix('/v1')->group(function () {
     Route::get('resume/show/{id}', [ResumeController::class, 'show'])->name('resume.show');
     Route::get('resume/download/{id}', [ResumeController::class, 'download'])->name('resume.download');
     // Candidate resume download with test api resume/download/test/{id}
-    Route::get('resume/download/test/{id}', [ResumeController::class , 'downloadtestCus'])->middleware(['auth:sanctum', 'is_customer']);
+    Route::get('resume/download/test/{id}/customer/{customer_id}', [ResumeController::class , 'downloadtestCus']);
     Route::get('resume/admin/show/{id}', [ResumeController::class, 'showForAdmin'])->name('resume.show');
     Route::get('resume/admin/download/{id}', [ResumeController::class, 'downloadForAdmin'])->name('resume.download');
     Route::get('resume/admin/with-tests/download/{id}', [ResumeController::class, 'downloadForAdminWithTests']);
