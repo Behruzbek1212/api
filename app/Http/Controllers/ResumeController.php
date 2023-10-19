@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreResumeRequest;
 use App\Http\Requests\UpdateResumeRequest;
+use App\Models\Candidate;
 use App\Models\Chat\Chat;
 use App\Models\Resume;
+use App\Models\TestResult;
 use App\Models\User;
 use App\Services\AdminResumeService;
 use App\Services\AdminResumeWithTestsService;
 use App\Services\ResumeService;
+use eloquentFilter\QueryFilter\Queries\WhereHas;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -260,6 +263,7 @@ class ResumeController extends Controller
      */
     public function downloadForAdminWithTests(string|int $id): Response
     {
+       
         $resume = Resume::query()
             ->with('user')
             ->findOrFail($id);
@@ -267,7 +271,7 @@ class ResumeController extends Controller
         $data = $resume->data;
         $candidate = $resume->user
             ->candidate;
-
+      
         $resume_id = $id;
 
         $experience = $resume -> experience;
@@ -279,4 +283,31 @@ class ResumeController extends Controller
             ->load(compact('data', 'candidate', 'resume_id', 'experience'))
             ->download($candidate->name . '.pdf');
     }
+
+    public function downloadtestCus(string|int $id)
+    {
+        $user = _auth()->user();
+       
+        $candidate = Candidate::with('user' , 'testResult')
+                   ->whereHas('testResult', function ($query) use ($user) {
+                        $query->where('customer_id', $user->customer->id)
+                            ->where('deleted_at', null);
+                   })->findOrFail($id);
+                   
+        $testResult =  $candidate->testResult ?? [];          
+        
+        $resume = Resume::where('user_id', $candidate->user->id)
+                 ->where('deleted_at', null)
+                 ->orderByDesc('updated_at')
+                 ->first();
+        $data = $resume->data;
+        $resume_id = $id;
+        $experience = $resume->experience;         
+        $resume->increment('downloads');
+        
+        return (new AdminResumeWithTestsService)
+        ->load(compact('data', 'candidate', 'testResult', 'resume_id', 'experience'))
+        ->download($candidate->name . '.pdf');
+    }
+    
 }

@@ -659,9 +659,9 @@
             </div>
         @endif
 
-        @if($candidate['test'] && count($candidate['test']))
+        @if(isset($testResult) &&  $testResult !== [])
             <table id="languages" class="w-full relative">
-                @if(count($candidate['test']) > 1)
+                @if(count($testResult[0]['result']) > 1)
                     <div class="timeline-line"></div>
                 @endif
                 <tr class="w-full table-row">
@@ -672,16 +672,16 @@
                         <div class="splitter"></div>
                     </td>
                 </tr>
-                @foreach($candidate['test'] as $test)
+                @foreach($testResult[0]['result'] as $test)
                     @if($test['quizGroup'] !== 'bookmaker')
                         <tr class="w-full table-row timeline">
                             <td class="left-side">
-                                @if(count($candidate['test']) > 1)
+                                @if(count($testResult[0]['result']) > 1)
                                     <span class="tl-fixer"></span>
                                 @endif
                                 <table id="experience-timeline" class="w-full table-space-none">
                                     <tr class="w-full">
-                                        @if(count($candidate['test']) > 1)
+                                        @if(count($testResult[0]['result']) > 1)
                                             <td>
                                                 <div class="timeline-dot"></div>
                                             </td>
