@@ -344,7 +344,7 @@
                 @endif
             </tr>
         </table>
-
+        @if (isset($data['position']))
         <table id="desired-jobs-and-salary" class="w-full">
             <tr class="w-full table-row">
                 <td class="left-side">
@@ -379,9 +379,13 @@
                     <p class="text-sm">{{ __('resume.message.type') }}: {{ __('resume.types.' . @$data['work_type']) }}</p>
                 </td>
             </tr>
-        </table>
+        </table> 
+        @else
+            
+        @endif
+       
 
-        @if(count($data['employment']))
+        @if(isset($data['employment']) &&  count($data['employment']))
             <table id="experience" class="w-full relative">
                 @if(count($data['employment']) > 1)
                     <div class="timeline-line experience"></div>
@@ -445,7 +449,7 @@
             </table>
         @endif
 
-        @if(count($data['education']))
+        @if(isset($data['education']) && count($data['education']))
             <table id="education" class="w-full relative">
                 @if(count($data['education']) > 1)
                     <div class="timeline-line"></div>
@@ -504,7 +508,7 @@
             </table>
         @endif
 
-        @if(@$data['additional_education'] && count($data['additional_education']))
+        @if(isset($data['additional_education']) &&  @$data['additional_education'] && count($data['additional_education']))
             <table id="education" class="w-full relative">
                 @if(count($data['additional_education']) > 1)
                     <div class="timeline-line"></div>

@@ -299,10 +299,11 @@ class ResumeController extends Controller
                  ->where('deleted_at', null)
                  ->orderByDesc('updated_at')
                  ->first();
-        $data = $resume->data;
-        $resume_id = $id;
-        $experience = $resume->experience;         
-        $resume->increment('downloads');
+
+        $data = $resume->data ?? [];
+        $resume_id = $resume->id ?? null;
+        $experience = $resume->experience ?? null;         
+       
         
         return (new AdminResumeWithTestsService)
         ->load(compact('data', 'candidate', 'testResult', 'resume_id', 'experience'))
