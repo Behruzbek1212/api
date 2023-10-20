@@ -59,11 +59,12 @@ class TestResultService
     }
     public function loadCustomer(array $data, array $mergeData = [], string $encode = 'utf-8')
     {
+        $customPaper = array(0,0,1000,1490);
         $this->pdf = Pdf::loadView('test.r2', $data, $mergeData, $encode)
-            ->setPaper('legal', 'landscape')
-            ->setOptions([
-              'dpi' => 126.6, 
-            ])
+            ->setPaper($customPaper, 'landscape')
+            // ->setOptions([
+            //   'dpi' => 126.6, 
+            // ])
             ->setWarnings(true);
         return $this;
     }
