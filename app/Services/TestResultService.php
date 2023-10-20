@@ -59,7 +59,7 @@ class TestResultService
     }
     public function loadCustomer(array $data, array $mergeData = [], string $encode = 'utf-8')
     {
-        $customPaper = array(0,0,1000,1490);
+        $customPaper = array(0,0,1000,1600);
         $this->pdf = Pdf::loadView('test.r2', $data, $mergeData, $encode)
             ->setPaper($customPaper, 'landscape')
             // ->setOptions([
