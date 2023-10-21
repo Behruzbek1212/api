@@ -148,13 +148,9 @@ class Resume extends Model
         $resumBalls = DB::table('resume_balls')->get();
 
         $candidateData =  [];
-        $candidateData['name'] = $candidate['name'] ?? null;
-        $candidateData['email'] = $user['email'] ?? null;
-        $candidateData['surname'] = $candidate['surname'] ?? null;
         $candidateData['education_level'] = $candidate['education_level'] ?? null;
         $candidateData['languages'] = $candidate['languages'] ?? null;
         $candidateData['specialization'] = $candidate['specialization'] ?? null;
-        $candidateData['birthday'] = $candidate['birthday'] ?? null;
         $candidateData['address'] = $candidate['address'] ?? null;
        
 
