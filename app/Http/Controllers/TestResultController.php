@@ -24,9 +24,19 @@ class TestResultController extends Controller
     }
 
     public function allTestResultCandidate()
-    {
-        $data = ReatingTestCandidateResource::collection($this->testResultService->allTestCount());
-        return  response()->json(['status' => true,   'result' => $data]);
+    {   
+        try{
+            $data = ReatingTestCandidateResource::collection($this->testResultService->allTestCount());
+            return   $this->successPaginate($data);
+        }
+        catch(Exception $e)
+        {
+            return response()->json([
+                'status' =>  false,
+                'message'=> $e->getMessage(),
+                'result' => []
+            ]);
+        }
     }
 
     /**

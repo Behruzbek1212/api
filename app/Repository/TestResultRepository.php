@@ -5,7 +5,7 @@ namespace App\Repository;
 use App\Models\TestResult;
 
 use function Laravel\Prompts\text;
-
+use Illuminate\Pagination\LengthAwarePaginator;
 class TestResultRepository
 {
     protected $user;
@@ -18,7 +18,7 @@ class TestResultRepository
     public function allResult()
     {
         $test = request('quiz_gruop') ?? null;
-     
+        $limit = request('limit') ?? 20;
         $data =  TestResult::with('candidate' , 'candidate.user.resumes')
                 ->whereHas('candidate', function ($query) {
                     $query->where('deleted_at', null);
@@ -54,7 +54,16 @@ class TestResultRepository
                         ];
                     })
                     ->values();
-        return $sortedResults ?? null;
+        $page = LengthAwarePaginator::resolveCurrentPage();
+
+        $reatingPaginated = new LengthAwarePaginator(
+            $sortedResults->forPage($page,  $limit),
+            $sortedResults->count(),
+            $limit,
+            $page,
+            ['path' => LengthAwarePaginator::resolveCurrentPath()]
+        );            
+        return  $reatingPaginated ?? null;
     }
 
    
