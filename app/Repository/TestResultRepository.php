@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Models\TestResult;
 
+use function Laravel\Prompts\text;
+
 class TestResultRepository
 {
     protected $user;
@@ -13,10 +15,58 @@ class TestResultRepository
         $this->user = _auth()->user();
     }
 
+    public function allResult()
+    {
+        $test = request('quiz_gruop') ?? null;
+     
+        $data =  TestResult::with('candidate' , 'candidate.user.resumes')
+                ->whereHas('candidate', function ($query) {
+                    $query->where('deleted_at', null);
+                })
+                ->where('deleted_at', null)->get();
+      
+        $filteredResults = collect($data)->filter(function ($item) use ($test) {
+                $sortArr = [];
+                $efficiensy = 0;
+                foreach($item['result'] as $key => $value){
+                    if($test == null){
+                        $sortArr[] = $value;
+                    } else {
+                        if($value['quizGroup'] == $test ){
+                            $efficiensy  = $value['efficiensy'];
+                            $sortArr[] = $value;
+                        }
+                    }
+                }  
+                $max = $test == null ? $this->getAveragePercentage($item['result']) :  $efficiensy  ;
+                $item['result'] = [];
+                $item['percentage'] = intval($max);
+                $item['result'] = $sortArr;  
+                return $item;    
+        });
+        
+        $sortedResults = $filteredResults
+                    ->sortByDesc(function ($item) {
+                        return [
+                            $item['percentage'],
+                            $item['candidate']['user']['resumes']->isNotEmpty(),
+                            optional($item['candidate']['user']['resumes']->first())->percentage ?? 0
+                        ];
+                    })
+                    ->values();
+        return $sortedResults ?? null;
+    }
+
+   
+
+
     public function getAll($request)
     {
         $data = $this->user->customer->testResult()
                 ->with('candidate')
+                ->whereHas('candidate', function ($query) {
+                    $query->where('deleted_at', null);
+                })
                 ->where('deleted_at', null)
                 ->get();
         return $data;        
@@ -76,8 +126,22 @@ class TestResultRepository
 
     public function show($request)
     {
-        $result = $this->user->customer->testResult()->with('candidate')->where('deleted_at', null)->where('id', $request->test_id)->firstOrFail();
+        $result = $this->user->customer->testResult()->with('candidate')
+        ->whereHas('candidate', function ($query) {
+            $query->where('deleted_at', null);
+        })->where('deleted_at', null)->where('id', $request->test_id)->firstOrFail();
 
         return $result;
+    }
+
+
+    private  function getAveragePercentage($tests) {
+        if ($tests) {
+            $totalEfficiency = array_reduce($tests, function ($acc, $test) {
+                return $acc + $test['efficiensy'];
+            }, 0);
+            $averagePercentage = round($totalEfficiency / count($tests));
+            return $averagePercentage;
+        }
     }
 }

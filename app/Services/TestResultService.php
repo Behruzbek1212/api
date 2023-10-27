@@ -20,7 +20,10 @@ class TestResultService
       $this->testResultRepository = $testResultRepository;
     }
 
-
+    public function allTestCount()
+    {
+        return $this->testResultRepository->allResult();
+    }
     public function getAll($request)
     {
        return $this->testResultRepository->getAll($request);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TestResult;
 use App\Http\Requests\StoreTestResultRequest;
 use App\Http\Requests\UpdateTestResultRequest;
+use App\Http\Resources\ReatingTestCandidateResource;
 use App\Http\Resources\TestResultResource;
 use Illuminate\Http\Request;
 use App\Services\TestResultService;
@@ -22,6 +23,11 @@ class TestResultController extends Controller
         $this->testResultService = $testResultService;
     }
 
+    public function allTestResultCandidate()
+    {
+        $data = ReatingTestCandidateResource::collection($this->testResultService->allTestCount());
+        return  response()->json(['status' => true,   'result' => $data]);
+    }
 
     /**
      * Display a listing of the resource.
@@ -135,33 +141,13 @@ class TestResultController extends Controller
         }
     }
 
-    // /**
-    //  * Show the form for editing the specified resource.
-    //  */
-    // public function edit(TestResult $testResult)
-    // {
-    //     //
-    // }
-
-    // /**
-    //  * Update the specified resource in storage.
-    //  */
-    // public function update(UpdateTestResultRequest $request, TestResult $testResult)
-    // {
-    //     //
-    // }
-
-    // /**
-    //  * Remove the specified resource from storage.
-    //  */
-    // public function destroy(TestResult $testResult)
-    // {
-    //     //
-    // }
 
     public function downloadTestResult(string|int $id)
     {
-        $data = TestResult::with('candidate')->where('candidate_id', $id)->first();
+        $data = TestResult::with('candidate')
+                            ->whereHas('candidate', function ($query) {
+                                $query->where('deleted_at', null);
+                            })->where('candidate_id', $id)->first();
 
         $candidate = $data->candidate;
       
@@ -176,6 +162,9 @@ class TestResultController extends Controller
     {
         
         $data = TestResult::with('candidate', 'customer')
+                            ->whereHas('candidate', function ($query) {
+                              $query->where('deleted_at', null);
+                            })
                            ->where('customer_id', $id)
                            ->where('deleted_at', null)
                            ->get();
