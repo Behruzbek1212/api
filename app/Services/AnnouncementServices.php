@@ -11,19 +11,20 @@ use File;
 
 class AnnouncementServices
 {
-    use HasScopes;
+  
     
         
     public static function create($request, $transaction) 
     {
         
         $user = _auth()->user();
-        
+     
         $vacansies = $user->customer->jobs()->where('id', $request->job_id)->first();
-        
+       
         $job =  new AnnouncementResource($vacansies);  
+     
         $vac =  $job->toArray($vacansies);
-        
+      
         $data = $user->customer->announcement()->create([
             'post' => $vac
         ]);
@@ -83,7 +84,7 @@ class AnnouncementServices
         $user = _auth()->user();
         $data = $user->customer->announcement()->findOrFail($request->announcement_id);
         $oldImage =  $data->post['image'];
-       
+        $update = $data->post['bonus'] ?? false;
         $filePath = parse_url($oldImage, PHP_URL_PATH);
         
         $filePath = ltrim($filePath, '/');
@@ -93,7 +94,7 @@ class AnnouncementServices
         }
         
         
-        $imageUrl =  JobServices::getInstance()->createJobBanner($request->data['company_name'], $request->data['title'], $request->data['salary'], $request->data['address'] , $request->data['post_number']);
+        $imageUrl =  JobServices::getInstance()->createJobBanner($request->data['company_name'], $request->data['title'], $request->data['salary'], $request->data['address'] , $request->data['post_number'], $update );
         
         $post = $request->data;
         

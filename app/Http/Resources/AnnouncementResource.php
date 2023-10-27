@@ -11,6 +11,7 @@ use Nette\Utils\Random;
 
 class AnnouncementResource extends JsonResource
 {
+    
     /**
      * Transform the resource into an array.
      *
@@ -30,6 +31,7 @@ class AnnouncementResource extends JsonResource
             'for_connection' => $this->getForConnection($this->customer->user->phone, $this->for_connection_phone ) ?? null,
             'post_number' => $postNumber,
             'company_name' =>  $this->customer->name ?? null,
+            'bonus' => request('bonus') ?? false,
             'hash_tag' => $this->getHashTab($this->title, $this->location_id) ?? null
         ];
     }
@@ -37,8 +39,8 @@ class AnnouncementResource extends JsonResource
     public function image($company_name, $title, $salary, $location_id, $postNumber)
     {
             if($company_name !== null && $title !== null && $salary !== null && $location_id !==null){
-            
-                $imageUrl =  JobServices::getInstance()->createJobBanner($company_name, $title, $salary,  $location_id , $postNumber);
+             
+                $imageUrl =  JobServices::getInstance()->createJobBanner($company_name, $title, $salary,  $location_id , $postNumber, request('bonus') ?? false);
 
                 return $imageUrl;
             }

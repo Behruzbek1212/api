@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Models\TestResult;
 
-use function Laravel\Prompts\text;
+
 use Illuminate\Pagination\LengthAwarePaginator;
 class TestResultRepository
 {
@@ -19,9 +19,17 @@ class TestResultRepository
     {
         $test = request('quiz_gruop') ?? null;
         $limit = request('limit') ?? 20;
+        $title = request('title') ?? null;
         $data =  TestResult::with('candidate' , 'candidate.user.resumes')
                 ->whereHas('candidate', function ($query) {
                     $query->where('deleted_at', null);
+                })
+                ->when($title, function ($query) use ($title) {
+                    $query->whereHas('candidate', function ($querys) use ($title) {
+                        $querys->where('name', 'like', '%' . $title . '%');
+                        $querys->orWhere('surname', 'like', '%' . $title . '%');
+                        $querys->orWhere('specialization', 'like', '%' . $title . '%');
+                    });
                 })
                 ->where('deleted_at', null)->get();
       

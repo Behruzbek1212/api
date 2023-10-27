@@ -78,7 +78,8 @@ class AnnouncementController extends Controller
     {
       
             $request->validate([
-                'job_id' => 'required|integer'
+                'job_id' => 'required|integer',
+                'bonus' => 'nullable|boolean'
             ]);
         try {
             $user = _auth()->user();
