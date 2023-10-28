@@ -435,12 +435,10 @@ Route::prefix('/v2')->group(function () {
     });
 
     Route::prefix('test-result')->name('test-result.')->group(function () {
-<<<<<<< HEAD
+
         Route::get('/all', [TestResultController::class, 'getAll'])->middleware(['auth:sanctum', 'is_customer'])->name('all');
-=======
         Route::get('/view/all', [TestResultController::class, 'allTestResultCandidate']);
         Route::get('/all', [TestResultController::class,  'getAll'])->middleware(['auth:sanctum', 'is_customer'])->name('all');
->>>>>>> fa68b982255b19bbdcec9bf20ed6f49420de4806
         Route::post('/store', [TestResultController::class, 'store'])->name('create');
         Route::get('/downloadOne/{id}', [TestResultController::class, 'downloadTestResult']);
         Route::get("/customer/donwnload/{id}", [TestResultController::class, 'downloadTestCustomer'])->name('customer-download');
