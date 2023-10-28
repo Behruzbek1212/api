@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Filters\RatingFilter;
 use App\Models\TestResult;
 
 
@@ -17,66 +18,14 @@ class TestResultRepository
 
     public function allResult()
     {
-        $test = request('quiz_gruop') ?? null;
-        $limit = request('limit') ?? 20;
-        $title = request('title') ?? null;
-        $data =  TestResult::with('candidate' , 'candidate.user.resumes')
-                ->whereHas('candidate', function ($query) {
-                    $query->where('deleted_at', null);
-                })
-                ->when($title, function ($query) use ($title) {
-                    $query->whereHas('candidate', function ($querys) use ($title) {
-                        $querys->where('name', 'like', '%' . $title . '%');
-                        $querys->orWhere('surname', 'like', '%' . $title . '%');
-                        $querys->orWhere('specialization', 'like', '%' . $title . '%');
-                    });
-                })
-                ->where('deleted_at', null)->get();
+        $data =  TestResult::with('candidate' , 'candidate.user.resumes');
+                
+        $filter = RatingFilter::apply($data);
       
-        $filteredResults = collect($data)->filter(function ($item) use ($test) {
-                $sortArr = [];
-                $efficiensy = 0;
-                foreach($item['result'] as $key => $value){
-                    if($test == null){
-                        $sortArr[] = $value;
-                    } else {
-                        if($value['quizGroup'] == $test ){
-                            $efficiensy  = $value['efficiensy'];
-                            $sortArr[] = $value;
-                        }
-                    }
-                }  
-                $max = $test == null ? $this->getAveragePercentage($item['result']) :  $efficiensy  ;
-                $item['result'] = [];
-                $item['percentage'] = intval($max);
-                $item['result'] = $sortArr;  
-                return $item;    
-        });
-        
-        $sortedResults = $filteredResults
-                    ->sortByDesc(function ($item) {
-                        return [
-                            $item['percentage'],
-                            $item['candidate']['user']['resumes']->isNotEmpty(),
-                            optional($item['candidate']['user']['resumes']->first())->percentage ?? 0
-                        ];
-                    })
-                    ->values();
-        $page = LengthAwarePaginator::resolveCurrentPage();
-
-        $reatingPaginated = new LengthAwarePaginator(
-            $sortedResults->forPage($page,  $limit),
-            $sortedResults->count(),
-            $limit,
-            $page,
-            ['path' => LengthAwarePaginator::resolveCurrentPath()]
-        );            
-        return  $reatingPaginated ?? null;
+        return $filter;
     }
 
    
-
-
     public function getAll($request)
     {
         $data = $this->user->customer->testResult()
@@ -152,13 +101,5 @@ class TestResultRepository
     }
 
 
-    private  function getAveragePercentage($tests) {
-        if ($tests) {
-            $totalEfficiency = array_reduce($tests, function ($acc, $test) {
-                return $acc + $test['efficiensy'];
-            }, 0);
-            $averagePercentage = round($totalEfficiency / count($tests));
-            return $averagePercentage;
-        }
-    }
+    
 }
