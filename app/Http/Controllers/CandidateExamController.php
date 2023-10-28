@@ -40,7 +40,6 @@ class CandidateExamController extends Controller
             'exams' => ['array', 'required'],
         ]);
 
-
         $candidate_exams = new CandidateExam();
         $candidate_exams->candidate_id = $params['candidate_id'] ?? null;
         $candidate_exams->customer_id =  $params['customer_id'] ?? null;

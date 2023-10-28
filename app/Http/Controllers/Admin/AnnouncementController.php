@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
 use App\Models\Announcement;
 use App\Http\Requests\StoreAnnouncementRequest;
@@ -23,9 +24,9 @@ class AnnouncementController extends Controller
      */
     public function index(Request $request)
     {
-        
+
         $announcementData = Announcement::where('deleted_at', null)
-                            ->orderByDesc('updated_at');
+            ->orderByDesc('updated_at');
 
         return response()->json([
             'status' => true,
@@ -33,7 +34,7 @@ class AnnouncementController extends Controller
         ]);
     }
 
-    
+
 
     /**
      * Store a newly created resource in storage.
@@ -41,18 +42,18 @@ class AnnouncementController extends Controller
     public function store(StoreAnnouncementRequest $request)
     {
         $request->validated();
-        
-        $imageUrl =  JobServices::getInstance()->createJobBanner($request->data['company_name'], $request->data['title'], $request->data['salary'], $request->data['address'] , $request->data['post_number']);
-        
+
+        $imageUrl = JobServices::getInstance()->createJobBanner($request->data['company_name'], $request->data['title'], $request->data['salary'], $request->data['address'], $request->data['post_number']);
+
         $data = $request->data;
 
         $data['image'] = $imageUrl;
-    
+
         $announcement = Announcement::create([
             'post' => $data
         ]);
-        
-     
+
+
         return response()->json([
             'status' => true,
             'data' => $announcement,
@@ -62,19 +63,20 @@ class AnnouncementController extends Controller
 
 
 
-    public function confirmation(Request $request) {
-        
+    public function confirmation(Request $request)
+    {
+
         $request->validate([
             'announcement_id' => 'required|integer',
             'announcement_time' => 'required|date'
         ]);
-        $carbon =  Carbon::now()->format('Y-m-d H:i:s');
-        if($request->announcement_time >= $carbon){
+        $carbon = Carbon::now()->format('Y-m-d H:i:s');
+        if ($request->announcement_time >= $carbon) {
             $announcement = Announcement::find($request->announcement_id);
 
             $announcement->update([
-               'status' => true,
-               'time' => $request->announcement_time
+                'status' => true,
+                'time' => $request->announcement_time
             ]);
 
             return response()->json([
@@ -87,18 +89,18 @@ class AnnouncementController extends Controller
             'status' => false,
             'message' => 'error date'
         ]);
-        
+
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($id):JsonResponse
+    public function show($id): JsonResponse
     {
         $announcement = Announcement::find($id);
         return response()->json([
-             'status' => true,
-             'data' => $announcement == null ? [] : $announcement
+            'status' => true,
+            'data' => $announcement == null ? [] : $announcement
         ]);
     }
 
@@ -110,29 +112,29 @@ class AnnouncementController extends Controller
     {
         $request->validated();
         $data = Announcement::find($request->announcement_id);
-        $oldImage =  $data->post['image'];
+        $oldImage = $data->post['image'];
         $filePath = parse_url($oldImage, PHP_URL_PATH);
-        
+
         $filePath = ltrim($filePath, '/');
-       
+
         if (File::exists(public_path($filePath))) {
             File::delete(public_path($filePath));
         }
-        
-        
-        $imageUrl =  JobServices::getInstance()->createJobBanner($request->post['company_name'], $request->post['title'], $request->post['salary'], $request->post['address'] , $request->post['post_number']);
-        
+
+
+        $imageUrl = JobServices::getInstance()->createJobBanner($request->post['company_name'], $request->post['title'], $request->post['salary'], $request->post['address'], $request->post['post_number']);
+
         $post = $request->post;
 
         $post['image'] = $imageUrl;
-       
+
         $updateData = $data->update([
             'post' => $post
         ]);
         $announcement = Announcement::find($request->announcement_id);
         return response()->json([
-              'status' => true,
-              'data' => $announcement
+            'status' => true,
+            'data' => $announcement
         ]);
     }
 
@@ -140,18 +142,18 @@ class AnnouncementController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Request $request)
-    {   
-      
-         $request->validate([
-             'id' => 'required|integer'
-         ]);
-           
-         $announcement =  Announcement::query()->findOrFail($request->id);
-         $announcement->delete();
-        
+    {
+
+        $request->validate([
+            'id' => 'required|integer'
+        ]);
+
+        $announcement = Announcement::query()->findOrFail($request->id);
+        $announcement->delete();
+
         return response()->json([
-             'status' => true,
-             'message' => 'Successfully deleted announcement'
+            'status' => true,
+            'message' => 'Successfully deleted announcement'
         ]);
     }
 }

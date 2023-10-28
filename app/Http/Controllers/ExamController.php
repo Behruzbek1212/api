@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Exam;
+use App\Services\Exam\ExamServices;
 use Illuminate\Http\Request;
 
 class ExamController extends Controller
@@ -14,5 +15,10 @@ class ExamController extends Controller
             'status' => true,
             'result' => $exams
         ]);
+    }
+
+    public function add(Request $request)
+    {
+        return ExamServices::getInstance()->add($request);
     }
 }

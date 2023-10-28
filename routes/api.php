@@ -21,6 +21,8 @@ use App\Http\Controllers\CustomerChatCommentController;
 use App\Http\Controllers\CustomerStatusController;
 use App\Http\Controllers\DeleteDataController;
 use App\Http\Controllers\EducationLevelController;
+use App\Http\Controllers\Exam\ExamQuestionController;
+use App\Http\Controllers\Exam\ExamUserController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\GoldenNitController;
 use App\Http\Controllers\GuideController;
@@ -68,16 +70,19 @@ Route::get('/cron_jobs', [JobController::class, 'cron_jobs'])->name('cron_jobs')
 Route::get('/cron_backup', [BackupController::class, 'backup'])->name('cron_backup');
 
 Route::prefix('/v1')->group(function () {
-     Route::get('/block-number', function () {
-        $data = ["refresh"=> 0, "items"=> [
-            ["number"=> "001", "name"=> "", "firstname"=> "", "lastname"=> "", "phone"=> "947980058", "mobile"=> "947980058", "email"=> "", "address"=> "", "city"=> "", "state"=> "", "zip"=> "", "comment"=> "", "presence"=> 0, "starred"=> 0, "info"=> ""],
-            ["number"=> "002", "name"=> "", "firstname"=> "", "lastname"=> "", "phone"=> "+998947980058", "mobile"=> "+998947980058", "email"=> "", "address"=> "", "city"=> "", "state"=> "", "zip"=> "", "comment"=> "", "presence"=> 0, "starred"=> 0, "info"=> ""],
-            ["number"=> "003", "name"=> "", "firstname"=> "", "lastname"=> "", "phone"=> "+998993960990", "mobile"=> "+998993960990", "email"=> "", "address"=> "", "city"=> "", "state"=> "", "zip"=> "", "comment"=> "", "presence"=> 0, "starred"=> 0, "info"=> ""],
-            ["number"=> "004", "name"=> "", "firstname"=> "", "lastname"=> "", "phone"=> "993960990", "mobile"=> "993960990", "email"=> "", "address"=> "", "city"=> "", "state"=> "", "zip"=> "", "comment"=> "", "presence"=> 0, "starred"=> 0, "info"=> ""],
-        ]];
+    Route::get('/block-number', function () {
+        $data = [
+            "refresh" => 0,
+            "items" => [
+                ["number" => "001", "name" => "", "firstname" => "", "lastname" => "", "phone" => "947980058", "mobile" => "947980058", "email" => "", "address" => "", "city" => "", "state" => "", "zip" => "", "comment" => "", "presence" => 0, "starred" => 0, "info" => ""],
+                ["number" => "002", "name" => "", "firstname" => "", "lastname" => "", "phone" => "+998947980058", "mobile" => "+998947980058", "email" => "", "address" => "", "city" => "", "state" => "", "zip" => "", "comment" => "", "presence" => 0, "starred" => 0, "info" => ""],
+                ["number" => "003", "name" => "", "firstname" => "", "lastname" => "", "phone" => "+998993960990", "mobile" => "+998993960990", "email" => "", "address" => "", "city" => "", "state" => "", "zip" => "", "comment" => "", "presence" => 0, "starred" => 0, "info" => ""],
+                ["number" => "004", "name" => "", "firstname" => "", "lastname" => "", "phone" => "993960990", "mobile" => "993960990", "email" => "", "address" => "", "city" => "", "state" => "", "zip" => "", "comment" => "", "presence" => 0, "starred" => 0, "info" => ""],
+            ]
+        ];
 
-        return  response()->json($data);
-     });
+        return response()->json($data);
+    });
 
     // User | Me ------------------------------------
     Route::get('/me', [Controller::class, 'user'])
@@ -149,6 +154,7 @@ Route::prefix('/v1')->group(function () {
             Route::post('/question_create', [QuestionController::class, 'create'])->name('create');
             Route::post('/edit/{slug}', [JobController::class, 'edit'])->name('edit');
             Route::post('/destroy/{slug}', [JobController::class, 'destroy'])->name('destroy');
+
         });
 
         // limits ---------------------------------------
@@ -195,9 +201,23 @@ Route::prefix('/v1')->group(function () {
         Route::get('/', [TraficPriceController::class, 'all'])->name('all');
     });
 
+
     // exams -----------------------------------------
     Route::prefix('/exams')->name('exams.')->group(function () {
         Route::get('/', [ExamController::class, 'all'])->name('all');
+        Route::post('add', [ExamController::class, 'add']);
+    });
+
+     // exam_questions -----------------------------------------
+    Route::group(['prefix' => 'exam-question'], function () {
+        Route::get('index', [ExamQuestionController::class, 'index']);
+        Route::post('add', [ExamQuestionController::class, 'add']);
+        Route::post('finish', [ExamQuestionController::class, 'finish']);
+    });
+
+     // exam_user -----------------------------------------
+    Route::group(['prefix' => 'exam-user'], function () {
+        Route::get('index', [ExamUserController::class, 'index']);
     });
 
 
@@ -265,7 +285,7 @@ Route::prefix('/v1')->group(function () {
             Route::post('/', [ChatsController::class, 'list'])->name('index');
             Route::get('/messages/{id}', [ChatsController::class, 'getMessage'])->name('getMessage');
             Route::post('/{id}', [ChatsController::class, 'get'])->name('get');
-            Route::get('/all',  [ChatsController::class, 'listAll']);
+            Route::get('/all', [ChatsController::class, 'listAll']);
             Route::post('/{id}/send', [ChatsController::class, 'send'])->name('send');
         });
 
@@ -361,7 +381,7 @@ Route::prefix('/v1')->group(function () {
 
     // user delete route
 
-    Route::post('delete/user',  [DeleteDataController::class, 'delete'])->middleware('api_token');
+    Route::post('delete/user', [DeleteDataController::class, 'delete'])->middleware('api_token');
 
     Route::prefix('/utils')->name('utils.')->group(function () {
         Route::post('upload', [UploadController::class, 'upload'])->name('upload');
@@ -397,7 +417,7 @@ Route::prefix('/v2')->group(function () {
     });
 
     // check phone number
-    Route::post('phone/check',  [CheckPhoneController::class, 'check']);
+    Route::post('phone/check', [CheckPhoneController::class, 'check']);
 
     // customer status columns api routes
 
@@ -413,7 +433,7 @@ Route::prefix('/v2')->group(function () {
     });
 
     Route::prefix('test-result')->name('test-result.')->group(function () {
-        Route::get('/all', [TestResultController::class,  'getAll'])->middleware(['auth:sanctum', 'is_customer'])->name('all');
+        Route::get('/all', [TestResultController::class, 'getAll'])->middleware(['auth:sanctum', 'is_customer'])->name('all');
         Route::post('/store', [TestResultController::class, 'store'])->name('create');
         Route::get('/candidate', [TestResultController::class, 'getCandidateTestResult']);
         Route::get('/show', [TestResultController::class, 'show']);
