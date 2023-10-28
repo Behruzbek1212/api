@@ -15,10 +15,17 @@ class ReatingTestCandidateResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
+            'id' => $this->id ?? null,
             'candidate_id' => $this->candidate_id ?? null,
             'name' => $this->candidate->name ?? null,
             'surname' => $this->candidate->surname ?? null,
+            'languages' => $this->candidate->languages ?? null,
+            'phone' => $this->candidate->user->phone ?? null,
+            'resume' => [
+                'id' => optional($this->candidate?->user?->resumes?->first())->id ?? null,
+                'experience' => optional($this->candidate?->user?->resumes?->first())->experience ?? null,
+                
+            ] ?? [],
             'avatar' => $this->candidate->avatar ?? null,
             'specialization' => $this->candidate->specialization ?? null,
             'birthday' => $this->candidate->birthday ?? null,
