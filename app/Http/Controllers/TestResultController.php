@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TestResult;
 use App\Http\Requests\StoreTestResultRequest;
 use App\Http\Requests\UpdateTestResultRequest;
+use App\Http\Resources\ReatingTestCandidateResource;
 use App\Http\Resources\TestResultResource;
 use Illuminate\Http\Request;
 use App\Services\TestResultService;
@@ -22,6 +23,21 @@ class TestResultController extends Controller
         $this->testResultService = $testResultService;
     }
 
+    public function allTestResultCandidate()
+    {   
+        try{
+            $data = ReatingTestCandidateResource::collection($this->testResultService->allTestCount());
+            return   $this->successPaginate($data);
+        }
+        catch(Exception $e)
+        {
+            return response()->json([
+                'status' =>  false,
+                'message'=> $e->getMessage(),
+                'result' => []
+            ]);
+        }
+    }
 
     /**
      * Display a listing of the resource.
@@ -135,27 +151,46 @@ class TestResultController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(TestResult $testResult)
+
+    public function downloadTestResult(string|int $id)
     {
-        //
+        $data = TestResult::with('candidate')
+                            ->whereHas('candidate', function ($query) {
+                                $query->where('deleted_at', null);
+                            })->where('candidate_id', $id)->first();
+
+        $candidate = $data->candidate;
+      
+        return $this->testResultService
+                ->loadOne(compact('data', 'candidate'))
+                ->download($candidate->name . '.pdf');
+                // ->loadOne(compact('data', 'candidate', 'resume_id', 'experience'))
+                // ->download($candidate->name . '.pdf');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateTestResultRequest $request, TestResult $testResult)
+    public function downloadTestCustomer($id)
     {
-        //
-    }
+        
+        $data = TestResult::with('candidate', 'customer')
+                            ->whereHas('candidate', function ($query) {
+                              $query->where('deleted_at', null);
+                            })
+                           ->where('customer_id', $id)
+                           ->where('deleted_at', null)
+                           ->get();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(TestResult $testResult)
-    {
-        //
+        $customer = $data[0]['customer']['name'];
+      
+        if($data !== []){
+            return $this->testResultService
+                ->loadCustomer(compact('data'))
+                ->download($customer . '.pdf');
+        } 
+         
+        return response()->json([
+            'status' => false,
+            'message' => 'Not Fount'
+        ]);
+
     }
 }

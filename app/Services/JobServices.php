@@ -79,7 +79,7 @@ class JobServices
     }
 
 
-    public function createJobBanner($company, $title, $salary, $address, $post_number)
+    public function createJobBanner($company, $title, $salary, $address, $post_number , $bonus)
     {
         $randomFileName = uniqid() . '.jpg';
         $imagefileUrl = 'uploads/image/job-posts/' . $randomFileName;
@@ -204,13 +204,24 @@ class JobServices
             $font->valign('middle');
         });
 
-        $jpg_image->text($prices,  750, 920, function ($font) use ($font_path) {
+        $bonus == true ? $pos_y = 885 : $pos_y = 920;
+        $jpg_image->text($prices,  750, $pos_y, function ($font) use ($font_path) {
             $font->file($font_path);
             $font->size(115);
             $font->color('#63CC52');
             $font->align('center');
             $font->valign('middle');
         });
+        if($bonus == true){
+            $jpg_image->text("+ bonus",  750, 1000, function ($font) use ($font_path) {
+                $font->file($font_path);
+                $font->size(90);
+                $font->color('#63CC52');
+                $font->align('center');
+                $font->valign('middle');
+            });
+        }
+      
         $jpg_image->save($storagePath);
 
 

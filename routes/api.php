@@ -317,6 +317,8 @@ Route::prefix('/v1')->group(function () {
     // Resume Display|Download ---------------------------------------
     Route::get('resume/show/{id}', [ResumeController::class, 'show'])->name('resume.show');
     Route::get('resume/download/{id}', [ResumeController::class, 'download'])->name('resume.download');
+    // Candidate resume download with test api resume/download/test/{id}
+    Route::get('resume/download/test/{id}/customer/{customer_id}', [ResumeController::class , 'downloadtestCus']);
     Route::get('resume/admin/show/{id}', [ResumeController::class, 'showForAdmin'])->name('resume.show');
     Route::get('resume/admin/download/{id}', [ResumeController::class, 'downloadForAdmin'])->name('resume.download');
     Route::get('resume/admin/with-tests/download/{id}', [ResumeController::class, 'downloadForAdminWithTests']);
@@ -433,8 +435,15 @@ Route::prefix('/v2')->group(function () {
     });
 
     Route::prefix('test-result')->name('test-result.')->group(function () {
+<<<<<<< HEAD
         Route::get('/all', [TestResultController::class, 'getAll'])->middleware(['auth:sanctum', 'is_customer'])->name('all');
+=======
+        Route::get('/view/all', [TestResultController::class, 'allTestResultCandidate']);
+        Route::get('/all', [TestResultController::class,  'getAll'])->middleware(['auth:sanctum', 'is_customer'])->name('all');
+>>>>>>> fa68b982255b19bbdcec9bf20ed6f49420de4806
         Route::post('/store', [TestResultController::class, 'store'])->name('create');
+        Route::get('/downloadOne/{id}', [TestResultController::class, 'downloadTestResult']);
+        Route::get("/customer/donwnload/{id}", [TestResultController::class, 'downloadTestCustomer'])->name('customer-download');
         Route::get('/candidate', [TestResultController::class, 'getCandidateTestResult']);
         Route::get('/show', [TestResultController::class, 'show']);
     });

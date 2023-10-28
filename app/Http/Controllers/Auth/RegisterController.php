@@ -135,19 +135,24 @@ class RegisterController extends Controller
             'limit_start_day' => ['date', 'nullable'],
             'limit_end_day' => ['date', 'nullable']
         ]);
-
-        $customer = $user->customer()->create([
-            'name' => $request->input('name'),
-            'about' => $request->input('about'),
-            'avatar' => $request->input('avatar') ?? null,
-            'owned_date' => $request->input('owned_date'),
-            'location' => $request->input('location'),
-            'address' => $request->input('address'),
-            'active' => true,
-            'limit_id' => $request->limit_id ?? null,
-            'limit_start_day' => $request->limit_start_day ?? null,
-            'limit_end_day' => $request->limit_end_day ?? null
-        ]);
+        $check = Customer::where('user_id' ,  $user->id)->where('deleted_at', null)->first();
+        if($check == null) {
+            $customer = $user->customer()->create([
+                'name' => $request->input('name'),
+                'about' => $request->input('about'),
+                'avatar' => $request->input('avatar') ?? null,
+                'owned_date' => $request->input('owned_date'),
+                'location' => $request->input('location'),
+                'address' => $request->input('address'),
+                'active' => true,
+                'limit_id' => $request->limit_id ?? null,
+                'limit_start_day' => $request->limit_start_day ?? null,
+                'limit_end_day' => $request->limit_end_day ?? null
+            ]);
+        } else {
+            $customer = $user->customer()->first();
+        }
+       
 
         $message = "🆕 <b>Yangi kompaniya</b>\n";
         $message .= "🏢 Kompaniya: <b>" . $request->name . "</b>\n";
@@ -206,23 +211,27 @@ class RegisterController extends Controller
             'spheres' => ['nullable'],
             'address' => ['required', 'string']
         ]);
-
-
-        $candidate = $user->candidate()->create([
-            'avatar' => $request->input('avatar') ?? null,
-            'name' => $request->input('name'),
-            'surname' => $request->input('surname') ?? null,
-            'sex' => $request->input('sex') ?? 'male' ?? null,
-            'spheres' => $request->input('spheres') ?? null,
-            'education_level' => $request->input('education_level') ?? null,
-            'specialization' => $request->input('specialization') ?? null,
-            'languages' => $request->input('languages') ?? null,
-            'birthday' => $request->input('birthday'),
-            'address' => $request->input('address'),
-            'test' => null,
-            'services' => null,
-            'active' => true
-        ]);
+        $check = Candidate::where('user_id' ,  $user->id)->where('deleted_at', null)->first();
+        if($check == null){
+            $candidate = $user->candidate()->create([
+                'avatar' => $request->input('avatar') ?? null,
+                'name' => $request->input('name'),
+                'surname' => $request->input('surname') ?? null,
+                'sex' => $request->input('sex') ?? 'male' ?? null,
+                'spheres' => $request->input('spheres') ?? null,
+                'education_level' => $request->input('education_level') ?? null,
+                'specialization' => $request->input('specialization') ?? null,
+                'languages' => $request->input('languages') ?? null,
+                'birthday' => $request->input('birthday'),
+                'address' => $request->input('address'),
+                'test' => null,
+                'services' => null,
+                'active' => true
+            ]);
+        } else {
+            $candidate = $user->candidate()->first();
+        }
+        
 
         $data = User::query()
             ->with('candidate')

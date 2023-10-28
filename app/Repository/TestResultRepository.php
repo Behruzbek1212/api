@@ -2,8 +2,11 @@
 
 namespace App\Repository;
 
+use App\Filters\RatingFilter;
 use App\Models\TestResult;
 
+
+use Illuminate\Pagination\LengthAwarePaginator;
 class TestResultRepository
 {
     protected $user;
@@ -13,10 +16,23 @@ class TestResultRepository
         $this->user = _auth()->user();
     }
 
+    public function allResult()
+    {
+        $data =  TestResult::with('candidate' , 'candidate.user.resumes');
+                
+        $filter = RatingFilter::apply($data);
+      
+        return $filter;
+    }
+
+   
     public function getAll($request)
     {
         $data = $this->user->customer->testResult()
                 ->with('candidate')
+                ->whereHas('candidate', function ($query) {
+                    $query->where('deleted_at', null);
+                })
                 ->where('deleted_at', null)
                 ->get();
         return $data;        
@@ -76,8 +92,14 @@ class TestResultRepository
 
     public function show($request)
     {
-        $result = $this->user->customer->testResult()->with('candidate')->where('deleted_at', null)->where('id', $request->test_id)->firstOrFail();
+        $result = $this->user->customer->testResult()->with('candidate')
+        ->whereHas('candidate', function ($query) {
+            $query->where('deleted_at', null);
+        })->where('deleted_at', null)->where('id', $request->test_id)->firstOrFail();
 
         return $result;
     }
+
+
+    
 }
