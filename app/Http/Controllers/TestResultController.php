@@ -39,6 +39,16 @@ class TestResultController extends Controller
         }
     }
 
+    public function  candidateRatings()
+    {
+        if(_user()->role == 'candidate'){
+            $data =  $this->testResultService->candidateRatingsServer();
+            return $this->successResponse($data);
+        } 
+        return $this->errorResponse(__('This is not possible for customer!'), 404);
+
+    }
+
     /**
      * Display a listing of the resource.
      */

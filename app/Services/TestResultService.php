@@ -24,6 +24,20 @@ class TestResultService
     {
         return $this->testResultRepository->allResult();
     }
+    
+    public function candidateRatingsServer()
+    {   
+        
+        $datas =  $this->testResultRepository->candidateRatings();
+        return $datas;
+        
+    }
+
+
+
+
+
+
     public function getAll($request)
     {
        return $this->testResultRepository->getAll($request);
@@ -88,4 +102,6 @@ class TestResultService
 
         return $this->pdf->download($name);
     }
+
+ 
 }
