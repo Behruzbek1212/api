@@ -2,6 +2,7 @@
 
 namespace App\Filters;
 
+use App\Models\Exam;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -155,11 +156,12 @@ class RatingFilter
     }
     private static function getAveragePercentage($tests)
     {
+        $exam = Exam::count();
         if ($tests) {
             $totalEfficiency = array_reduce($tests, function ($acc, $test) {
                 return $acc + $test['efficiensy'];
             }, 0);
-            $averagePercentage = round($totalEfficiency / count($tests));
+            $averagePercentage = round($totalEfficiency / $exam);
             return $averagePercentage;
         }
     }

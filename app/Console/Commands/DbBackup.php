@@ -26,7 +26,7 @@ class DbBackup extends Command
      */
     public function handle()
     {
-        $filename = 'jobo_next.sql';
+        $filename = 'jobo_next' . time() . rand() . '.sql';
 
         $command = env('Db_MYSQLDUMP') . "  --user=" . env('DB_USERNAME') . " --password=" . env("DB_PASSWORD") .
         " --host=" . env('DB_HOST') . " " . env('DB_DATABASE') . " > " . public_path('backup/' . $filename);
