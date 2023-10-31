@@ -33,22 +33,7 @@ class DbBackup extends Command
                 " --host=" . env('DB_HOST') . " " . env('DB_DATABASE') . " > " . public_path('backup/' . $filename);
 
             shell_exec($command);
-            $telegramBotToken = env('TELEGRAM_TOKEN_BACKUP');
-            $chatId = env('TELEGRAM_BACKUP_CHANNEL_ID');
-
-            $telegramApiUrl = "https://api.telegram.org/bot{$telegramBotToken}/sendDocument";
-
-            $curlFile = new \CURLFile(public_path('backup/' . $filename));
-
-            $curl = curl_init();
-            curl_setopt($curl, CURLOPT_URL, $telegramApiUrl);
-            curl_setopt($curl, CURLOPT_POST, true);
-            curl_setopt($curl, CURLOPT_POSTFIELDS, [
-                'chat_id' => $chatId,
-                'document' => $curlFile,
-            ]);
-            curl_exec($curl);
-            curl_close($curl);
+          
         } 
          catch(Exception $e)
         {
@@ -59,7 +44,22 @@ class DbBackup extends Command
             ]);
         }
         
+        $telegramBotToken = env('TELEGRAM_TOKEN_BACKUP');
+        $chatId = env('TELEGRAM_BACKUP_CHANNEL_ID');
 
+        $telegramApiUrl = "https://api.telegram.org/bot{$telegramBotToken}/sendDocument";
+
+        $curlFile = new \CURLFile(public_path('backup/' . $filename));
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $telegramApiUrl);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, [
+            'chat_id' => $chatId,
+            'document' => $curlFile,
+        ]);
+        curl_exec($curl);
+        curl_close($curl);
         
         
     
