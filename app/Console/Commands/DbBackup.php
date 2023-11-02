@@ -27,40 +27,52 @@ class DbBackup extends Command
      */
     public function handle()
     {
-        $filename = 'jobo_next' . time() . rand() . '.sql';
-        try{
-            $command = env('Db_MYSQLDUMP') . "  --user=" . env('DB_USERNAME') . " --password=" . env("DB_PASSWORD") .
-                " --host=" . env('DB_HOST') . " " . env('DB_DATABASE') . " > " . public_path('backup/' . $filename);
-
-            shell_exec($command);
-          
-        } 
-         catch(Exception $e)
-        {
+        $filename = 'jobo_next' . time() . '.sql';
+        $dbHost = env('DB_HOST');
+        $dbUsername = env('DB_USERNAME');
+        $dbPassword = env("DB_PASSWORD");
+        $dbName = env('DB_DATABASE');
+        $mysqlDump = env('Db_MYSQLDUMP');
+        try {
+            // $command = env('Db_MYSQLDUMP') . " --user=" . env('DB_USERNAME') . " --password=" . env("DB_PASSWORD") .
+            //     " --host=" . env('DB_HOST') . " " . env('DB_DATABASE') . " > " . public_path('backup/' . $filename);
+            $command = "$mysqlDump -h $dbHost -u $dbUsername -p$dbPassword $dbName > " . public_path('backup/' . $filename);
+            exec($command, $output, $returnValue);
+        
+            // Check if the backup file was created successfully
+            $backupFilePath = public_path('backup/' . $filename);
+            if (file_exists($backupFilePath)) {
+                $telegramBotToken = env('TELEGRAM_TOKEN_BACKUP');
+                $chatId = env('TELEGRAM_BACKUP_CHANNEL_ID');
+        
+                $telegramApiUrl = "https://api.telegram.org/bot{$telegramBotToken}/sendDocument";
+        
+                // Read the file and create the CURLFile object
+                $fileContent = file_get_contents($backupFilePath);
+                $curlFile = new \CURLFile($backupFilePath, 'application/octet-stream', $filename);
+        
+                $curl = curl_init();
+                curl_setopt($curl, CURLOPT_URL, $telegramApiUrl);
+                curl_setopt($curl, CURLOPT_POST, true);
+                curl_setopt($curl, CURLOPT_POSTFIELDS, [
+                    'chat_id' => $chatId,
+                    'document' => $curlFile,
+                ]);
+                curl_exec($curl);
+                curl_close($curl);
+            } else {
+                // Handle the case where the backup file was not created
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Backup file was not created',
+                ]);
+            }
+        } catch (Exception $e) {
             return response()->json([
-                'status' =>  false,
-                'message'=> $e->getMessage(),
-              
+                'status' => false,
+                'message' => $e->getMessage(),
             ]);
         }
-        
-        $telegramBotToken = env('TELEGRAM_TOKEN_BACKUP');
-        $chatId = env('TELEGRAM_BACKUP_CHANNEL_ID');
-
-        $telegramApiUrl = "https://api.telegram.org/bot{$telegramBotToken}/sendDocument";
-
-        $curlFile = new \CURLFile(public_path('backup/' . $filename));
-
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $telegramApiUrl);
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, [
-            'chat_id' => $chatId,
-            'document' => $curlFile,
-        ]);
-        curl_exec($curl);
-        curl_close($curl);
-        
         
     
     }
