@@ -33,11 +33,11 @@ class DbBackup extends Command
         $dbPassword = env("DB_PASSWORD");
         $dbName = env('DB_DATABASE');
         $mysqlDump = env('Db_MYSQLDUMP');
-        try {
+      
             // $command = env('Db_MYSQLDUMP') . " --user=" . env('DB_USERNAME') . " --password=" . env("DB_PASSWORD") .
             //     " --host=" . env('DB_HOST') . " " . env('DB_DATABASE') . " > " . public_path('backup/' . $filename);
-            $command = "$mysqlDump -h $dbHost -u $dbUsername -p$dbPassword $dbName < " . public_path('backup/' . $filename);
-            exec($command, $output, $returnValue);
+            $command = "$mysqlDump  -u $dbUsername -p$dbPassword $dbName > " . public_path('backup/' . $filename);
+            exec($command);
         
             // Check if the backup file was created successfully
             $backupFilePath = public_path('backup/' . $filename);
@@ -60,19 +60,7 @@ class DbBackup extends Command
                 ]);
                 curl_exec($curl);
                 curl_close($curl);
-            } else {
-                // Handle the case where the backup file was not created
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Backup file was not created',
-                ]);
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage(),
-            ]);
-        }
+            } 
         
     
     }
