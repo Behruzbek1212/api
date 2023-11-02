@@ -36,7 +36,7 @@ class DbBackup extends Command
         try {
             // $command = env('Db_MYSQLDUMP') . " --user=" . env('DB_USERNAME') . " --password=" . env("DB_PASSWORD") .
             //     " --host=" . env('DB_HOST') . " " . env('DB_DATABASE') . " > " . public_path('backup/' . $filename);
-            $command = "$mysqlDump -h $dbHost -u $dbUsername -p$dbPassword $dbName > " . public_path('backup/' . $filename);
+            $command = "$mysqlDump -h $dbHost -u $dbUsername -p$dbPassword $dbName < " . public_path('backup/' . $filename);
             exec($command, $output, $returnValue);
         
             // Check if the backup file was created successfully
