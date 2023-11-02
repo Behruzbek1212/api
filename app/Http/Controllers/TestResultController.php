@@ -46,7 +46,6 @@ class TestResultController extends Controller
             return $this->successResponse($data);
         } 
         return $this->errorResponse(__('This is not possible for customer!'), 404);
-
     }
 
     /**
