@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Exam\ExamQuestion;
 use App\Models\Exam\ExamUser;
 use App\Traits\ApiLogActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Exam extends Model
 {
@@ -39,6 +41,11 @@ class Exam extends Model
         return $this->hasOne(ExamUser::class, 'exam_id', 'id')->where('user_id', user()->id);
     }
 
+    public function examQuestion():HasMany
+    {
+       return $this->hasMany(ExamQuestion::class);
+    }
+    
     public function candidate_exams()
     {
         return $this->belongsToMany(CandidateExam::class, 'exams_candidate_exams', 'exams_id', 'candidate_exams_id');

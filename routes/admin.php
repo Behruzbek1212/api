@@ -15,6 +15,9 @@ use App\Http\Controllers\Admin\ResumeController;
 use App\Http\Controllers\Admin\ResumeBallController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CustomerStatusAdminController;
+use App\Http\Controllers\Admin\Exam\ExamAdminController;
+use App\Http\Controllers\Admin\Exam\ExamAnswerAdminController;
+use App\Http\Controllers\Admin\Exam\ExamQuestionAdminController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/jobs')->name('jobs.')->group(function () {
@@ -153,4 +156,29 @@ Route::prefix('/customer-status')->name('customer-status.')->group(function () {
     Route::get('/show', [CustomerStatusAdminController::class, 'show'])->name('show');
     Route::post('/edit', [CustomerStatusAdminController::class, 'update'])->name('edit');
     Route::post('/destroy', [CustomerStatusAdminController::class, 'destroy'])->name('destroy');
+});
+
+
+Route::prefix('/exam')->name('exams.')->group(function (){
+    Route::get('/all', [ExamAdminController::class, 'list']);
+    Route::post('/store', [ExamAdminController::class, 'store']);
+    Route::get('show/{exam}' , [ExamAdminController::class, 'show']);
+    Route::get('/question/{exam}', [ExamAdminController::class, 'showWithQuestion']);
+    Route::post('/update', [ExamAdminController::class, 'update']);
+    Route::delete('/delete/{exam}', [ExamAdminController::class, 'destroy']);
+});
+
+Route::prefix('/exams/question')->group(function () {
+   Route::post('/store',  [ExamQuestionAdminController::class, 'store']);
+   Route::get('/show/{question}', [ExamQuestionAdminController::class, 'show']);
+   Route::get('/with/answer/{question}', [ExamQuestionAdminController::class, 'showWithAnswer']);
+   Route::post('/update/{question}',  [ExamQuestionAdminController::class, 'update']);
+   Route::delete('delete/{question}',[ExamQuestionAdminController::class, 'destroy']);
+});
+
+Route::prefix('/exams/answer')->group(function () {
+    Route::post('/store',  [ExamAnswerAdminController::class, 'store']);
+    Route::get('/show/{answer}', [ExamAnswerAdminController::class, 'show']);
+    Route::post('/update/{answer}',  [ExamAnswerAdminController::class, 'update']);
+    Route::delete('delete/{answer}',[ExamAnswerAdminController::class, 'destroy']);
 });
