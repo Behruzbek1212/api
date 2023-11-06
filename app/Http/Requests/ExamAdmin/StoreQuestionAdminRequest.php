@@ -22,6 +22,7 @@ class StoreQuestionAdminRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'exam_id'=> 'required|integer',
             'question' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'video' => 'nullable|mimes:mp4,avi,mov,wmv|max:20480',

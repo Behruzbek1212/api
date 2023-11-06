@@ -39,13 +39,17 @@ class ExamQuestionsAdminServices
             $request->video->move($path,   $videoName);
         }
      
-        $queastion  = Question::query()->create([
+        $question  = Question::query()->create([
             'question' => $request->question,
             'video' => $request->video !== null ? asset('exam/question/video/'.  $request->video): null,
             'image' => $request->image !== null ? asset('exam/question/image/' . $imageName) : null,
             'position' => $request->position ?? null
         ]);
-        return  $queastion?->id  ?? null;
+        $examQuestion = ExamQuestion::query()->create([
+            'exam_id' => $request->exam_id,
+            'questions_for_exam_id' => $question->id
+        ]);
+        return  $question?->id  ?? null;
     }
     
     public function showWithQuestion($exam)
@@ -56,12 +60,12 @@ class ExamQuestionsAdminServices
     }
 
 
-    public function update($request, $queastion)
+    public function update($request, $question)
     {  
         $validated =  $request->validated();
         if($request->hasFile('image')){
             
-            $filePath = parse_url($queastion->image, PHP_URL_PATH);
+            $filePath = parse_url($question->image, PHP_URL_PATH);
             $filePath = ltrim($filePath, '/');
             if (File::exists($filePath)) {
                 File::delete($filePath);
@@ -90,7 +94,7 @@ class ExamQuestionsAdminServices
             $request->video->move($path, $videoName);
         }
      
-        $exam = $queastion->update($validated);
+        $exam = $question->update($validated);
 
         return  $exam;
     }
