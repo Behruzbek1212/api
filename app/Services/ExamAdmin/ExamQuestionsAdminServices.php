@@ -41,10 +41,11 @@ class ExamQuestionsAdminServices
      
         $question  = Question::query()->create([
             'question' => $request->question,
-            'video' => $request->video !== null ? asset('exam/question/video/'.  $request->video): null,
+            'video' => $request->video !== null ? asset('exam/question/video/'.   $videoName): null,
             'image' => $request->image !== null ? asset('exam/question/image/' . $imageName) : null,
             'position' => $request->position ?? null
         ]);
+        $decrement = ExamAdminServices::getInstance()->question_count('plus', $request->exam_id);
         $examQuestion = ExamQuestion::query()->create([
             'exam_id' => $request->exam_id,
             'questions_for_exam_id' => $question->id
@@ -118,7 +119,13 @@ class ExamQuestionsAdminServices
             }
         }
         $question->answerVariants()->delete();
-        $examQuestion = ExamQuestion::where('questions_for_exam_id', $question->id)->delete();
+        $examQuestion = ExamQuestion::where('questions_for_exam_id', $question->id)->first();
+        if($examQuestion !== null){
+            $decrement = ExamAdminServices::getInstance()->question_count('minus', $examQuestion->exam_id);
+            $examQuestion->delete();
+        }
+       
+
         $question->delete();
 
         return [];

@@ -115,5 +115,26 @@ class ExamAdminServices
         $exam->delete();
         return [];
     }
+
+
+    public function question_count($type , $exam_id):void
+    {
+        $exam = Exam::find($exam_id);
+
+        if (!$exam) {
+        } else {
+            if ($type == 'minus') {
+                if ($exam->questions_count > 0) {
+                    $exam->questions_count--;
+                    $exam->save(); // Save the changes to the database
+                }
+            } else if ($type == 'plus') {
+                $exam->questions_count++;
+                $exam->save(); // Save the changes to the database
+            }
+        }
+    }
+
+
     
 }

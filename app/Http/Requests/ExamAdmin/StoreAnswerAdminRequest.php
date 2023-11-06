@@ -22,10 +22,11 @@ class StoreAnswerAdminRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'question_id' => 'required|integer',
-            'answer' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'score' => 'required|integer'
+            'data' => 'required|array',
+            'data.*.question_id' => 'required|integer',
+            'data.*.answer' => 'required|string',
+            'data.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'data.*.score' => 'required|integer',
         ];
     }
 }

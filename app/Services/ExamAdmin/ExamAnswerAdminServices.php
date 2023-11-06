@@ -22,22 +22,26 @@ class ExamAnswerAdminServices
     public function store($request)
     {
     
-        if($request->hasFile('image')){
-            $path = public_path('exam/answer/image');
-            !is_dir($path) &&
-                mkdir($path, 0777, true);
-    
-            $imageName = "jobo_answer_" . time() . '.' . $request->image->extension();
-            $request->image->move($path, $imageName);
+        
+        foreach($request?->data as $value){
+          
+            if(!empty($value['image'])){
+                $path = public_path('exam/answer/image');
+                !is_dir($path) &&
+                    mkdir($path, 0777, true);
+        
+                $imageName = "jobo_answer_" . time() . '.' . $value['image']->extension();
+                $value['image']->move($path, $imageName);
+            }
+            $queastion  = AnswerVariant::query()->create([
+                'questions_for_exam_id' => $request->question_id ?? 0,
+                'answer' => $value['answer'] ?? null,
+                'image' => !empty($value['image'])  ? asset('exam/answer/image/' . $imageName) : null,
+                'score' => $value['score'] ?? null
+            ]);
         }
-     
-        $queastion  = AnswerVariant::query()->create([
-            'questions_for_exam_id' => $request->question_id ?? 0,
-            'answer' => $request->answer ?? null,
-            'image' => $request->image !== null ? asset('exam/answer/image/' . $imageName) : null,
-            'score' => $request->score ?? null
-        ]);
-        return  $queastion?->id  ?? null;
+        
+        return  [] ;
     }
     
     
