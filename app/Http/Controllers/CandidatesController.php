@@ -30,37 +30,11 @@ class CandidatesController extends Controller
         $params = $request->validate([
             'limit' => ['integer', 'nullable']
         ]);
-
-        $candidates = Candidate::query()
-
-            ->with(['user:id,email,phone,verified', 'user.resumes'])
-            ->orderByDesc('id')
-            ->whereHas('user', function (Builder $query) {
-                $query->where('role', '=', 'candidate');
-            })
-            ->where('active', '=', true);
-
-        if ($name = $request->get('name'))
-            $candidates->where(function (Builder $query) use ($name) {
-                $query->where('name', 'like', '%' . $name . '%');
-                $query->orWhere('surname', 'like', '%' . $name . '%');
-            });
-
-        if ($title = $request->get('title'))
-            $candidates->whereHas('user.resumes', function (Builder $query) use ($title) {
-                $query->whereRaw(
-                    'lower(json_unquote(json_extract(`data`, \'$."position"\'))) like ?',
-                    ['%' . strtolower($title) . '%']
-                );
-            });
-
-        /** @see https://laravel.com/docs/9.x/queries#json-where-clauses */
-        if ($sphere = $request->get('sphere'))
-            $candidates->whereJsonContains('spheres', $sphere);
-
+        $data = CandidateServices::getInstance()->all($request) ?? [];
+        
         return response()->json([
             'status' => true,
-            'data' => $candidates->paginate($params['limit'] ?? null)
+            'data' => $data
         ]);
     }
 

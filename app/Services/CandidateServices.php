@@ -24,6 +24,15 @@ class CandidateServices
         return new static(CandidateRepository::getInctance());
     }
 
+    public function all($request)
+    {
+       
+        $data = $this->repository->all();
+        $candidateFilter =  CandidateFilter::applys($data);
+
+        return $candidateFilter ?? [];
+    }
+
     public function list($request)
     {
         $condidate_limit = user()->customer->limit_customer->condidate_limit ?? [];

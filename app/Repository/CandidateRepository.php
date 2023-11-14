@@ -13,6 +13,16 @@ class CandidateRepository
         return new static();
     }
 
+    public function all()
+    {
+        return Candidate::with(['user:id,email,phone,verified', 'user.resumes'])
+            ->orderByDesc('id')
+            ->whereHas('user', function ($query) {
+                $query->where('role', '=', 'candidate');
+            })
+            ->where('active', '=', true);
+    }
+
     public function list(Closure $closure)
     {
         return $closure(Candidate::query())->get();

@@ -138,7 +138,7 @@ class JobServices
         $green = '#F0922E';
         // Custom text generator to wrap the text based on the maximum width
         $lines = wordwrap($text1, 28, "\n", true);
-        $words = explode(' ', $text1); // Matnni so'zlarga bo'lib massivga ajratamiz
+        $words = explode(' ', $text1); 
         $wordCount = count($words);
 
         // If there are more than 5 words, trim the string and add three dots at the end
