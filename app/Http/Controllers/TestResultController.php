@@ -54,9 +54,14 @@ class TestResultController extends Controller
     public function getAll(Request $request):JsonResponse
     {
         try
-        {
-            $data = TestResultResource::collection($this->testResultService->getAll($request));
-            return  response()->json(['status' => true,   'result' => $data]);
+        { 
+            $test = $this->testResultService->getAll($request);
+            if($test !== null && $test !== []){
+                $data = TestResultResource::collection($test);
+                return  response()->json(['status' => true,   'result' => $data]);
+            }
+            return  response()->json(['status' => false,   'result' => []]);
+           
         }
         catch(Exception $e)
         {
