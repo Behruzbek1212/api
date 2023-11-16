@@ -69,8 +69,9 @@ class TestResultRepository
     {
         $users = _auth()->user();
 
-        if ($users) {
-            $data = $users->customer->testResult()
+        if ($users !== null) {
+            if($users->customer !== null){
+                $data = $users->customer->testResult()
                 ->with('candidate')
                 ->whereHas('candidate', function ($query) {
                     $query->where('deleted_at', null);
@@ -79,6 +80,8 @@ class TestResultRepository
                 ->get();
 
             return $data ?? [];
+            }
+            return [];
         } else {
             return []; // or handle the case where the user is null
         }
