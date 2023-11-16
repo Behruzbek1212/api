@@ -67,14 +67,21 @@ class TestResultRepository
    
     public function getAll($request)
     {
-        $data = $this->user->customer->testResult()
+        $users = _auth()->user();
+
+        if ($users) {
+            $data = $users->customer->testResult()
                 ->with('candidate')
                 ->whereHas('candidate', function ($query) {
                     $query->where('deleted_at', null);
                 })
                 ->where('deleted_at', null)
                 ->get();
-        return $data;        
+
+            return $data ?? [];
+        } else {
+            return []; // or handle the case where the user is null
+        }
     }
     public function store($request) 
     {
