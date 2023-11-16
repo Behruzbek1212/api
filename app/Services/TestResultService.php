@@ -34,13 +34,9 @@ class TestResultService
     }
 
 
-
-
-
-
     public function getAll($request)
     {
-       return $this->testResultRepository->getAll($request);
+       return $this->testResultRepository->getAll($request) !== null ?  $this->testResultRepository->getAll($request) : [];
     } 
 
 
