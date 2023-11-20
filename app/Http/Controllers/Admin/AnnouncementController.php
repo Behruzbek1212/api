@@ -26,7 +26,7 @@ class AnnouncementController extends Controller
     {
 
         $announcementData = Announcement::where('deleted_at', null)
-            ->orderByDesc('updated_at');
+            ->orderByDesc('created_at');
 
         return response()->json([
             'status' => true,
