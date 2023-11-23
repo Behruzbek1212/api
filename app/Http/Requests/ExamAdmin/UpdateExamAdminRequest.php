@@ -27,7 +27,7 @@ class UpdateExamAdminRequest extends FormRequest
             'title' => 'required|string',
             'key' => 'required|string',
             'attemps_count' => 'nullable|integer',
-            'duration' => 'nullable|integer',
+            'duration' => 'nullable',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'questions_count' => 'nullable|integer',
             'max_ball' => 'nullable|integer'
