@@ -97,7 +97,7 @@ class ExamQuestionsAdminServices
      
         $exam = $question->update($validated);
 
-        return  $exam;
+        return  [];
     }
 
     public function destroy($question)

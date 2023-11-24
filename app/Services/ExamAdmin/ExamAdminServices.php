@@ -56,7 +56,6 @@ class ExamAdminServices
             'attemps_count' => $request->attemps_count ?? 0,
             'duration' => $request->duration ?? 0,
             'image' => $request->image !== null ? asset('exam/exam-banner/' . $imageName) : null,
-            'questions_count' => $request->questions_count ?? null,
             'max_ball' => $request->max_ball ?? null
         ]);
         return $exam?->id  ?? null;
@@ -72,8 +71,14 @@ class ExamAdminServices
 
     public function update($request)
     {
+        $data =  Exam::query()->where('id', $request->exam_id)->first();
         if($request->hasFile('image')){
             $path = public_path('exam/exam-banner');
+            $filePath = parse_url($data->image, PHP_URL_PATH);
+            $filePath = ltrim($filePath, '/');
+            if (File::exists($filePath)) {
+                File::delete($filePath);
+            }
             !is_dir($path) &&
                 mkdir($path, 0777, true);
     
@@ -81,18 +86,17 @@ class ExamAdminServices
             $request->image->move($path, $imageName);
         }
      
-        $exam  = Exam::query()->where('id', $request->exam_id)->update([
+        $exam  = $data->update([
             'name' => $request->name,
             'title' => $request->title,
             'key' => $request->key,
             'attemps_count' => $request->attemps_count ?? 0,
             'duration' => $request->duration ?? 0,
-            'image' => $request->image !== null ? asset('exam/exam-banner/' . $imageName) : null,
-            'questions_count' => $request->questions_count ?? null,
+            'image' => $request->image !== null ? asset('exam/exam-banner/' . $imageName) :  $data->image,
             'max_ball' => $request->max_ball ?? null 
         ]);
 
-        return  $exam;
+        return  [];
     }
 
     public function delete($exam)
