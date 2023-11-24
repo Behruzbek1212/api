@@ -23,7 +23,7 @@ class UpdateAnswerAdminRequest extends FormRequest
     {
         return [
             'answer' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10048',
             'score' => 'required|integer'
         ];
     }

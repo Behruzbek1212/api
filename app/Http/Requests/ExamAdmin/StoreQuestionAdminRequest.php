@@ -24,8 +24,8 @@ class StoreQuestionAdminRequest extends FormRequest
         return [
             'exam_id'=> 'required|integer',
             'question' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'video' => 'nullable|mimes:mp4,avi,mov,wmv|max:20480',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:20048',
+            'video' => 'nullable|mimes:mp3,mp4,avi,mov,wmv|max:20480',
             'position' => 'nullable|integer'
         ];
     }
