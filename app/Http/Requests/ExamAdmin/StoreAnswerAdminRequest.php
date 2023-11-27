@@ -23,10 +23,9 @@ class StoreAnswerAdminRequest extends FormRequest
     {
         return [
             'question_id' => 'required|integer',
-            'data' => 'required|array',
-            'data.*.answer' => 'required|string',
-            'data.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10048',
-            'data.*.score' => 'required|integer',
+            'answer' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10048',
+            'score' => 'required|integer',
         ];
     }
 }

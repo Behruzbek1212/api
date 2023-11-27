@@ -24,7 +24,7 @@ class UpdateQuestionAdminRequest extends FormRequest
         return [
             'question' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:8048',
-            'video' => 'nullable|mimes:mp3,mp4,avi,mov,wmv|max:20480',
+            'video' => 'nullable|file|mimes:mp3,mp4,avi,mov,wmv|max:20480',
             'position' => 'nullable|integer'
         ];
     }
