@@ -37,7 +37,7 @@ class ExamAnswerAdminServices
                 'image' => $request->image !== null  ? asset('exam/answer/image/' . $imageName) : null,
                 'score' =>  $request->score ?? null
             ]);
-        }
+        
         
         return  [] ;
     }
