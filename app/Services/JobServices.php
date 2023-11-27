@@ -92,15 +92,15 @@ class JobServices
 
         if (isset($salary['agreement']) && $salary['agreement'] !== true) {
             try{
-                if (isset($salary['amount']) && $salary['amount'] !== null) {
-                    $text4 = explode('-', $salary['amount']);
-                } elseif (isset($salary['min_salary']) && $salary['min_salary'] !== null  && isset($salary['max_salary']) && $salary['max_salary'] !== null) {
+                if (isset($salary['min_salary']) && $salary['min_salary'] !== null  && isset($salary['max_salary']) && $salary['max_salary'] !== null) {
                     $text4 = explode('-', $salary['min_salary'] . '-' . $salary['max_salary']);
                 } elseif(isset($salary['min_salary']) &&  $salary['min_salary'] !== null) {
                     $text4 = explode('-', $salary['min_salary']);
                 }elseif(isset($salary['max_salary']) && $salary['max_salary'] !== null){
                     $text4= explode('-',  $salary['max_salary']);
-                }
+                } elseif (isset($salary['amount']) && $salary['amount'] !== null) {
+                    $text4 = explode('-', $salary['amount']);
+                } 
                 try{
                     $formattedParts = array_map(function ($text) use ($salary) {
                         if($salary['currency'] == 'USD'){
