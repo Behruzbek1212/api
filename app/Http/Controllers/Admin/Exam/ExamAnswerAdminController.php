@@ -67,10 +67,10 @@ class ExamAnswerAdminController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(AnswerVariant $variantVariant)
+    public function destroy(AnswerVariant $answerVariant)
     {  
         try {
-            return $this->successResponse(ExamAnswerAdminServices::getInstance()->destroy($variantVariant));
+            return $this->successResponse(ExamAnswerAdminServices::getInstance()->destroy($answerVariant));
         }catch (Exception $e){
             return $this->errorResponse($e->getMessage());
         }
