@@ -180,5 +180,5 @@ Route::prefix('/exams/answer')->group(function () {
     Route::post('/store',  [ExamAnswerAdminController::class, 'store']);
     Route::get('/show/{answer}', [ExamAnswerAdminController::class, 'show']);
     Route::post('/update/{answer}',  [ExamAnswerAdminController::class, 'update']);
-    Route::delete('delete/{answer}',[ExamAnswerAdminController::class, 'destroy']);
+    Route::delete('delete/{variantVariant}',[ExamAnswerAdminController::class, 'destroy']);
 });
