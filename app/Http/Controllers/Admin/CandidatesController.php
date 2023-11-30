@@ -135,7 +135,7 @@ class CandidatesController extends Controller
 
         $candidate->update(array_merge(
             $request->except(['id', 'phone', 'email']),
-            ['avatar' => $request->get('avatar') ?? null]
+            ['avatar' => $request->get('avatar') ?? $candidate?->avatar ?? null]
         ));
 
         $candidate->__conversation = $request->get('__conversation');
