@@ -63,6 +63,7 @@ class ExamQuestionsAdminServices
 
     public function update($request, $question)
     {  
+        
         $validated =  $request->validated();
         if($request->hasFile('image')){
             
@@ -81,7 +82,7 @@ class ExamQuestionsAdminServices
         }
 
         if($request?->hasFile('video')){
-            $filePath = parse_url($queastion->video, PHP_URL_PATH);
+            $filePath = parse_url($question->video, PHP_URL_PATH);
             $filePath = ltrim($filePath, '/');
             if (File::exists($filePath)) {
                 File::delete($filePath);
