@@ -123,7 +123,7 @@ class JobServices
         }
         // Trim whitespace from each part and add a space as a thousands separator
 
-        $rasmUrl = public_path('img/banner.jpg');
+        $rasmUrl = public_path('img/banner.png');
         $font_file = 'Gilroy-ExtraBold.otf';
         $font_path = public_path('fonts/' . $font_file);
 
