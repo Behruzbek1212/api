@@ -43,7 +43,7 @@ class AnnouncementController extends Controller
     {
         $request->validated();
 
-        $imageUrl =  JobServices::getInstance()->createJobBanner($request->data['company_name'], $request->data['title'], $request->data['salary'], $request->data['address'] , $request->data['post_number'], $request->data['bonus']);
+        $imageUrl =  JobServices::getInstance()->createJobBanner($request->data['company_name'], $request->data['title'], $request->data['salary'], $request->data['address'] , $request->data['post_number'], $request->data['bonus'] ?? false);
 
         $data = $request->data;
 

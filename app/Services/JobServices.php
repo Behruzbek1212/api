@@ -135,7 +135,7 @@ class JobServices
         $gilroyLight = realpath($gilroyLight);
         $gilroyLight = mb_convert_encoding($gilroyLight, 'big5', 'utf-8');
         $jpg_image = Image::make($rasmUrl);
-        $green = '#F0922E';
+        $green = '#3894FF';
         // Custom text generator to wrap the text based on the maximum width
         $lines = wordwrap($text1, 28, "\n", true);
         $words = explode(' ', $text1); 
