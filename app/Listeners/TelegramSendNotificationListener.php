@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Http;
 class TelegramSendNotificationListener implements ShouldQueue
 {
     use InteractsWithQueue;
-    
+
     /**
      * Create the event listener.
      */
@@ -19,7 +19,7 @@ class TelegramSendNotificationListener implements ShouldQueue
     {
         //
     }
-    
+
     /**
      * Handle the event.
      */
@@ -32,14 +32,14 @@ class TelegramSendNotificationListener implements ShouldQueue
             $month  = $resume->calculate_experience($resume->data);
             if($month > 0){
                 $yaerMonth = $this->convertMonthsToYearsAndMonths($month);
-            } else 
+            } else
             {
                 $yaerMonth = "Ish tajribasi yo'q";
             }
         }
-       
+
         $message = "⚡️ <b> Yangi ariza </b> \n\n";
-      
+
         $message .= "📜 Vakansiya: <b>" . $event->job->title . "</b> \n";
         if($event->candidate->sex == 'male'){
             $message .= "👨‍💼 Nomzod: <b>" . $event->candidate->name . " " . $event->candidate->surname . "</b> \n";
@@ -58,7 +58,7 @@ class TelegramSendNotificationListener implements ShouldQueue
         } else {
             $message .= "✍️ Qo'shimcha xabar:<b> Yo'q</b> \n\n";
         }
-       
+
         foreach($event->customer->telegram_id as $value){
             Http::withoutVerifying()->post("https://api.telegram.org/bot".env('TELEGRAM_BOT_NOTIFICATION') ."/sendMessage", [
                     'chat_id' => $value,
@@ -68,16 +68,16 @@ class TelegramSendNotificationListener implements ShouldQueue
                         'inline_keyboard' => [[
                             [
                                 'text' => "↗️ Chatga o'tish",
-                                'url' => 'https://jobo.uz/user/chat/' . $event->chat_id
+                                'url' => 'https://jobo.uz/monitoring'
                             ]
                         ]]
                     ])
                 ]);
             }
-            
+
     }
 
-    
+
     public  function convertMonthsToYearsAndMonths($months) {
         $years = floor($months / 12);
         $remainingMonths = $months % 12;
@@ -85,11 +85,11 @@ class TelegramSendNotificationListener implements ShouldQueue
         if($years > 0){
             $result = "$years yil ";
         }
-       
+
         if ($remainingMonths > 0) {
             $result .= "$remainingMonths oy";
         }
-      
+
         return $result;
     }
 }
