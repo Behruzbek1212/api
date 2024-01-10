@@ -19,7 +19,7 @@ class CandidateExamController extends Controller
         ]);
         $user = _auth()->user();
 
-        $candidate_id = Candidate::where('user_id', $user->id)->first()->id;
+        // $candidate_id = Candidate::where('user_id', $user->id)->first()->id;
         $candidate_exams = CandidateExam::with('exams')
             ->where('id', $request->candidate_exam_id)
             ->where('customer_id', $request->customer_id)->first();
