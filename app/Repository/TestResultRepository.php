@@ -130,16 +130,16 @@ class TestResultRepository
 
         if($customer_id !== null){
             if($this->user->candidate !== null){
-                $result = $this->user->candidate->testResult()->where('deleted_at', null)->where('customer_id', $customer_id)->firstOrFail();
+                $result = $this->user->candidate->testResult()->where('deleted_at', null)->where('customer_id', $customer_id)->first();
 
-                return $result;
+                return $result ?? [];
             }
             return [];
         }
         if($this->user->candidate !== null){
-            $result = $this->user->candidate->testResult()->where('deleted_at', null)->where('customer_id', null)->firstOrFail();
+            $result = $this->user->candidate->testResult()->where('deleted_at', null)->where('customer_id', null)->first();
 
-            return $result;
+            return $result ?? [];
         }
         return [];
     }
