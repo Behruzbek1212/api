@@ -23,7 +23,7 @@ class StoreCalledInterviewRequest extends FormRequest
     {
         return [
             'candidate_id' =>  'required|integer',
-            'date' => 'required|date_format:Y-m-d H:i:s',
+            'date' => 'required|date',
             'chat_id'=> 'integer|nullable'
         ];
     }
