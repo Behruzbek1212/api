@@ -217,7 +217,14 @@ class ResumeController extends Controller
             ->candidate;
 
         $experience = $resume->experience;
+        
+        $candidateTest = Candidate::with('user' , 'testResult')
+                   ->whereHas('testResult', function ($query) {
+                        $query->where('customer_id', null)
+                            ->where('deleted_at', null);
+                   })->find($candidate->id);
 
+        $testResult =   $candidateTest->testResult ?? [];          
         $resume_id = $id;
 
         $experience = $resume -> experience;
@@ -226,7 +233,7 @@ class ResumeController extends Controller
         $resume->increment('visits');
 
         return (new ResumeService)
-            ->load(compact('data', 'candidate', 'resume_id', 'experience'))
+            ->load(compact('data', 'candidate', 'testResult', 'resume_id', 'experience'))
             ->download($candidate->name . '.pdf');
     }
 
