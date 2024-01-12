@@ -140,25 +140,32 @@ class ResumeController extends Controller
      * @throws JsonException
      */
     public function show(string|int $id): Response
-    {
+    {   
         $resume = Resume::query()
             ->with('user')
             ->findOrFail($id);
-
+       
         $data = $resume->data;
         $candidate = $resume->user
             ->candidate;
         $experience = $resume -> experience;
-
+        
         $experience = $resume->experience;
+     
+        $candidateTest = Candidate::with('user' , 'testResult')
+                   ->whereHas('testResult', function ($query) {
+                        $query->where('customer_id', null)
+                            ->where('deleted_at', null);
+                   })->find($candidate->id);
 
+        $testResult =   $candidateTest->testResult ?? [];          
         $resume_id = $id;
 
         $resume->increment('visits');
 
         return (new ResumeService)
-            ->load(compact('data', 'candidate', 'resume_id', 'experience'))
-            ->load(compact('data', 'candidate', 'resume_id', 'experience'))
+            ->load(compact('data', 'candidate', 'testResult', 'resume_id', 'experience'))
+            ->load(compact('data', 'candidate', 'testResult', 'resume_id', 'experience'))
             ->stream($candidate->name . '.pdf');
     }
 
