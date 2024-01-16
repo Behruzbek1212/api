@@ -81,7 +81,7 @@ class Chat extends Model
      *
      * @return Candidate|Model|BelongsTo
      */
-    public function getCandidateAttribute(): BelongsTo|Model|Candidate
+    public function getCandidateAttribute(): BelongsTo|Model|Candidate|null
     {
         return $this->candidate()->first();
     }
@@ -102,7 +102,7 @@ class Chat extends Model
      *
      * @return Customer|Model|BelongsTo
      */
-    public function getCustomerAttribute(): BelongsTo|Model|Customer
+    public function getCustomerAttribute(): BelongsTo|Model|Customer|null
     {
         return $this->customer()->first();
     }
