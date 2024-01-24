@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Bots\ADSON\AdminController as AdsonAdminController;
 use App\Http\Controllers\Bots\ADSON\MainController as AdsonController;
+use App\Http\Controllers\Bots\MehriGiyo\MehriGiyoController;
+use App\Http\Controllers\Bots\MehriGiyo\MehriGiyoHrController;
 use App\Http\Controllers\Bots\NUMAKIDS\AdminController as NumakidsAdminController;
 use App\Http\Controllers\Bots\NUMAKIDS\MainController as NumakidsController;
 use App\Http\Controllers\Bots\PartyHr\PartyAdminController;
@@ -60,4 +62,15 @@ Route::prefix('/_utils/portret-hr')->name('portret-hr.')->group(function () {
     Route::get('user/get/{token}', [PortretUserController::class, 'showData'])->name('show-user');
     Route::get('user/all', [PortretUserController::class, 'index'])->name('show-All');
     Route::get('user/count', [PortretUserController::class, 'userCount'])->name('user-count');
+});
+
+
+Route::prefix('/_utils/mehri-giyo')->name('mehri-giyo.')->group(function () {
+    Route::post('store-data' , [MehriGiyoHrController::class, 'store'])->name('data-store');
+    Route::post('store-file' , [MehriGiyoHrController::class, 'createFile'])->name('data-file');
+    Route::get('data/{token}', [MehriGiyoHrController::class, 'showData'])->name('show-data');
+    Route::post('user/store', [MehriGiyoController::class, 'store'])->name('user-store');
+    Route::get('user/get/{token}', [MehriGiyoController::class, 'showData'])->name('show-user');
+    Route::get('user/all', [MehriGiyoController::class, 'index'])->name('show-All');
+    Route::get('user/count', [MehriGiyoController::class, 'userCount'])->name('user-count');
 });
