@@ -222,7 +222,7 @@ class JobServices
             });
         }
       
-        $jpg_image->save($storagePath);
+        $jpg_image->encode('jpg', 100)->save($storagePath);
 
 
         return 'https://static.jobo.uz/' .   $imagefileUrl;
