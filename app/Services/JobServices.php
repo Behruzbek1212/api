@@ -211,7 +211,7 @@ class JobServices
         $bonus == true ? $pos_y = 885 : $pos_y = 920;
         $jpg_image->text($prices,  750, $pos_y, function ($font) use ($font_path) {
             $font->file($font_path);
-            $font->size(115);
+            $font->size(105);
             $font->color('#63CC52');
             $font->align('center');
             $font->valign('middle');
