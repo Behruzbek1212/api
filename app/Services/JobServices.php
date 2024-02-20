@@ -113,8 +113,12 @@ class JobServices
                     $formattedParts = $text4;
                 }
 
-                // Join the formatted parts back with the '-' character
-                $prices = implode(' - ', $formattedParts);
+                if(count($formattedParts) > 1)
+                {
+                    $formattedParts[0] = "c " . $formattedParts[0];
+                }
+                
+                $prices = implode(' до ', $formattedParts);
             } catch (Exception $e){
                 $prices = $text4;
             }
