@@ -116,9 +116,17 @@ class JobServices
                 if(count($formattedParts) > 1)
                 {
                     $formattedParts[0] = "c " . $formattedParts[0];
+                    $prices = implode(' до ', $formattedParts);
+                } else {
+                    
+                    if(isset($salary['min_salary']) &&  $salary['min_salary'] !== null) {
+                        $prices = 'c ' . implode(' c ', $formattedParts);
+                    } else {
+                        $prices = 'до ' . implode(' до ', $formattedParts);
+                    }
+                  
                 }
-                
-                $prices = implode(' до ', $formattedParts);
+                  
             } catch (Exception $e){
                 $prices = $text4;
             }
