@@ -64,11 +64,11 @@
     if (! function_exists('showEducationLevels')) {
         function showEducationLevels($level):string {
             if ($level !== 'higher' && $level !== 'secondary' && $level !== 'incomplete_higher') {
-                return $level;
+                return (string)$level;
             }
             $temp = 'resume.education_levels.' . $level;
             $str = __($temp);
-            return $str;
+            return $str !== null ? $str : "No Education Level";
         }
     }
 
@@ -657,7 +657,7 @@
                 </div>
             </div>
         @endif
-        
+
         @if(isset($testResult) &&  $testResult !== [])
         <table id="languages" class="w-full relative">
             @if(count($testResult[0]['result']) > 1)
