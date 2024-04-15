@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\BlockNumberController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -70,19 +71,7 @@ Route::get('/cron_jobs', [JobController::class, 'cron_jobs'])->name('cron_jobs')
 Route::get('/cron_backup', [BackupController::class, 'backup'])->name('cron_backup');
 
 Route::prefix('/v1')->group(function () {
-    Route::get('/block-number', function () {
-        $data = [
-            "refresh" => 0,
-            "items" => [
-                ["number" => "001", "name" => "", "firstname" => "", "lastname" => "", "phone" => "947980058", "mobile" => "947980058", "email" => "", "address" => "", "city" => "", "state" => "", "zip" => "", "comment" => "", "presence" => 0, "starred" => 0, "info" => ""],
-                ["number" => "002", "name" => "", "firstname" => "", "lastname" => "", "phone" => "+998947980058", "mobile" => "+998947980058", "email" => "", "address" => "", "city" => "", "state" => "", "zip" => "", "comment" => "", "presence" => 0, "starred" => 0, "info" => ""],
-                ["number" => "003", "name" => "", "firstname" => "", "lastname" => "", "phone" => "+998993960990", "mobile" => "+998993960990", "email" => "", "address" => "", "city" => "", "state" => "", "zip" => "", "comment" => "", "presence" => 0, "starred" => 0, "info" => ""],
-                ["number" => "004", "name" => "", "firstname" => "", "lastname" => "", "phone" => "993960990", "mobile" => "993960990", "email" => "", "address" => "", "city" => "", "state" => "", "zip" => "", "comment" => "", "presence" => 0, "starred" => 0, "info" => ""],
-            ]
-        ];
-
-        return response()->json($data);
-    });
+    Route::get('/block-number',[BlockNumberController::class, 'index'])->name('block_number');
 
     // User | Me ------------------------------------
     Route::get('/me', [Controller::class, 'user'])

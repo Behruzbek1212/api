@@ -57,7 +57,7 @@ class Handler extends ExceptionHandler
                 'chat_id' => '-1001821241273',
                 'text' => "title: " . $e->getMessage() . "\n\nFile: " . $e->getFile() . "\nLine: " . $e->getLine()
             ]);
-        }); 
+        });
 
         $this->renderable(function (NotFoundHttpException $e) {
             return response()->json([

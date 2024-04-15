@@ -79,89 +79,165 @@ class JobServices
     }
 
 
-    public function createJobBanner($company, $title, $salary, $address, $post_number , $bonus)
+    public function createJobBanner($company, $title, $salary, $address, $postNumber = 0, $bonus = false)
     {
         $randomFileName = uniqid() . '.jpg';
-        $imagefileUrl = 'uploads/image/job-posts/' . $randomFileName;
-        $storagePath = public_path($imagefileUrl);
-        $postNumber =  '№ ' . $post_number ?? 0;
+        $imageFileUrl = 'uploads/image/job-posts/' . $randomFileName;
+        $storagePath = public_path($imageFileUrl);
+        $postNumber = '№ ' . ($postNumber ?? 0);
         $text1 = $title;
         $text2 = $company;
         $text3 = Location::find($address)['name']['uz'] ?? "";
 
+        $prices = $this->getSalaryText($salary);
 
+        $rasmUrl = public_path('img/banner.jpg');
+        $fontFile = 'Gilroy-ExtraBold.otf';
+        $fontPath = $this->getFontPath('fonts/' . $fontFile);
+
+        $gilroyLight = $this->getFontPath('fonts/Gilroy-Light.otf');
+
+        $jpgImage = Image::make($rasmUrl);
+        $green = '#3894FF';
+
+        $lines = wordwrap($text1, 28, "\n", true);
+        $words = explode(' ', $text1);
+        $wordCount = count($words);
+
+        $trimmedString = $wordCount > 4 ? $this->getTrimmedString($lines, 4) : $lines;
+
+        list($firstLine, $remainingText) = $this->getFirstAndRemainingLines($trimmedString);
+
+        $jpgImage->text($postNumber, 753, 273, function ($font) use ($fontPath) {
+            $font->file($fontPath);
+            $font->size(50);
+            $font->color('#0079fe');
+            $font->align('center');
+            $font->valign('middle');
+        });
+
+        $positionY = $remainingText !== "" ? 450 : 560;
+
+        $jpgImage->text($firstLine, 750, $positionY, function ($font) use ($fontPath, $green) {
+            $font->file($fontPath);
+            $font->size(106);
+            $font->color($green);
+            $font->align('center');
+            $font->valign('middle');
+        });
+
+        if ($remainingText !== "") {
+            $jpgImage->text($remainingText, 750, 560, function ($font) use ($fontPath, $green) {
+                $font->file($fontPath);
+                $font->size(100);
+                $font->color($green);
+                $font->align('center');
+                $font->valign('middle');
+            });
+        }
+
+        $jpgImage->text($text2, 330, 1080, function ($font) use ($gilroyLight) {
+            $font->file($gilroyLight);
+            $font->size(40);
+            $font->color('#7c7c7c');
+            $font->align('left');
+            $font->valign('middle');
+        });
+
+        $jpgImage->text($text3, 1030, 1080, function ($font) use ($gilroyLight) {
+            $font->file($gilroyLight);
+            $font->size(40);
+            $font->color('#7c7c7c');
+            $font->align('left');
+            $font->valign('middle');
+        });
+
+        $posY = $bonus ? 885 : 920;
+        $jpgImage->text($prices, 750, $posY, function ($font) use ($fontPath) {
+            $font->file($fontPath);
+            $font->size(105);
+            $font->color('#63CC52');
+            $font->align('center');
+            $font->valign('middle');
+        });
+
+        if ($bonus) {
+            $jpgImage->text("+ bonus", 750, 1000, function ($font) use ($fontPath) {
+                $font->file($fontPath);
+                $font->size(90);
+                $font->color('#63CC52');
+                $font->align('center');
+                $font->valign('middle');
+            });
+        }
+
+        $jpgImage->encode('jpg', 100)->save($storagePath);
+
+        return 'https://static.jobo.uz/' . $imageFileUrl;
+    }
+
+    public function getSalaryText($salary)
+    {
         if (isset($salary['agreement']) && $salary['agreement'] !== true) {
-            try{
-                if (isset($salary['min_salary']) && $salary['min_salary'] !== null  && isset($salary['max_salary']) && $salary['max_salary'] !== null) {
-                    $text4 = explode('-', $salary['min_salary'] . '-' . $salary['max_salary']);
-                } elseif(isset($salary['min_salary']) &&  $salary['min_salary'] !== null) {
-                    $text4 = explode('-', $salary['min_salary']);
-                }elseif(isset($salary['max_salary']) && $salary['max_salary'] !== null){
-                    $text4= explode('-',  $salary['max_salary']);
-                } elseif (isset($salary['amount']) && $salary['amount'] !== null) {
-                    $text4 = explode('-', $salary['amount']);
-                } 
-                try{
-                    $formattedParts = array_map(function ($text) use ($salary) {
-                        if($salary['currency'] == 'USD'){
-                            return  number_format(trim($text), 0, '', ' ') . "$";
-                        } else {
-                            return number_format(trim($text), 0, '', ' ');
-                        }
-                    }, $text4);
-                }  catch(Exception $e){
-                    $formattedParts = $text4;
-                }
+            try {
+                $text4 = $this->extractSalaryRange($salary);
+                $formattedParts = $this->formatSalaryParts($text4, $salary['currency']);
 
-                if(count($formattedParts) > 1)
-                {
-                    $formattedParts[0] = "c " . $formattedParts[0];
-                    $prices = implode(' до ', $formattedParts);
+                $prices = implode(' до ', $formattedParts);
+                if (count($formattedParts) === 1) {
+                    $prices = isset($salary['min_salary']) && $salary['min_salary'] !== null
+                        ? 'c ' . $prices
+                        : 'до ' . $prices;
                 } else {
-                    
-                    if(isset($salary['min_salary']) &&  $salary['min_salary'] !== null) {
-                        $prices = 'c ' . implode(' c ', $formattedParts);
-                    } else {
-                        $prices = 'до ' . implode(' до ', $formattedParts);
-                    }
-                  
+                    $formattedParts[0] = "c " . $formattedParts[0];
                 }
-                  
-            } catch (Exception $e){
+            } catch (Exception $e) {
                 $prices = $text4;
             }
         } else {
             $prices = 'Suhbat asosida';
         }
-        // Trim whitespace from each part and add a space as a thousands separator
 
-        $rasmUrl = public_path('img/banner.jpg');
-        $font_file = 'Gilroy-ExtraBold.otf';
-        $font_path = public_path('fonts/' . $font_file);
+        return $prices;
+    }
 
-        $font_path = realpath($font_path);
-
-        $font_path = mb_convert_encoding($font_path, 'big5', 'utf-8');
-
-        $gilroyLight = public_path('fonts/Gilroy-Light.otf');
-        $gilroyLight = realpath($gilroyLight);
-        $gilroyLight = mb_convert_encoding($gilroyLight, 'big5', 'utf-8');
-        $jpg_image = Image::make($rasmUrl);
-        $green = '#3894FF';
-        // Custom text generator to wrap the text based on the maximum width
-        $lines = wordwrap($text1, 28, "\n", true);
-        $words = explode(' ', $text1); 
-        $wordCount = count($words);
-
-        // If there are more than 5 words, trim the string and add three dots at the end
-        if ($wordCount > 4) {
-            $words = explode(' ', $lines);
-            $trimmedString = implode(' ', array_slice($words, 0, 4));
-            $trimmedString .= '...';
-        } else {
-            $trimmedString = $lines;
+    public function extractSalaryRange($salary)
+    {
+        if (isset($salary['min_salary']) && $salary['min_salary'] !== null && isset($salary['max_salary']) && $salary['max_salary'] !== null) {
+            $text4 = explode('-', $salary['min_salary'] . '-' . $salary['max_salary']);
+        } elseif (isset($salary['min_salary']) && $salary['min_salary'] !== null) {
+            $text4 = explode('-', $salary['min_salary']);
+        } elseif (isset($salary['max_salary']) && $salary['max_salary'] !== null) {
+            $text4 = explode('-', $salary['max_salary']);
+        } elseif (isset($salary['amount']) && $salary['amount'] !== null) {
+            $text4 = explode('-', $salary['amount']);
         }
 
+        return $text4;
+    }
+
+    public function formatSalaryParts($text4, $currency)
+    {
+        return array_map(function ($text) use ($currency) {
+            if ($currency == 'USD') {
+                return number_format(trim($text), 0, '', ' ') . "$";
+            } else {
+                return number_format(trim($text), 0, '', ' ');
+            }
+        }, $text4);
+    }
+
+    public function getTrimmedString($lines, $maxWords = 4)
+    {
+        $words = explode(' ', $lines);
+        $trimmedString = implode(' ', array_slice($words, 0, $maxWords));
+        $trimmedString .= (count($words) > $maxWords) ? '...' : '';
+
+        return $trimmedString;
+    }
+
+    public function getFirstAndRemainingLines($trimmedString)
+    {
         $firstNewLinePos = strpos($trimmedString, "\n");
 
         if ($firstNewLinePos !== false) {
@@ -172,71 +248,14 @@ class JobServices
             $remainingText = "";
         }
 
-        $jpg_image->text($postNumber,  753, 273, function ($font) use ($font_path) {
-            $font->file($font_path);
-            $font->size(50);
-            $font->color('#0079fe');
-            $font->align('center');
-            $font->valign('middle');
-        });
-        
-        $remainingText !== "" ?  $position_y = 450 : $position_y =  560;
-        
-        $jpg_image->text($firstLine, 750, $position_y, function ($font) use ($font_path, $green) {
-            $font->file($font_path);
-            $font->size(106);
-            $font->color($green);
-            $font->align('center');
-            $font->valign('middle');
-        });
-        if ($remainingText !== "") {
-            $jpg_image->text($remainingText, 750, 560, function ($font) use ($font_path, $green) {
-                $font->file($font_path);
-                $font->size(100);
-                $font->color($green);
-                $font->align('center');
-                $font->valign('middle');
-            });
-        }
+        return [$firstLine, $remainingText];
+    }
 
+    public function getFontPath($fontPath)
+    {
+        $fontPath = realpath(public_path($fontPath));
+        $fontPath = mb_convert_encoding($fontPath, 'big5', 'utf-8');
 
-        $jpg_image->text($text2, 330, 1080, function ($font) use ($gilroyLight) {
-            $font->file($gilroyLight);
-            $font->size(40);
-            $font->color('#7c7c7c');
-            $font->align('left');
-            $font->valign('middle');
-        });
-
-        $jpg_image->text($text3, 1030, 1080, function ($font) use ($gilroyLight) {
-            $font->file($gilroyLight);
-            $font->size(40);
-            $font->color('#7c7c7c');
-            $font->align('left');
-            $font->valign('middle');
-        });
-
-        $bonus == true ? $pos_y = 885 : $pos_y = 920;
-        $jpg_image->text($prices,  750, $pos_y, function ($font) use ($font_path) {
-            $font->file($font_path);
-            $font->size(105);
-            $font->color('#63CC52');
-            $font->align('center');
-            $font->valign('middle');
-        });
-        if($bonus == true){
-            $jpg_image->text("+ bonus",  750, 1000, function ($font) use ($font_path) {
-                $font->file($font_path);
-                $font->size(90);
-                $font->color('#63CC52');
-                $font->align('center');
-                $font->valign('middle');
-            });
-        }
-      
-        $jpg_image->encode('jpg', 100)->save($storagePath);
-
-
-        return 'https://static.jobo.uz/' .   $imagefileUrl;
+        return $fontPath;
     }
 }
