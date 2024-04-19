@@ -189,7 +189,7 @@ class Candidate extends Model
     {
         return $this->hasMany(Comment::class);
     }
-    
+
     /**
      * Display the interview
      *
@@ -209,7 +209,7 @@ class Candidate extends Model
      * @return HasMany
      * @see https://laravel.com/docs/10.x/eloquent-relationships#one-to-many
      */
-    
+
      public function testResult():HasMany
      {
         return $this->hasMany(TestResult::class);

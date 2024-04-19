@@ -20,6 +20,9 @@ class CandidateRepository
             ->whereHas('user', function ($query) {
                 $query->where('role', '=', 'candidate');
             })
+            ->whereHas('testResult', function ($query){
+                $query->where('customer_id', null);
+            })
             ->where('active', '=', true);
     }
 
