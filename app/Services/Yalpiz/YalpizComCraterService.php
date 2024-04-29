@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\MehriGiyoService;
+namespace App\Services\Yalpiz;
 
 use App\Models\Yalpiz\YalpizComCrater;
 use Nette\Utils\Random;

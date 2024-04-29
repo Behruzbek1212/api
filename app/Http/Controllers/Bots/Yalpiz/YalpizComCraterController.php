@@ -5,7 +5,7 @@ namespace  App\Http\Controllers\Bots\Yalpiz;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Yalpiz\StoreYalpizComCraterRequest;
 use App\Http\Requests\Yalpiz\StoreYalpizFileRequest;
-use App\Services\MehriGiyoService\YalpizComCraterService;
+use App\Services\Yalpiz\YalpizComCraterService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 

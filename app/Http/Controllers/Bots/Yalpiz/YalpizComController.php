@@ -7,7 +7,7 @@ use App\Http\Requests\Yalpiz\StoreYalpizComRequest;
 use App\Models\Yalpiz\YalpizCom as YalpizYalpizCom;
 use App\Models\YalpizCom;
 
-use App\Services\MehriGiyoService\YalpizComService;
+use App\Services\Yalpiz\YalpizComService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
