@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Bots\ADSON\AdminController as AdsonAdminController;
 use App\Http\Controllers\Bots\ADSON\MainController as AdsonController;
+use App\Http\Controllers\Bots\Buday\BudayComController;
+use App\Http\Controllers\Bots\Buday\BudayComHrController;
 use App\Http\Controllers\Bots\MehriGiyo\MehriGiyoController;
 use App\Http\Controllers\Bots\MehriGiyo\MehriGiyoHrController;
 use App\Http\Controllers\Bots\NUMAKIDS\AdminController as NumakidsAdminController;
@@ -10,6 +12,8 @@ use App\Http\Controllers\Bots\PartyHr\PartyAdminController;
 use App\Http\Controllers\Bots\PartyHr\PartyHrController;
 use App\Http\Controllers\Bots\PORTRETHR\PortretHrController;
 use App\Http\Controllers\Bots\PORTRETHR\PortretUserController;
+use App\Http\Controllers\Bots\Yalpiz\YalpizComController;
+use App\Http\Controllers\Bots\Yalpiz\YalpizComCraterController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/_utils/_bots/_adson-crater')->name('bots.')->group(function () {
@@ -73,4 +77,24 @@ Route::prefix('/_utils/mehri-giyo')->name('mehri-giyo.')->group(function () {
     Route::get('user/get/{token}', [MehriGiyoController::class, 'showData'])->name('show-user');
     Route::get('user/all', [MehriGiyoController::class, 'index'])->name('show-All');
     Route::get('user/count', [MehriGiyoController::class, 'userCount'])->name('user-count');
+});
+
+Route::prefix('/_utils/yalpiz')->name('yalpiz.')->group(function () {
+    Route::post('store-data' , [YalpizComCraterController::class, 'store'])->name('data-store');
+    Route::post('store-file' , [YalpizComCraterController::class, 'createFile'])->name('data-file');
+    Route::get('data/{token}', [YalpizComCraterController::class, 'showData'])->name('show-data');
+    Route::post('user/store', [YalpizComController::class, 'store'])->name('user-store');
+    Route::get('user/get/{token}', [YalpizComController::class, 'showData'])->name('show-user');
+    Route::get('user/all', [YalpizComController::class, 'index'])->name('show-All');
+    Route::get('user/count', [YalpizComController::class, 'userCount'])->name('user-count');
+});
+
+Route::prefix('/_utils/buday')->name('buday.')->group(function () {
+    Route::post('store-data' , [BudayComHrController::class, 'store'])->name('data-store');
+    Route::post('store-file' , [BudayComHrController::class, 'createFile'])->name('data-file');
+    Route::get('data/{token}', [BudayComHrController::class, 'showData'])->name('show-data');
+    Route::post('user/store', [BudayComController::class, 'store'])->name('user-store');
+    Route::get('user/get/{token}', [BudayComController::class, 'showData'])->name('show-user');
+    Route::get('user/all', [BudayComController::class, 'index'])->name('show-All');
+    Route::get('user/count', [BudayComController::class, 'userCount'])->name('user-count');
 });
