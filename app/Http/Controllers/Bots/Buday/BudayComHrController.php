@@ -6,9 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Buday\StoreBudayComHrRequest;
 use App\Http\Requests\Buday\StoreBudayFileRequest;
 
-use App\Http\Requests\UpdateBudayComHrRequest;
-use App\Models\BudayComHr;
-use App\Services\MehriGiyoService\BudayComHrService;
+use App\Services\BudayCom\BudayComHrService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 

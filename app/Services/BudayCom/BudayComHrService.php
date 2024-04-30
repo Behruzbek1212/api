@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\MehriGiyoService;
+namespace App\Services\BudayCom;
 
 use App\Models\Buday\BudayComHr;
 use Nette\Utils\Random;

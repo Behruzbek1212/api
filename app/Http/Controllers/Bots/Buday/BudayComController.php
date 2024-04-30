@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Bots\Buday;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Buday\StoreBudayComRequest;
 use App\Models\Buday\BudayCom;
-use App\Services\MehriGiyoService\BudayComService;
+use App\Services\BudayCom\BudayComService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
