@@ -79,7 +79,7 @@ Route::prefix('/v1')->group(function () {
 
     // Authorization --------------------------------
     Route::prefix('/auth')->name('auth.')->group(function () {
-        Route::middleware('guest:sanctum')->group(function () {
+        Route::middleware(['guest:sanctum', 'throttle:guest_api'])->group(function () {
             Route::post('/register', [RegisterController::class, 'register'])->name('register');
             Route::post('/login', [LoginController::class, 'login'])->name('login');
             Route::prefix('/check')->name('check.')->group(function () {

@@ -6,6 +6,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Http;
 use Psr\Log\LogLevel;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -47,7 +48,7 @@ class Handler extends ExceptionHandler
     public function register(): void
     {
         $this->reportable(function (Throwable $e) {
-            if (! config('app.debug'))
+            if (!config('app.debug'))
                 return;
 
             // https://t.me/uzcsbot
@@ -65,5 +66,16 @@ class Handler extends ExceptionHandler
                 'message' => $e->getMessage()
             ]);
         });
+    }
+
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof ThrottleRequestsException) {
+            return response()->json([
+                'message' => 'Too many requests. Please try again in a minute.'
+            ], 429);
+        }
+
+        return parent::render($request, $exception);
     }
 }
