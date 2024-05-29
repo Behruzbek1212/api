@@ -102,6 +102,31 @@ class ResumeController extends Controller
         ]);
     }
 
+    public function updateStatus(Request $request): JsonResponse
+    {
+        $request->validate([
+            'resume_id' => 'required|integer',
+            'status' => 'required|in:active,no-active'
+        ]);
+        // /** @var Authenticatable|User|null $user */
+        // $user = _auth()->user();
+
+        $resume = Resume::findOrFail($request->input('resume_id'));
+
+        $data = $resume->data;
+        // dd($data);
+        $data['status'] = $request->status ?? 'active'; // Update the status key within the data JSON
+
+        $resume->update([
+            'data' => $data, // Re-encode and update the entire data JSON column
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Ok'
+        ]);
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -140,25 +165,25 @@ class ResumeController extends Controller
      * @throws JsonException
      */
     public function show(string|int $id): Response
-    {   
+    {
         $resume = Resume::query()
             ->with('user')
             ->findOrFail($id);
-       
+
         $data = $resume->data;
         $candidate = $resume->user
             ->candidate;
         $experience = $resume -> experience;
-        
+
         $experience = $resume->experience;
-     
+
         $candidateTest = Candidate::with('user' , 'testResult')
                    ->whereHas('testResult', function ($query) {
                         $query->where('customer_id', null)
                             ->where('deleted_at', null);
                    })->find($candidate->id);
 
-        $testResult =   $candidateTest->testResult ?? [];          
+        $testResult =   $candidateTest->testResult ?? [];
         $resume_id = $id;
 
         $resume->increment('visits');
@@ -217,14 +242,14 @@ class ResumeController extends Controller
             ->candidate;
 
         $experience = $resume->experience;
-        
+
         $candidateTest = Candidate::with('user' , 'testResult')
                    ->whereHas('testResult', function ($query) {
                         $query->where('customer_id', null)
                             ->where('deleted_at', null);
                    })->find($candidate->id);
 
-        $testResult =   $candidateTest->testResult ?? [];          
+        $testResult =   $candidateTest->testResult ?? [];
         $resume_id = $id;
 
         $experience = $resume -> experience;
@@ -277,7 +302,7 @@ class ResumeController extends Controller
      */
     public function downloadForAdminWithTests(string|int $id): Response
     {
-       
+
         $resume = Resume::query()
             ->with('user')
             ->findOrFail($id);
@@ -285,7 +310,7 @@ class ResumeController extends Controller
         $data = $resume->data;
         $candidate = $resume->user
             ->candidate;
-      
+
         $resume_id = $id;
 
         $experience = $resume -> experience;
@@ -300,15 +325,15 @@ class ResumeController extends Controller
 
     public function downloadtestCus(string|int $id,int $customer_id)
     {
-        
+
         $candidate = Candidate::with('user' , 'testResult')
                    ->whereHas('testResult', function ($query) use ($customer_id) {
                         $query->where('customer_id', $customer_id)
                             ->where('deleted_at', null);
                    })->findOrFail($id);
 
-        $testResult =  $candidate->testResult ?? [];          
-        
+        $testResult =  $candidate->testResult ?? [];
+
         $resume = Resume::where('user_id', $candidate->user->id)
                  ->where('deleted_at', null)
                  ->orderByDesc('updated_at')
@@ -316,12 +341,12 @@ class ResumeController extends Controller
 
         $data = $resume->data ?? [];
         $resume_id = $resume->id ?? null;
-        $experience = $resume->experience ?? null;         
-       
-        
+        $experience = $resume->experience ?? null;
+
+
         return (new AdminResumeWithTestsService)
         ->load(compact('data', 'candidate', 'testResult', 'resume_id', 'experience'))
         ->download($candidate->name . '.pdf');
     }
-    
+
 }

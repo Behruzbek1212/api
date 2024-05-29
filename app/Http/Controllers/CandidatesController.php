@@ -31,7 +31,7 @@ class CandidatesController extends Controller
             'limit' => ['integer', 'nullable']
         ]);
         $data = CandidateServices::getInstance()->all($request) ?? [];
-        
+
         return response()->json([
             'status' => true,
             'data' => $data
@@ -63,13 +63,15 @@ class CandidatesController extends Controller
     public function get(int $id): JsonResponse
     {
         $candidate = Candidate::query()
-            ->with(['user:id,email,phone,verified', 'user.resumes'])
-            ->whereHas('user', function (Builder $query) {
-                $query->where('role', '=', 'candidate');
-            })
-            ->where('active', '=', true)
-            ->where('id', '=', $id)
-            ->firstOrFail();
+        ->with(['user:id,email,phone,verified', 'user.resumes' => function ($query) {
+            $query->whereJsonContains('data->status', 'active');
+        }])
+        ->whereHas('user', function (Builder $query) {
+            $query->where('role', '=', 'candidate');
+        })
+        ->where('active', '=', true)
+        ->where('id', '=', $id)
+        ->firstOrFail();
 
         _auth()->check() && _user()->candidateStats()
             ->syncWithoutDetaching($candidate);
@@ -183,8 +185,8 @@ class CandidatesController extends Controller
         $user = _auth()->user();
         if($user !== null){
         $candidate = $user->candidate()->firstOrFail();
-       
-       
+
+
             if($candidate->telegram_id == null) {
                 $candidate->telegram_id = [$request->chat_id];
                 $candidate->save();
@@ -193,14 +195,14 @@ class CandidatesController extends Controller
                     'message' => 'success'
                 ]);
             }
-            
+
             if (!in_array($request->chat_id, $candidate->telegram_id)) {
                 $data =   $candidate->telegram_id;
                 $data[] = $request->chat_id;
                 $candidate->telegram_id = $data;
                 $candidate->save();
             }
-            
+
             return response()->json([
                 'status' => true,
                 'message' => 'success'

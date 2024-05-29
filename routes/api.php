@@ -79,7 +79,7 @@ Route::prefix('/v1')->group(function () {
 
     // Authorization --------------------------------
     Route::prefix('/auth')->name('auth.')->group(function () {
-        Route::middleware(['guest:sanctum', 'throttle:guest_api'])->group(function () {
+        Route::middleware(['guest:sanctum', 'throttle:guest_api,30'])->group(function () {
             Route::post('/register', [RegisterController::class, 'register'])->name('register');
             Route::post('/login', [LoginController::class, 'login'])->name('login');
             Route::prefix('/check')->name('check.')->group(function () {
@@ -290,6 +290,7 @@ Route::prefix('/v1')->group(function () {
             Route::get('/', [ResumeController::class, 'index'])->name('index');
             Route::post('/make', [ResumeController::class, 'store'])->name('make');
             Route::post('/edit', [ResumeController::class, 'update'])->name('make');
+            Route::post('/edit/status', [ResumeController::class, 'updateStatus'])->name('edit-status');
             Route::post('/get/{id}', [ResumeController::class, 'get'])->name('get');
             Route::post('/remove/{id}', [ResumeController::class, 'destroy'])->name('remove');
         });

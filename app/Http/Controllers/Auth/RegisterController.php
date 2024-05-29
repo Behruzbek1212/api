@@ -152,7 +152,7 @@ class RegisterController extends Controller
         } else {
             $customer = $user->customer()->first();
         }
-       
+
 
         $message = "🆕 <b>Yangi kompaniya</b>\n";
         $message .= "🏢 Kompaniya: <b>" . $request->name . "</b>\n";
@@ -231,7 +231,7 @@ class RegisterController extends Controller
         } else {
             $candidate = $user->candidate()->first();
         }
-        
+
 
         $data = User::query()
             ->with('candidate')

@@ -152,7 +152,7 @@ class Resume extends Model
         $candidateData['languages'] = $candidate['languages'] ?? null;
         $candidateData['specialization'] = $candidate['specialization'] ?? null;
         $candidateData['address'] = $candidate['address'] ?? null;
-       
+
 
         $filled_fields = 0;
         $ball = [];
@@ -220,7 +220,7 @@ class Resume extends Model
                         $filled_fields += $ball[$key];
                      }
                     break;
-        
+
                 }
                }
             }
