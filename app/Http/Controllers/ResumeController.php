@@ -108,13 +108,12 @@ class ResumeController extends Controller
             'resume_id' => 'required|integer',
             'status' => 'required|in:active,no-active'
         ]);
-        // /** @var Authenticatable|User|null $user */
-        // $user = _auth()->user();
+        /** @var Authenticatable|User|null $user */
+        $user = _auth()->user();
 
-        $resume = Resume::findOrFail($request->input('resume_id'));
+        $resume = $user->resumes()->findOrFail($request->input('resume_id'));
 
         $data = $resume->data;
-        // dd($data);
         $data['status'] = $request->status ?? 'active'; // Update the status key within the data JSON
 
         $resume->update([
