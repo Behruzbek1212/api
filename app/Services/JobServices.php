@@ -137,7 +137,7 @@ class JobServices
             });
         }
 
-        $jpgImage->text($text2, 267, 1587, function ($font) use ($gilroyLight) {
+        $jpgImage->text($text2, 267, 1593, function ($font) use ($gilroyLight) {
             $font->file($gilroyLight);
             $font->size(47);
             $font->color('#474747');
@@ -163,7 +163,7 @@ class JobServices
         });
 
         if ($bonus) {
-            $jpgImage->text("+ bonus", 988, 1210, function ($font) use ($fontPath) {
+            $jpgImage->text("+ bonus", 988, 1255, function ($font) use ($fontPath) {
                 $font->file($fontPath);
                 $font->size(90);
                 $font->color('#057AF5');
