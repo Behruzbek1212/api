@@ -109,9 +109,9 @@ class JobServices
 
         list($firstLine, $remainingText) = $this->getFirstAndRemainingLines($trimmedString);
 
-        $jpgImage->text($postNumber, 999, 488, function ($font) use ($fontPath) {
+        $jpgImage->text($postNumber, 1000, 488, function ($font) use ($fontPath) {
             $font->file($fontPath);
-            $font->size(74);
+            $font->size(70);
             $font->color('#313134');
             $font->align('center');
             $font->valign('middle');
@@ -137,7 +137,7 @@ class JobServices
             });
         }
 
-        $jpgImage->text($text2, 267, 1593, function ($font) use ($gilroyLight) {
+        $jpgImage->text($text2, 267, 1595, function ($font) use ($gilroyLight) {
             $font->file($gilroyLight);
             $font->size(47);
             $font->color('#474747');
@@ -145,7 +145,7 @@ class JobServices
             $font->valign('middle');
         });
 
-        $jpgImage->text($text3, 1610, 1587, function ($font) use ($gilroyLight) {
+        $jpgImage->text($text3, 1610, 1590, function ($font) use ($gilroyLight) {
             $font->file($gilroyLight);
             $font->size(47);
             $font->color('#474747');
