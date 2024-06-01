@@ -81,6 +81,7 @@ class JobServices
 
     public function createJobBanner($company, $title, $salary, $address, $postNumber = 0, $bonus = false)
     {
+
         $randomFileName = uniqid() . '.jpg';
         $imageFileUrl = 'uploads/image/job-posts/' . $randomFileName;
         $storagePath = public_path($imageFileUrl);
@@ -172,7 +173,7 @@ class JobServices
         }
 
         $jpgImage->encode('jpg', 100)->save($storagePath);
-
+        dd($company);
         return 'https://static.jobo.uz/' . $imageFileUrl;
     }
 

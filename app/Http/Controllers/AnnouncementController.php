@@ -17,11 +17,11 @@ class AnnouncementController extends Controller
      {
         date_default_timezone_set('Asia/Tashkent');
         $currentDateTime = date('Y-m-d H:i:s');
-      
+
         $announcementData = Announcement::where('deleted_at', null)
                         ->where('status', true)
                         ->where('time', '<=', $currentDateTime)->get();
-    
+
         $updatedAnnouncements = $announcementData->map(function ($announcement) {
             return $announcement->update([
                 'status' => false
@@ -51,7 +51,7 @@ class AnnouncementController extends Controller
             if( $request->announ_date >=  $carbon ){
 
                 $availableTimes = AnnouncementServices::checkDate($request, $carbon);
-    
+
                 return response()->json([
                     'status' => true,
                     'data' => $availableTimes
@@ -70,27 +70,29 @@ class AnnouncementController extends Controller
                 'data' => []
             ]);
         }
-        
+
     }
 
 
     public function create(Request $request):JsonResponse
     {
-      
+
             $request->validate([
                 'job_id' => 'required|integer',
                 'bonus' => 'nullable|boolean'
             ]);
         try {
             $user = _auth()->user();
+
+
             $transactionHistory = TransactionHistory::query()->where('user_id', $user->id)->where('key', Trafic::KEY_FOR_TELEGRAM)->latest()->firstOrFail();
-          
+
             if($transactionHistory !== null && $transactionHistory !== []){
-             
+
                 if($transactionHistory->service_count > 0){
-                
+
                     $data =  AnnouncementServices::create($request, $transactionHistory);
-            
+
                     return response()->json([
                         'status' => true,
                         'message' => 'Announcement was created successfully',
@@ -105,7 +107,7 @@ class AnnouncementController extends Controller
             return response()->json([
                 'status' =>  false,
                 'message' => 'You should buy a new service',
-            ]); 
+            ]);
         }
         catch(Exception $e) {
             return response()->json([
@@ -118,7 +120,7 @@ class AnnouncementController extends Controller
     }
 
 
-    public function storeConfirmation(Request $request) 
+    public function storeConfirmation(Request $request)
     {
         try {
             $request->validate([
@@ -126,10 +128,10 @@ class AnnouncementController extends Controller
                 'announcement_time' => 'required|date'
             ]);
             $carbon =  Carbon::now()->format('Y-m-d H:i:s');
-            
+
             if($request->announcement_time >= $carbon){
                 $data = AnnouncementServices::confirmation($request);
-    
+
                 return response()->json([
                     'status' => true,
                     'message' => 'Successfully confirmation'
@@ -140,8 +142,8 @@ class AnnouncementController extends Controller
                 'status' => false,
                 'message' => 'error date'
             ]);
-           
-        } 
+
+        }
         catch (Exception $e)
         {
             return response()->json([
@@ -149,7 +151,7 @@ class AnnouncementController extends Controller
                 'message' =>  $e->getMessage(),
             ]);
         }
-       
+
     }
 
 
