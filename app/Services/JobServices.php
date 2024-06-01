@@ -109,29 +109,29 @@ class JobServices
 
         list($firstLine, $remainingText) = $this->getFirstAndRemainingLines($trimmedString);
 
-        $jpgImage->text($postNumber, 753, 273, function ($font) use ($fontPath) {
+        $jpgImage->text($postNumber, 878, 488, function ($font) use ($fontPath) {
             $font->file($fontPath);
             $font->size(50);
-            $font->color('#0079fe');
+            $font->color('#313134');
             $font->align('center');
             $font->valign('middle');
         });
 
-        $positionY = $remainingText !== "" ? 450 : 560;
+        $positionY = $remainingText !== "" ? 602 : 760;
 
-        $jpgImage->text($firstLine, 750, $positionY, function ($font) use ($fontPath, $green) {
+        $jpgImage->text($firstLine, 960, $positionY, function ($font) use ($fontPath, $green) {
             $font->file($fontPath);
             $font->size(106);
-            $font->color($green);
+            $font->color('#139E53');
             $font->align('center');
             $font->valign('middle');
         });
 
         if ($remainingText !== "") {
-            $jpgImage->text($remainingText, 750, 560, function ($font) use ($fontPath, $green) {
+            $jpgImage->text($remainingText, 950, 760, function ($font) use ($fontPath, $green) {
                 $font->file($fontPath);
                 $font->size(100);
-                $font->color($green);
+                $font->color('#139E53');
                 $font->align('center');
                 $font->valign('middle');
             });
@@ -140,7 +140,7 @@ class JobServices
         $jpgImage->text($text2, 330, 1080, function ($font) use ($gilroyLight) {
             $font->file($gilroyLight);
             $font->size(40);
-            $font->color('#7c7c7c');
+            $font->color('#474747');
             $font->align('left');
             $font->valign('middle');
         });
@@ -148,25 +148,25 @@ class JobServices
         $jpgImage->text($text3, 1030, 1080, function ($font) use ($gilroyLight) {
             $font->file($gilroyLight);
             $font->size(40);
-            $font->color('#7c7c7c');
+            $font->color('#474747');
             $font->align('left');
             $font->valign('middle');
         });
 
-        $posY = $bonus ? 885 : 920;
-        $jpgImage->text($prices, 750, $posY, function ($font) use ($fontPath) {
+        $posY = $bonus ? 1115 : 1120;
+        $jpgImage->text($prices, 988, $posY, function ($font) use ($fontPath) {
             $font->file($fontPath);
             $font->size(105);
-            $font->color('#63CC52');
+            $font->color('#057AF5');
             $font->align('center');
             $font->valign('middle');
         });
 
         if ($bonus) {
-            $jpgImage->text("+ bonus", 750, 1000, function ($font) use ($fontPath) {
+            $jpgImage->text("+ bonus", 988, 1210, function ($font) use ($fontPath) {
                 $font->file($fontPath);
                 $font->size(90);
-                $font->color('#63CC52');
+                $font->color('#057AF5');
                 $font->align('center');
                 $font->valign('middle');
             });
