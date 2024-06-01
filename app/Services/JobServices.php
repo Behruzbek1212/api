@@ -109,9 +109,9 @@ class JobServices
 
         list($firstLine, $remainingText) = $this->getFirstAndRemainingLines($trimmedString);
 
-        $jpgImage->text($postNumber, 966, 488, function ($font) use ($fontPath) {
+        $jpgImage->text($postNumber, 988, 488, function ($font) use ($fontPath) {
             $font->file($fontPath);
-            $font->size(50);
+            $font->size(78);
             $font->color('#313134');
             $font->align('center');
             $font->valign('middle');
@@ -119,16 +119,16 @@ class JobServices
 
         $positionY = $remainingText !== "" ? 602 : 760;
 
-        $jpgImage->text($firstLine, 970, $positionY, function ($font) use ($fontPath, $green) {
+        $jpgImage->text($firstLine, 980, $positionY, function ($font) use ($fontPath, $green) {
             $font->file($fontPath);
-            $font->size(106);
+            $font->size(108);
             $font->color('#139E53');
             $font->align('center');
             $font->valign('middle');
         });
 
         if ($remainingText !== "") {
-            $jpgImage->text($remainingText, 970, 760, function ($font) use ($fontPath, $green) {
+            $jpgImage->text($remainingText, 980, 760, function ($font) use ($fontPath, $green) {
                 $font->file($fontPath);
                 $font->size(100);
                 $font->color('#139E53');
@@ -137,17 +137,17 @@ class JobServices
             });
         }
 
-        $jpgImage->text($text2, 400, 1800, function ($font) use ($gilroyLight) {
+        $jpgImage->text($text2, 400, 18650, function ($font) use ($gilroyLight) {
             $font->file($gilroyLight);
-            $font->size(55);
+            $font->size(47);
             $font->color('#474747');
             $font->align('left');
             $font->valign('middle');
         });
 
-        $jpgImage->text($text3, 1030, 1800, function ($font) use ($gilroyLight) {
+        $jpgImage->text($text3, 1500, 1650, function ($font) use ($gilroyLight) {
             $font->file($gilroyLight);
-            $font->size(55);
+            $font->size(47);
             $font->color('#474747');
             $font->align('left');
             $font->valign('middle');
@@ -156,7 +156,7 @@ class JobServices
         $posY = $bonus ? 1160 : 1166;
         $jpgImage->text($prices, 988, $posY, function ($font) use ($fontPath) {
             $font->file($fontPath);
-            $font->size(105);
+            $font->size(108);
             $font->color('#057AF5');
             $font->align('center');
             $font->valign('middle');
