@@ -121,7 +121,7 @@ class JobServices
 
         $jpgImage->text($firstLine, 988, $positionY, function ($font) use ($fontPath, $green) {
             $font->file($fontPath);
-            $font->size(108);
+            $font->size(110);
             $font->color('#139E53');
             $font->align('center');
             $font->valign('middle');
@@ -137,7 +137,7 @@ class JobServices
             });
         }
 
-        $jpgImage->text($text2, 280, 1535, function ($font) use ($gilroyLight) {
+        $jpgImage->text($text2, 270, 1560, function ($font) use ($gilroyLight) {
             $font->file($gilroyLight);
             $font->size(47);
             $font->color('#474747');
@@ -145,7 +145,7 @@ class JobServices
             $font->valign('middle');
         });
 
-        $jpgImage->text($text3, 1600, 1535, function ($font) use ($gilroyLight) {
+        $jpgImage->text($text3, 1600, 1560, function ($font) use ($gilroyLight) {
             $font->file($gilroyLight);
             $font->size(47);
             $font->color('#474747');
