@@ -109,7 +109,7 @@ class JobServices
 
         list($firstLine, $remainingText) = $this->getFirstAndRemainingLines($trimmedString);
 
-        $jpgImage->text($postNumber, 878, 488, function ($font) use ($fontPath) {
+        $jpgImage->text($postNumber, 966, 488, function ($font) use ($fontPath) {
             $font->file($fontPath);
             $font->size(50);
             $font->color('#313134');
@@ -119,7 +119,7 @@ class JobServices
 
         $positionY = $remainingText !== "" ? 602 : 760;
 
-        $jpgImage->text($firstLine, 960, $positionY, function ($font) use ($fontPath, $green) {
+        $jpgImage->text($firstLine, 970, $positionY, function ($font) use ($fontPath, $green) {
             $font->file($fontPath);
             $font->size(106);
             $font->color('#139E53');
@@ -128,7 +128,7 @@ class JobServices
         });
 
         if ($remainingText !== "") {
-            $jpgImage->text($remainingText, 950, 760, function ($font) use ($fontPath, $green) {
+            $jpgImage->text($remainingText, 970, 760, function ($font) use ($fontPath, $green) {
                 $font->file($fontPath);
                 $font->size(100);
                 $font->color('#139E53');
@@ -137,23 +137,23 @@ class JobServices
             });
         }
 
-        $jpgImage->text($text2, 330, 1080, function ($font) use ($gilroyLight) {
+        $jpgImage->text($text2, 400, 1800, function ($font) use ($gilroyLight) {
             $font->file($gilroyLight);
-            $font->size(40);
+            $font->size(55);
             $font->color('#474747');
             $font->align('left');
             $font->valign('middle');
         });
 
-        $jpgImage->text($text3, 1030, 1080, function ($font) use ($gilroyLight) {
+        $jpgImage->text($text3, 1030, 1800, function ($font) use ($gilroyLight) {
             $font->file($gilroyLight);
-            $font->size(40);
+            $font->size(55);
             $font->color('#474747');
             $font->align('left');
             $font->valign('middle');
         });
 
-        $posY = $bonus ? 1115 : 1120;
+        $posY = $bonus ? 1160 : 1166;
         $jpgImage->text($prices, 988, $posY, function ($font) use ($fontPath) {
             $font->file($fontPath);
             $font->size(105);
