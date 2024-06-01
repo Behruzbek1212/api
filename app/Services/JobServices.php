@@ -173,7 +173,7 @@ class JobServices
         }
 
         $jpgImage->encode('jpg', 100)->save($storagePath);
-        dd($company);
+      
         return 'https://static.jobo.uz/' . $imageFileUrl;
     }
 
