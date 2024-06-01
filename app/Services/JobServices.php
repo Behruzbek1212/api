@@ -109,9 +109,9 @@ class JobServices
 
         list($firstLine, $remainingText) = $this->getFirstAndRemainingLines($trimmedString);
 
-        $jpgImage->text($postNumber, 988, 488, function ($font) use ($fontPath) {
+        $jpgImage->text($postNumber, 999, 488, function ($font) use ($fontPath) {
             $font->file($fontPath);
-            $font->size(78);
+            $font->size(74);
             $font->color('#313134');
             $font->align('center');
             $font->valign('middle');
@@ -119,7 +119,7 @@ class JobServices
 
         $positionY = $remainingText !== "" ? 602 : 760;
 
-        $jpgImage->text($firstLine, 980, $positionY, function ($font) use ($fontPath, $green) {
+        $jpgImage->text($firstLine, 988, $positionY, function ($font) use ($fontPath, $green) {
             $font->file($fontPath);
             $font->size(108);
             $font->color('#139E53');
@@ -128,7 +128,7 @@ class JobServices
         });
 
         if ($remainingText !== "") {
-            $jpgImage->text($remainingText, 980, 760, function ($font) use ($fontPath, $green) {
+            $jpgImage->text($remainingText, 988, 760, function ($font) use ($fontPath, $green) {
                 $font->file($fontPath);
                 $font->size(100);
                 $font->color('#139E53');
@@ -137,7 +137,7 @@ class JobServices
             });
         }
 
-        $jpgImage->text($text2, 400, 18650, function ($font) use ($gilroyLight) {
+        $jpgImage->text($text2, 370, 1550, function ($font) use ($gilroyLight) {
             $font->file($gilroyLight);
             $font->size(47);
             $font->color('#474747');
@@ -145,7 +145,7 @@ class JobServices
             $font->valign('middle');
         });
 
-        $jpgImage->text($text3, 1500, 1650, function ($font) use ($gilroyLight) {
+        $jpgImage->text($text3, 1595, 1550, function ($font) use ($gilroyLight) {
             $font->file($gilroyLight);
             $font->size(47);
             $font->color('#474747');
