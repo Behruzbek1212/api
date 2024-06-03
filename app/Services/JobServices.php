@@ -185,7 +185,14 @@ class JobServices
                 $formattedParts = $this->formatSalaryParts($text4, $salary['currency']);
 
                 $prices = implode(' - ', $formattedParts);
-              
+                if (count($formattedParts) === 1) {
+                    $prices = isset($salary['min_salary']) && $salary['min_salary'] !== null
+                        ?  $prices .' dan' 
+                        :  $prices . ' gacha';
+                } else {
+                    $formattedParts[0] =  $formattedParts[0]  " dan" ;
+                }
+
             } catch (Exception $e) {
                 $prices = $text4;
             }
