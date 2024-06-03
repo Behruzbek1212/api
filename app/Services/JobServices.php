@@ -190,7 +190,7 @@ class JobServices
                         ?  $prices .' dan' 
                         :  $prices . ' gacha';
                 } else {
-                    $formattedParts[0] =  $formattedParts[0]  " dan" ;
+                    $formattedParts[0] =  $formattedParts[0] . " dan" ;
                 }
 
             } catch (Exception $e) {
