@@ -184,14 +184,8 @@ class JobServices
                 $text4 = $this->extractSalaryRange($salary);
                 $formattedParts = $this->formatSalaryParts($text4, $salary['currency']);
 
-                $prices = implode(' do ', $formattedParts);
-                if (count($formattedParts) === 1) {
-                    $prices = isset($salary['min_salary']) && $salary['min_salary'] !== null
-                        ? 'ot ' . $prices
-                        : 'do ' . $prices;
-                } else {
-                    $formattedParts[0] = "ot" . $formattedParts[0];
-                }
+                $prices = implode(' - ', $formattedParts);
+              
             } catch (Exception $e) {
                 $prices = $text4;
             }
