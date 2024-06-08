@@ -109,17 +109,17 @@ class JobServices
 
         list($firstLine, $remainingText) = $this->getFirstAndRemainingLines($trimmedString);
 
-        $jpgImage->text($postNumber, 753, 273, function ($font) use ($fontPath) {
+        $jpgImage->text($postNumber, 1010, 365, function ($font) use ($fontPath) {
             $font->file($fontPath);
             $font->size(70);
-            $font->color('#313134');
+            $font->color('#057AF5');
             $font->align('center');
             $font->valign('middle');
         });
 
-        $positionY = $remainingText !== "" ? 450 : 560;
+        $positionY = $remainingText !== "" ? 602 : 750;
 
-        $jpgImage->text($firstLine, 750, $positionY, function ($font) use ($fontPath, $green) {
+        $jpgImage->text($firstLine, 988, $positionY, function ($font) use ($fontPath, $green) {
             $font->file($fontPath);
             $font->size(110);
             $font->color('#139E53');
@@ -128,7 +128,7 @@ class JobServices
         });
 
         if ($remainingText !== "") {
-            $jpgImage->text($remainingText, 988, 560, function ($font) use ($fontPath, $green) {
+            $jpgImage->text($remainingText, 988, 700, function ($font) use ($fontPath, $green) {
                 $font->file($fontPath);
                 $font->size(100);
                 $font->color('#139E53');
@@ -137,7 +137,7 @@ class JobServices
             });
         }
 
-        $jpgImage->text($text2, 330, 1080, function ($font) use ($gilroyLight) {
+        $jpgImage->text($text2, 435, 1442, function ($font) use ($gilroyLight) {
             $font->file($gilroyLight);
             $font->size(47);
             $font->color('#474747');
@@ -145,7 +145,7 @@ class JobServices
             $font->valign('middle');
         });
 
-        $jpgImage->text($text3, 1030, 1080, function ($font) use ($gilroyLight) {
+        $jpgImage->text($text3, 1368, 1435, function ($font) use ($gilroyLight) {
             $font->file($gilroyLight);
             $font->size(47);
             $font->color('#474747');
@@ -153,8 +153,8 @@ class JobServices
             $font->valign('middle');
         });
 
-        $posY = $bonus ? 885 : 920;
-        $jpgImage->text($prices, 750, $posY, function ($font) use ($fontPath) {
+        $posY = $bonus ? 1160 : 1166;
+        $jpgImage->text($prices, 988, $posY, function ($font) use ($fontPath) {
             $font->file($fontPath);
             $font->size(108);
             $font->color('#057AF5');
@@ -163,7 +163,7 @@ class JobServices
         });
 
         if ($bonus) {
-            $jpgImage->text("+ bonus", 750, 1000, function ($font) use ($fontPath) {
+            $jpgImage->text("+ bonus", 988,  1255, function ($font) use ($fontPath) {
                 $font->file($fontPath);
                 $font->size(90);
                 $font->color('#057AF5');
@@ -184,14 +184,15 @@ class JobServices
                 $text4 = $this->extractSalaryRange($salary);
                 $formattedParts = $this->formatSalaryParts($text4, $salary['currency']);
 
-                $prices = implode(' do ', $formattedParts);
+                $prices = implode(' - ', $formattedParts);
                 if (count($formattedParts) === 1) {
                     $prices = isset($salary['min_salary']) && $salary['min_salary'] !== null
-                        ? 'ot ' . $prices
-                        : 'do ' . $prices;
+                        ?  $prices .' dan' 
+                        :  $prices . ' gacha';
                 } else {
-                    $formattedParts[0] = "ot" . $formattedParts[0];
+                    $formattedParts[0] =  $formattedParts[0] . " dan" ;
                 }
+
             } catch (Exception $e) {
                 $prices = $text4;
             }
