@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Bots\ADSON\AdminController as AdsonAdminController;
 use App\Http\Controllers\Bots\ADSON\MainController as AdsonController;
+use App\Http\Controllers\Bots\Azaly\AzalyController;
+use App\Http\Controllers\Bots\Azaly\AzalyHrController;
 use App\Http\Controllers\Bots\Buday\BudayComController;
 use App\Http\Controllers\Bots\Buday\BudayComHrController;
 use App\Http\Controllers\Bots\MehriGiyo\MehriGiyoController;
@@ -97,4 +99,14 @@ Route::prefix('/_utils/buday')->name('buday.')->group(function () {
     Route::get('user/get/{token}', [BudayComController::class, 'showData'])->name('show-user');
     Route::get('user/all', [BudayComController::class, 'index'])->name('show-All');
     Route::get('user/count', [BudayComController::class, 'userCount'])->name('user-count');
+});
+
+Route::prefix('/_utils/azaly')->name('azaly.')->group(function () {
+    Route::post('store-data' , [AzalyHrController::class, 'store'])->name('data-store');
+    Route::post('store-file' , [AzalyHrController::class, 'createFile'])->name('data-file');
+    Route::get('data/{token}', [AzalyHrController::class, 'showData'])->name('show-data');
+    Route::post('user/store', [AzalyController::class, 'store'])->name('user-store');
+    Route::get('user/get/{token}', [AzalyController::class, 'showData'])->name('show-user');
+    Route::get('user/all', [AzalyController::class, 'index'])->name('show-All');
+    Route::get('user/count', [AzalyController::class, 'userCount'])->name('user-count');
 });
