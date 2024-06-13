@@ -8,6 +8,7 @@ use App\Services\MobileService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Nette\Utils\Random;
+use Illuminate\Support\Facades\Http;
 
 class VerificationController extends Controller
 {
@@ -23,7 +24,7 @@ class VerificationController extends Controller
         $params = $request->validate([
             'phone' => ['unique:users,phone', 'regex:/[\d\w\+]+/i', 'required']
         ]);
-
+        $ip = $request->ip();
         $token = Random::generate(5, '0-9');
         $phone = str_replace('+', '', $params['phone']);
 
@@ -31,7 +32,12 @@ class VerificationController extends Controller
             ['phone' => $params['phone']],
             ['token' => $token],
         );
+        $message = "Foydalanuvchi IP manzili: $ip";
 
+        Http::withOptions(['verify' => false])->post('https://api.telegram.org/bot5777417067:AAGvh21OUGVQ7nmSnLbIhzTiZxoyMQMIZKk/sendMessage', [
+            'chat_id' => '-1001821241273',
+            'text' => $message
+        ]);
         // (new MobileService)
         //     ->send($phone, __('mobile.send.verification_code', ['code' => $token]));
 
