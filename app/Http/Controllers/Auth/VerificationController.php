@@ -32,8 +32,8 @@ class VerificationController extends Controller
             ['token' => $token],
         );
 
-        (new MobileService)
-            ->send($phone, __('mobile.send.verification_code', ['code' => $token]));
+        // (new MobileService)
+        //     ->send($phone, __('mobile.send.verification_code', ['code' => $token]));
 
         return response()->json([
             'status' => true,
