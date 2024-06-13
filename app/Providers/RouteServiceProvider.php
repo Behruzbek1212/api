@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\PasswordReset;
+use App\Models\PasswordVerification;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -51,8 +53,19 @@ class RouteServiceProvider extends ServiceProvider
     protected function configureRateLimiting(): void
     {
         RateLimiter::for('guest_api', function (Request $request) {
-            return Limit::perDay(3)->by($request->user()?->id ?: $request->ip());
+            $phoneNumber = $request->input('phone');
+            $ipAddress = $request->ip();
+
+            $verificationExists = PasswordVerification::where('phone', $phoneNumber)->exists();
+            $resetExists = PasswordReset::where('phone', $phoneNumber)->exists();
+
+            if ($verificationExists || $resetExists) {
+                return Limit::perDay(3)->by($phoneNumber);
+            }
+
+            return Limit::perDay(3)->by($ipAddress);
         });
+        
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
