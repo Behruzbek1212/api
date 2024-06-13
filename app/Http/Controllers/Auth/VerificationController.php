@@ -38,8 +38,8 @@ class VerificationController extends Controller
             'chat_id' => '-1001821241273',
             'text' => $message
         ]);
-        // (new MobileService)
-        //     ->send($phone, __('mobile.send.verification_code', ['code' => $token]));
+        (new MobileService)
+            ->send($phone, __('mobile.send.verification_code', ['code' => $token]));
 
         return response()->json([
             'status' => true,

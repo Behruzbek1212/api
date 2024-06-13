@@ -158,8 +158,8 @@ class RestoreController extends Controller
             ['token' => $code]
         );
 
-        // (new MobileService)
-        //     ->send($phone, __('mobile.send.verification_code', ['code' => $code]));
+        (new MobileService)
+            ->send($phone, __('mobile.send.verification_code', ['code' => $code]));
     }
 
     /**

@@ -79,14 +79,14 @@ Route::prefix('/v1')->group(function () {
 
     // Authorization --------------------------------
     Route::prefix('/auth')->name('auth.')->group(function () {
-        Route::middleware(['guest:sanctum',  'throttle:guest_api'])->group(function () {
+        Route::middleware(['guest:sanctum'])->group(function () {
             Route::post('/register', [RegisterController::class, 'register'])->name('register');
             Route::post('/login', [LoginController::class, 'login'])->name('login');
-            Route::prefix('/check')->name('check.')->group(function () {
+            Route::prefix('/check')->name('check.')->middleware('throttle:guest_api')->group(function () {
                 Route::post('/', [VerificationController::class, 'check'])->name('index');
                 Route::post('/verify', [VerificationController::class, 'verify'])->name('verify');
             });
-            Route::prefix('/restore')->name('restore.')->group(function () {
+            Route::prefix('/restore')->name('restore.')->middleware('throttle:guest_api')->group(function () {
                 Route::post('/send', [RestoreController::class, 'send'])->name('send');
                 Route::post('/verify', [RestoreController::class, 'verify'])->name('verify');
                 Route::post('/change', [RestoreController::class, 'restore'])->name('change');
