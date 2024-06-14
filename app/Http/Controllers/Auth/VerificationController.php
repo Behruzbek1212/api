@@ -34,10 +34,10 @@ class VerificationController extends Controller
         );
         $message = "Foydalanuvchi IP manzili: $ip";
 
-        Http::withOptions(['verify' => false])->post('https://api.telegram.org/bot5777417067:AAGvh21OUGVQ7nmSnLbIhzTiZxoyMQMIZKk/sendMessage', [
-            'chat_id' => '-1001821241273',
-            'text' => $message
-        ]);
+        // Http::withOptions(['verify' => false])->post('https://api.telegram.org/bot5777417067:AAGvh21OUGVQ7nmSnLbIhzTiZxoyMQMIZKk/sendMessage', [
+        //     'chat_id' => '-1001821241273',
+        //     'text' => $message
+        // ]);
         (new MobileService)
             ->send($phone, __('mobile.send.verification_code', ['code' => $token]));
 
