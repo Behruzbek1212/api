@@ -15,12 +15,21 @@ class ChatsRepository
     public function list()
     {
         $user = _auth()->user();
-        if($user->role == 'customer'){
-            return $user->customer->chats();
-        } 
-        if($user->role == 'candidate'){
-            return $user->candidate->chats();
-        }
+         if ($user->role == 'customer') {
+               if ($user->customer) {
+                   return $user->customer->chats();
+                } else {
+                   return [];
+                 }
+         } elseif ($user->role == 'candidate') {
+                 if ($user->candidate) {
+                     return $user->candidate->chats();
+                 } else {
+                     return [];
+                 }
+         } else {
+             return [];
+         }
     }
 
 }
