@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\PasswordReset;
 use App\Models\User;
+use App\Services\EskizService;
 use App\Services\MobileService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
@@ -158,7 +159,7 @@ class RestoreController extends Controller
             ['token' => $code]
         );
 
-        (new MobileService)
+        (new EskizService)
             ->send($phone, __('mobile.send.verification_code', ['code' => $code]));
     }
 

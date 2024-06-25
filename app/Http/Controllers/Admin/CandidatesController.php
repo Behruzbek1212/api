@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Candidate;
 use App\Models\User;
+use App\Services\EskizService;
 use App\Services\MobileService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -90,7 +91,7 @@ class CandidatesController extends Controller
             ]);
         }
 
-        (new MobileService())->send(
+        (new EskizService)->send(
             $request->get('phone'),
             "Sizning JOBO.uz ga kirish parolingiz: " . $password .
             "\nQuyidagi link orqali tezkor kirishni amalga oshirishingiz mumkin: " .

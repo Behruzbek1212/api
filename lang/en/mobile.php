@@ -2,6 +2,6 @@
 
 return [
     'send' => [
-        'verification_code' => 'JOBO | Verification code: :code'
+        'verification_code' => "Jobo.uz saytiga ro‘yxatdan o‘tish uchun tasdiqlash kodi: :code"
     ]
 ];

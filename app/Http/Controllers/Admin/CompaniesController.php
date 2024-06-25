@@ -7,6 +7,7 @@ use App\Http\Resources\JobResource;
 use App\Models\Customer;
 use App\Models\Job;
 use App\Models\User;
+use App\Services\EskizService;
 use App\Services\JobServices;
 use App\Services\MobileService;
 use App\Traits\ApiResponse;
@@ -39,7 +40,7 @@ class CompaniesController extends Controller
                     $query->where('phone', 'like', '%' . $request->get('title') . '%');
                 });
             });
-           
+
 
         return response()->json([
             'status' => true,
@@ -72,7 +73,7 @@ class CompaniesController extends Controller
             ]);
         }
 
-        (new MobileService())->send(
+        (new EskizService)->send(
             $request->get('phone'),
             "Sizning JOBO.uz ga kirish parolingiz: " . $password .
                 "\nQuyidagi link orqali tezkor kirishni amalga oshirishingiz mumkin: " .
@@ -106,7 +107,7 @@ class CompaniesController extends Controller
 
     public function companiesJobs(Request $request)
     {
-        
+
        $jobs =  JobServices::getInstance()->companiesJobs($request);
 
         return $this->successResponse($jobs);
@@ -120,15 +121,15 @@ class CompaniesController extends Controller
             'phone' => ['numeric', 'required'],
             'email' => ['email', 'required']
         ]);
-        
-        
+
+
 
         $customer = Customer::query()
             ->withTrashed()
             ->findOrFail($request->get('id'));
-   
+
          $user = User::find($customer->user_id);
-        
+
          if($user->email !== $request->email){
             $request->validate(['email' =>  [ 'email'  ,'unique:users,email']]);
          }
@@ -140,7 +141,7 @@ class CompaniesController extends Controller
             $customer->user()->update(array_merge(
                 $request->only(['phone', 'email']),
             ));
-        
+
         return response()->json([
             'status' => true,
             'message' => []

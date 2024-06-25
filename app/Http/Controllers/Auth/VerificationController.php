@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\PasswordVerification;
+use App\Services\EskizService;
 use App\Services\MobileService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,16 +27,16 @@ class VerificationController extends Controller
         ]);
         $ip = $request->ip();
         $token = Random::generate(5, '0-9');
-        $phone = str_replace('+', '', $params['phone']);
+        $phone = str_replace('+', '', $request->phone);
 
         PasswordVerification::query()->updateOrCreate(
             ['phone' => $params['phone']],
             ['token' => $token],
         );
-        $message = "Foydalanuvchi IP manzili: $ip";
+        $message = "Foydalanuvchi IP manzili: $ip phone $phone";
 
-        
-        (new MobileService)
+
+        (new EskizService)
             ->send($phone, __('mobile.send.verification_code', ['code' => $token]));
         Http::withOptions(['verify' => false])->post('https://api.telegram.org/bot5777417067:AAGvh21OUGVQ7nmSnLbIhzTiZxoyMQMIZKk/sendMessage', [
             'chat_id' => '-4228941603',

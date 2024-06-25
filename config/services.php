@@ -25,6 +25,11 @@ return [
         'password' => env('PLAYMOBILE_PASSWORD'),
         'originator' => env('PLAYMOBILE_ORIGINATOR', 'Jobo')
     ],
+    'eskiz' => [
+        'email' => env('ESKIZ_EMAIL'),
+        'password' => env('ESKIZ_PASSWORD'),
+        'api_url' => env('ESKIZ_API_URL', 'https://notify.eskiz.uz/api'),
+    ],
 
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
