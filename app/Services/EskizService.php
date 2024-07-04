@@ -28,7 +28,7 @@ class EskizService extends MobileServiceConst
         $data = $response->json();
 
         if ($data['message'] === 'token_generated') {
-            Cache::put('eskiz_token', $data['data']['token'], 3600);
+            Cache::put('eskiz_token', $data['data']['token'], 86400);
             return $data['data']['token'];
         }
 
