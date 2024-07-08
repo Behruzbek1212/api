@@ -64,7 +64,7 @@ class CandidatesController extends Controller
     public function create(Request $request): JsonResponse
     {
         $this->validateParams($request, []);
-        $password = Random::generate();
+        $password = Random::generate(10, '0-9');
 
         try {
             $user = User::query()->create(array_merge(
