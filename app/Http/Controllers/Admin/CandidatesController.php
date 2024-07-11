@@ -94,8 +94,7 @@ class CandidatesController extends Controller
         (new EskizService)->send(
             $request->get('phone'),
             "JOBO.uz ga kirish parolingiz: " . $password .
-            "\nQuyidagi link orqali kirishingiz amalga mumkin: " .
-            vsprintf("https://jobo.uz/auth/verifier/%s/?p=%s", [$password, $request->get('phone')])
+            " Quyidagi link orqali kirishingiz mumkin:  https://jobo.uz" 
         );
 
         return response()->json([
