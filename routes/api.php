@@ -427,7 +427,6 @@ Route::prefix('/v2')->group(function () {
     Route::prefix('test-result')->name('test-result.')->group(function () {
         Route::get('/all', [TestResultController::class, 'getAll'])->middleware(['auth:sanctum', 'is_customer'])->name('all');
         Route::get('/view/all', [TestResultController::class, 'allTestResultCandidate']);
-        Route::get('/all', [TestResultController::class,  'getAll'])->middleware(['auth:sanctum', 'is_customer'])->name('all');
         Route::post('/store', [TestResultController::class, 'store'])->name('create');
         Route::get('/candidate/rating', [TestResultController::class, 'candidateRatings'])->middleware(['auth:sanctum']);
         Route::get('/downloadOne/{id}', [TestResultController::class, 'downloadTestResult']);
