@@ -1,149 +1,165 @@
 <?php
+
 namespace App\Filters;
 
 use App\Models\Exam;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
 class RatingFilter
 {
     public static function apply($query)
     {
-        $test = request('quiz_gruop') ?? null;
-        $take = request('take') ?? 100;
-        $title = request('title') ?? null;
-        $min_year = request()->input('min_year') ?? null;
-        $max_year = request()->input('max_year') ?? null;
+        $test = request('quiz_gruop');
+        $take = request('take', 100);
+        $title = request('title');
+        $min_year = request('min_year');
+        $max_year = request('max_year');
 
-        $query->when($title, function ($query) use ($title) {
-                $query->whereHas('candidate', function ($query) use ($title) {
-                    $query->where(function ($query) use ($title) {
-                        $query->where('name', 'like', '%' . $title . '%')
-                              ->orWhere('surname', 'like', '%' . $title . '%')
-                              ->orWhere('specialization', 'like', '%' . $title . '%');
-                    });
-                });
+        $query->with(['candidate.user.resumes'])
+            ->whereHas('candidate', function ($q) {
+                $q->whereNull('deleted_at');
             })
-            ->when(request('sex'), function ($query) {
-                $query->whereHas('candidate', function ($query) {
-                    $query->where('sex', request('sex'));
-                });
-            })
-            ->when(request('spheres'), function ($query) {
-                $query->whereHas('candidate', function ($query) {
-                    $query->whereJsonContains('spheres', request('spheres'));
-                });
-            })
-            ->when(request('educ_level'), function ($query) {
-                $query->whereHas('candidate', function ($query) {
-                    $query->where('education_level', request('educ_level'));
-                });
-            })
-            ->when(request('min_age') || request('max_age'), function ($query) {
-                $query->whereHas('candidate', function ($query) {
-                    if (request('max_age') === null) {
-                        $query->whereRaw("YEAR(birthday) <= YEAR(CURDATE()) - ?", [request('min_age')]);
-                    } elseif (request('min_age') === null) {
-                        $query->whereRaw("YEAR(birthday) >= YEAR(CURDATE()) - ?", [request('max_age')]);
-                    } else {
-                        $min_year = date('Y') - request('min_age');
-                        $max_year = date('Y') - request('max_age');
-                        $query->whereBetween(DB::raw('YEAR(birthday)'), [$max_year, $min_year]);
-                    }
-                });
-            })
-            ->when(request('languages'), function ($query) {
-                $query->whereHas('candidate', function ($query) {
-                    $languages = json_decode(request()->input('languages'), true);
-                    foreach ($languages as $language) {
-                        $query->whereJsonContains('languages', [
-                            ['language' => $language['language'], 'rate' => $language['rate']]
-                        ]);
-                    }
-                });
-            })
-            ->when(request('address'), function ($query) {
-                $query->whereHas('candidate', function ($query) {
-                    $query->where('address', request('address'));
-                });
-            });
+            ->whereNull('deleted_at');
 
-        if ($min_year !== null || $max_year !== null) {
-            $datas = $query->get()->filter(function ($chat) use ($min_year, $max_year) {
-                $experience = optional($chat['candidate']['user']['resumes']->first())->experience;
+        self::applyFilters($query, $title, $min_year, $max_year);
 
-                $min_years = $min_year !== null ? (strpos($min_year, '0.') !== false ? intval(str_replace('0.', '', $min_year)) : intval($min_year * 12)) : null;
-                $max_years = $max_year !== null ? (strpos($max_year, '0.') !== false ? intval(str_replace('0.', '', $max_year)) : intval($max_year * 12)) : null;
+        $perPage = request('limit', 20);
+        $page = request('page', 1);
 
-                if ($min_years === null && $max_years === null) {
-                    return true;
-                } elseif ($min_years === null) {
-                    return $experience <= $max_years;
-                } elseif ($max_years === null) {
-                    return $experience >= $min_years;
-                } else {
-                    return $experience >= $min_years && $experience <= $max_years;
-                }
-            });
-        } else {
-            $datas = $query->get();
-        }
+        $paginatedResults = $query->paginate($perPage, ['*'], 'page', $page);
 
-        $filteredResults = collect($datas)->map(function ($item) use ($test) {
-            $sortArr = [];
-            $efficiency = 0;
-            foreach ($item['result'] as $value) {
-                if ($test === null) {
-                    $sortArr[] = $value;
-                } elseif ($value['quizGroup'] === $test) {
-                    $efficiency = $value['efficiensy'];
-                    $sortArr[] = $value;
-                }
-            }
-            $max = $test === null ? self::getAveragePercentage($item['result']) : $efficiency;
-            $item['percentage'] = intval($max);
-            $item['result'] = $sortArr;
-            return $item;
-        });
-
-        $sortedResults = $filteredResults->sortByDesc(function ($item) {
+        $processedResults = $paginatedResults->getCollection()->map(function ($item) use ($test) {
+            return self::processItem($item, $test);
+        })->filter(function ($item) {
+            return $item['percentage'] > 0;
+        })->sortByDesc(function ($item) {
             return [
                 $item['percentage'],
-                $item['candidate']['user']['resumes']->isNotEmpty(),
-                optional($item['candidate']['user']['resumes']->first())->percentage ?? 0
+                $item['candidate']['user']['resumes']->isNotEmpty() ? 1 : 0,
+                $item['candidate']['user']['resumes']->first()['percentage'] ?? 0
             ];
-        })
-        ->take($take)
-        ->values();
+        })->take($take)->values();
 
-        return self::paginateResults($sortedResults, request('limit') ?? 20);
+        $paginatedResults->setCollection($processedResults);
+
+        return $paginatedResults;
     }
 
-    private static function paginateResults($query, $perPage)
+    private static function applyFilters($query, $title, $min_year, $max_year)
     {
-        $page = LengthAwarePaginator::resolveCurrentPage();
+        if ($title) {
+            $query->whereHas('candidate', function ($q) use ($title) {
+                $q->where(function ($subq) use ($title) {
+                    $subq->where('name', 'like', "%$title%")
+                         ->orWhere('surname', 'like', "%$title%")
+                         ->orWhere('specialization', 'like', "%$title%");
+                });
+            });
+        }
 
-        $chatsPaginated = new LengthAwarePaginator(
-            $query->forPage($page, $perPage),
-            $query->count(),
-            $perPage,
-            $page,
-            ['path' => LengthAwarePaginator::resolveCurrentPath()]
-        );
+        if (request('sex')) {
+            $query->whereHas('candidate', function ($q) {
+                $q->where('sex', request('sex'));
+            });
+        }
 
-        return $chatsPaginated;
+        if (request('spheres')) {
+            $query->whereHas('candidate', function ($q) {
+                $q->whereJsonContains('spheres', request('spheres'));
+            });
+        }
+
+        if (request('educ_level')) {
+            $query->whereHas('candidate', function ($q) {
+                $q->where('education_level', request('educ_level'));
+            });
+        }
+
+        if (request('min_age') || request('max_age')) {
+            $query->whereHas('candidate', function ($q) {
+                $minAge = request('min_age');
+                $maxAge = request('max_age');
+                if ($maxAge === null) {
+                    $q->whereRaw("YEAR(birthday) <= YEAR(CURDATE()) - ?", [$minAge]);
+                } elseif ($minAge === null) {
+                    $q->whereRaw("YEAR(birthday) >= YEAR(CURDATE()) - ?", [$maxAge]);
+                } else {
+                    $minYear = date('Y') - $minAge;
+                    $maxYear = date('Y') - $maxAge;
+                    $q->whereBetween(DB::raw('YEAR(birthday)'), [$maxYear, $minYear]);
+                }
+            });
+        }
+
+        if (request('languages')) {
+            $query->whereHas('candidate', function ($q) {
+                $languages = json_decode(request('languages'), true);
+                foreach ($languages as $language) {
+                    $q->whereJsonContains('languages', [
+                        'language' => $language['language'],
+                        'rate' => $language['rate']
+                    ]);
+                }
+            });
+        }
+
+        if (request('address')) {
+            $query->whereHas('candidate', function ($q) {
+                $q->where('address', request('address'));
+            });
+        }
+
+        self::applyExperienceFilter($query, $min_year, $max_year);
+    }
+
+    private static function applyExperienceFilter($query, $min_year, $max_year)
+    {
+        if ($min_year !== null || $max_year !== null) {
+            $query->whereHas('candidate.user.resumes', function ($q) use ($min_year, $max_year) {
+                $min_months = self::yearToMonths($min_year);
+                $max_months = self::yearToMonths($max_year);
+
+                if ($min_months !== null && $max_months !== null) {
+                    $q->whereBetween('experience', [$min_months, $max_months]);
+                } elseif ($min_months !== null) {
+                    $q->where('experience', '>=', $min_months);
+                } elseif ($max_months !== null) {
+                    $q->where('experience', '<=', $max_months);
+                }
+            });
+        }
+    }
+
+    private static function yearToMonths($year)
+    {
+        if ($year === null) return null;
+        return strpos($year, '0.') !== false ? intval(str_replace('0.', '', $year)) : intval($year * 12);
+    }
+
+    private static function processItem($item, $test)
+    {
+        if ($test === null) {
+            $item['percentage'] = intval(self::getAveragePercentage($item['result']));
+        } else {
+            $testResult = collect($item['result'])->firstWhere('quizGroup', $test);
+            $item['percentage'] = $testResult ? intval($testResult['efficiensy']) : 0;
+            $item['result'] = $testResult ? [$testResult] : [];
+        }
+        return $item;
     }
 
     private static function getAveragePercentage($tests)
     {
-        $exam = Exam::count();
-        if ($tests) {
-            $totalEfficiency = array_reduce($tests, function ($acc, $test) {
-                return $acc + $test['efficiensy'];
-            }, 0);
-            $averagePercentage = round($totalEfficiency / $exam);
-            return $averagePercentage;
+        static $examCount = null;
+        if ($examCount === null) {
+            $examCount = Exam::count();
         }
+
+        if ($tests && $examCount > 0) {
+            $totalEfficiency = array_sum(array_column($tests, 'efficiensy'));
+            return round($totalEfficiency / $examCount);
+        }
+        return 0;
     }
 }
