@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace App\Filters;
 
 use App\Models\Exam;
@@ -16,11 +16,7 @@ class RatingFilter
         $min_year = request()->input('min_year') ?? null;
         $max_year = request()->input('max_year') ?? null;
 
-        $query->with(['candidate.user.resumes'])
-            ->whereHas('candidate', function ($query) {
-                $query->whereNull('deleted_at');
-            })
-            ->when($title, function ($query) use ($title) {
+        $query->when($title, function ($query) use ($title) {
                 $query->whereHas('candidate', function ($query) use ($title) {
                     $query->where(function ($query) use ($title) {
                         $query->where('name', 'like', '%' . $title . '%')
@@ -94,19 +90,18 @@ class RatingFilter
             $datas = $query->get();
         }
 
-        $filteredResults = collect($datas)->filter(function ($item) use ($test) {
+        $filteredResults = collect($datas)->map(function ($item) use ($test) {
             $sortArr = [];
-            $efficiensy = 0;
+            $efficiency = 0;
             foreach ($item['result'] as $value) {
                 if ($test === null) {
                     $sortArr[] = $value;
                 } elseif ($value['quizGroup'] === $test) {
-                    $efficiensy = $value['efficiensy'];
+                    $efficiency = $value['efficiensy'];
                     $sortArr[] = $value;
                 }
             }
-            $max = $test === null ? self::getAveragePercentage($item['result']) : $efficiensy;
-            $item['result'] = [];
+            $max = $test === null ? self::getAveragePercentage($item['result']) : $efficiency;
             $item['percentage'] = intval($max);
             $item['result'] = $sortArr;
             return $item;

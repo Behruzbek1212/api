@@ -18,16 +18,21 @@ class TestResultRepository
 
     public function allResult()
     {
-        $data =  TestResult::with('candidate' , 'candidate.user.resumes');
-                
+        $data = TestResult::with([
+            'candidate' => function ($query) {
+                $query->whereNull('deleted_at');
+            },
+            'candidate.user.resumes'
+        ]);
+
         $filter = RatingFilter::apply($data);
-      
+
         return $filter;
     }
-    
+
     public function candidateRatings()
-    {   
-      
+    {
+
         $user = $this->user->id;
         $data = TestResult::with('candidate', 'candidate.user.resumes')
                 ->whereHas('candidate', function ($query) {
@@ -44,7 +49,7 @@ class TestResultRepository
                     $item['result'] = $sortArr;
                     return $item;
         });
-        
+
         $sortedResults = $filteredResults
                     ->sortByDesc(function ($item) {
                         return [
@@ -53,7 +58,7 @@ class TestResultRepository
                             optional($item['candidate']['user']['resumes']->first())->percentage ?? 0
                         ];
         })->values();
-        
+
         $filteredResults = $sortedResults->map(function ($item, $key) use ($user) {
                 if($item['candidate']['user']['id'] === $user){
                     return $key + 1;
@@ -61,10 +66,10 @@ class TestResultRepository
         })->filter(function ($item) {
             return $item !== null; // Remove the items that are not null (i.e., where the condition was not met)
         })->values();
-        
+
         return $filteredResults->first() ?? null;
     }
-   
+
     public function getAll($request)
     {
         $users = _auth()->user();
@@ -86,7 +91,7 @@ class TestResultRepository
             return []; // or handle the case where the user is null
         }
     }
-    public function store($request) 
+    public function store($request)
     {
         $user = $this->user;
         $customer_id = $request->get('customer_id') ?? null;
@@ -106,21 +111,21 @@ class TestResultRepository
             return $store;
         } else {
             $test = $testRes->result;
-            
+
             foreach ($test as $testkey) {
                 if ($testkey['quizGroup'] === $data['quizGroup']) {
                     return [];
-                }    
+                }
             }
-         
+
             $test[] = $data;
-           
+
             $testRes->result = $test;
-            
+
             $testRes->save();
 
             return $testRes;
-        
+
         }
     }
 
@@ -153,7 +158,7 @@ class TestResultRepository
 
         return $result;
     }
-    
+
     private static function getAveragePercentage($tests)
     {
         if ($tests) {
@@ -165,5 +170,5 @@ class TestResultRepository
         }
     }
 
-    
+
 }
