@@ -243,10 +243,7 @@ class ResumeController extends Controller
         $experience = $resume->experience;
 
         $candidateTest = Candidate::with('user' , 'testResult')
-                   ->whereHas('testResult', function ($query) {
-                        $query->where('customer_id', null)
-                            ->where('deleted_at', null);
-                   })->find($candidate->id);
+                   ->find($candidate->id);
 
         $testResult =   $candidateTest->testResult ?? [];
         $resume_id = $id;

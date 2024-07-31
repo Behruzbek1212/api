@@ -125,7 +125,6 @@ class RatingFilter
         });
 
         $sortedResults = $filteredResults
-
             ->sortByDesc(function ($item) {
                 return [
                     $item['percentage'],
