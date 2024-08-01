@@ -246,7 +246,6 @@ class ResumeController extends Controller
             $query->latest();
         }])->find($candidate->id);
 
-        dd($candidateTest);
         $testResult =   $candidateTest->testResult ?? [];
         $resume_id = $id;
 
