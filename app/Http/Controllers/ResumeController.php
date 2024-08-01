@@ -242,11 +242,11 @@ class ResumeController extends Controller
 
         $experience = $resume->experience;
 
-        $candidateTest = Candidate::with(['user', 'testResults' => function ($query) {
+        $candidateTest = Candidate::with(['user', 'testResult' => function ($query) {
             $query->latest();
         }])->find($candidate->id);
 
-
+        dd($candidateTest);
         $testResult =   $candidateTest->testResult ?? [];
         $resume_id = $id;
 
