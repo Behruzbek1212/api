@@ -658,7 +658,7 @@
             </div>
         @endif
 
-        @if(isset($testResult) && !empty($testResult))
+        @if(isset($testResult) && !empty($testResult) && isset($testResult[0]) && !empty($testResult[0]['result']))
         <table id="languages" class="w-full relative">
             @if(count($testResult[0]['result']) > 1)
                 <div class="timeline-line"></div>
