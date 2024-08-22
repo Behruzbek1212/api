@@ -6,6 +6,7 @@ use App\Models\Exam;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class RatingFilter
 {
@@ -22,15 +23,30 @@ class RatingFilter
             $query->whereNull('deleted_at');
             self::filterByTitle($query);
         }])
-        ->when(request('sex'), self::filterBySex(...))
-        ->when(request('spheres'), self::filterBySpheres(...))
-        ->when(request('educ_level'), self::filterByEducationLevel(...))
-        ->when(request('min_year') || request('max_year'), self::filterByAge(...))
-        ->when(request('languages'), self::filterByLanguages(...))
-        ->when(request('address'), self::filterByAddress(...));
+        ->when(request('sex'), function ($query) {
+            return self::filterBySex($query);
+        })
+        ->when(request('spheres'), function ($query) {
+            return self::filterBySpheres($query);
+        })
+        ->when(request('min_age') || request('max_age'), function ($query) {
+            return self::filterAge($query);
+        })
+        ->when(request('educ_level'), function ($query) {
+            return self::filterByEducationLevel($query);
+        })
+        ->when(request('min_year') || request('max_year'), function ($query) {
+            return self::filterByAge($query);
+        })
+        ->when(request('languages'), function ($query) {
+            return self::filterByLanguages($query);
+        })
+        ->when(request('address'), function ($query) {
+            return self::filterByAddress($query);
+        });
     }
 
-    private static function filterByTitle($query): void
+    private static function filterByTitle($query)
     {
         $title = request('title');
         if ($title) {
@@ -40,30 +56,49 @@ class RatingFilter
                   ->orWhere('specialization', 'like', '%' . $title . '%');
             });
         }
+        return $query;
     }
 
-    private static function filterBySex($query): void
+    private static function filterBySex($query)
     {
         $query->whereHas('candidate', function ($q) {
             $q->where('sex', request('sex'));
         });
+        return $query;
+    }
+    private static function filterAge($query)
+    {
+        $query->whereHas('candidate', function ($query) {
+            if (request('max_age') == null) {
+                $query->whereRaw("YEAR(birthday) <= YEAR(NOW()) - ?", [request('min_age')]);
+            } elseif (request('min_age') == null) {
+                $query->whereRaw("YEAR(birthday) >= YEAR(NOW()) - ?", [request('max_age')]);
+            } else {
+                $min_year = date('Y') - request('min_age');
+                $max_year = date('Y') - request('max_age');
+                $query->whereBetween(DB::raw('YEAR(birthday)'), [$max_year, $min_year]);
+            }
+        });
+        return $query;
     }
 
-    private static function filterBySpheres($query): void
+    private static function filterBySpheres($query)
     {
         $query->whereHas('candidate', function ($q) {
             $q->whereJsonContains('spheres', request('spheres'));
         });
+        return $query;
     }
 
-    private static function filterByEducationLevel($query): void
+    private static function filterByEducationLevel($query)
     {
         $query->whereHas('candidate', function ($q) {
             $q->where('education_level', request('educ_level'));
         });
+        return $query;
     }
 
-    private static function filterByAge($query): void
+    private static function filterByAge($query)
     {
         $query->whereHas('candidate', function ($q) {
             $minYear = request('min_year');
@@ -77,9 +112,10 @@ class RatingFilter
                 $q->whereRaw("YEAR(birthday) >= ?", [$maxBirthYear]);
             }
         });
+        return $query;
     }
 
-    private static function filterByLanguages($query): void
+    private static function filterByLanguages($query)
     {
         $query->whereHas('candidate', function ($q) {
             $languages = json_decode(request('languages'), true);
@@ -90,13 +126,15 @@ class RatingFilter
                 ]);
             }
         });
+        return $query;
     }
 
-    private static function filterByAddress($query): void
+    private static function filterByAddress($query)
     {
         $query->whereHas('candidate', function ($q) {
             $q->where('address', request('address'));
         });
+        return $query;
     }
 
     private static function processResults(Builder $query): Collection
