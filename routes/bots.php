@@ -14,6 +14,8 @@ use App\Http\Controllers\Bots\PartyHr\PartyAdminController;
 use App\Http\Controllers\Bots\PartyHr\PartyHrController;
 use App\Http\Controllers\Bots\PORTRETHR\PortretHrController;
 use App\Http\Controllers\Bots\PORTRETHR\PortretUserController;
+use App\Http\Controllers\Bots\RailWay\RailWayController;
+use App\Http\Controllers\Bots\RailWay\RailWayHrController;
 use App\Http\Controllers\Bots\Yalpiz\YalpizComController;
 use App\Http\Controllers\Bots\Yalpiz\YalpizComCraterController;
 use Illuminate\Support\Facades\Route;
@@ -109,4 +111,14 @@ Route::prefix('/_utils/azaly')->name('azaly.')->group(function () {
     Route::get('user/get/{token}', [AzalyController::class, 'showData'])->name('show-user');
     Route::get('user/all', [AzalyController::class, 'index'])->name('show-All');
     Route::get('user/count', [AzalyController::class, 'userCount'])->name('user-count');
+});
+
+Route::prefix('/_utils/railway')->name('railway.')->group(function () {
+    Route::post('store-data' , [RailWayHrController::class, 'store'])->name('data-store');
+    Route::post('store-file' , [RailWayHrController::class, 'createFile'])->name('data-file');
+    Route::get('data/{token}', [RailWayHrController::class, 'showData'])->name('show-data');
+    Route::post('user/store', [RailWayController::class, 'store'])->name('user-store');
+    Route::get('user/get/{token}', [RailWayController::class, 'showData'])->name('show-user');
+    Route::get('user/all', [RailWayController::class, 'index'])->name('show-All');
+    Route::get('user/count', [RailWayController::class, 'userCount'])->name('user-count');
 });
