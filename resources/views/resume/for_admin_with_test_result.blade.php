@@ -379,11 +379,11 @@
                     <p class="text-sm">{{ __('resume.message.type') }}: {{ __('resume.types.' . @$data['work_type']) }}</p>
                 </td>
             </tr>
-        </table> 
+        </table>
         @else
-            
+
         @endif
-       
+
 
         @if(isset($data['employment']) &&  count($data['employment']))
             <table id="experience" class="w-full relative">
@@ -663,53 +663,52 @@
             </div>
         @endif
 
-        @if(isset($testResult) &&  $testResult !== [])
-            <table id="languages" class="w-full relative">
-                @if(count($testResult[0]['result']) > 1)
-                    <div class="timeline-line"></div>
-                @endif
-                <tr class="w-full table-row">
-                    <td class="left-side">
-                        <p class="font-bold">{{ __('resume.list.result_of_tests') }}</p>
-                    </td>
-                    <td class="w-full right-side">
-                        <div class="splitter"></div>
-                    </td>
-                </tr>
-                @foreach($testResult[0]['result'] as $test)
-                    @if($test['quizGroup'] !== 'bookmaker')
-                        <tr class="w-full table-row timeline">
-                            <td class="left-side">
-                                @if(count($testResult[0]['result']) > 1)
-                                    <span class="tl-fixer"></span>
-                                @endif
-                                <table id="experience-timeline" class="w-full table-space-none">
-                                    <tr class="w-full">
-                                        @if(count($testResult[0]['result']) > 1)
-                                            <td>
-                                                <div class="timeline-dot"></div>
-                                            </td>
-                                        @endif
+        @if(isset($testResult) && !empty($testResult) && isset($testResult[0]) && !empty($testResult[0]['result']))
+        <table id="languages" class="w-full relative">
+            @if(count($testResult[0]['result']) > 1)
+                <div class="timeline-line"></div>
+            @endif
+            <tr class="w-full table-row">
+                <td class="left-side">
+                    <p class="font-bold">{{ __('resume.list.result_of_tests') }}</p>
+                </td>
+                <td class="w-full right-side">
+                    <div class="splitter"></div>
+                </td>
+            </tr>
+            @foreach($testResult[0]['result'] as $test)
+                @if($test['quizGroup'] !== 'bookmaker')
+                    <tr class="w-full table-row timeline">
+                        <td class="left-side">
+                            @if(count($testResult[0]['result']) > 1)
+                                <span class="tl-fixer"></span>
+                            @endif
+                            <table id="experience-timeline" class="w-full table-space-none">
+                                <tr class="w-full">
+                                    @if(count($testResult[0]['result']) > 1)
                                         <td>
-                                            <p class="font-bold" style="font-size: 12px">
-                                                {{
-                                                   strip_tags($test['title'])
-                                                }}
-                                                &mdash;
-                                            </p>
+                                            <div class="timeline-dot"></div>
                                         </td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td class="w-full right-side">
-                                <p class="text-sm mb-4">{{ str_replace(['&nbsp;', '&amp;'], [' ', '&'], strip_tags($test['result'])) }}</p>
-                            </td>
-                        </tr>
-                    @endif
-                @endforeach
-            </table>
+                                    @endif
+                                    <td>
+                                        <p class="font-bold" style="font-size: 12px">
+                                            {{
+                                               strip_tags($test['title'])
+                                            }}
+                                            &mdash;
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="w-full right-side">
+                            <p class="text-sm mb-4">{{ str_replace(['&nbsp;', '&amp;'], [' ', '&'], strip_tags($test['result'])) }}</p>
+                        </td>
+                    </tr>
+                @endif
+            @endforeach
+        </table>
         @endif
-
         {{--       "resign": "sababsiz meas ekan","bad_habits": null,"birth_place": "Andijon viloyati","power_habits": null, "noticed_where": "lyubyfdsao",
         "social_status": "student",--}}
 
