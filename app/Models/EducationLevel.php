@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class EducationLevel extends Model
 {
     use HasFactory;
-    use ApiLogActivity;
+    // use ApiLogActivity;
 
      /**
      * The attributes that are mass assignable.

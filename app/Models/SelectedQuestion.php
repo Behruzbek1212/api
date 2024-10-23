@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class SelectedQuestion extends Model
 {
     use HasFactory;
-    use ApiLogActivity;
+    // use ApiLogActivity;
     protected $table = 'selected_questions';
     protected $guarded = [];
 

@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Category extends Model
 {
     use HasFactory;
-    use ApiLogActivity;
+    // use ApiLogActivity;
 
     /**
      * The attributes that are mass assignable.
