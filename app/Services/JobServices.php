@@ -109,13 +109,13 @@ class JobServices
 
         list($firstLine, $remainingText) = $this->getFirstAndRemainingLines($trimmedString);
 
-        $jpgImage->text($postNumber, 1010, 365, function ($font) use ($fontPath) {
-            $font->file($fontPath);
-            $font->size(70);
-            $font->color('#057AF5');
-            $font->align('center');
-            $font->valign('middle');
-        });
+        // $jpgImage->text($postNumber, 1010, 365, function ($font) use ($fontPath) {
+        //     $font->file($fontPath);
+        //     $font->size(70);
+        //     $font->color('#057AF5');
+        //     $font->align('center');
+        //     $font->valign('middle');
+        // });
 
         $positionY = $remainingText !== "" ? 595 : 775;
 
