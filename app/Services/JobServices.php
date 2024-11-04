@@ -93,10 +93,10 @@ class JobServices
         $prices = $this->getSalaryText($salary);
 
         $rasmUrl = public_path('img/banner.jpg');
-        $fontFile = 'Gilroy-ExtraBold.otf';
+        $fontFile = 'MYRIADPRO-BOLDCONDIT.OTF';
         $fontPath = $this->getFontPath('fonts/' . $fontFile);
 
-        $gilroyLight = $this->getFontPath('fonts/Gilroy-Light.otf');
+        $gilroyLight = $this->getFontPath('fonts/MYRIADPRO-BOLDCONDIT.OTF');
 
         $jpgImage = Image::make($rasmUrl);
         $green = '#3894FF';
@@ -137,8 +137,8 @@ class JobServices
             });
         }
 
-        $jpgImage->text($text2, 220, 1442, function ($font) use ($fontPath) {
-            $font->file($fontPath);
+        $jpgImage->text($text2, 220, 1442, function ($font) use ($gilroyLight) {
+            $font->file($gilroyLight);
             $font->size(72);
             $font->color('#c8a844');
             $font->align('left');
