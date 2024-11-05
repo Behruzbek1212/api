@@ -96,7 +96,7 @@ class JobServices
         $fontFile = 'MYRIADPRO-BOLDCONDIT.OTF';
         $fontPath = $this->getFontPath('fonts/' . $fontFile);
 
-        $gilroyLight = $this->getFontPath('fonts/MYRIADPRO-BOLDCONDIT.OTF');
+        $gilroyLight = $this->getFontPath('fonts/MYRIADPRO-BOLDCOND.OTF');
 
         $jpgImage = Image::make($rasmUrl);
         $green = '#3894FF';
