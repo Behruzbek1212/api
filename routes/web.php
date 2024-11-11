@@ -13,10 +13,11 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\ResumeController;
 Route::get('/', function () {
     return 'welcome';
 });
+
 
 // redirect to payment system or payment form
 // Route::middleware('guest:sanctum')->group(function () {

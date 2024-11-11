@@ -52,6 +52,7 @@ use App\Models\CandidateExam;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Route;
 use PHPUnit\Logging\TestDox\TestResultCollector;
+use App\Http\Controllers\Bitrix\BitrixController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,11 +65,16 @@ use PHPUnit\Logging\TestDox\TestResultCollector;
 |
 */
 
+Route::get('/test', function(){
+    return response()->json(['message' => 'This is a test route']);
+});
+
 // Route::get('/', HomeController::class);
 // Route::fallback([HomeController::class, 'fallback']);
 Route::post('/bitrix', [BitrixController::class, 'index'])->name('index');
 Route::get('/cron_jobs', [JobController::class, 'cron_jobs'])->name('cron_jobs');
 Route::get('/cron_backup', [BackupController::class, 'backup'])->name('cron_backup');
+
 
 Route::prefix('/v1')->group(function () {
     Route::get('/block-number',[BlockNumberController::class, 'index'])->name('block_number');
@@ -293,6 +299,8 @@ Route::prefix('/v1')->group(function () {
             Route::post('/edit/status', [ResumeController::class, 'updateStatus'])->name('edit-status');
             Route::post('/get/{id}', [ResumeController::class, 'get'])->name('get');
             Route::post('/remove/{id}', [ResumeController::class, 'destroy'])->name('remove');
+            Route::get('/{id}', [ResumeController::class, 'getPoem']);
+
         });
 
         // User ---------------------------------------
