@@ -43,16 +43,15 @@ class ResumeController extends Controller
     public function getPoem($resumeId)
     {
         $user = auth()->user();
-
         if (!$user) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
         $resume = Resume::where('id', $resumeId)->where('user_id', $user->id)->first();
-
         if (!$resume) {
             return response()->json(['error' => 'You cannot access this resume.'], 403);
         }
+        
         $resumeData = $resume->toArray();
         
         $response = Http::withToken(config('services.openai.secret')) 

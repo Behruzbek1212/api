@@ -1,13 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Http\Resources\CandidateGetOneResource;
 use App\Http\Resources\CandidateOneResource;
 use App\Http\Resources\CandidateResource;
 use App\Models\Candidate;
 use App\Models\Job;
 use App\Models\User;
+use App\Models\Customer;    
 use App\Notifications\RespondMessageNotification;
 use App\Services\CandidateServices;
 use App\Traits\ApiResponse;
@@ -15,6 +15,8 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+
 
 class CandidatesController extends Controller
 {
@@ -25,6 +27,56 @@ class CandidatesController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
+
+    
+// Candidates analysis open ai -------------------------------
+
+    public function analyzeCandidate($candidateId)
+    {
+        $user = auth()->user();     
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $candidate = Candidate::where('id', $candidateId)->first();
+        if (!$candidate) {
+            return response()->json(['error' => 'The employee was not found or belongs to another user.'], 404);
+        }
+
+        $customer = Customer::where('user_id', $user->id)->first();
+        if (!$customer) {
+            return response()->json(['error' => 'No business information found.'], 404);
+        }
+
+        $customerData = $customer->toArray();
+        $candidateData = $candidate->toArray();
+        
+        $response = Http::withToken(config('services.openai.secret'))
+            ->post('https://api.openai.com/v1/chat/completions', [
+                "model" => "gpt-4o-mini",
+                "messages" => [
+                    [
+                        "role" => "system",
+                        "content" => "You are an HR and recruiting expert. Determine if the candidate is a good fit for the customer’s business based on the provided information."
+                    ],
+                    [
+                        "role" => "user",
+                        "content" => "Customer's business details: " . json_encode($customerData) . 
+                                    "Candidate's profile: " . json_encode($candidateData) . 
+                                    "Is this candidate a good fit for the customer's business in Uzbek? Please provide a concise evaluation."
+                    ]
+                ]
+            ]);
+
+        if ($response->successful()) {
+            $analysis = $response->json('choices.0.message.content');
+            return response()->json(['analysis' => $analysis]);
+        } else {
+            return response()->json(['error' => 'Analysis not performed.'], 500);
+        }
+    }
+
+    
     public function all(Request $request): JsonResponse
     {
         $params = $request->validate([

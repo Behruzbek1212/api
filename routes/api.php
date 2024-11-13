@@ -163,11 +163,17 @@ Route::prefix('/v1')->group(function () {
     // });
 
     Route::prefix('customer-status')->name('customer-status.')->middleware(['auth:sanctum', 'is_customer'])->group(function () {
+
         Route::post('/update-status', [CustomerStatusController::class, 'updatedCandidateStatus'])->name('customer-status');
     });
 
+
     // Candidates -----------------------------------------
     Route::prefix('/candidates')->name('candidates.')->group(function () {
+        // candidate ai
+        Route::middleware(['auth:sanctum'])->group(function () {
+            Route::post('/{id}/analysis', [CandidatesController::class, 'analyzeCandidate'])->name('analysis');
+        });
         Route::get('/', [CandidatesController::class, 'all'])->name('all');
         // limit all candidate
         Route::get('/candidates', [CandidatesController::class, 'candidates'])->name('candidates');
@@ -180,6 +186,7 @@ Route::prefix('/v1')->group(function () {
         Route::post('/respond', [CandidatesController::class, 'respond'])->middleware(['auth:sanctum', 'is_customer'])->name('respond');
         Route::post('/add-test', [CandidatesController::class, 'addTestResult'])->name('add-test-result');
         Route::post('/telegram-id', [CandidatesController::class, 'createTelegram']);
+
     });
 
     Route::prefix('/limits')->name('limits.')->group(function () {
@@ -226,6 +233,7 @@ Route::prefix('/v1')->group(function () {
         Route::prefix('/exams')->group(function () {
             Route::post('/create', [CandidateExamController::class, 'create'])->name('create');
         });
+
     });
 
     // Companies -----------------------------------------
