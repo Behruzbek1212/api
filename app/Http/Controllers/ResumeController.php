@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Http;
 use App\Http\Requests\StoreResumeRequest;
 use App\Http\Requests\UpdateResumeRequest;
 use App\Models\Candidate;
@@ -26,18 +26,60 @@ class ResumeController extends Controller
      *
      * @return JsonResponse
      */
+
     public function index(): JsonResponse
     {
         /** @var Authenticatable|User|null $user */
         $user = _auth()->user();
-
+        $resumes = Resume::all();
 
         return response()->json([
             'status' => true,
-            'resumes' => $user->resumes,
+            'resumes' => $resumes,
 
         ]);
     }
+
+    public function getPoem($resumeId)
+    {
+        $user = auth()->user();
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $resume = Resume::where('id', $resumeId)->where('user_id', $user->id)->first();
+        if (!$resume) {
+            return response()->json(['error' => 'You cannot access this resume.'], 403);
+        }
+        
+        $resumeData = $resume->toArray();
+        
+        $response = Http::withToken(config('services.openai.secret')) 
+            ->post('https://api.openai.com/v1/chat/completions', [  
+                "model" => "gpt-4o-mini",
+                "messages" => [
+                    [
+                        "role" => "system",
+                        "content" => "You are an expert in HR and recruitment, specializing in resume analysis and improvement. Analyze user resumes and provide constructive feedback in Uzbek, focusing on areas such as work experience, skills, achievements, education, and overall presentation. Ensure that the feedback is helpful, actionable, and easy to understand for job seekers aiming to enhance their resumes for better career opportunities."
+                    ],
+                    [
+                        "role" => "user",
+                        "content" =>  json_encode($resumeData),
+                    ]
+                ]
+            ]);
+    if ($response->failed()) {
+        return response()->json(['error' => 'The OpenAI API request ended with an error'], 500);
+    }
+
+        $poem = $response->json('choices.0.message.content');
+        // return response($poem);
+        return response()->json(['user_id' => $user->id,'poem' => $poem]);
+    }
+
+
+
+    
 
     /**
      * Get resume information
@@ -50,7 +92,7 @@ class ResumeController extends Controller
         /** @var Authenticatable|User|null $user */
         $user = _auth()->user();
 
-        $resume = $user->resumes()->findOrFail($id);
+            $resume = $user->resumes()->findOrFail($id);
         return response()->json([
             'status' => true,
             'data' => $resume['data']
@@ -165,6 +207,7 @@ class ResumeController extends Controller
      */
     public function show(string|int $id): Response
     {
+        
         $resume = Resume::query()
             ->with('user')
             ->findOrFail($id);
